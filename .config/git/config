@@ -13,6 +13,13 @@
 	stashes = stash list
 	tags = tag
 
+	# synonyms
+	amend = commit --amend
+	fix = rebase -i HEAD~2
+	uncommit = reset --mixed HEAD~
+	unstage = restore --staged
+	tidy = rebase -i @{upstream}..
+
 	a = add
 	b = branch -avv
 	ci = commit -v
@@ -20,12 +27,10 @@
 	d = diff
 	dw = diff --word-diff
 	dsf = "!git diff --color $@ | diff-so-fancy"
-	fix = rebase -i HEAD~2
 	l = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
 	ls = "!cd ${GIT_PREFIX:-`pwd`}; printf \"# HEAD: \"; git log --oneline | head -n1; git status"
 	rb = rebase
 	s = status
-	tidy = rebase -i @{upstream}..
 
 [push]
 	default = simple
