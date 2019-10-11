@@ -23,7 +23,7 @@ bindsym $mod+BackSpace exec termite -d $(xcwd) -c /bin/fish
 
 bindsym $mod+Escape kill
 
-bindsym $mod+o exec rofi -show window
+bindsym $mod+p exec rofi -show window
 
 bindsym $mod+Shift+grave move scratchpad
 bindsym $mod+grave scratchpad show
@@ -34,7 +34,7 @@ bindsym $mod+j focus down
 bindsym $mod+k focus up
 bindsym $mod+l focus right
 bindsym $mod+Prior focus parent
-Bindsym $mod+Next focus child
+bindsym $mod+Next focus child
 
 # move focused window
 bindsym $mod+Shift+h move left
@@ -103,6 +103,7 @@ mode $i3mode {
 
   # bar
   bindsym b bar mode toggle
+  bindsym i bar mode invisible; mode "default"
 
   # wallpaper
   bindsym w exec "~/.fehbg"
@@ -264,6 +265,7 @@ mode $gapsmodeouter {
 # decorations
 default_border pixel 2
 hide_edge_borders smart
+for_window [class=".*"] title_format " %title"
 
 # dracula
 set $void "#000000"
@@ -290,7 +292,7 @@ client.background       $black
 # Start i3bar to display a workspace bar (plus i3status info)
 bar {
   status_command py3status
-  mode hide
+  mode invisible
   position top
   tray_output none
   separator_symbol "–"
