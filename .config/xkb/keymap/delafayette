@@ -1,0 +1,184 @@
+// To apply this keymap, use:
+//   xkbcomp $HOME/.config/xkb/keymap/delafayette $DISPLAY
+// Main config files can be found in arch at /usr/share/X11/xkb/
+// See also /usr/include/X11/keysymdef.h
+
+xkb_keymap {
+  xkb_keycodes { include "evdev" };
+  xkb_types { include "complete" };
+  xkb_compatibility {
+    include "complete"
+    virtual_modifiers Shift;
+
+    interpret ISO_Level2_Latch {
+      action = LatchMods(modifiers = Shift);
+    };
+  };
+
+  partial alphanumeric_keys modifier_keys
+  xkb_symbols "delafayette" {
+    include "pc"
+    include "inet(evdev)"
+    include "ctrl(nocaps)" // CAPS is another Control_L
+
+    // Multi_key → compose (see https://cgit.freedesktop.org/xorg/lib/libX11/plain/nls/en_US.UTF-8/Compose.pre)
+    // NoSymbol → preserve previously defined symbol in lafayette
+    // VoidSymbol → don't produce anything
+
+    // The “OneDeadKey” is an ISO_Level3_Latch, i.e. a “dead AltGr” key.
+    // This is the only way to have a multi-purpose dead key with XKB.
+
+    // The real AltGr key should be an ISO_Level5_Switch; however,
+    // ISO_Level5_Switch does not work as expected when applying this layout
+    // with xkbcomp, so let’s use two groups instead and make the AltGr key a
+    // group selector.
+
+    name[group1] = "French (Qwerty-Delafayette)";
+    name[group2] = "AltGr";
+
+    key.type[group1] = "FOUR_LEVEL";
+    key.type[group2] = "TWO_LEVEL";
+
+    // Digits
+    key <AE01> {[ 1               , exclam          , U201E           , exclamdown      ],[ exclam          , onesuperior     ]}; // 1 ! „ ¡ ! ¹
+    key <AE02> {[ 2               , at              , U201C           , U2018           ],[ parenleft       , twosuperior     ]}; // 2 @ “ ‘ ( ²
+    key <AE03> {[ 3               , numbersign      , U201D           , U2019           ],[ parenright      , threesuperior   ]}; // 3 # ” ’ ) ³
+    key <AE04> {[ 4               , dollar          , sterling        , cent            ],[ apostrophe      , foursuperior    ]}; // 4 $ £ ¢ ' ⁴
+    key <AE05> {[ 5               , percent         , EuroSign        , U2030           ],[ quotedbl        , fivesuperior    ]}; // 5 % € ‰ " ⁵
+    key <AE06> {[ 6               , asciicircum     , dead_currency   , VoidSymbol      ],[ VoidSymbol      , sixsuperior     ]}; // 6 ^ ฿     ⁶
+    key <AE07> {[ 7               , ampersand       , bar             , brokenbar       ],[ VoidSymbol      , sevensuperior   ]}; // 7 & | ¦   ⁷
+    key <AE08> {[ 8               , asterisk        , infinity        , U2605           ],[ VoidSymbol      , eightsuperior   ]}; // 8 * ∞ ★   ⁸
+    key <AE09> {[ 9               , parenleft       , VoidSymbol      , U2606           ],[ VoidSymbol      , ninesuperior    ]}; // 9 (   ☆   ⁹
+    key <AE10> {[ 0               , parenright      , degree          , division        ],[ VoidSymbol      , zerosuperior    ]}; // 0 ) ° ÷   ⁰
+
+    // Letters, first row
+    key <AD01> {[ q               , Q               , ae              , AE              ],[ guillemotleft   , U2039           ]}; // q Q æ Æ « ‹
+    key <AD02> {[ w               , W               , eacute          , Eacute          ],[ less            , lessthanequal   ]}; // w W é É < ≤
+    key <AD03> {[ e               , E               , egrave          , Egrave          ],[ greater         , greaterthanequal]}; // e E è È > ≥
+    key <AD04> {[ r               , R               , registered      , trademark       ],[ guillemotright  , U203A           ]}; // r R ® ™ » ›
+    key <AD05> {[ t               , T               , thorn           , Thorn           ],[ VoidSymbol      , VoidSymbol      ]}; // t T þ Þ
+    key <AD06> {[ y               , Y               , yen             , currency        ],[ VoidSymbol      , VoidSymbol      ]}; // y Y ¥ ¤
+    key <AD07> {[ u               , U               , ugrave          , Ugrave          ],[ VoidSymbol      , VoidSymbol      ]}; // u U ù Ù
+    key <AD08> {[ i               , I               , U0133           , U0132           ],[ VoidSymbol      , VoidSymbol      ]}; // i I ĳ Ĳ
+    key <AD09> {[ o               , O               , oe              , OE              ],[ VoidSymbol      , VoidSymbol      ]}; // o O œ Œ
+    key <AD10> {[ p               , P               , section         , paragraph       ],[ VoidSymbol      , VoidSymbol      ]}; // p P § ¶
+
+    // Letters, second row
+    key <AC01> {[ a               , A               , agrave          , Agrave          ],[ braceleft       , VoidSymbol      ]}; // a A à À {
+    key <AC02> {[ s               , S               , ssharp          , U1E9E           ],[ bracketleft     , VoidSymbol      ]}; // s S ß ẞ [
+    key <AC03> {[ d               , D               , eth             , Eth             ],[ bracketright    , VoidSymbol      ]}; // d D ð Ð ]
+    key <AC04> {[ f               , F               , U017F           , ordfeminine     ],[ braceright      , VoidSymbol      ]}; // f F ſ ª }
+    key <AC05> {[ g               , G               , copyright       , VoidSymbol      ],[ dead_greek      , VoidSymbol      ]}; // g G © Ω
+    key <AC06> {[ h               , H               , leftarrow       , U21D0           ],[ VoidSymbol      , VoidSymbol      ]}; // h H ← ⇐
+    key <AC07> {[ j               , J               , downarrow       , U21D3           ],[ VoidSymbol      , VoidSymbol      ]}; // j J ↓ ⇓
+    key <AC08> {[ k               , K               , uparrow         , U21D1           ],[ VoidSymbol      , VoidSymbol      ]}; // k K ↑ ⇑
+    key <AC09> {[ l               , L               , rightarrow      , U21D2           ],[ VoidSymbol      , VoidSymbol      ]}; // l L → ⇒
+    key <AC10> {[ ISO_Level3_Latch, ISO_Level3_Latch, grave           , grave           ],[ VoidSymbol      , VoidSymbol      ]}; //     ` `
+
+    // Letters, third row
+    key <AB01> {[ z               , Z               , VoidSymbol      , VoidSymbol      ],[ underscore      , VoidSymbol      ]}; // z Z     _
+    key <AB02> {[ x               , X               , multiply        , VoidSymbol      ],[ plus            , VoidSymbol      ]}; // x X ×   +
+    key <AB03> {[ c               , C               , ccedilla        , Ccedilla        ],[ asciicircum     , VoidSymbol      ]}; // c C ç Ç ^
+    key <AB04> {[ v               , V               , VoidSymbol      , VoidSymbol      ],[ dollar          , VoidSymbol      ]}; // v V     $
+    key <AB05> {[ b               , B               , dagger          , doubledagger    ],[ ampersand       , VoidSymbol      ]}; // b B † ‡ &
+    key <AB06> {[ n               , N               , ntilde          , Ntilde          ],[ VoidSymbol      , VoidSymbol      ]}; // n N ñ Ñ
+    key <AB07> {[ m               , M               , Multi_key       , masculine       ],[ VoidSymbol      , VoidSymbol      ]}; // m M ⎄ º
+    key <AB08> {[ comma           , semicolon       , periodcentered  , U2022           ],[ comma           , VoidSymbol      ]}; // , ; · • ,
+    key <AB09> {[ period          , colon           , ellipsis        , notsign         ],[ period          , VoidSymbol      ]}; // . : … ¬ .
+    key <AB10> {[ slash           , question        , backslash       , questiondown    ],[ U061F           , VoidSymbol      ]}; // / ? \ ¿ ؟
+
+    // Pinky keys
+    key <TLDE> {[ grave           , asciitilde      , VoidSymbol      , VoidSymbol      ],[ dead_grave      , dead_tilde      ]}; // ` ~     ` ~
+    key <AE11> {[ minus           , underscore      , emdash          , endash          ],[ VoidSymbol      , VoidSymbol      ]}; // - _ — –
+    key <AE12> {[ equal           , plus            , notequal        , plusminus       ],[ VoidSymbol      , VoidSymbol      ]}; // = + ≠ ±
+    key <AD11> {[ dead_circumflex , dead_acute      , dead_caron      , VoidSymbol      ],[ VoidSymbol      , VoidSymbol      ]}; // ^ ´
+    key <AD12> {[ dead_diaeresis  , dead_grave      , dead_breve      , VoidSymbol      ],[ VoidSymbol      , VoidSymbol      ]}; // ¨ `
+    key <AC11> {[ apostrophe      , quotedbl        , VoidSymbol      , VoidSymbol      ],[ dead_acute      , dead_diaeresis  ]}; // ' "     ´ ¨
+    key <BKSL> {[ backslash       , bar             , brokenbar       , VoidSymbol      ],[ VoidSymbol      , VoidSymbol      ]}; // \ | ¦
+    key <LSGT> {[ less            , greater         , lessthanequal   , greaterthanequal],[ VoidSymbol      , VoidSymbol      ]}; // < > ≤ ≥
+
+    // Space bar
+    key <SPCE> {[ space           , space           , VoidSymbol      , VoidSymbol      ],[ Escape          , nobreakspace    ]};
+
+    // Arrows - AltGr + Arrow is hard to type :(
+    key <LEFT> {symbols[1] = [ NoSymbol, Home     , U25C0,    U25C1], [ Home      ]};
+    key <DOWN> {symbols[1] = [ NoSymbol, Page_Down, U25BC,    U25BD], [ Page_Down ]};
+    key <UP>   {symbols[1] = [ NoSymbol, Page_Up  , U25B2,    U25B3], [ Page_Up   ]};
+    key <RGHT> {symbols[1] = [ NoSymbol, End      , U25B6,    U25B7], [ End       ]};
+
+    // AltGr
+    // Note: the `ISO_Level5_Latch` here is meaningless but helps with Chromium (no idea why)
+    key <RALT> {
+      type = "TWO_LEVEL",
+      symbols = [ ISO_Level5_Latch, ISO_Level5_Latch ],
+      actions = [ SetGroup(group=2), SetGroup(group=2) ]
+    };
+
+    // Lock AltGr (2nd group)
+    key <PRSC> {[ ISO_Next_Group, ISO_Next_Group ], [ ISO_Next_Group, ISO_Next_Group ] };
+
+    // Print screen as symmetric Super_L
+    // key <PRSC> {[ Hyper_R, Hyper_R ]};
+    // modifier_map Mod4 { <HYPR> };
+
+    // Shifts - needs the "LatchMods" section above to work
+    // Press one shift then the other one to enable/disable Caps_Lock
+    // key <RTSH> { [ ISO_Level2_Latch, Caps_Lock ] };
+
+    // TypeMatrix 2030 in 106 mode (Fn + F3 to activate)
+
+    // Alt and AltGr are "switched" up side down to be compatible with Laptop
+
+    // [ Ctrl ][ Super ][ AltGr ][ Space ][  Alt  ][ Super ]
+    //         [ Super ][  Alt  ]         [ AltGr ]
+
+    // Antislash key - Romaji keycode 97
+    // key <AB11> {[ backslash, bar, VoidSymbol, VoidSymbol ],[ brokenbar, VoidSymbol ]};
+
+    // These keys are remapped to Super_L via xmodmap (for now)
+    // Shuffle key - Muhenkan keycode 102
+    // key <MUHE> {type[group1] = "ONE_LEVEL", [ Super_L ]};
+    // modifier_map Mod4 { <MUHE> };
+    // key <MUHE> {
+    //   type = "TWO_LEVEL",
+    //   symbols = [ ISO_Level5_Latch, ISO_Level5_Latch ],
+    //   actions = [ SetGroup(group=2), SetGroup(group=2) ]
+    // };
+
+    // Desktop key - Henkan keycode 100
+    // key <HENK> {type[group1] = "ONE_LEVEL", [ Super_L ]};
+    // modifier_map Mod4 { <HENK> };
+    // key <HENK> {[ Alt_L ]};
+
+    // Play key, next to left ctrl
+    // key <I172> {type[group1] = "ONE_LEVEL", [ Control_L ]};
+    // modifier_map Control { <I172> };
+
+    // key <MENU> {type[group1] = "ONE_LEVEL", [ Super_L ]};
+    // key <HOME> {type[group1] = "ONE_LEVEL", [ Super_L ]};
+
+    // keys right of p, useful for kakoune
+
+    // // dead key shift, lock shift
+    // key <AD11> {
+    //   type = "TWO_LEVEL",
+    //   symbols = [ VoidSymbol, VoidSymbol ],
+    //   actions = [ LatchMods(modifiers = Shift), LockMods(modifiers = Shift) ]
+    // };
+
+    // // dead key alt, lock alt
+    // key <AD12> {
+    //   type = "TWO_LEVEL",
+    //   symbols = [ VoidSymbol, VoidSymbol ],
+    //   actions = [ LatchMods(modifiers = Mod1), LockMods(modifiers = Mod1) ]
+    // };
+
+    // // emergency reset
+    // key <PRSC> {
+    //    type = "TWO_LEVEL",
+    //    symbols = [ VoidSymbol, VoidSymbol ],
+    //    // actions = [ SetMods(modifiers = none), SetMods(modifiers = none) ]
+    //    actions = [ SetMods(clearLocks), SetMods(clearLocks) ]
+    // };
+  };
+};
