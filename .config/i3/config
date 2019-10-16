@@ -111,20 +111,16 @@ mode $openmode {
   bindsym Escape mode "default"
 }
 
-set $firefox "firefox: [d]evdocs [g]ithub [l]obsters g[m]ail [r]eddit"
-bindsym $mod+i mode $firefox
+set $firefoxmode "firefox: [d]evdocs [g]ithub [l]obsters g[m]ail [r]eddit"
+bindsym $mod+i mode $firefoxmode
 
-mode $firefox {
-  bindsym d [class="Firefox" title="DevDocs"] focus ; mode "default"
-  bindsym Shift+d exec firefox https://devdocs.io; mode "default"
-  bindsym g [class="Firefox" title="GitHub"] focus ; mode "default"
-  bindsym Shift+g exec firefox https://github.com ; mode "default"
-  bindsym l [class="Firefox" title="Lobsters"] focus ; mode "default"
-  bindsym Shift+l exec firefox https://lobste.rs ; mode "default"
-  bindsym m [class="Firefox" title="Inbox"] focus ; mode "default"
-  bindsym Shift+m exec firefox https://gmail.com ; mode "default"
-  bindsym r [class="Firefox" title="reddit"] focus ; mode "default"
-  bindsym Shift+r exec firefox https://reddit.com ; mode "default"
+mode $firefoxmode {
+  bindsym d exec (i3-msg [class="Firefox" title="DevDocs"] focus | grep true) || firefox https://devdocs.io; mode "default"
+  bindsym g exec (i3-msg [class="Firefox" title="GitHub"] focus | grep true) || firefox https://github.com; mode "default"
+  bindsym n exec (i3-msg [class="Firefox" title="Notifications"] focus | grep true) || firefox https://github.com/notifications; mode "default"
+  bindsym l exec (i3-msg [class="Firefox" title="Lobsters"] focus | grep true) || firefox https://lobste.rs; mode "default"
+  bindsym m exec (i3-msg [class="Firefox" title="Inbox"] focus | grep true) || firefox https://gmail.com ; mode "default"
+  bindsym r exec (i3-msg [class="Firefox" title="reddit"] focus | grep true) || firefox https://reddit.com ; mode "default"
   
   bindsym Return mode "default"
   bindsym Escape mode "default"
@@ -160,7 +156,7 @@ bindsym $mod+Delete mode $i3mode
 
 mode $i3mode {
   bindsym a restart
-  bindsym c exec termite -e "kak -e 'set buffer filetype ini' ~/.config/i3/config" ; mode "default"
+  bindsym c exec termite -e "kak ~/.config/i3/config" ; mode "default"
   bindsym e exit
   bindsym r reload
 
