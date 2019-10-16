@@ -90,7 +90,70 @@ bindsym $mod+Shift+8 move container to workspace 8
 bindsym $mod+Shift+9 move container to workspace 9
 bindsym $mod+Shift+0 move container to workspace 10
 
+bindsym $mod+button2 kill
+
 # modes
+
+set $openmode "open: r[o]fi [c]hromium [f]irefox [g]imp [k]akoune [i]nkscape [n]ode [r]anger"
+bindsym $mod+o mode $openmode
+
+mode $openmode {
+  bindsym c exec chromium ; mode "default"
+  bindsym f exec firefox ; mode "default"
+  bindsym g exec gimp ; mode "default"
+  bindsym k exec termite -e "kak" ; mode "default"
+  bindsym i exec inkscape ; mode "default"
+  bindsym n exec termite -e "node" ; mode "default"
+  bindsym o exec rofi -show run ; mode "default"
+  bindsym r exec termite -e "ranger" ; mode "default"
+
+  bindsym Return mode "default"
+  bindsym Escape mode "default"
+}
+
+set $firefox "firefox: [d]evdocs [g]ithub [l]obsters g[m]ail [r]eddit"
+bindsym $mod+i mode $firefox
+
+mode $firefox {
+  bindsym d [class="Firefox" title="DevDocs"] focus ; mode "default"
+  bindsym Shift+d exec firefox https://devdocs.io; mode "default"
+  bindsym g [class="Firefox" title="GitHub"] focus ; mode "default"
+  bindsym Shift+g exec firefox https://github.com ; mode "default"
+  bindsym l [class="Firefox" title="Lobsters"] focus ; mode "default"
+  bindsym Shift+l exec firefox https://lobste.rs ; mode "default"
+  bindsym m [class="Firefox" title="Inbox"] focus ; mode "default"
+  bindsym Shift+m exec firefox https://gmail.com ; mode "default"
+  bindsym r [class="Firefox" title="reddit"] focus ; mode "default"
+  bindsym Shift+r exec firefox https://reddit.com ; mode "default"
+  
+  bindsym Return mode "default"
+  bindsym Escape mode "default"
+}
+
+set $musicmode "music: [hp]rev [ln]ext [t]oggle [r]andom [f]av"
+bindsym $mod+m mode $musicmode
+
+mode $musicmode {
+  bindsym h exec "mpc prev"
+  bindsym p exec "mpc prev"
+  bindsym l exec "mpc next"
+  bindsym n exec "mpc next"
+  bindsym t exec "mpc toggle"
+  bindsym r exec "mpc random"
+  bindsym f exec mpd-fav
+
+  bindsym Return mode "default"
+  bindsym Escape mode "default"
+}
+
+# sound
+bindsym XF86AudioMute exec "amixer set Master toggle"
+bindsym XF86AudioLowerVolume exec "amixer set Master 3%-"
+bindsym XF86AudioRaiseVolume exec "amixer set Master 3%+"
+bindsym XF86AudioMicMute exec "amixer set Mic toggle"
+bindsym XF86AudioPrev exec "mpc prev"
+bindsym XF86AudioPlay exec "mpc toggle"
+bindsym XF86AudioNext exec "mpc next"
 
 set $i3mode "i3: [c]onfig rest[a]rt [e]xit [r]eload [b]ar [t]riforce [w]allpaper [x]randr"
 bindsym $mod+Delete mode $i3mode
@@ -152,23 +215,6 @@ mode "resize" {
   bindsym Escape mode "default"
 }
 
-set $launchmode "d: [d]menu [c]hromium [f]irefox [g]imp [k]akoune [i]nkscape [n]ode [r]anger"
-bindsym $mod+d mode $launchmode
-
-mode $launchmode {
-  bindsym c exec chromium ; mode "default"
-  bindsym d exec rofi -show run ; mode "default"
-  bindsym f exec firefox ; mode "default"
-  bindsym g exec gimp ; mode "default"
-  bindsym k exec termite -e "kak" ; mode "default"
-  bindsym i exec inkscape ; mode "default"
-  bindsym n exec termite -e "node" ; mode "default"
-  bindsym r exec termite -e "ranger" ; mode "default"
-
-  bindsym Return mode "default"
-  bindsym Escape mode "default"
-}
-
 set $bordermode "border: [1-0] [t]oggle"
 bindsym $mod+b mode $bordermode
 
@@ -188,31 +234,6 @@ mode $bordermode {
   bindsym Return mode "default"
   bindsym Escape mode "default"
 }
-
-set $musicmode "music: [hp]rev [ln]ext [t]oggle [r]andom [f]av"
-bindsym $mod+m mode $musicmode
-
-mode $musicmode {
-  bindsym h exec "mpc prev"
-  bindsym p exec "mpc prev"
-  bindsym l exec "mpc next"
-  bindsym n exec "mpc next"
-  bindsym t exec "mpc toggle"
-  bindsym r exec "mpc random"
-  bindsym f exec mpd-fav
-
-  bindsym Return mode "default"
-  bindsym Escape mode "default"
-}
-
-# sound
-bindsym XF86AudioMute exec "amixer set Master toggle"
-bindsym XF86AudioLowerVolume exec "amixer set Master 3%-"
-bindsym XF86AudioRaiseVolume exec "amixer set Master 3%+"
-bindsym XF86AudioMicMute exec "amixer set Mic toggle"
-bindsym XF86AudioPrev exec "mpc prev"
-bindsym XF86AudioPlay exec "mpc toggle"
-bindsym XF86AudioNext exec "mpc next"
 
 set $gapspx 0
 gaps inner $gapspx
