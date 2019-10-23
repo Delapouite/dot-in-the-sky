@@ -13,6 +13,7 @@
 - neovim — https://neovim.io/ — https://github.com/neovim/neovim
 - pastel — https://github.com/sharkdp/pastel 🦀
 - ripgrep — https://github.com/BurntSushi/ripgrep 🦀
+- sxiv — https://github.com/muennich/sxiv
 - tealdeer — https://github.com/dbrgn/tealdeer 🦀
 - termite — https://github.com/thestinger/termite
 - tig — https://jonas.github.io/tig/ – https://github.com/jonas/tig 
