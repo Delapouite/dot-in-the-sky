@@ -1,6 +1,7 @@
 # dots
 
 - bat — https://github.com/sharkdp/bat 🦀
+- chars — https://github.com/antifuchs/chars 🦀
 - exa — https://the.exa.website/ — https://github.com/ogham/exa 🦀
 - fd — https://github.com/sharkdp/fd 🦀
 - fish — http://fishshell.com/ — https://github.com/fish-shell/fish-shell
