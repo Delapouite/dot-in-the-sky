@@ -79,7 +79,7 @@ xkb_keymap {
     key <AB01> {[ z               , Z               , VoidSymbol      , VoidSymbol      ],[ underscore      , VoidSymbol      ]}; // z Z     _
     key <AB02> {[ x               , X               , multiply        , VoidSymbol      ],[ plus            , VoidSymbol      ]}; // x X ×   +
     key <AB03> {[ c               , C               , ccedilla        , Ccedilla        ],[ asciicircum     , VoidSymbol      ]}; // c C ç Ç ^
-    key <AB04> {[ v               , V               , VoidSymbol      , VoidSymbol      ],[ dollar          , VoidSymbol      ]}; // v V     $
+    key <AB04> {[ v               , V               , U2713           , U2714           ],[ dollar          , VoidSymbol      ]}; // v V ✓ ✔ $
     key <AB05> {[ b               , B               , dagger          , doubledagger    ],[ ampersand       , VoidSymbol      ]}; // b B † ‡ &
     key <AB06> {[ n               , N               , ntilde          , Ntilde          ],[ VoidSymbol      , VoidSymbol      ]}; // n N ñ Ñ
     key <AB07> {[ m               , M               , Multi_key       , masculine       ],[ VoidSymbol      , VoidSymbol      ]}; // m M ⎄ º
