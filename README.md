@@ -15,6 +15,7 @@ jq | https://stedolan.github.io/jq/ | https://github.com/stedolan/jq | ✓ | C
 kakoune | http://kakoune.org/ | https://github.com/mawww/kakoune | ✓ | C++
 neovim | https://neovim.io/ | https://github.com/neovim/neovim | ✓ | C
 pastel | | https://github.com/sharkdp/pastel | AUR | 🦀
+ranger | https://ranger.github.io/ | https://github.com/ranger/ranger | ✓ | 🐍
 ripgrep  | | https://github.com/BurntSushi/ripgrep | ✓ | 🦀
 rofi | | https://github.com/davatorium/rofi | ✓ | C
 sxiv | | https://github.com/muennich/sxiv | ✓ | C
