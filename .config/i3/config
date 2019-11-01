@@ -44,13 +44,11 @@ bindsym $mod+Shift+l move right
 
 # change focus between screens
 bindsym $mod+q focus output eDP-1
-bindsym $mod+w focus output HDMI-1
-bindsym $mod+e focus output DP-2
+bindsym $mod+w focus output DP-1
 
 # move focused workspace between screens
 bindsym $mod+Shift+q move workspace to output eDP-1
-bindsym $mod+Shift+w move workspace to output HDMI-1
-bindsym $mod+Shift+e move workspace to output DP-2
+bindsym $mod+Shift+w move workspace to output DP-1
 
 # horizontal orientation is [][][]
 bindsym $mod+s split h
