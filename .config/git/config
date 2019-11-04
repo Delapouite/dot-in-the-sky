@@ -27,7 +27,7 @@
 	d = diff
 	dw = diff --word-diff
 	dsf = "!git diff --color $@ | diff-so-fancy"
-	l = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
+	l = log --graph --format='%C(yellow)%h% %C(red)%d%Creset %s %Cgreen(%cr) %C(blue)%an%Creset'
 	ls = "!cd ${GIT_PREFIX:-`pwd`}; printf \"# HEAD: \"; git log --oneline | head -n1; git status"
 	rb = rebase
 	s = status
