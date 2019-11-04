@@ -51,7 +51,7 @@ map global goto <a-m> '<esc><a-m>;'                                   -docstring
 
 map global user <space> :                                             -docstring 'command (: alias)'
 map global user g ': grep '                                           -docstring 'grep'
-map global user r %{:connect ranger --selectfile %val{buffile} <ret>} -docstring 'ranger'
+map global user r %{:connect lf %val{buffile} <ret>}                  -docstring 'lf'
 
 alias global h doc
 alias global u enter-user-mode
@@ -123,7 +123,7 @@ hook global InsertChar [[(<{}>)\]] %{
   }
 }
 
-hook global InsertEnd .* %{
+hook global ModeChange pop:insert:normal %{
   set-option buffer show_matching_range
 }
 
@@ -163,8 +163,9 @@ plug 'alexherbo2/volatile-highlighter.kak' %{
   hook global WinCreate .* %{ volatile-highlighter-enable }
 }
 
-plug 'andreyorst/fzf.kak' defer 'fzf' %{
+plug 'andreyorst/fzf.kak' config %{
   map global user f ': fzf-mode<ret>' -docstring 'fzf'
+  } defer 'fzf' %{
   set-option global fzf_file_command 'rg'
   set-option global fzf_highlight_command 'bat'
 }
