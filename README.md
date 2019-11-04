@@ -13,9 +13,9 @@ httpie | https://httpie.org/ | https://github.com/jakubroztocil/httpie | ✓ | �
 i3 | https://i3wm.org/ | https://github.com/i3/i3 | ✓ | C
 jq | https://stedolan.github.io/jq/ | https://github.com/stedolan/jq | ✓ | C
 kakoune | http://kakoune.org/ | https://github.com/mawww/kakoune | ✓ | C++
+lf | https://godoc.org/github.com/gokcehan/lf | https://github.com/gokcehan/lf | AUR | Go
 neovim | https://neovim.io/ | https://github.com/neovim/neovim | ✓ | C
 pastel | | https://github.com/sharkdp/pastel | AUR | 🦀
-ranger | https://ranger.github.io/ | https://github.com/ranger/ranger | ✓ | 🐍
 ripgrep  | | https://github.com/BurntSushi/ripgrep | ✓ | 🦀
 rofi | | https://github.com/davatorium/rofi | ✓ | C
 sxiv | | https://github.com/muennich/sxiv | ✓ | C

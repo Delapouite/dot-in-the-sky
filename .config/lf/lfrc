@@ -1,0 +1,8 @@
+map gk top
+map gj bottom
+map gc cd ~/.config
+map e $$EDITOR $fx
+map <enter> $$EDITOR $fx
+
+set previewer ~/.config/lf/previewer.sh
+set ratios 2:5
