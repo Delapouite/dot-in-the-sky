@@ -14,6 +14,7 @@ i3 | https://i3wm.org/ | https://github.com/i3/i3 | ✓ | C | ![lc](https://img.
 jq | https://stedolan.github.io/jq/ | https://github.com/stedolan/jq | ✓ | C | ![lc](https://img.shields.io/github/last-commit/stedolan/jq)
 kakoune | http://kakoune.org/ | https://github.com/mawww/kakoune | ✓ | C++ | ![lc](https://img.shields.io/github/last-commit/mawww/kakoune)
 lf | https://godoc.org/github.com/gokcehan/lf | https://github.com/gokcehan/lf | AUR | Go | ![lc](https://img.shields.io/github/last-commit/gokcehan/lf)
+mpd | https://www.musicpd.org/ | https://github.com/MusicPlayerDaemon/MPD | ✓ | C++ | ![lc](https://img.shields.io/github/last-commit/MusicPlayerDaemon/MPD)
 neovim | https://neovim.io/ | https://github.com/neovim/neovim | ✓ | C | ![lc](https://img.shields.io/github/last-commit/neovim/neovim)
 pastel | | https://github.com/sharkdp/pastel | AUR | 🦀 | ![lc](https://img.shields.io/github/last-commit/sharkdp/pastel)
 ripgrep  | | https://github.com/BurntSushi/ripgrep | ✓ | 🦀 | ![lc](https://img.shields.io/github/last-commit/BurntSushi/ripgrep)
