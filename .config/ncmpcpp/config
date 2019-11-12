@@ -1,0 +1,6 @@
+song_list_format = {%a - }{%t}|{$8%f$9}$R{$3(%l)$9} {%y}
+song_columns_list_format = (20)[]{a} (6f)[green]{NE} (50)[white]{t|f:Title} (20)[cyan]{b} (7f)[magenta]{l} (4f)[]{y}
+playlist_separate_albums = yes
+autocenter_mode = yes
+centered_cursor = yes
+user_interface = alternative
