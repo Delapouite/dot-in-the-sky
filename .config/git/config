@@ -36,7 +36,7 @@
 	default = simple
 
 [pull]
-	rebase = preserve
+	rebase = merges
 
 [status]
 	showUntrackedFiles = all
