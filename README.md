@@ -15,6 +15,7 @@ jq | https://stedolan.github.io/jq/ https://github.com/stedolan/jq | ✓ | C | !
 kakoune | https://kakoune.org/ https://github.com/mawww/kakoune | ✓ | C++ | ![lc](https://img.shields.io/github/last-commit/mawww/kakoune)
 lf | https://godoc.org/github.com/gokcehan/lf https://github.com/gokcehan/lf | AUR | 🐹 | ![lc](https://img.shields.io/github/last-commit/gokcehan/lf)
 mpd | https://www.musicpd.org/ https://github.com/MusicPlayerDaemon/MPD | ✓ | C++ | ![lc](https://img.shields.io/github/last-commit/MusicPlayerDaemon/MPD)
+mpv | https://mpv.io/ https://github.com/mpv-player/mpv | ✓ | C | ![lc](https://img.shields.io/github/last-commit/mpv-player/mpv)
 ncmpcpp | https://rybczak.net/ncmpcpp/ https://github.com/arybczak/ncmpcpp | ✓ | C++ | ![lc](https://img.shields.io/github/last-commit/arybczak/ncmpcpp)
 neovim | https://neovim.io/ https://github.com/neovim/neovim | ✓ | C | ![lc](https://img.shields.io/github/last-commit/neovim/neovim)
 pastel | https://github.com/sharkdp/pastel | AUR | 🦀 | ![lc](https://img.shields.io/github/last-commit/sharkdp/pastel)
