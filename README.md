@@ -27,3 +27,21 @@ termite | https://github.com/thestinger/termite | ✓ | C++ | ![lc](https://img.
 tig | https://jonas.github.io/tig/ https://github.com/jonas/tig | ✓ | C | ![lc](https://img.shields.io/github/last-commit/jonas/tig)
 tokei | https://github.com/XAMPPRocky/tokei | ✓ | 🦀 | ![lc](https://img.shields.io/github/last-commit/XAMPPRocky/tokei)
 xkb | https://www.x.org/wiki/XKB/ https://cgit.freedesktop.org/xorg/xserver/tree/xkb | ✓ | C
+
+## init
+
+```sh
+git init --bare $HOME/.dot-in-the-sky
+git --git-dir=$HOME/.dot-in-the-sky --work-tree=$HOME config status.showUntrackedFiles no
+```
+
+## clone
+
+```sh
+git clone --bare https://github.com/Delapouite/dot-in-the-sky $HOME/.dot-in-the-sky
+git --git-dir=$HOME/.dot-in-the-sky --work-tree=$HOME checkout
+```
+
+## drab
+
+https://www.youtube.com/watch?v=HALKkedJUqM
