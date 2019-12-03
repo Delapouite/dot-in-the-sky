@@ -9,6 +9,7 @@ fd | https://github.com/sharkdp/fd | ✓ | 🦀 | ![lc](https://img.shields.io/g
 fish | https://fishshell.com/ https://github.com/fish-shell/fish-shell | ✓ | C++ | ![lc](https://img.shields.io/github/last-commit/fish-shell/fish-shell)
 fzf | https://github.com/junegunn/fzf | ✓ | 🐹 | ![lc](https://img.shields.io/github/last-commit/junegunn/fzf)
 git | https://git-scm.com/ https://github.com/git/git | ✓ | C | ![lc](https://img.shields.io/github/last-commit/git/git)
+htop | https://hisham.hm/htop/ https://github.com/hishamhm/htop | ✓ | C | ![lc](https://img.shields.io/github/last-commit/hishamhm/htop)
 httpie | https://httpie.org/ https://github.com/jakubroztocil/httpie | ✓ | 🐍 | ![lc](https://img.shields.io/github/last-commit/jakubroztocil/httpie)
 i3 | https://i3wm.org/ https://github.com/i3/i3 | ✓ | C | ![lc](https://img.shields.io/github/last-commit/i3/i3)
 jq | https://stedolan.github.io/jq/ https://github.com/stedolan/jq | ✓ | C | ![lc](https://img.shields.io/github/last-commit/stedolan/jq)
@@ -26,6 +27,7 @@ tealdeer | https://github.com/dbrgn/tealdeer | AUR | 🦀 | ![lc](https://img.sh
 termite | https://github.com/thestinger/termite | ✓ | C++ | ![lc](https://img.shields.io/github/last-commit/thestinger/termite)
 tig | https://jonas.github.io/tig/ https://github.com/jonas/tig | ✓ | C | ![lc](https://img.shields.io/github/last-commit/jonas/tig)
 tokei | https://github.com/XAMPPRocky/tokei | ✓ | 🦀 | ![lc](https://img.shields.io/github/last-commit/XAMPPRocky/tokei)
+xcwd | https://github.com/schischi/xcwd | ✓ | C | ![lc](https://img.shields.io/github/last-commit/schischi/xcwd)
 xkb | https://www.x.org/wiki/XKB/ https://cgit.freedesktop.org/xorg/xserver/tree/xkb | ✓ | C
 
 ## init
