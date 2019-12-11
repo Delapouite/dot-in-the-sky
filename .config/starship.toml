@@ -1,0 +1,52 @@
+prompt_order = [
+  "time",
+  "username",
+  "hostname",
+  "kubernetes",
+  "directory",
+  "git_branch",
+  "git_state",
+  "git_status",
+  "package",
+  "dotnet",
+  "golang",
+  "java",
+  "nodejs",
+  "python",
+  "ruby",
+  "rust",
+  "nix_shell",
+  "conda",
+  "memory_usage",
+  "aws",
+  "env_var",
+  "cmd_duration",
+  "line_break",
+  "jobs",
+  "battery",
+  "character",
+]
+
+[time]
+disabled = false
+style = ""
+
+[directory]
+truncation_length = 4
+truncate_to_repo = false
+style = "bold yellow"
+
+[git_status]
+conflicted_count.enabled = true
+deleted_count.enabled = true
+modified_count.enabled = true
+renamed_count.enabled = true
+staged_count.enabled = true
+untracked_count.enabled = true
+style = "blue"
+
+[battery]
+disabled = true
+
+[character]
+use_symbol_for_status = true

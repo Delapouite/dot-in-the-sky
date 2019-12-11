@@ -22,6 +22,7 @@ neovim | https://neovim.io/ https://github.com/neovim/neovim | ✓ | C | ![lc](h
 pastel | https://github.com/sharkdp/pastel | AUR | 🦀 | ![lc](https://img.shields.io/github/last-commit/sharkdp/pastel)
 ripgrep  | https://github.com/BurntSushi/ripgrep | ✓ | 🦀 | ![lc](https://img.shields.io/github/last-commit/BurntSushi/ripgrep)
 rofi | https://github.com/davatorium/rofi | ✓ | C | ![lc](https://img.shields.io/github/last-commit/davatorium/rofi)
+starship | https://starship.rs/ https://github.com/starship/starship | AUR | 🦀 | ![lc](https://img.shields.io/github/last-commit/starship/starship)
 sxiv | https://github.com/muennich/sxiv | ✓ | C | ![lc](https://img.shields.io/github/last-commit/muennich/sxiv)
 tealdeer | https://github.com/dbrgn/tealdeer | AUR | 🦀 | ![lc](https://img.shields.io/github/last-commit/dbrgn/tealdeer)
 termite | https://github.com/thestinger/termite | ✓ | C++ | ![lc](https://img.shields.io/github/last-commit/thestinger/termite)
