@@ -105,6 +105,7 @@ mode $openmode {
   bindsym m exec termite -e "ncmpcpp" ; mode "default"
   bindsym n exec termite -e "node" ; mode "default"
   bindsym o exec rofi -show run ; mode "default"
+  bindsym s exec flameshot gui ; mode "default"
 
   bindsym Return mode "default"
   bindsym Escape mode "default"
