@@ -15,6 +15,7 @@
 
 	# synonyms
 	amend = commit --amend
+	authors = shortlog -sne
 	fix = rebase -i HEAD~2
 	uncommit = reset --mixed HEAD~
 	unstage = restore --staged
