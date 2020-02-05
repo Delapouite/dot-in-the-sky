@@ -5,6 +5,7 @@ prompt_order = [
   "kubernetes",
   "directory",
   "git_branch",
+  "git_commit",
   "git_state",
   "git_status",
   "package",
@@ -35,6 +36,9 @@ style = ""
 truncation_length = 4
 truncate_to_repo = false
 style = "bold yellow"
+
+[git_commit]
+disabled = false
 
 [git_status]
 conflicted_count.enabled = true
