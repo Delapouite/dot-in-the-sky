@@ -1,0 +1,65 @@
+{
+  "editor.fontSize": 12,
+  "editor.minimap.enabled": false,
+  "editor.renderWhitespace": "all",
+  "editor.suggestSelection": "first",
+  "editor.tabSize": 2,
+  "problems.showCurrentInStatus": true,
+  "window.menuBarVisibility": "toggle",
+  "workbench.colorTheme": "Dracula",
+  "workbench.statusBar.visible": true,
+
+  "eslint.alwaysShowStatus": true,
+  "gitlens.codeLens.enabled": false,
+  "prettier.semi": false,
+  "prettier.trailingComma": "all",
+  "[html]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "vim.cursorStylePerMode.normal": "block",
+  "vim.easymotion": true,
+  "vim.highlightedyank.enable": true,
+  "vim.hlsearch": true,
+  "vim.leader": "<space>",
+  "vim.replaceWithRegister": true,
+  "vim.useSystemClipboard": true,
+  "vim.insertModeKeyBindings": [
+    {
+      "before": ["j", "j"],
+      "after": ["<Esc>"]
+    }
+  ],
+  "vim.normalModeKeyBindingsNonRecursive": [
+    {
+      "before": ["q"],
+      "after": ["b"]
+    },
+    {
+      "before": ["Q"],
+      "after": ["B"]
+    },
+    {
+      "before": ["U"],
+      "after": ["<C-r>"]
+    },
+    {
+      "before": ["<leader>", "n"],
+      "commands": ["workbench.action.nextEditor"]
+    },
+    {
+      "before": ["<leader>", "p"],
+      "commands": [
+        {
+          "command": "workbench.action.previousEditor"
+        }
+      ]
+    }
+  ]
+}
+
