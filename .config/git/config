@@ -11,7 +11,7 @@
 	branches = branch -a
 	remotes = remote -v
 	stashes = stash list
-	tags = tag
+	tags = tag -n
 
 	# synonyms
 	amend = commit --amend
