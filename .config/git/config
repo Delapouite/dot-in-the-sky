@@ -1,6 +1,7 @@
 [user]
 	email = delapouite@gmail.com
 	name = Delapouite
+	useConfigOnly = true
 
 [core]
 	editor = kak
