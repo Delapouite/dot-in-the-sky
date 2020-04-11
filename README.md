@@ -19,6 +19,7 @@ mpd | https://www.musicpd.org/ https://github.com/MusicPlayerDaemon/MPD | ✓ | 
 mpv | https://mpv.io/ https://github.com/mpv-player/mpv | ✓ | C | ![lc](https://img.shields.io/github/last-commit/mpv-player/mpv)
 ncmpcpp | https://rybczak.net/ncmpcpp/ https://github.com/arybczak/ncmpcpp | ✓ | C++ | ![lc](https://img.shields.io/github/last-commit/arybczak/ncmpcpp)
 neovim | https://neovim.io/ https://github.com/neovim/neovim | ✓ | C | ![lc](https://img.shields.io/github/last-commit/neovim/neovim)
+nushell | https://www.nushell.sh/ https://github.com/nushell/nushell | AUR | 🦀 | ![lc](https://img.shields.io/github/last-commit/nushell/nushell)
 pastel | https://github.com/sharkdp/pastel | AUR | 🦀 | ![lc](https://img.shields.io/github/last-commit/sharkdp/pastel)
 ripgrep  | https://github.com/BurntSushi/ripgrep | ✓ | 🦀 | ![lc](https://img.shields.io/github/last-commit/BurntSushi/ripgrep)
 rofi | https://github.com/davatorium/rofi | ✓ | C | ![lc](https://img.shields.io/github/last-commit/davatorium/rofi)
@@ -30,6 +31,7 @@ tig | https://jonas.github.io/tig/ https://github.com/jonas/tig | ✓ | C | ![lc
 tokei | https://github.com/XAMPPRocky/tokei | ✓ | 🦀 | ![lc](https://img.shields.io/github/last-commit/XAMPPRocky/tokei)
 xcwd | https://github.com/schischi/xcwd | ✓ | C | ![lc](https://img.shields.io/github/last-commit/schischi/xcwd)
 xkb | https://www.x.org/wiki/XKB/ https://cgit.freedesktop.org/xorg/xserver/tree/xkb | ✓ | C
+zola | https://www.getzola.org https://github.com/getzola/zola | AUR | 🦀 | ![lc](https://img.shields.io/github/last-commit/getzola/zola)
 
 ## init
 
