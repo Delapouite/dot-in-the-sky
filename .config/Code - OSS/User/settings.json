@@ -1,14 +1,18 @@
 {
+  "editor.codeLens": false,
+  "editor.cursorStyle": "block",
+  "editor.cursorSurroundingLines": 10,
   "editor.fontSize": 12,
   "editor.minimap.enabled": false,
+  "editor.renderLineHighlight": "all",
   "editor.renderWhitespace": "all",
   "editor.suggestSelection": "first",
   "editor.tabSize": 2,
   "problems.showCurrentInStatus": true,
+  "references.preferredLocation": "view",
   "window.menuBarVisibility": "toggle",
   "workbench.colorTheme": "Dracula",
   "workbench.statusBar.visible": true,
-
   "eslint.alwaysShowStatus": true,
   "gitlens.codeLens.enabled": false,
   "prettier.semi": false,
@@ -31,35 +35,139 @@
   "vim.useSystemClipboard": true,
   "vim.insertModeKeyBindings": [
     {
-      "before": ["j", "j"],
-      "after": ["<Esc>"]
+      "before": [
+        "j",
+        "j"
+      ],
+      "after": [
+        "<Esc>"
+      ]
     }
   ],
   "vim.normalModeKeyBindingsNonRecursive": [
     {
-      "before": ["q"],
-      "after": ["b"]
+      "before": [
+        "q"
+      ],
+      "after": [
+        "b"
+      ]
     },
     {
-      "before": ["Q"],
-      "after": ["B"]
+      "before": [
+        "Q"
+      ],
+      "after": [
+        "B"
+      ]
     },
     {
-      "before": ["U"],
-      "after": ["<C-r>"]
+      "before": [
+        "U"
+      ],
+      "after": [
+        "<C-r>"
+      ]
     },
     {
-      "before": ["<leader>", "n"],
-      "commands": ["workbench.action.nextEditor"]
+      "before": [
+        "<leader>",
+        "n"
+      ],
+      "commands": [
+        "workbench.action.nextEditor"
+      ]
     },
     {
-      "before": ["<leader>", "p"],
+      "before": [
+        "<leader>",
+        "p"
+      ],
       "commands": [
         {
           "command": "workbench.action.previousEditor"
         }
       ]
+    },
+    {
+      "before": [
+        "<leader>",
+        "="
+      ],
+      "commands": [
+        {
+          "command": "editor.action.formatDocument"
+        }
+      ]
+    },
+    {
+      "before": [
+        "g",
+        "d"
+      ],
+      "commands": [
+        {
+          "command": "editor.action.goToTypeDefinition"
+        }
+      ]
+    },
+    {
+      "before": [
+        "g",
+        "h"
+      ],
+      "after": [
+        "0"
+      ]
+    },
+    {
+      "before": [
+        "g",
+        "i"
+      ],
+      "after": [
+        "^"
+      ]
+    },
+    {
+      "before": [
+        "g",
+        "l"
+      ],
+      "after": [
+        "$"
+      ]
+    },
+    {
+      "before": [
+        "g",
+        "m"
+      ],
+      "after": [
+        "%"
+      ]
+    },
+    {
+      "before": [
+        "g",
+        "s"
+      ],
+      "commands": [
+        {
+          "command": "workbench.action.gotoSymbol"
+        }
+      ]
+    },
+    {
+      "before": [
+        "g",
+        "t"
+      ],
+      "commands": [
+        {
+          "command": "workbench.action.showAllSymbols"
+        }
+      ]
     }
   ]
 }
-
