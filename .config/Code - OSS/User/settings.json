@@ -27,11 +27,12 @@
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   "vim.cursorStylePerMode.normal": "block",
-  "vim.easymotion": true,
+  "vim.easymotion": false,
   "vim.highlightedyank.enable": true,
   "vim.hlsearch": true,
   "vim.leader": "<space>",
   "vim.replaceWithRegister": true,
+  "vim.sneak": true,
   "vim.useSystemClipboard": true,
   "vim.insertModeKeyBindings": [
     {
@@ -45,6 +46,37 @@
     }
   ],
   "vim.normalModeKeyBindingsNonRecursive": [
+    // fixes
+    {
+      "before": [
+        "K"
+      ],
+      "after": [
+        "i",
+        "<CR>",
+        "<Esc>",
+        "k",
+        "$"
+      ]
+    },
+    {
+      "before": [
+        "U"
+      ],
+      "after": [
+        "<C-r>"
+      ]
+    },
+    {
+      "before": [
+        "Y"
+      ],
+      "after": [
+        "y",
+        "$"
+      ]
+    },
+    // moves
     {
       "before": [
         "q"
@@ -61,14 +93,17 @@
         "B"
       ]
     },
+    // extend
     {
       "before": [
-        "U"
+        "m"
       ],
       "after": [
-        "<C-r>"
+        "v",
+        "%",
       ]
     },
+    // leader
     {
       "before": [
         "<leader>",
@@ -100,6 +135,7 @@
         }
       ]
     },
+    // goto
     {
       "before": [
         "g",
