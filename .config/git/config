@@ -33,7 +33,7 @@
 	l = log --graph --format='%C(yellow)%h% %C(red)%d%Creset %s %Cgreen(%cr) %C(blue)%an%Creset'
 	ls = "!cd ${GIT_PREFIX:-`pwd`}; printf \"# HEAD: \"; git log --oneline | head -n1; git status"
 	rb = rebase
-	s = status
+	s = status --short --branch
 
 [push]
 	default = simple
