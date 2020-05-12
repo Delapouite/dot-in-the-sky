@@ -198,15 +198,25 @@ mode "resize" {
   bindsym Up    resize grow   height 1 px or 1 ppt
   bindsym Right resize grow   width 1 px or 1 ppt
 
-  bindsym 1 resize set 10 ppt 0
-  bindsym 2 resize set 20 ppt 0
-  bindsym 3 resize set 30 ppt 0
-  bindsym 4 resize set 40 ppt 0
-  bindsym 5 resize set 50 ppt 0
-  bindsym 6 resize set 60 ppt 0
-  bindsym 7 resize set 70 ppt 0
-  bindsym 8 resize set 80 ppt 0
-  bindsym 9 resize set 90 ppt 0
+  bindsym 1 resize set width 10 ppt
+  bindsym 2 resize set width 20 ppt
+  bindsym 3 resize set width 30 ppt
+  bindsym 4 resize set width 40 ppt
+  bindsym 5 resize set width 50 ppt
+  bindsym 6 resize set width 60 ppt
+  bindsym 7 resize set width 70 ppt
+  bindsym 8 resize set width 80 ppt
+  bindsym 9 resize set width 90 ppt
+
+  bindsym q resize set height 10 ppt
+  bindsym w resize set height 20 ppt
+  bindsym e resize set height 30 ppt
+  bindsym r resize set height 40 ppt
+  bindsym t resize set height 50 ppt
+  bindsym y resize set height 60 ppt
+  bindsym u resize set height 70 ppt
+  bindsym i resize set height 80 ppt
+  bindsym o resize set height 90 ppt
 
   bindsym Return mode "default"
   bindsym Escape mode "default"
