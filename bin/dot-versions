@@ -1,0 +1,30 @@
+#!/bin/sh
+bat --version
+chars --version
+exa --version
+fd --version
+echo "fish $(fish --version | awk '{ print $3 }')"
+echo "fzf $(fzf --version)"
+echo "git $(git --version | awk '{ print $3 }')"
+echo "htop $(htop --version | head -n 1 | awk '{ print $2 }')"
+echo "httpie $(http --version)"
+echo "i3 $(i3 --version | awk '{ print $3 }')"
+jq --version | tr '-' ' '
+kak -version | tr '[:upper:]' '[:lower:]'
+echo "lf $(lf --version)"
+echo "mpd $(mpd --version | head -n 1 | awk '{ print $4 }')"
+mpv --version | head -n 1 | awk '{ print $1" "$2 }'
+ncmpcpp --version | head -n 1 |
+nvim --version | head -n 1 | tr '[:upper:]' '[:lower:]'
+nu --version
+pastel --version
+rg --version | head -n 1
+echo "rofi $(rofi -v | awk '{ print $2 }')"
+starship --version
+sxiv -v
+tldr --version
+termite --version
+tig --version | head -n 1 | awk '{ print $1" "$3 }'
+tokei --version | awk '{ print $1" "$2}'
+zola --version
+
