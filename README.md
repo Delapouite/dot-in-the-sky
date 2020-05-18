@@ -11,6 +11,7 @@ fzf | https://github.com/junegunn/fzf | ✓ | 🐹 | ![lc](https://img.shields.i
 git | https://git-scm.com/ https://github.com/git/git | ✓ | C | ![lc](https://img.shields.io/github/last-commit/git/git)
 htop | https://hisham.hm/htop/ https://github.com/hishamhm/htop | ✓ | C | ![lc](https://img.shields.io/github/last-commit/hishamhm/htop)
 httpie | https://httpie.org/ https://github.com/jakubroztocil/httpie | ✓ | 🐍 | ![lc](https://img.shields.io/github/last-commit/jakubroztocil/httpie)
+hyperfine | https://github.com/sharkdp/hyperfine | ✓ | 🦀 | ![lc](https://img.shields.io/github/last-commit/sharkdp/hyperfine)
 i3 | https://i3wm.org/ https://github.com/i3/i3 | ✓ | C | ![lc](https://img.shields.io/github/last-commit/i3/i3)
 jq | https://stedolan.github.io/jq/ https://github.com/stedolan/jq | ✓ | C | ![lc](https://img.shields.io/github/last-commit/stedolan/jq)
 kakoune | https://kakoune.org/ https://github.com/mawww/kakoune | ✓ | C++ | ![lc](https://img.shields.io/github/last-commit/mawww/kakoune)

@@ -8,6 +8,7 @@ echo "fzf $(fzf --version)"
 echo "git $(git --version | awk '{ print $3 }')"
 echo "htop $(htop --version | head -n 1 | awk '{ print $2 }')"
 echo "httpie $(http --version)"
+hyperfine --version
 echo "i3 $(i3 --version | awk '{ print $3 }')"
 jq --version | tr '-' ' '
 kak -version | tr '[:upper:]' '[:lower:]'
