@@ -3,6 +3,7 @@
 Name | Web / Source | Arch | Lang | Badge
 -----|--------------|------|------|------
 bat | https://github.com/sharkdp/bat | ✓ | 🦀 | ![lc](https://img.shields.io/github/last-commit/sharkdp/bat)
+broot | https://github.com/Canop/broot | ✓ | 🦀 | ![lc](https://img.shields.io/github/last-commit/Canop/broot)
 chars | https://github.com/antifuchs/chars | AUR | 🦀 | ![lc](https://img.shields.io/github/last-commit/antifuchs/chars) 
 exa | https://the.exa.website/ https://github.com/ogham/exa | ✓ | 🦀 | ![lc](https://img.shields.io/github/last-commit/ogham/exa)
 fd | https://github.com/sharkdp/fd | ✓ | 🦀 | ![lc](https://img.shields.io/github/last-commit/sharkdp/fd)

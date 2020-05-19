@@ -1,5 +1,6 @@
 #!/bin/sh
 bat --version
+broot --version
 chars --version
 exa --version
 fd --version
