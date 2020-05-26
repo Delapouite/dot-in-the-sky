@@ -55,3 +55,6 @@
 
 [mergetool "meld"]
 	cmd = meld "$LOCAL" "$MERGED" "$REMOTE" --output "$MERGED"
+
+[rerere]
+	enabled = true
