@@ -3,6 +3,9 @@
 	name = Delapouite
 	useConfigOnly = true
 
+[includeIf "gitdir:~/code/github/"]
+	path = ~/code/github/.gitconfig
+
 [core]
 	editor = kak
 
