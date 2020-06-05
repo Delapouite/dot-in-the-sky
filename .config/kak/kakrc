@@ -160,7 +160,6 @@ plug 'alexherbo2/split-object.kak' %{
 
 plug 'alexherbo2/volatile-highlighter.kak' %{
   set-face global Volatile +bi
-  hook global WinCreate .* %{ volatile-highlighter-enable }
 }
 
 plug 'andreyorst/fzf.kak' config %{
