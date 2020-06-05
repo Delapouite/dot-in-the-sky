@@ -1,3 +1,6 @@
+set -x EDITOR kak
+set -x VISUAL kak
+
 alias ...='cd ../../'
 alias ....='cd ../../../'
 alias .....='cd ../../../../'
