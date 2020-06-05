@@ -23,7 +23,19 @@
   "[javascript]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
+  "[json]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[jsonc]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
   "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[yaml]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   "vim.cursorStylePerMode.normal": "block",
@@ -139,17 +151,6 @@
     {
       "before": [
         "g",
-        "d"
-      ],
-      "commands": [
-        {
-          "command": "editor.action.goToTypeDefinition"
-        }
-      ]
-    },
-    {
-      "before": [
-        "g",
         "h"
       ],
       "after": [
@@ -181,6 +182,29 @@
       ],
       "after": [
         "%"
+      ]
+    },
+    // LSP
+    {
+      "before": [
+        "g",
+        "d"
+      ],
+      "commands": [
+        {
+          "command": "editor.action.goToTypeDefinition"
+        }
+      ]
+    },
+    {
+      "before": [
+        "g",
+        "D"
+      ],
+      "commands": [
+        {
+          "command": "editor.action.goToImplementation"
+        }
       ]
     },
     {
