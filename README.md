@@ -29,6 +29,7 @@ starship | https://starship.rs/ https://github.com/starship/starship | AUR | �
 sxiv | https://github.com/muennich/sxiv | ✓ | C | ![lc](https://img.shields.io/github/last-commit/muennich/sxiv) | ![v](https://img.shields.io/github/v/release/muennich/sxiv?sort=semver)
 tealdeer | https://github.com/dbrgn/tealdeer | AUR | 🦀 | ![lc](https://img.shields.io/github/last-commit/dbrgn/tealdeer) | ![v](https://img.shields.io/github/v/release/dbrgn/tealdeer?sort=semver)
 termite | https://github.com/thestinger/termite | ✓ | C++ | ![lc](https://img.shields.io/github/last-commit/thestinger/termite) | ![v](https://img.shields.io/github/v/release/thestinger/termite?sort=semver)
+trans | https://github.com/soimort/translate-shell | ✓ | awk | ![lc](https://img.shields.io/github/last-commit/soimort/translate-shell) | ![v](https://img.shields.io/github/v/release/soimort/translate-shell?sort=semver)
 tig | https://jonas.github.io/tig/ https://github.com/jonas/tig | ✓ | C | ![lc](https://img.shields.io/github/last-commit/jonas/tig) | ![v](https://img.shields.io/github/v/release/jonas/tig?sort=semver)
 tokei | https://github.com/XAMPPRocky/tokei | ✓ | 🦀 | ![lc](https://img.shields.io/github/last-commit/XAMPPRocky/tokei) | ![v](https://img.shields.io/github/v/release/XAMPPRocky/tokei?sort=semver)
 xcwd | https://github.com/schischi/xcwd | ✓ | C | ![lc](https://img.shields.io/github/last-commit/schischi/xcwd) | ![v](https://img.shields.io/github/v/release/schischi/xcwd?sort=semver)
