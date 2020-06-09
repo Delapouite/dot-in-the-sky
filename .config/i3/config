@@ -18,8 +18,8 @@ bindsym $mod+space floating toggle
 # change focus between tiling / floating windows
 bindsym $mod+Shift+space focus mode_toggle
 
-bindsym $mod+Return exec termite
-bindsym $mod+BackSpace exec termite -d $(xcwd) -c /bin/fish
+bindsym $mod+Return exec kitty
+bindsym $mod+BackSpace exec kitty -d $(xcwd)
 
 bindsym $mod+Escape kill
 
