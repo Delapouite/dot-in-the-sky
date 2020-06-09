@@ -29,29 +29,49 @@ hook global WinDisplay .* update-status
 hook global BufSetOption lsp_diagnostic_error_count=.* update-status
 hook global BufSetOption lsp_diagnostic_warning_count=.* update-status
 
-map global normal <space> ,                                           -docstring 'leader'
-map global normal <backspace> <space>                                 -docstring 'remove all selections except main'
-map global normal <a-backspace> <a-space>                             -docstring 'remove main sel'
+# needs those kitty map for disambiguation hack:
+# map ctrl+h send_text all \u24D7 // ⓗ
+# map ctrl+i send_text all \u24D8 // ⓘ
+# map ctrl+j send_text all \u24D9 // ⓙ
+# map ctrl+m send_text all \u24DC // ⓜ
 
-map global normal . ':'                                               -docstring 'enter command prompt'
-map global normal : '.'                                               -docstring 'repeat last insert'
+map global normal ⓘ '<tab>'
 
-map global normal '#' ': comment-line<ret>'                           -docstring 'comment-line' 
-map global normal '<a-#>' ': comment-block<ret>'                      -docstring 'comment-block' 
-map global normal '=' ': format<ret>'                                 -docstring 'format'
+# <a-k> equivalent is defined afer auto-percent is loaded
+map global normal <a-j> ': extend-line-down %val{count}<ret>' -docstring 'extend line down'
+map global normal C '<a-j>'                                   -docstring 'join lines'
+map global normal <a-C> '<a-J>'                               -docstring 'join lines and select spaces'
 
-map global insert <a-j> '<a-;>'                                       -docstring 'temp escape to normal mode'
-map global insert <a-k> '<esc>'                                       -docstring 'escape to normal mode'
-map global insert <a-p> '<c-r>"'                                      -docstring 'paste'
+map global normal ⓙ 'C'                                       -docstring 'copy selection on next line'
+map global normal <c-k> '<a-C>'                               -docstring 'copy selection on previous line'
 
-map global goto <lt> <esc><c-o>                                       -docstring 'jump backward'
-map global goto <gt> <esc><tab>                                       -docstring 'jump forward'
-map global goto m '<esc>m;'                                           -docstring 'matching next char'
-map global goto <a-m> '<esc><a-m>;'                                   -docstring 'matching previous char'
+map global normal <c-l> ']p;'                                 -docstring 'next paragraph'
+map global normal ⓗ '[p;'                                     -docstring 'previous paragraph'
 
-map global user <space> :                                             -docstring 'command (: alias)'
-map global user g ': grep '                                           -docstring 'grep'
-map global user r %{:connect lf %val{buffile} <ret>}                  -docstring 'lf'
+map global normal <space> ,                                   -docstring 'leader'
+map global normal <backspace> <space>                         -docstring 'remove all selections except main'
+map global normal <a-backspace> <a-space>                     -docstring 'remove main sel'
+
+map global normal . ':'                                       -docstring 'enter command prompt'
+map global normal : '.'                                       -docstring 'repeat last insert'
+
+map global normal '#' ': comment-line<ret>'                   -docstring 'comment-line'
+map global normal '<a-#>' ': comment-block<ret>'              -docstring 'comment-block'
+map global normal '=' ': format<ret>'                         -docstring 'format'
+
+map global insert <a-j> '<a-;>'                               -docstring 'temp escape to normal mode'
+map global insert <a-k> '<esc>'                               -docstring 'escape to normal mode'
+map global insert <a-p> '<c-r>"'                              -docstring 'paste'
+
+map global goto <lt> <esc><c-o>                               -docstring 'jump backward'
+map global goto <gt> <esc><tab>                               -docstring 'jump forward'
+map global goto m '<esc>m;'                                   -docstring 'matching next char'
+map global goto n '<esc>]p;'                                  -docstring 'next paragraph'
+map global goto p '<esc>[p;'                                  -docstring 'previous paragraph'
+map global goto <a-m> '<esc><a-m>;'                           -docstring 'matching previous char'
+
+map global user <space> :                                     -docstring 'command (: alias)'
+map global user g ': grep '                                   -docstring 'grep'
 
 alias global h doc
 alias global u enter-user-mode
@@ -96,10 +116,6 @@ hook global WinSetOption filetype=javascript %{
 
 hook global WinSetOption filetype=json %{
   set-option window formatcmd 'prettier --stdin --parser json'
-}
-
-hook global BufOpenFile .* %{
-  editorconfig-load
 }
 
 hook global BufWritePre .* %{ evaluate-commands %sh{
@@ -148,14 +164,16 @@ hook global WinCreate .* %{
 
 source '~/.config/kak/plugins/plug.kak/rc/plug.kak'
 
-plug 'alexherbo2/connect.kak'
+plug 'alexherbo2/connect.kak' %{
+  map global user r %{:connect lf %val{buffile} <ret>} -docstring 'lf'
+}
 
 plug 'alexherbo2/explore.kak'
 
 plug 'alexherbo2/pad-number.kak'
 
 plug 'alexherbo2/split-object.kak' %{
-  map global normal <a-I> ': enter-user-mode split-object<ret>'
+  map global normal <a-I> ': enter-user-mode split-object<ret>' -docstring 'split object mode'
 }
 
 plug 'alexherbo2/volatile-highlighter.kak' %{
@@ -169,7 +187,11 @@ plug 'andreyorst/fzf.kak' config %{
   set-option global fzf_highlight_command 'bat'
 }
 
-plug 'delapouite/kakoune-auto-percent'
+plug 'delapouite/kakoune-auto-percent' %{
+  map global normal <a-k> ': extend-line-up %val{count}<ret>'   -docstring 'extend line up'
+  map global normal D '<a-k>'                                   -docstring 'keep selections matching regex'
+  map global normal <a-D> '<a-K>'                               -docstring 'keep selections not matching regex'
+}
 
 plug 'delapouite/kakoune-buffers' %{
   map global normal ^ q
@@ -178,8 +200,8 @@ plug 'delapouite/kakoune-buffers' %{
   map global normal Q B
   map global normal <a-q> <a-b>
   map global normal <a-Q> <a-B>
-  map global normal b ': enter-buffers-mode<ret>' -docstring 'buffers'
-  map global normal B ': enter-user-mode -lock buffers<ret>' -docstring 'buffers (lock)'
+  map global normal b ': enter-buffers-mode<ret>' -docstring 'buffers mode'
+  map global normal B ': enter-user-mode -lock buffers<ret>' -docstring 'buffers mode lock'
 }
 
 plug 'delapouite/kakoune-cd' %{
@@ -195,7 +217,7 @@ plug 'delapouite/kakoune-hump' %{
 }
 
 plug 'delapouite/kakoune-i3' %{
-  map global user 3 ': enter-user-mode i3<ret>' -docstring 'i3'
+  map global user 3 ': enter-user-mode i3<ret>' -docstring 'i3 mode'
 }
 
 plug 'delapouite/kakoune-goto-file' %{
@@ -204,7 +226,7 @@ plug 'delapouite/kakoune-goto-file' %{
 }
 
 plug 'delapouite/kakoune-mirror' %{
-  map global normal "'" ': enter-user-mode -lock mirror<ret>'
+  map global normal "'" ': enter-user-mode -lock mirror<ret>' -docstring 'mirror mode lock'
 }
 
 plug 'delapouite/kakoune-npm'
@@ -232,17 +254,20 @@ plug 'delapouite/kakoune-user-modes' %{
   map global normal , ': enter-user-mode anchor<ret>'   -docstring 'anchor mode'
   map global user s ': enter-user-mode echo<ret>'       -docstring 'echo mode'
   map global user / ': enter-user-mode search<ret>'     -docstring 'search mode'
-  map global user l ': enter-user-mode lint<ret>'       -docstring 'lint'
-  map global user L ': enter-user-mode -lock lint<ret>' -docstring 'lint lock'
+  map global user l ': enter-user-mode lint<ret>'       -docstring 'lint mode'
+  map global user L ': enter-user-mode -lock lint<ret>' -docstring 'lint mode lock'
+  map global user k ': enter-user-mode keep<ret>'       -docstring 'keep mode'
+  map global user _ ': enter-user-mode trim<ret>'       -docstring 'trim mode'
+  map global user = ': enter-user-mode trim<ret>'       -docstring 'format mode'
 }
 
 plug 'https://gitlab.com/FlyingWombat/case.kak' %{
-  map global normal '`' ': enter-user-mode case<ret>'
+  map global normal '`' ': enter-user-mode case<ret>' -docstring 'case mode'
 }
 
 plug 'https://gitlab.com/Screwtapello/kakoune-inc-dec' %{
-  map global normal <c-a> ': inc-dec-modify-numbers + %val{count}<ret>'
-  map global normal <c-x> ': inc-dec-modify-numbers - %val{count}<ret>'
+  map global normal <c-a> ': inc-dec-modify-numbers + %val{count}<ret>' -docstring 'increment'
+  map global normal <c-x> ': inc-dec-modify-numbers - %val{count}<ret>' -docstring 'decrement'
 }
 
 plug "lePerdu/kakboard" %{
@@ -275,7 +300,7 @@ plug "ul/kak-lsp" do %{
 }
 
 plug "ul/kak-tree" do %{
-  cargo install --force --path . --features "javascript json typescript"
+  cargo install --force --path . --features "css html javascript json typescript"
   } %{
   declare-user-mode tree
   map global tree h ': tree-select-previous-node<ret>' -docstring 'select previous'
@@ -284,6 +309,20 @@ plug "ul/kak-tree" do %{
   map global tree j ': tree-select-children<ret>' -docstring 'select children'
   map global tree f ': tree-select-first-child<ret>' -docstring 'select first child'
   map global tree s ': tree-node-sexp<ret>' -docstring 'show info'
-  map global user t ': enter-user-mode tree<ret>' -docstring 'tree'
-  map global normal þ ': enter-user-mode -lock tree<ret>' -docstring 'tree (lock)'
+  map global user t ': enter-user-mode tree<ret>' -docstring 'tree mode'
+  map global normal þ ': enter-user-mode -lock tree<ret>' -docstring 'tree mode lock'
 }
+
+define-command -hidden -params 1 extend-line-down %{
+  execute-keys "<a-:>%arg{1}X"
+}
+
+define-command -hidden  -params 1 extend-line-up %{
+  execute-keys "<a-:><a-;>%arg{1}K<a-;>"
+  try %{
+    execute-keys -draft ';<a-K>\n<ret>'
+    execute-keys X
+  }
+  execute-keys '<a-;><a-X>'
+}
+
