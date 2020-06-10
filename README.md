@@ -10,6 +10,7 @@ fd | https://github.com/sharkdp/fd | ✓ | 🦀 | ![lc](https://img.shields.io/g
 fish | https://fishshell.com/ https://github.com/fish-shell/fish-shell | ✓ | C++ | ![lc](https://img.shields.io/github/last-commit/fish-shell/fish-shell) | ![v](https://img.shields.io/github/v/release/fish-shell/fish-shell?sort=semver)
 fzf | https://github.com/junegunn/fzf | ✓ | 🐹 | ![lc](https://img.shields.io/github/last-commit/junegunn/fzf) | ![v](https://img.shields.io/github/v/release/junegunn/fzf?sort=semver)
 git | https://git-scm.com/ https://github.com/git/git | ✓ | C | ![lc](https://img.shields.io/github/last-commit/git/git) | ![v](https://img.shields.io/github/v/release/git/git?sort=semver)
+gitui | https://github.com/extrawurst/gitui | AUR | 🦀 | ![lc](https://img.shields.io/github/last-commit/extrawurst/gitui) | ![v](https://img.shields.io/github/v/release/extrawurst/gitui?sort=semver)
 htop | https://hisham.hm/htop/ https://github.com/hishamhm/htop | ✓ | C | ![lc](https://img.shields.io/github/last-commit/hishamhm/htop) | ![v](https://img.shields.io/github/v/release/hishamhm/htop?sort=semver)
 httpie | https://httpie.org/ https://github.com/jakubroztocil/httpie | ✓ | 🐍 | ![lc](https://img.shields.io/github/last-commit/jakubroztocil/httpie) | ![v](https://img.shields.io/github/v/release/jakubroztocil/httpie?sort=semver)
 hyperfine | https://github.com/sharkdp/hyperfine | ✓ | 🦀 | ![lc](https://img.shields.io/github/last-commit/sharkdp/hyperfine) | ![v](https://img.shields.io/github/v/release/sharkdp/hyperfine?sort=semver)
@@ -50,6 +51,12 @@ git --git-dir=$HOME/.dot-in-the-sky --work-tree=$HOME config status.showUntracke
 git clone --bare https://github.com/Delapouite/dot-in-the-sky $HOME/.dot-in-the-sky
 git --git-dir=$HOME/.dot-in-the-sky --work-tree=$HOME checkout
 ```
+
+## /etc
+
+### /etc/pacman.conf
+
+- `VerbosePkgLists`
 
 ## drab
 
