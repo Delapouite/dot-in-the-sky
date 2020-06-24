@@ -3,6 +3,7 @@
 Name | Web / Source | Arch | Lang | Date | Version |
 -----|--------------|------|------|------|---------|
 bat | https://github.com/sharkdp/bat | ✓ | 🦀 | ![lc](https://img.shields.io/github/last-commit/sharkdp/bat) | ![v](https://img.shields.io/github/v/release/sharkdp/bat?sort=semver)
+bat-extras | https://github.com/eth-p/bat-extras | AUR | sh | ![lc](https://img.shields.io/github/last-commit/eth-p/bat-extras) | ![v](https://img.shields.io/github/v/release/eth-p/bat-extras?sort=semver)
 broot | https://github.com/Canop/broot | ✓ | 🦀 | ![lc](https://img.shields.io/github/last-commit/Canop/broot) | ![v](https://img.shields.io/github/v/release/Canop/broot?sort=semver)
 chars | https://github.com/antifuchs/chars | AUR | 🦀 | ![lc](https://img.shields.io/github/last-commit/antifuchs/chars) | ![v](https://img.shields.io/github/v/release/antifuchs/chars?sort=semver)
 exa | https://the.exa.website/ https://github.com/ogham/exa | ✓ | 🦀 | ![lc](https://img.shields.io/github/last-commit/ogham/exa) | ![v](https://img.shields.io/github/v/release/ogham/exa?sort=semver)
