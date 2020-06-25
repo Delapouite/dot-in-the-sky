@@ -23,6 +23,7 @@ nu --version
 pastel --version
 rg --version | head -n 1
 echo "rofi $(rofi -v | awk '{ print $2 }')"
+rofimoji --version
 starship --version
 sxiv -v
 tldr --version

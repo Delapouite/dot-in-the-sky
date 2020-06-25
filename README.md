@@ -28,6 +28,7 @@ nushell | https://www.nushell.sh/ https://github.com/nushell/nushell | AUR | �
 pastel | https://github.com/sharkdp/pastel | AUR | 🦀 | ![lc](https://img.shields.io/github/last-commit/sharkdp/pastel) | ![v](https://img.shields.io/github/v/release/sharkdp/pastel?sort=semver)
 ripgrep  | https://github.com/BurntSushi/ripgrep | ✓ | 🦀 | ![lc](https://img.shields.io/github/last-commit/BurntSushi/ripgrep) | ![v](https://img.shields.io/github/v/release/BurntSushi/ripgrep?sort=semver)
 rofi | https://github.com/davatorium/rofi | ✓ | C | ![lc](https://img.shields.io/github/last-commit/davatorium/rofi) | ![v](https://img.shields.io/github/v/release/davatorium/rofi?sort=semver)
+rofimoji | https://github.com/fdw/rofimoji | ✓ | 🐍 | ![lc](https://img.shields.io/github/last-commit/fdw/rofimoji) | ![v](https://img.shields.io/github/v/release/fdw/rofimoji?sort=semver)
 starship | https://starship.rs/ https://github.com/starship/starship | AUR | 🦀 | ![lc](https://img.shields.io/github/last-commit/starship/starship) | ![v](https://img.shields.io/github/v/release/starship/starship?sort=semver)
 sxiv | https://github.com/muennich/sxiv | ✓ | C | ![lc](https://img.shields.io/github/last-commit/muennich/sxiv) | ![v](https://img.shields.io/github/v/release/muennich/sxiv?sort=semver)
 tealdeer | https://github.com/dbrgn/tealdeer | AUR | 🦀 | ![lc](https://img.shields.io/github/last-commit/dbrgn/tealdeer) | ![v](https://img.shields.io/github/v/release/dbrgn/tealdeer?sort=semver)
