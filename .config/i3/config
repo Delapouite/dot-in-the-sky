@@ -152,7 +152,7 @@ bindsym XF86AudioPrev exec "mpc prev"
 bindsym XF86AudioPlay exec "mpc toggle"
 bindsym XF86AudioNext exec "mpc next"
 
-set $i3mode "i3: [c]onfig rest[a]rt [e]xit [r]eload [b]ar [t]riforce [w]allpaper [x]randr"
+set $i3mode "i3: [c]onfig rest[a]rt [e]xit [r]eload [b]ar [l]ock"
 bindsym $mod+Delete mode $i3mode
 
 mode $i3mode {
@@ -161,15 +161,15 @@ mode $i3mode {
   bindsym e exit
   bindsym r reload
 
+  bindsym l --release exec slock ; mode "default"
+
   # bar
   bindsym b bar mode toggle
   bindsym i bar mode invisible; mode "default"
 
-  # wallpaper
-  bindsym w exec "~/.fehbg"
-  # monitors plugs
-  bindsym t exec triforce.sh
-  bindsym x exec xrandr --auto
+  # monitors
+  bindsym 1 exec mons -o ; mode "default"
+  bindsym 2 exec mons -e top ; mode "default"
 
   bindsym Return mode "default"
   bindsym Escape mode "default"

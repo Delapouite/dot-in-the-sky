@@ -15,6 +15,7 @@ echo "i3 $(i3 --version | awk '{ print $3 }')"
 jq --version | tr '-' ' '
 kak -version | tr '[:upper:]' '[:lower:]'
 echo "lf $(lf --version)"
+mons -v | head -n 1 | tr '[:upper:]' '[:lower:]'
 echo "mpd $(mpd --version | head -n 1 | awk '{ print $4 }')"
 mpv --version | head -n 1 | awk '{ print $1" "$2 }'
 ncmpcpp --version | head -n 1 |
