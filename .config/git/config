@@ -37,6 +37,7 @@
 	ls = "!cd ${GIT_PREFIX:-`pwd`}; printf \"# HEAD: \"; git log --oneline | head -n1; git status"
 	rb = rebase
 	s = status --short --branch
+	ui = !gitui
 
 [push]
 	default = simple
