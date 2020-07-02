@@ -6,6 +6,7 @@ bat | https://github.com/sharkdp/bat | ✓ | 🦀 | ![lc](https://img.shields.io
 bat-extras | https://github.com/eth-p/bat-extras | AUR | sh | ![lc](https://img.shields.io/github/last-commit/eth-p/bat-extras) | ![v](https://img.shields.io/github/v/release/eth-p/bat-extras?sort=semver)
 broot | https://github.com/Canop/broot | ✓ | 🦀 | ![lc](https://img.shields.io/github/last-commit/Canop/broot) | ![v](https://img.shields.io/github/v/release/Canop/broot?sort=semver)
 chars | https://github.com/antifuchs/chars | AUR | 🦀 | ![lc](https://img.shields.io/github/last-commit/antifuchs/chars) | ![v](https://img.shields.io/github/v/release/antifuchs/chars?sort=semver)
+entr | http://eradman.com/entrproject/ https://github.com/eradman/entr | ✓ | C | ![lc](https://img.shields.io/github/last-commit/eradman/entr) | ![v](https://img.shields.io/github/v/release/eradman/entr?sort=semver)
 exa | https://the.exa.website/ https://github.com/ogham/exa | ✓ | 🦀 | ![lc](https://img.shields.io/github/last-commit/ogham/exa) | ![v](https://img.shields.io/github/v/release/ogham/exa?sort=semver)
 fd | https://github.com/sharkdp/fd | ✓ | 🦀 | ![lc](https://img.shields.io/github/last-commit/sharkdp/fd) | ![v](https://img.shields.io/github/v/release/sharkdp/fd?sort=semver)
 fish | https://fishshell.com/ https://github.com/fish-shell/fish-shell | ✓ | C++ | ![lc](https://img.shields.io/github/last-commit/fish-shell/fish-shell) | ![v](https://img.shields.io/github/v/release/fish-shell/fish-shell?sort=semver)
