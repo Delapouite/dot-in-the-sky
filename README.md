@@ -34,6 +34,7 @@ rofimoji | https://github.com/fdw/rofimoji | ✓ | 🐍 | ![lc](https://img.shie
 starship | https://starship.rs/ https://github.com/starship/starship | AUR | 🦀 | ![lc](https://img.shields.io/github/last-commit/starship/starship) | ![v](https://img.shields.io/github/v/release/starship/starship?sort=semver)
 sxiv | https://github.com/muennich/sxiv | ✓ | C | ![lc](https://img.shields.io/github/last-commit/muennich/sxiv) | ![v](https://img.shields.io/github/v/release/muennich/sxiv?sort=semver)
 tealdeer | https://github.com/dbrgn/tealdeer | AUR | 🦀 | ![lc](https://img.shields.io/github/last-commit/dbrgn/tealdeer) | ![v](https://img.shields.io/github/v/release/dbrgn/tealdeer?sort=semver)
+teip | https://github.com/greymd/teip| AUR | 🦀 | ![lc](https://img.shields.io/github/last-commit/greymd/teip) | ![v](https://img.shields.io/github/v/release/greymd/teip?sort=semver)
 termite | https://github.com/thestinger/termite | ✓ | C++ | ![lc](https://img.shields.io/github/last-commit/thestinger/termite) | ![v](https://img.shields.io/github/v/release/thestinger/termite?sort=semver)
 trans | https://github.com/soimort/translate-shell | ✓ | awk | ![lc](https://img.shields.io/github/last-commit/soimort/translate-shell) | ![v](https://img.shields.io/github/v/release/soimort/translate-shell?sort=semver)
 tig | https://jonas.github.io/tig/ https://github.com/jonas/tig | ✓ | C | ![lc](https://img.shields.io/github/last-commit/jonas/tig) | ![v](https://img.shields.io/github/v/release/jonas/tig?sort=semver)
