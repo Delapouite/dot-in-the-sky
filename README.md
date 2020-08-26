@@ -22,6 +22,7 @@ kakoune | https://kakoune.org/ https://github.com/mawww/kakoune | ✓ | C++ | ![
 kitty | https://sw.kovidgoyal.net/kitty/ https://github.com/kovidgoyal/kitty | ✓ | C | ![lc](https://img.shields.io/github/last-commit/kovidgoyal/kitty) | ![v](https://img.shields.io/github/v/release/kovidgoyal/kitty?sort=semver)
 lf | https://godoc.org/github.com/gokcehan/lf https://github.com/gokcehan/lf | AUR | 🐹 | ![lc](https://img.shields.io/github/last-commit/gokcehan/lf) | ![v](https://img.shields.io/github/v/release/gokcehan/lf?sort=semver)
 mons | https://github.com/Ventto/mons | AUR | sh | ![lc](https://img.shields.io/github/last-commit/Ventto/mons) | ![v](https://img.shields.io/github/v/release/Ventto/mons?sort=semver)
+moreutils | https://joeyh.name/code/moreutils/ | ✓ | C
 mpd | https://www.musicpd.org/ https://github.com/MusicPlayerDaemon/MPD | ✓ | C++ | ![lc](https://img.shields.io/github/last-commit/MusicPlayerDaemon/MPD) | ![v](https://img.shields.io/github/v/release/MusicPlayerDaemon/MPD?sort=semver)
 mpv | https://mpv.io/ https://github.com/mpv-player/mpv | ✓ | C | ![lc](https://img.shields.io/github/last-commit/mpv-player/mpv) | ![v](https://img.shields.io/github/v/release/mpv-player/mpv?sort=semver)
 ncmpcpp | https://rybczak.net/ncmpcpp/ https://github.com/arybczak/ncmpcpp | ✓ | C++ | ![lc](https://img.shields.io/github/last-commit/arybczak/ncmpcpp) | ![v](https://img.shields.io/github/v/release/arybczak/ncmpcpp?sort=semver)
