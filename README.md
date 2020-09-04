@@ -42,7 +42,7 @@ tig | https://jonas.github.io/tig/ https://github.com/jonas/tig | ✓ | C | ![lc
 tokei | https://github.com/XAMPPRocky/tokei | ✓ | 🦀 | ![lc](https://img.shields.io/github/last-commit/XAMPPRocky/tokei) | ![v](https://img.shields.io/github/v/release/XAMPPRocky/tokei?sort=semver)
 xcwd | https://github.com/schischi/xcwd | ✓ | C | ![lc](https://img.shields.io/github/last-commit/schischi/xcwd) | ![v](https://img.shields.io/github/v/release/schischi/xcwd?sort=semver)
 xkb | https://www.x.org/wiki/XKB/ https://cgit.freedesktop.org/xorg/xserver/tree/xkb | ✓ | C
-zola | https://www.getzola.org https://github.com/getzola/zola | AUR | 🦀 | ![lc](https://img.shields.io/github/last-commit/getzola/zola) | ![v](https://img.shields.io/github/v/release/getzola/zola?sort=semver)
+zola | https://www.getzola.org https://github.com/getzola/zola | ✓ | 🦀 | ![lc](https://img.shields.io/github/last-commit/getzola/zola) | ![v](https://img.shields.io/github/v/release/getzola/zola?sort=semver)
 
 ## init
 
