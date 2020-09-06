@@ -8,3 +8,7 @@ To obtain almost the same effect than the `adduser` wizard:
 
 - usermod(8)
 - userdel(8)
+
+- groupadd(8)
+- groupmode(8)
+- groupdel(8)
