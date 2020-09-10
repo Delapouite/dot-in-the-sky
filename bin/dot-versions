@@ -9,6 +9,7 @@ echo "fish $(fish --version | awk '{ print $3 }')"
 echo "fzf $(fzf --version)"
 echo "git $(git --version | awk '{ print $3 }')"
 gitui --version
+grex --version
 echo "htop $(htop --version | head -n 1 | awk '{ print $2 }')"
 echo "httpie $(http --version)"
 hyperfine --version
