@@ -21,6 +21,7 @@ i3 | https://i3wm.org/ https://github.com/i3/i3 | ✓ | C |   | ![lc](https://im
 jq | https://stedolan.github.io/jq/ https://github.com/stedolan/jq | ✓ | C | ✓ | ![lc](https://img.shields.io/github/last-commit/stedolan/jq?label=) | ![v](https://img.shields.io/github/v/release/stedolan/jq?sort=semver&label=)
 kakoune | https://kakoune.org/ https://github.com/mawww/kakoune | ✓ | C++ | ✓ | ![lc](https://img.shields.io/github/last-commit/mawww/kakoune?label=) | ![v](https://img.shields.io/github/v/release/mawww/kakoune?sort=semver&label=)
 kitty | https://sw.kovidgoyal.net/kitty/ https://github.com/kovidgoyal/kitty | ✓ | C |   | ![lc](https://img.shields.io/github/last-commit/kovidgoyal/kitty?label=) | ![v](https://img.shields.io/github/v/release/kovidgoyal/kitty?sort=semver&label=)
+lazydocker | https://github.com/jesseduffield/lazydocker | AUR | 🐹 |   | ![lc](https://img.shields.io/github/last-commit/jesseduffield/lazydocker?label=) | ![v](https://img.shields.io/github/v/release/jesseduffield/lazydocker?sort=semver&label=)
 lf | https://godoc.org/github.com/gokcehan/lf https://github.com/gokcehan/lf | AUR | 🐹 |   | ![lc](https://img.shields.io/github/last-commit/gokcehan/lf?label=) | ![v](https://img.shields.io/github/v/release/gokcehan/lf?sort=semver&label=)
 mons | https://github.com/Ventto/mons | AUR | sh |   | ![lc](https://img.shields.io/github/last-commit/Ventto/mons?label=) | ![v](https://img.shields.io/github/v/release/Ventto/mons?sort=semver&label=)
 moreutils | https://joeyh.name/code/moreutils/ | ✓ | C |
