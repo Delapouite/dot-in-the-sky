@@ -6,6 +6,7 @@ echo "entr $(entr 2>&1 | head -n 1 | awk '{ print $2 }')"
 exa --version
 fd --version
 echo "fish $(fish --version | awk '{ print $3 }')"
+echo "flameshot $(flameshot --version | head -n 1 | awk '{ print $2 }')"
 echo "fzf $(fzf --version)"
 echo "git $(git --version | awk '{ print $3 }')"
 gitui --version
