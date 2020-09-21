@@ -35,5 +35,6 @@ tldr --version
 termite --version
 tig --version | head -n 1 | awk '{ print $1" "$3 }'
 tokei --version | awk '{ print $1" "$2}'
+echo "xsv $(xsv --version)"
 zola --version
 
