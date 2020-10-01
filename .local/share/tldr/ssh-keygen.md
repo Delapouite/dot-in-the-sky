@@ -2,3 +2,6 @@
 
 	ssh-keygen -y -f ~/.ssh/id_rsa > ~/.ssh/id_rsa.pub
 
+# Display a certificate
+
+	ssh-keygen -L -f id_rsa-cert.pub
