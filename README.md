@@ -21,6 +21,7 @@ htop | https://hisham.hm/htop/ https://github.com/hishamhm/htop | ✓ | C | ✓ 
 httpie | https://httpie.org/ https://github.com/jakubroztocil/httpie | ✓ | 🐍 | ✓ | ![lc](https://img.shields.io/github/last-commit/jakubroztocil/httpie?label=) | ![v](https://img.shields.io/github/v/release/jakubroztocil/httpie?sort=semver&label=)
 hyperfine | https://github.com/sharkdp/hyperfine | ✓ | 🦀 | ✓ | ![lc](https://img.shields.io/github/last-commit/sharkdp/hyperfine?label=) | ![v](https://img.shields.io/github/v/release/sharkdp/hyperfine?sort=semver&label=)
 i3 | https://i3wm.org/ https://github.com/i3/i3 | ✓ | C |   | ![lc](https://img.shields.io/github/last-commit/i3/i3?label=) | ![v](https://img.shields.io/github/v/release/i3/i3?sort=semver&label=)
+inkscape | https://inkscape.org/ https://gitlab.com/inkscape/inkscape | ✓ | C++ | ✓ |  |
 jq | https://stedolan.github.io/jq/ https://github.com/stedolan/jq | ✓ | C | ✓ | ![lc](https://img.shields.io/github/last-commit/stedolan/jq?label=) | ![v](https://img.shields.io/github/v/release/stedolan/jq?sort=semver&label=)
 jwt | https://github.com/mike-engel/jwt-cli |   | 🦀 | ✓ | ![lc](https://img.shields.io/github/last-commit/mike-engel/jwt-cli?label=) | ![v](https://img.shields.io/github/v/release/mike-engel/jwt-cli?sort=semver&label=)
 kakoune | https://kakoune.org/ https://github.com/mawww/kakoune | ✓ | C++ | ✓ | ![lc](https://img.shields.io/github/last-commit/mawww/kakoune?label=) | ![v](https://img.shields.io/github/v/release/mawww/kakoune?sort=semver&label=)
