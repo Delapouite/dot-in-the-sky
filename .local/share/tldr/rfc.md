@@ -28,6 +28,10 @@
 
 - RFC 6749 - 2012 - 2.0 - https://tools.ietf.org/html/rfc6749
 
+# PGP
+
+- RFC 4880 - 2007 - https://tools.ietf.org/html/rfc4880
+
 # SSH
 
 - RFC 4251 - 2006 - https://tools.ietf.org/html/rfc4251
