@@ -28,6 +28,14 @@
 
 - RFC 6749 - 2012 - 2.0 - https://tools.ietf.org/html/rfc6749
 
+# PEM
+
+- RFC 1421 - 1993 - https://tools.ietf.org/html/rfc1421
+- RFC 1422 - 1993 - https://tools.ietf.org/html/rfc1422
+- RFC 1423 - 1993 - https://tools.ietf.org/html/rfc1423
+- RFC 1424 - 1993 - https://tools.ietf.org/html/rfc1424
+- RFC 7468 - 2015 - https://tools.ietf.org/html/rfc7468
+
 # PGP
 
 - RFC 4880 - 2007 - https://tools.ietf.org/html/rfc4880
@@ -35,6 +43,7 @@
 # SSH
 
 - RFC 4251 - 2006 - https://tools.ietf.org/html/rfc4251
+- RFC 4716 - 2006 - SSH Public Key Format - https://tools.ietf.org/html/rfc4716
 
 # TLS
 
