@@ -2,6 +2,7 @@
 bat --version
 broot --version
 chars --version
+echo "dog $(dog --version | head -n 2 | tail -n 1)"
 echo "entr $(entr 2>&1 | head -n 1 | awk '{ print $2 }')"
 exa --version
 fd --version

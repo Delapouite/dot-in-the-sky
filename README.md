@@ -6,6 +6,7 @@ bat | https://github.com/sharkdp/bat | ✓ | 🦀 | ✓ | ![lc](https://img.shie
 bat-extras | https://github.com/eth-p/bat-extras | AUR | sh |   | ![lc](https://img.shields.io/github/last-commit/eth-p/bat-extras?label=) | ![v](https://img.shields.io/github/v/release/eth-p/bat-extras?sort=semver&label=)
 broot | https://github.com/Canop/broot | ✓ | 🦀 |   | ![lc](https://img.shields.io/github/last-commit/Canop/broot?label=) | ![v](https://img.shields.io/github/v/release/Canop/broot?sort=semver&label=)
 chars | https://github.com/antifuchs/chars | AUR | 🦀 | ✓ | ![lc](https://img.shields.io/github/last-commit/antifuchs/chars?label=) | ![v](https://img.shields.io/github/v/release/antifuchs/chars?sort=semver&label=)
+dog | https://github.com/ogham/dog | AUR | 🦀 |   | ![lc](https://img.shields.io/github/last-commit/ogham/dog?label=) | ![v](https://img.shields.io/github/v/release/ogham/dog?sort=semver&label=)
 entr | http://eradman.com/entrproject/ https://github.com/eradman/entr | ✓ | C | ✓ | ![lc](https://img.shields.io/github/last-commit/eradman/entr?label=) | ![v](https://img.shields.io/github/v/release/eradman/entr?sort=semver&label=)
 exa | https://the.exa.website/ https://github.com/ogham/exa | ✓ | 🦀 | ✓ | ![lc](https://img.shields.io/github/last-commit/ogham/exa?label=) | ![v](https://img.shields.io/github/v/release/ogham/exa?sort=semver&label=)
 fd | https://github.com/sharkdp/fd | ✓ | 🦀 | ✓ | ![lc](https://img.shields.io/github/last-commit/sharkdp/fd?label=) | ![v](https://img.shields.io/github/v/release/sharkdp/fd?sort=semver&label=)
@@ -49,7 +50,7 @@ tig | https://jonas.github.io/tig/ https://github.com/jonas/tig | ✓ | C | ✓ 
 tokei | https://github.com/XAMPPRocky/tokei | ✓ | 🦀 | ✓ | ![lc](https://img.shields.io/github/last-commit/XAMPPRocky/tokei?label=) | ![v](https://img.shields.io/github/v/release/XAMPPRocky/tokei?sort=semver&label=)
 xcwd | https://github.com/schischi/xcwd | ✓ | C |   | ![lc](https://img.shields.io/github/last-commit/schischi/xcwd?label=) | ![v](https://img.shields.io/github/v/release/schischi/xcwd?sort=semver&label=)
 xkb | https://www.x.org/wiki/XKB/ https://cgit.freedesktop.org/xorg/xserver/tree/xkb | ✓ | C |
-xsv | https://github.com/BurntSushi/xsv| ✓ | 🦀 | ✓ | ![lc](https://img.shields.io/github/last-commit/BurntSushi/xsv?label=) | ![v](https://img.shields.io/github/v/release/BurntSushi/xsv?sort=semver&label=)
+xsv | https://github.com/BurntSushi/xsv| AUR | 🦀 | ✓ | ![lc](https://img.shields.io/github/last-commit/BurntSushi/xsv?label=) | ![v](https://img.shields.io/github/v/release/BurntSushi/xsv?sort=semver&label=)
 zola | https://www.getzola.org https://github.com/getzola/zola | ✓ | 🦀 | ✓ | ![lc](https://img.shields.io/github/last-commit/getzola/zola?label=) | ![v](https://img.shields.io/github/v/release/getzola/zola?sort=semver&label=)
 
 ## init
