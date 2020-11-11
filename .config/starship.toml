@@ -1,44 +1,43 @@
-prompt_order = [
-  "time",
-  "username",
-  "hostname",
-  "kubernetes",
-  "directory",
-  "git_branch",
-  "git_commit",
-  "git_state",
-  "git_status",
-  "package",
-  "dotnet",
-  "golang",
-  "java",
-  "nodejs",
-  "python",
-  "ruby",
-  "rust",
-  "nix_shell",
-  "conda",
-  "memory_usage",
-  "aws",
-  "env_var",
-  "cmd_duration",
-  "line_break",
-  "jobs",
-  "battery",
-  "character",
-]
+format = """
+$time\
+  $username\
+  $hostname\
+  $kubernetes\
+  $directory\
+  $git_branch\
+  $git_commit\
+  $git_state\
+  $git_status\
+  $package\
+  $dotnet\
+  $golang\
+  $java\
+  $nodejs\
+  $python\
+  $ruby\
+  $rust\
+  $nix_shell\
+  $conda\
+  $memory_usage\
+  $aws\
+  $env_var\
+  $cmd_duration\
+  $line_break\
+  $jobs\
+  $battery\
+  $character\
+"""
 
 [time]
 disabled = false
 style = ""
+time_format = "%T"
+format = "[$time]($style) "
 
 [directory]
 truncation_length = 4
 truncate_to_repo = false
 style = "bold yellow"
-
-[git_commit]
-disabled = false
 
 [git_status]
 conflicted_count.enabled = true
@@ -53,4 +52,4 @@ style = "blue"
 disabled = true
 
 [character]
-use_symbol_for_status = true
+error_symbol = "[✖](bold red)"
