@@ -95,7 +95,7 @@ xkb_keymap {
     key <AD12> {[ dead_diaeresis  , dead_grave      , dead_breve      , VoidSymbol      ],[ VoidSymbol      , VoidSymbol      ]}; // ¨ `
     key <AC11> {[ apostrophe      , quotedbl        , VoidSymbol      , VoidSymbol      ],[ dead_acute      , dead_diaeresis  ]}; // ' "     ´ ¨
     key <BKSL> {[ backslash       , bar             , brokenbar       , VoidSymbol      ],[ VoidSymbol      , VoidSymbol      ]}; // \ | ¦
-    key <LSGT> {[ less            , greater         , lessthanequal   , greaterthanequal],[ VoidSymbol      , VoidSymbol      ]}; // < > ≤ ≥
+    key <LSGT> {[ less            , greater         , lessthanequal   , greaterthanequal],[ asciitilde      , VoidSymbol      ]}; // < > ≤ ≥ ~
 
     // Space bar
     key <SPCE> {[ space           , space           , VoidSymbol      , VoidSymbol      ],[ Escape          , nobreakspace    ]};
