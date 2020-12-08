@@ -1,0 +1,5 @@
+#!/bin/sh
+
+WORKSPACES_DIR="$HOME/code/workspaces/"
+WORKSPACE=$(ls "$WORKSPACES_DIR" | cut -d '.' -f 1 | rofi -dmenu -p "vscode workspaces" $@)
+code "${WORKSPACES_DIR}${WORKSPACE}.code-workspace"

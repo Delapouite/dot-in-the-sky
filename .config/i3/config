@@ -106,6 +106,7 @@ mode $openmode {
   bindsym n exec termite -e "node" ; mode "default"
   bindsym o exec rofi -show run ; mode "default"
   bindsym s exec flameshot gui ; mode "default"
+  bindsym w exec rofi-vscode-workspaces ; mode "default"
 
   bindsym Return mode "default"
   bindsym Escape mode "default"
