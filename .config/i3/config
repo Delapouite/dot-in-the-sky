@@ -92,20 +92,23 @@ bindsym $mod+button2 kill
 
 # modes
 
-set $openmode "open: r[o]fi [c]hromium [f]irefox [g]imp [k]akoune [i]nkscape [l]f nc[m]pcpp [n]ode"
+set $openmode "open: r[o]fi chromi[u]m [f]irefox [g]imp [k]akoune [i]nkscape [l]f nc[m]pcpp [n]ode"
 bindsym $mod+o mode $openmode
 
 mode $openmode {
-  bindsym c exec chromium ; mode "default"
+  bindsym c exec code ; mode "default"
+  bindsym e exec emacs ; mode "default"
   bindsym f exec firefox ; mode "default"
   bindsym g exec gimp ; mode "default"
-  bindsym k exec termite -e "kak" ; mode "default"
+  bindsym k exec kitty -e "kak" ; mode "default"
   bindsym i exec inkscape ; mode "default"
-  bindsym l exec termite -e "lf" ; mode "default"
-  bindsym m exec termite -e "ncmpcpp" ; mode "default"
-  bindsym n exec termite -e "node" ; mode "default"
+  bindsym l exec kitty -e "lf" ; mode "default"
+  bindsym m exec kitty -e "ncmpcpp" ; mode "default"
+  bindsym n exec kitty -e "node" ; mode "default"
   bindsym o exec rofi -show run ; mode "default"
   bindsym s exec flameshot gui ; mode "default"
+  bindsym u exec chromium ; mode "default"
+  bindsym v exec kitty -e "nvim"; mode "default"
   bindsym w exec rofi-vscode-workspaces ; mode "default"
 
   bindsym Return mode "default"
