@@ -7,6 +7,7 @@ $time\
   $git_branch\
   $git_commit\
   $git_state\
+  ${custom.git}\
   $git_status\
   $package\
   $dotnet\
@@ -21,10 +22,13 @@ $time\
   $memory_usage\
   $aws\
   $env_var\
+  ${custom.docker}\
   $cmd_duration\
   $line_break\
   $jobs\
   $battery\
+  ${custom.ssh_keys}\
+  ${custom.sudo}\
   $character\
 """
 
@@ -38,6 +42,11 @@ format = "[$time]($style) "
 truncation_length = 4
 truncate_to_repo = false
 style = "bold yellow"
+
+[git_commit]
+only_detached = false
+tag_disabled = false
+style = "purple"
 
 [git_status]
 conflicted_count.enabled = true
@@ -53,3 +62,33 @@ disabled = true
 
 [character]
 error_symbol = "[✖](bold red)"
+
+[custom.git]
+description = "Author and date of last git commit"
+command = "git log -1 --format='%cn - %cd' --date=relative"
+when = "true"
+format = "[$output]($style) "
+style = "cyan"
+
+[custom.docker]
+description = "Docker symbol if the current directory has Dockerfile or docker-compose.yml files"
+command = "echo 🐳"
+shell = ["bash", "--noprofile", "--norc"]
+files = ["Dockerfile", "docker-compose.yml", "docker-compose.yaml"]
+when = "command -v docker &> /dev/null; exit (echo $?);"
+
+[custom.sudo]
+description = "Valid sudo timestamp marker"
+command = "echo -n 'sudo'"
+when = "sudo -vn &>/dev/null"
+format = "[$output]($style)"
+style = "bold green"
+
+[custom.ssh_keys]
+description = "SSH key count"
+command = "ssh-add -l | grep -v 'no identities' | wc -l"
+when = "ssh-add -l | grep -v -q 'no identities'"
+shell = ["bash", "--noprofile", "--norc"]
+format = "[$output]($style)$symbol"
+symbol = "🔑"
+style = "bold green"
