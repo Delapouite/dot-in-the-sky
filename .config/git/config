@@ -12,7 +12,8 @@
 [alias]
 	# plurals
 	aliases = !git config -l | grep alias | cut -c 7-
-	branches = branch -a
+	branches = branch -a --sort=-committerdate --format='%(committerdate:short) %(color:green)%(refname:short)%(color:reset) - %(color:cyan)%(contents:subject)%(color:reset) - %(authorname)'
+	hooks = !fd . .git/hooks --exclude '*.sample'
 	remotes = remote -v
 	stashes = stash list
 	tags = tag -n
@@ -27,7 +28,7 @@
 	tidy = rebase -i @{upstream}..
 
 	a = add
-	b = branch -avv
+	b = branches
 	ci = commit -v
 	co = checkout
 	d = diff
