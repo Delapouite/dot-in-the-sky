@@ -22,13 +22,14 @@ htop | https://hisham.hm/htop/ https://github.com/hishamhm/htop | ✓ | C | ✓ 
 httpie | https://httpie.org/ https://github.com/jakubroztocil/httpie | ✓ | 🐍 | ✓ | ![lc](https://img.shields.io/github/last-commit/jakubroztocil/httpie?label=) | ![v](https://img.shields.io/github/v/release/jakubroztocil/httpie?sort=semver&label=)
 hyperfine | https://github.com/sharkdp/hyperfine | ✓ | 🦀 | ✓ | ![lc](https://img.shields.io/github/last-commit/sharkdp/hyperfine?label=) | ![v](https://img.shields.io/github/v/release/sharkdp/hyperfine?sort=semver&label=)
 i3 | https://i3wm.org/ https://github.com/i3/i3 | ✓ | C |   | ![lc](https://img.shields.io/github/last-commit/i3/i3?label=) | ![v](https://img.shields.io/github/v/release/i3/i3?sort=semver&label=)
-inkscape | https://inkscape.org/ https://gitlab.com/inkscape/inkscape | ✓ | C++ | ✓ |  |
+inkscape | https://inkscape.org/ https://gitlab.com/inkscape/inkscape | ✓ | C++ | ✓ |   |
 jq | https://stedolan.github.io/jq/ https://github.com/stedolan/jq | ✓ | C | ✓ | ![lc](https://img.shields.io/github/last-commit/stedolan/jq?label=) | ![v](https://img.shields.io/github/v/release/stedolan/jq?sort=semver&label=)
 jwt | https://github.com/mike-engel/jwt-cli |   | 🦀 | ✓ | ![lc](https://img.shields.io/github/last-commit/mike-engel/jwt-cli?label=) | ![v](https://img.shields.io/github/v/release/mike-engel/jwt-cli?sort=semver&label=)
 kakoune | https://kakoune.org/ https://github.com/mawww/kakoune | ✓ | C++ | ✓ | ![lc](https://img.shields.io/github/last-commit/mawww/kakoune?label=) | ![v](https://img.shields.io/github/v/release/mawww/kakoune?sort=semver&label=)
 kitty | https://sw.kovidgoyal.net/kitty/ https://github.com/kovidgoyal/kitty | ✓ | C |   | ![lc](https://img.shields.io/github/last-commit/kovidgoyal/kitty?label=) | ![v](https://img.shields.io/github/v/release/kovidgoyal/kitty?sort=semver&label=)
 lazydocker | https://github.com/jesseduffield/lazydocker | AUR | 🐹 |   | ![lc](https://img.shields.io/github/last-commit/jesseduffield/lazydocker?label=) | ![v](https://img.shields.io/github/v/release/jesseduffield/lazydocker?sort=semver&label=)
 lf | https://godoc.org/github.com/gokcehan/lf https://github.com/gokcehan/lf | AUR | 🐹 |   | ![lc](https://img.shields.io/github/last-commit/gokcehan/lf?label=) | ![v](https://img.shields.io/github/v/release/gokcehan/lf?sort=semver&label=)
+meld | https://meldmerge.org/ https://gitlab.gnome.org/GNOME/meld | ✓ | 🐍| ✓ |   |
 mons | https://github.com/Ventto/mons | AUR | sh |   | ![lc](https://img.shields.io/github/last-commit/Ventto/mons?label=) | ![v](https://img.shields.io/github/v/release/Ventto/mons?sort=semver&label=)
 moreutils | https://joeyh.name/code/moreutils/ | ✓ | C |
 mpd | https://www.musicpd.org/ https://github.com/MusicPlayerDaemon/MPD | ✓ | C++ |   | ![lc](https://img.shields.io/github/last-commit/MusicPlayerDaemon/MPD?label=) | ![v](https://img.shields.io/github/v/release/MusicPlayerDaemon/MPD?sort=semver&label=)
