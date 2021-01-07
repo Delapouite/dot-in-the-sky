@@ -21,6 +21,7 @@ jwt --version | head -n 1
 kak -version | tr '[:upper:]' '[:lower:]'
 echo "lazydocker $(lazydocker --version | head -n 1 | awk '{ print $2 }')"
 echo "lf $(lf --version)"
+meld --version
 mons -v | head -n 1 | tr '[:upper:]' '[:lower:]'
 echo "mpd $(mpd --version | head -n 1 | awk '{ print $4 }')"
 mpv --version | head -n 1 | awk '{ print $1" "$2 }'
@@ -37,6 +38,7 @@ tldr --version
 termite --version
 tig --version | head -n 1 | awk '{ print $1" "$3 }'
 tokei --version | awk '{ print $1" "$2}'
+units --version | head -n 1
 echo "xsv $(xsv --version)"
 zola --version
 
