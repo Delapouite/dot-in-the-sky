@@ -23,6 +23,7 @@ $time\
   $aws\
   $env_var\
   ${custom.docker}\
+  $vagrant\
   $cmd_duration\
   $line_break\
   $jobs\
