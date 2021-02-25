@@ -62,3 +62,5 @@
 (map! :n "q" #'evil-backward-word-begin)
 (map! :n "Q" #'evil-backward-WORD-begin)
 (map! :n "U" #'evil-redo)
+(map! :leader
+      :desc "Find roam" "r" #'org-roam-find-file)
