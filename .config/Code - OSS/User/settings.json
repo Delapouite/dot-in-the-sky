@@ -1,20 +1,44 @@
 {
+  // editor
   "editor.codeLens": false,
   "editor.cursorStyle": "block",
   "editor.cursorSurroundingLines": 10,
   "editor.fontSize": 12,
   "editor.minimap.enabled": false,
+  "editor.quickSuggestions": {
+    "other": true,
+    "comments": true,
+    "strings": true
+  },
   "editor.renderLineHighlight": "all",
   "editor.renderWhitespace": "all",
   "editor.suggestSelection": "first",
   "editor.tabSize": 2,
+  "editor.wordBasedSuggestions": true,
+  "editor.wordBasedSuggestionsMode": "allDocuments",
+  // builtin
   "problems.showCurrentInStatus": true,
   "references.preferredLocation": "view",
+  "update.mode": "none",
   "window.menuBarVisibility": "toggle",
   "workbench.colorTheme": "Dracula",
+  "workbench.startupEditor": "newUntitledFile",
   "workbench.statusBar.visible": true,
+  // extensions
+  "atlascode.bitbucket.enabled": true,
+  "atlascode.bitbucket.explorer.relatedJiraIssues.enabled": true,
+  "bracket-pair-colorizer-2.colors": [
+    "#bd93f9",
+    "#8be9fd",
+    "#50fa7b",
+    "#f1fa8c",
+    "#ffb86c",
+    "#f1fa8c"
+  ],
+  "cSpell.language": "en,fr",
   "eslint.alwaysShowStatus": true,
   "gitlens.codeLens.enabled": false,
+  // format
   "prettier.semi": false,
   "prettier.trailingComma": "all",
   "[html]": {
@@ -38,6 +62,7 @@
   "[yaml]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
+  // vim
   "vim.cursorStylePerMode.normal": "block",
   "vim.easymotion": false,
   "vim.highlightedyank.enable": true,
@@ -48,186 +73,84 @@
   "vim.useSystemClipboard": true,
   "vim.insertModeKeyBindings": [
     {
-      "before": [
-        "j",
-        "j"
-      ],
-      "after": [
-        "<Esc>"
-      ]
+      "before": ["j", "j"],
+      "after": ["<Esc>"]
     }
   ],
   "vim.normalModeKeyBindingsNonRecursive": [
     // fixes
     {
-      "before": [
-        "K"
-      ],
-      "after": [
-        "i",
-        "<CR>",
-        "<Esc>",
-        "k",
-        "$"
-      ]
+      "before": ["K"],
+      "after": ["i", "<CR>", "<Esc>", "k", "$"]
     },
     {
-      "before": [
-        "U"
-      ],
-      "after": [
-        "<C-r>"
-      ]
+      "before": ["U"],
+      "after": ["<C-r>"]
     },
     {
-      "before": [
-        "Y"
-      ],
-      "after": [
-        "y",
-        "$"
-      ]
+      "before": ["Y"],
+      "after": ["y", "$"]
     },
     // moves
     {
-      "before": [
-        "q"
-      ],
-      "after": [
-        "b"
-      ]
+      "before": ["q"],
+      "after": ["b"]
     },
     {
-      "before": [
-        "Q"
-      ],
-      "after": [
-        "B"
-      ]
+      "before": ["Q"],
+      "after": ["B"]
     },
     // extend
     {
-      "before": [
-        "m"
-      ],
-      "after": [
-        "v",
-        "%",
-      ]
+      "before": ["m"],
+      "after": ["v", "%"]
     },
     // leader
     {
-      "before": [
-        "<leader>",
-        "n"
-      ],
-      "commands": [
-        "workbench.action.nextEditor"
-      ]
+      "before": ["<leader>", "n"],
+      "commands": ["workbench.action.nextEditor"]
     },
     {
-      "before": [
-        "<leader>",
-        "p"
-      ],
-      "commands": [
-        {
-          "command": "workbench.action.previousEditor"
-        }
-      ]
+      "before": ["<leader>", "p"],
+      "commands": ["workbench.action.previousEditor"]
     },
     {
-      "before": [
-        "<leader>",
-        "="
-      ],
-      "commands": [
-        {
-          "command": "editor.action.formatDocument"
-        }
-      ]
+      "before": ["<leader>", "="],
+      "commands": ["editor.action.formatDocument"]
     },
     // goto
     {
-      "before": [
-        "g",
-        "h"
-      ],
-      "after": [
-        "0"
-      ]
+      "before": ["g", "h"],
+      "after": ["0"]
     },
     {
-      "before": [
-        "g",
-        "i"
-      ],
-      "after": [
-        "^"
-      ]
+      "before": ["g", "i"],
+      "after": ["^"]
     },
     {
-      "before": [
-        "g",
-        "l"
-      ],
-      "after": [
-        "$"
-      ]
+      "before": ["g", "l"],
+      "after": ["$"]
     },
     {
-      "before": [
-        "g",
-        "m"
-      ],
-      "after": [
-        "%"
-      ]
+      "before": ["g", "m"],
+      "after": ["%"]
     },
     // LSP
     {
-      "before": [
-        "g",
-        "d"
-      ],
-      "commands": [
-        {
-          "command": "editor.action.goToTypeDefinition"
-        }
-      ]
+      "before": ["g", "d"],
+      "commands": ["editor.action.goToTypeDefinition"]
     },
     {
-      "before": [
-        "g",
-        "D"
-      ],
-      "commands": [
-        {
-          "command": "editor.action.goToImplementation"
-        }
-      ]
+      "before": ["g", "D"],
+      "commands": ["editor.action.goToImplementation"]
     },
     {
-      "before": [
-        "g",
-        "s"
-      ],
-      "commands": [
-        {
-          "command": "workbench.action.gotoSymbol"
-        }
-      ]
+      "before": ["g", "s"],
+      "commands": ["workbench.action.gotoSymbol"]
     },
     {
-      "before": [
-        "g",
-        "t"
-      ],
-      "commands": [
-        {
-          "command": "workbench.action.showAllSymbols"
-        }
-      ]
+      "before": ["g", "t"],
+      "commands": ["workbench.action.showAllSymbols"]
     }
   ]
 }
