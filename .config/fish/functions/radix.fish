@@ -7,7 +7,17 @@ function radix --description 'conversion between number radix'
 	# obase needs to be specified first:
 	# https://unix.stackexchange.com/questions/199615/understand-ibase-and-obase-in-case-of-conversions-with-bc
 
-	# h
+	# from h
+	case 'h'
+	  echo h: $num
+	  echo h: (echo $num | sed ':a;s/\B[0-F]\{2\}\>/ &/;ta')
+		echo d: (echo "obase=10; ibase=16; $num" | bc)
+		echo d: (echo "obase=10; ibase=16; $num" | bc | sed ':a;s/\B[0-9]\{3\}\>/ &/;ta')
+		echo o: (echo "obase=8; ibase=16; $num" | bc)
+		echo b: (echo "obase=2; ibase=16; $num" | bc)
+		echo b: (echo "obase=2; ibase=16; $num" | bc | sed ':a;s/\B[0-9]\{8\}\>/ &/;ta')
+		echo b: (echo "obase=2; ibase=16; $num" | bc | sed ':a;s/\B[0-9]\{4\}\>/ &/;ta')
+
 	case 'hd'
 		echo "obase=10; ibase=16; $num" | bc
 
@@ -17,7 +27,17 @@ function radix --description 'conversion between number radix'
 	case 'hb'
 		echo "obase=2; ibase=16; $num" | bc
 
-	# d
+	# from d
+	case 'd'
+		echo h: (echo "obase=16; ibase=10; $num" | bc)
+		echo h: (echo "obase=16; ibase=10; $num" | bc | sed ':a;s/\B[0-F]\{2\}\>/ &/;ta')
+	  echo d: $num
+	  echo d: (echo $num | sed ':a;s/\B[0-9]\{3\}\>/ &/;ta')
+		echo o: (echo "obase=8; ibase=10; $num" | bc)
+		echo b: (echo "obase=2; ibase=10; $num" | bc)
+		echo b: (echo "obase=2; ibase=10; $num" | bc | sed ':a;s/\B[0-9]\{8\}\>/ &/;ta')
+		echo b: (echo "obase=2; ibase=10; $num" | bc | sed ':a;s/\B[0-9]\{4\}\>/ &/;ta')
+
 	case 'dh'
 		echo "obase=16; ibase=10; $num" | bc
 
@@ -27,7 +47,17 @@ function radix --description 'conversion between number radix'
 	case 'db'
 		echo "obase=2; ibase=10; $num" | bc
 
-	# o
+	# from o
+	case 'o'
+		echo h: (echo "obase=16; ibase=8; $num" | bc)
+		echo h: (echo "obase=16; ibase=8; $num" | bc | sed ':a;s/\B[0-F]\{2\}\>/ &/;ta')
+		echo d: (echo "obase=10; ibase=8; $num" | bc)
+		echo d: (echo "obase=10; ibase=8; $num" | bc | sed ':a;s/\B[0-9]\{3\}\>/ &/;ta')
+	  echo o: $num
+		echo b: (echo "obase=2; ibase=8; $num" | bc)
+		echo b: (echo "obase=2; ibase=8; $num" | bc | sed ':a;s/\B[0-9]\{8\}\>/ &/;ta')
+		echo b: (echo "obase=2; ibase=8; $num" | bc | sed ':a;s/\B[0-9]\{4\}\>/ &/;ta')
+
 	case 'oh'
 		echo "obase=16; ibase=8; $num" | bc
 
@@ -37,7 +67,17 @@ function radix --description 'conversion between number radix'
 	case 'ob'
 		echo "obase=2; ibase=8; $num" | bc
 
-	# b
+	# from b
+	case 'b'
+		echo h: (echo "obase=16; ibase=2; $num" | bc)
+		echo h: (echo "obase=16; ibase=2; $num" | bc | sed ':a;s/\B[0-F]\{2\}\>/ &/;ta')
+		echo d: (echo "obase=10; ibase=2; $num" | bc)
+		echo d: (echo "obase=10; ibase=2; $num" | bc | sed ':a;s/\B[0-9]\{3\}\>/ &/;ta')
+		echo o: (echo "obase=8; ibase=2; $num" | bc)
+		echo b: $num
+	  echo b: (echo $num | sed ':a;s/\B[0-9]\{8\}\>/ &/;ta')
+	  echo b: (echo $num | sed ':a;s/\B[0-9]\{4\}\>/ &/;ta')
+
 	case 'bh'
 		echo "obase=16; ibase=2; $num" | bc
 
