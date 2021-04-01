@@ -19,6 +19,8 @@
   // builtin
   "problems.showCurrentInStatus": true,
   "references.preferredLocation": "view",
+  "terminal.integrated.fontFamily": "iosevka",
+  "terminal.integrated.fontSize": 12,
   "update.mode": "none",
   "window.menuBarVisibility": "toggle",
   "workbench.colorTheme": "Dracula",
