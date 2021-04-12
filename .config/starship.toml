@@ -29,6 +29,8 @@ $time\
   $jobs\
   $battery\
   ${custom.ssh_keys}\
+  ${custom.direnv_allowed}\
+  ${custom.direnv_denied}\
   ${custom.sudo}\
   $character\
 """
@@ -93,3 +95,19 @@ shell = ["bash", "--noprofile", "--norc"]
 format = "[$output]($style)$symbol"
 symbol = "🔑"
 style = "bold green"
+
+[custom.direnv_allowed]
+description = "Direnv allowed"
+command = "echo -n 'direnv'"
+when = "direnv status | grep -q 'Found RC allowed true'"
+format = "[$output]($style)$symbol"
+symbol = "🌕"
+style = "bold green"
+
+[custom.direnv_denied]
+description = "Direnv denied"
+command = "echo -n 'direnv'"
+when = "direnv status | grep -q 'Found RC allowed false'"
+format = "[$output]($style)$symbol"
+symbol = "🌑"
+style = "bold red"

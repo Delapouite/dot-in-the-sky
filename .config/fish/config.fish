@@ -13,3 +13,5 @@ end
 
 bind --erase \cf
 bind \ct __fzf_search_current_dir
+
+direnv hook fish | source
