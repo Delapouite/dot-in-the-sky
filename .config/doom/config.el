@@ -28,6 +28,7 @@
 ;; `load-theme' function. This is the default:
 (setq doom-theme 'doom-dracula)
 (custom-set-faces!
+ '(bold :weight bold :foreground "#8be9fd")
  '(org-roam-link :weight bold :foreground "#50fa7b" :underline t)
  '(org-document-title :height 180))
 
@@ -64,3 +65,29 @@
 (map! :n "U" #'evil-redo)
 (map! :leader
       :desc "Find roam" "r" #'org-roam-find-file)
+
+;; modeline
+(defun get-buffer-file-mtime ()
+   (let* ((fname (buffer-file-name))
+          (mtime (file-attribute-modification-time
+                      (file-attributes fname))))
+     (when mtime
+        (format-time-string " %Y-%m-%d %H:%M:%S" mtime))))
+
+(use-package! doom-modeline
+  :config
+  (doom-modeline-def-segment buffer-mtime
+    "Define buffer-mtime modeline segment"
+    (propertize (get-buffer-file-mtime) 'face 'mode-line))
+
+  (doom-modeline-def-modeline 'delapouite
+    '(bar window-number modals matches buffer-info-simple buffer-mtime buffer-position word-count parrot selection-info)
+    '(objed-state misc-info debug lsp minor-modes input-method indent-info major-mode process checker))
+
+  (defun doom-modeline-set-delapouite-modeline ()
+    "Enable delapouite modeline"
+    (doom-modeline-set-modeline 'delapouite)))
+
+(use-package! org-roam
+  :config
+  (add-hook 'org-mode-hook `doom-modeline-set-delapouite-modeline))
