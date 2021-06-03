@@ -36,5 +36,91 @@
     "key": "ctrl+l",
     "command": "workbench.action.navigateRight",
     "when": "vim.mode != 'Insert'"
+  },
+  // dance: move b to q
+  {
+    "key": "Q",
+    "when": "editorTextFocus && dance.mode == 'normal'",
+    "title": "Select to previous word start",
+    "command": "dance.seek.word.backward"
+  },
+  {
+    "key": "Shift+Q",
+    "when": "editorTextFocus && dance.mode == 'normal'",
+    "title": "Extend to previous word start",
+    "command": "dance.seek.word.extend.backward"
+  },
+  {
+    "key": "Alt+Q",
+    "when": "editorTextFocus && dance.mode == 'normal'",
+    "title": "Select to previous non-whitespace word start",
+    "command": "dance.seek.word.ws.backward"
+  },
+  {
+    "key": "Shift+Alt+Q",
+    "when": "editorTextFocus && dance.mode == 'normal'",
+    "title": "Extend to previous non-whitespace word start",
+    "command": "dance.seek.word.ws.extend.backward"
+  },
+  {
+    "key": "B",
+    "when": "editorTextFocus && dance.mode == 'normal'",
+    "title": "Show buffer menu",
+    "command": "dance.openMenu",
+    "args": {
+      "input": "buffer"
+    }
+  },
+  {
+    "key": "Shift+B",
+    "when": "editorTextFocus && dance.mode == 'normal'",
+    "title": "Show buffer menu (locked)",
+    "command": "dance.openMenu",
+    "args": {
+      "input": "buffer",
+      "locked": true
+    }
+  },
+  {
+    "key": "Ctrl+I",
+    "when": "editorTextFocus && dance.mode == 'normal'",
+    "title": "Jump forward",
+    "command": "workbench.action.navigateForward"
+  },
+  {
+    "key": "Ctrl+O",
+    "when": "editorTextFocus && dance.mode == 'normal'",
+    "title": "Jump backward",
+    "command": "workbench.action.navigateBack"
+  },
+  {
+    "key": "Alt+Backspace",
+    "when": "editorTextFocus && dance.mode == 'normal'",
+    "title": "Clear main selections",
+    "command": "dance.selections.clear.main"
+  },
+  {
+    "key": "Backspace",
+    "when": "editorTextFocus && dance.mode == 'normal'",
+    "title": "Clear secondary selections",
+    "command": "dance.selections.clear.secondary"
+  },
+  {
+    "key": "Alt+O",
+    "when": "editorTextFocus && dance.mode == 'normal'",
+    "title": "Select whole object",
+    "command": "dance.seek.askObject"
+  },
+  {
+    "key": "Alt+O",
+    "when": "editorTextFocus && dance.mode == 'insert'",
+    "title": "Select whole object",
+    "command": "dance.seek.askObject"
+  },
+  {
+    "key": "Space",
+    "when": "editorTextFocus && dance.mode == 'normal'",
+    "title": "Show commands",
+    "command": "workbench.action.showCommands"
   }
 ]
