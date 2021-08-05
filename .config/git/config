@@ -6,6 +6,9 @@
 [includeIf "gitdir:~/code/github/"]
 	path = ~/code/github/.gitconfig
 
+[includeIf "gitdir:~/code/gitlab/"]
+	path = ~/code/gitlab/.gitconfig
+
 [core]
 	editor = kak
 
@@ -22,7 +25,7 @@
 	amend = commit --amend
 	authors = shortlog -sne
 	fix = rebase -i HEAD~2
-	nuke = !git branch --merged | grep -v -P '^\\*|master|staging|develop' | xargs -n1 -r git branch -d
+	nuke = !git branch --merged | grep -v -P '^\\*|master|main|staging|develop' | xargs -n1 -r git branch -d
 	uncommit = reset --mixed HEAD~
 	unstage = restore --staged
 	tidy = rebase -i @{upstream}..
