@@ -6,7 +6,6 @@ set-option global scrolloff 5,1
 set-option global grepcmd 'rg --column'
 set-option global completers filename word=all
 set-option global startup_info_version 20420101
-set-option global autoinfo normal|command|onkey
 set-option -add global matching_pairs ‹ › « » “ ” ‘ ’
 set-option -add global ui_options ncurses_assistant=none ncurses_change_colors=true ncurses_status_on_top=true
 
@@ -34,6 +33,8 @@ hook global BufSetOption lsp_diagnostic_warning_count=.* update-status
 # map ctrl+i send_text all \u24D8 // ⓘ
 # map ctrl+j send_text all \u24D9 // ⓙ
 # map ctrl+m send_text all \u24DC // ⓜ
+# map ctrl+return send_text all \u240D // ␍
+# map ctrl+space send_text all \u2420 // ␠
 
 map global normal ⓘ '<tab>'
 
@@ -173,7 +174,8 @@ plug 'alexherbo2/explore.kak'
 plug 'alexherbo2/pad-number.kak'
 
 plug 'alexherbo2/split-object.kak' %{
-  map global normal <a-I> ': enter-user-mode split-object<ret>' -docstring 'split object mode'
+  # <c-space>
+  map global normal ␠ ': enter-user-mode split-object<ret>' -docstring 'split object mode'
 }
 
 plug 'alexherbo2/volatile-highlighter.kak' %{
@@ -229,16 +231,11 @@ plug 'delapouite/kakoune-mirror' %{
   map global normal "'" ': enter-user-mode -lock mirror<ret>' -docstring 'mirror mode lock'
 }
 
-plug 'delapouite/kakoune-npm'
-
-plug 'delapouite/kakoune-palette'
-
 plug 'delapouite/kakoune-select-view' %{
   map global view s '<esc>: select-view<ret>' -docstring 'select view'
 }
 
 plug 'delapouite/kakoune-text-objects' %{
-  text-object-map
   map global selectors 's' ': if-cursor s s<ret>'                            -docstring 'auto-percent s'
   map global selectors 'p' ': if-cursor S S<ret>'                            -docstring 'auto-percent S'
   map global selectors '<ret>' ': if-cursor <lt>a-s> <lt>a-s> no-hooks<ret>' -docstring 'auto-percent <a-s>'
