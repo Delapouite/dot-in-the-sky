@@ -24,6 +24,7 @@
 	# synonyms
 	amend = commit --amend
 	authors = shortlog -sne
+	first = !git rev-list --max-parents=0 HEAD | xargs git show
 	fix = rebase -i HEAD~2
 	nuke = !git branch --merged | grep -v -P '^\\*|master|main|staging|develop' | xargs -n1 -r git branch -d
 	uncommit = reset --mixed HEAD~
