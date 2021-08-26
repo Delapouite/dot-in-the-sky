@@ -52,6 +52,7 @@ trans | https://github.com/soimort/translate-shell | ✓ | awk | ✓ | ![lc](htt
 tig | https://jonas.github.io/tig/ https://github.com/jonas/tig | ✓ | C | ✓ | ![lc](https://img.shields.io/github/last-commit/jonas/tig?label=) | ![v](https://img.shields.io/github/v/release/jonas/tig?sort=semver&label=)
 tokei | https://github.com/XAMPPRocky/tokei | ✓ | 🦀 | ✓ | ![lc](https://img.shields.io/github/last-commit/XAMPPRocky/tokei?label=) | ![v](https://img.shields.io/github/v/release/XAMPPRocky/tokei?sort=semver&label=)
 units | https://www.gnu.org/software/units/ | ✓ | C |
+websocketd | http://websocketd.com/ https://github.com/joewalnes/websocketd | AUR | 🐹 |   | ![lc](https://img.shields.io/github/last-commit/joewalnes/websocketd?label=) | ![v](https://img.shields.io/github/v/release/joewalnes/websocketd?sort=semver&label=)
 xcwd | https://github.com/schischi/xcwd | ✓ | C |   | ![lc](https://img.shields.io/github/last-commit/schischi/xcwd?label=) | ![v](https://img.shields.io/github/v/release/schischi/xcwd?sort=semver&label=)
 xkb | https://www.x.org/wiki/XKB/ https://cgit.freedesktop.org/xorg/xserver/tree/xkb | ✓ | C |
 xsv | https://github.com/BurntSushi/xsv| AUR | 🦀 | ✓ | ![lc](https://img.shields.io/github/last-commit/BurntSushi/xsv?label=) | ![v](https://img.shields.io/github/v/release/BurntSushi/xsv?sort=semver&label=)
