@@ -7,7 +7,7 @@ bat-extras | https://github.com/eth-p/bat-extras | AUR | sh |   | ![lc](https://
 broot | https://github.com/Canop/broot | ✓ | 🦀 |   | ![lc](https://img.shields.io/github/last-commit/Canop/broot?label=) | ![v](https://img.shields.io/github/v/release/Canop/broot?sort=semver&label=)
 chars | https://github.com/antifuchs/chars | AUR | 🦀 | ✓ | ![lc](https://img.shields.io/github/last-commit/antifuchs/chars?label=) | ![v](https://img.shields.io/github/v/release/antifuchs/chars?sort=semver&label=)
 direnv | https://github.com/direnv/direnv | AUR | 🐹 | ✓ | ![lc](https://img.shields.io/github/last-commit/direnv/direnv?label=) | ![v](https://img.shields.io/github/v/release/direnv/direnv?sort=semver&label=)
-dog | https://github.com/ogham/dog | AUR | 🦀 |   | ![lc](https://img.shields.io/github/last-commit/ogham/dog?label=) | ![v](https://img.shields.io/github/v/release/ogham/dog?sort=semver&label=)
+dog | https://github.com/ogham/dog | ✓ | 🦀 |   | ![lc](https://img.shields.io/github/last-commit/ogham/dog?label=) | ![v](https://img.shields.io/github/v/release/ogham/dog?sort=semver&label=)
 entr | http://eradman.com/entrproject/ https://github.com/eradman/entr | ✓ | C | ✓ | ![lc](https://img.shields.io/github/last-commit/eradman/entr?label=) | ![v](https://img.shields.io/github/v/release/eradman/entr?sort=semver&label=)
 exa | https://the.exa.website/ https://github.com/ogham/exa | ✓ | 🦀 | ✓ | ![lc](https://img.shields.io/github/last-commit/ogham/exa?label=) | ![v](https://img.shields.io/github/v/release/ogham/exa?sort=semver&label=)
 fd | https://github.com/sharkdp/fd | ✓ | 🦀 | ✓ | ![lc](https://img.shields.io/github/last-commit/sharkdp/fd?label=) | ![v](https://img.shields.io/github/v/release/sharkdp/fd?sort=semver&label=)
