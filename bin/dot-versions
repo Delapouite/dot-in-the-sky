@@ -32,6 +32,7 @@ pastel --version
 rg --version | head -n 1
 echo "rofi $(rofi -v | awk '{ print $2 }')"
 rofimoji --version
+sad --version
 echo "semgrep $(semgrep --version)"
 starship --version
 sxiv -v
