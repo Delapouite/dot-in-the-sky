@@ -29,13 +29,13 @@
 (setq doom-theme 'doom-dracula)
 (custom-set-faces!
  '(bold :weight bold :foreground "#8be9fd")
- '(org-roam-link :weight bold :foreground "#50fa7b" :underline t)
  '(org-document-title :height 180))
 
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
 (setq org-directory "~/Sync/org/")
 (setq org-roam-directory "~/Sync/org/roam")
+(setq org-agenda-files '("~/Sync/org/roam/20201217195416-todo.org"))
 (setq deft-directory "~/Sync/org/roam")
 (setq deft-extensions '("txt" "tex" "org"))
 
@@ -64,7 +64,7 @@
 (map! :n "Q" #'evil-backward-WORD-begin)
 (map! :n "U" #'evil-redo)
 (map! :leader
-      :desc "Find roam" "r" #'org-roam-find-file)
+      :desc "Find roam" "r" #'org-roam-node-find)
 
 ;; modeline
 (defun get-buffer-file-mtime ()
@@ -90,4 +90,46 @@
 
 (use-package! org-roam
   :config
-  (add-hook 'org-mode-hook `doom-modeline-set-delapouite-modeline))
+  (add-hook 'org-mode-hook `doom-modeline-set-delapouite-modeline)
+  ;; only in v2
+  (setq org-roam-node-display-template "${title:*} ${tags:50}")
+  (setq org-roam-mode-section-functions
+        (list #'org-roam-backlinks-section
+              #'org-roam-reflinks-section
+              ;#'org-roam-unlinked-references-section
+        ))
+  (defface org-link-id
+    '((t :foreground "#50fa7b"
+         :weight bold
+         :underline t))
+    "Face for Org-Mode links starting with id:."
+    :group 'org-faces)
+  (defface org-link-file
+    '((t :foreground "#ff5555"
+         :weight bold
+         :underline t))
+    "Face for Org-Mode links starting with file:."
+    :group 'org-faces)
+  (org-link-set-parameters
+   "id"
+   :face 'org-link-id)
+  (org-link-set-parameters
+   "file"
+   :face 'org-link-file))
+
+(use-package! websocket
+    :after org-roam)
+
+(use-package! org-roam-ui
+    :after org-roam ;; or :after org
+;;         normally we'd recommend hooking orui after org-roam, but since org-roam does not have
+;;         a hookable mode anymore, you're advised to pick something yourself
+;;         if you don't care about startup time, use
+;;  :hook (after-init . org-roam-ui-mode)
+    :config
+    (setq org-roam-ui-sync-theme t
+          org-roam-ui-follow t
+          org-roam-ui-update-on-save t
+          org-roam-ui-open-on-start t))
+
+(setq company-selection-wrap-around t)
