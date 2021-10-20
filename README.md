@@ -5,6 +5,7 @@ Name | Web / Source | Arch | Lang | TLDR | Date | Version |
 bat | https://github.com/sharkdp/bat | ✓ | 🦀 | ✓ | ![lc](https://img.shields.io/github/last-commit/sharkdp/bat?label=) | ![v](https://img.shields.io/github/v/release/sharkdp/bat?sort=semver&label=)
 bat-extras | https://github.com/eth-p/bat-extras | AUR | sh |   | ![lc](https://img.shields.io/github/last-commit/eth-p/bat-extras?label=) | ![v](https://img.shields.io/github/v/release/eth-p/bat-extras?sort=semver&label=)
 broot | https://github.com/Canop/broot | ✓ | 🦀 |   | ![lc](https://img.shields.io/github/last-commit/Canop/broot?label=) | ![v](https://img.shields.io/github/v/release/Canop/broot?sort=semver&label=)
+caddy | https://github.com/caddyserver/caddy| ✓ | 🐹 | ✓ | ![lc](https://img.shields.io/github/last-commit/caddyserver/caddy?label=) | ![v](https://img.shields.io/github/v/release/caddyserver/caddy?sort=semver&label=)
 chars | https://github.com/antifuchs/chars | AUR | 🦀 | ✓ | ![lc](https://img.shields.io/github/last-commit/antifuchs/chars?label=) | ![v](https://img.shields.io/github/v/release/antifuchs/chars?sort=semver&label=)
 direnv | https://github.com/direnv/direnv | AUR | 🐹 | ✓ | ![lc](https://img.shields.io/github/last-commit/direnv/direnv?label=) | ![v](https://img.shields.io/github/v/release/direnv/direnv?sort=semver&label=)
 dog | https://github.com/ogham/dog | ✓ | 🦀 |   | ![lc](https://img.shields.io/github/last-commit/ogham/dog?label=) | ![v](https://img.shields.io/github/v/release/ogham/dog?sort=semver&label=)
