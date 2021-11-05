@@ -133,3 +133,125 @@
           org-roam-ui-open-on-start t))
 
 (setq company-selection-wrap-around t)
+
+;; URL parsers and fetchers
+;;
+;; future candidates: Wikipedia
+
+(require 'request)
+(require 'json)
+
+(defun my/get-current-line-content ()
+  (buffer-substring-no-properties (line-beginning-position) (line-end-position)))
+
+(defun my/parse-github-url ()
+  (let ((line-content (my/get-current-line-content)))
+    (string-match ".*?https://github.com/\\([a-zA-Z0-9-_\.]*\\)/\\([a-zA-Z0-9-_\.]*\\).*" line-content)
+    (list (match-string 1 line-content)
+          (match-string 2 line-content))))
+
+(defun my/fetch-github-stats ()
+  "Fetch GitHub REST API and add the returned values in a PROPERTIES drawer"
+  (interactive)
+  (seq-let (org name) (my/parse-github-url)
+    (request
+      (concat "https://api.github.com/repos/" org  "/" name)
+      :parser 'json-read
+      :success (cl-function
+                (lambda (&key data &allow-other-keys)
+                  (org-set-property "description" (assoc-default 'description data))
+                  (org-set-property "stars" (number-to-string (assoc-default 'stargazers_count data)))
+                  (org-set-property "open-issues" (number-to-string (assoc-default 'open_issues data)))
+                  (org-set-property "language" (assoc-default 'language data))
+                  (org-set-property "created-at" (assoc-default 'created_at data))
+                  (org-set-property "updated-at" (assoc-default 'updated_at data))
+                  (org-set-property "fetched-at" (format-time-string "%Y-%m-%dT%TZ%z")))))))
+
+(defun my/parse-stackoverflow-url ()
+  (let ((line-content (my/get-current-line-content)))
+    (string-match ".*?https://stackoverflow.com/questions/\\([0-9]*\\)/.*" line-content)
+    (match-string 1 line-content)))
+
+
+(defun my/fetch-stackoverflow-stats ()
+  "Fetch StackOverflow REST API and add the returned values in a PROPERTIES drawer"
+  (interactive)
+  (let ((stackoverflow-id (my/parse-stackoverflow-url)))
+    (request
+      (concat "https://api.stackexchange.com/2.3/questions/" stackoverflow-id "?site=stackoverflow")
+      :parser 'json-read
+      :success (cl-function
+                (lambda (&key data &allow-other-keys)
+                  (org-set-property "title" (assoc-default 'title (aref (assoc-default 'items data) 0)))
+                  (org-set-property "score" (number-to-string (assoc-default 'score (aref (assoc-default 'items data) 0))))
+                  (org-set-property "views" (number-to-string (assoc-default 'view_count (aref (assoc-default 'items data) 0))))
+                  (org-set-property "asked-at" (format-time-string "%Y-%m-%dT%TZ%z" (assoc-default 'creation_date (aref (assoc-default 'items data) 0))))
+                  (org-set-property "fetched-at" (format-time-string "%Y-%m-%dT%TZ%z")))))))
+
+(defun my/parse-youtube-url ()
+  (let ((line-content (my/get-current-line-content)))
+    (string-match ".*?https://www.youtube.com/watch\\?v=\\([a-zA-Z0-9-_]*\\).*" line-content)
+    (match-string 1 line-content)))
+
+(defun my/fetch-youtube-stats ()
+  "Fetch Youtube REST API and add the returned values in a PROPERTIES drawer"
+  (interactive)
+  (let ((youtube-id (my/parse-youtube-url)))
+    (request
+      (concat "https://youtube.googleapis.com/youtube/v3/videos?part=snippet%2CcontentDetails%2Cstatistics&id=" youtube-id "&key=" youtube-api-key)
+      :parser 'json-read
+      :success (cl-function
+                (lambda (&key data &allow-other-keys)
+                  (org-set-property "channel" (assoc-default 'channelTitle (assoc-default 'snippet (aref (assoc-default 'items data) 0))))
+                  (org-set-property "title" (assoc-default 'title (assoc-default 'snippet (aref (assoc-default 'items data) 0))))
+                  (org-set-property "views" (assoc-default 'viewCount (assoc-default 'statistics (aref (assoc-default 'items data) 0))))
+                  (org-set-property "duration" (assoc-default 'duration (assoc-default 'contentDetails (aref (assoc-default 'items data) 0))))
+                  (org-set-property "published-at" (assoc-default 'publishedAt (assoc-default 'snippet (aref (assoc-default 'items data) 0))))
+                  (org-set-property "fetched-at" (format-time-string "%Y-%m-%dT%TZ%z")))))))
+
+(defun my/parse-npm-url ()
+  (let ((line-content (my/get-current-line-content)))
+    (string-match ".*?https://www.npmjs.com/package/\\([a-zA-Z0-9-_]*\\).*" line-content)
+    (match-string 1 line-content)))
+
+(defun my/fetch-npm-stats ()
+  "Fetch Npm REST API and add the returned values in a PROPERTIES drawer"
+  (interactive)
+  (let ((npm-id (my/parse-npm-url)))
+    (request
+      (concat "https://api.npmjs.org/downloads/point/last-month/" npm-id)
+      :parser 'json-read
+      :success (cl-function
+                (lambda (&key data &allow-other-keys)
+                  (org-set-property "downloads" (number-to-string (assoc-default 'downloads data)))
+                  (org-set-property "fetched-at" (format-time-string "%Y-%m-%dT%TZ%z")))))
+    (request
+      (concat "https://registry.npmjs.com/" npm-id)
+      :parser 'json-read
+      :success (cl-function
+                (lambda (&key data &allow-other-keys)
+                  ; TODO add dependencies
+                  (org-set-property "last-version" (assoc-default 'latest (assoc-default 'dist-tags data)))
+                  (org-set-property "fetched-at" (format-time-string "%Y-%m-%dT%TZ%z")))))))
+
+(defun my/parse-musicbrainz-url ()
+  (let ((line-content (my/get-current-line-content)))
+    (string-match ".*?https://musicbrainz.org/artist/\\([a-zA-Z0-9-_]*\\).*" line-content)
+    (match-string 1 line-content)))
+
+(defun my/fetch-musicbrainz-stats ()
+  "Fetch MusicBrainz REST API and add the returned values in a PROPERTIES drawer"
+  (interactive)
+  (let ((artist-id (my/parse-musicbrainz-url)))
+    (request
+      (concat "https://musicbrainz.org/ws/2/artist/" artist-id "?fmt=json&inc=url-rels")
+      :parser 'json-read
+      :success (cl-function
+                (lambda (&key data &allow-other-keys)
+                  ; append is needed to cast the vector into a list
+                  (let ((bandcamp (--find (string-equal (assoc-default 'type it) "bandcamp") (append (assoc-default 'relations data) nil))))
+                    (if bandcamp (org-set-property "bandcamp" (assoc-default 'resource (assoc-default 'url bandcamp)))))
+                  (let ((songkick (--find (string-equal (assoc-default 'type it) "songkick") (append (assoc-default 'relations data) nil))))
+                    (if songkick (org-set-property "songkick" (assoc-default 'resource (assoc-default 'url songkick)))))
+                  (org-set-property "fetched-at" (format-time-string "%Y-%m-%dT%TZ%z")))))))
+
