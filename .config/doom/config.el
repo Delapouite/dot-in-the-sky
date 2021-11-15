@@ -165,6 +165,13 @@
                   (org-set-property "language" (assoc-default 'language data))
                   (org-set-property "created-at" (assoc-default 'created_at data))
                   (org-set-property "updated-at" (assoc-default 'updated_at data))
+                  (org-set-property "fetched-at" (format-time-string "%Y-%m-%dT%TZ%z")))))
+    (request
+      (concat "https://api.github.com/repos/" org  "/" name "/commits")
+      :parser 'json-read
+      :success (cl-function
+                (lambda (&key data &allow-other-keys)
+                  (org-set-property "last-commit-at" (assoc-default 'date (assoc-default 'author (assoc-default 'commit (aref data 0)))))
                   (org-set-property "fetched-at" (format-time-string "%Y-%m-%dT%TZ%z")))))))
 
 (defun my/parse-stackoverflow-url ()
@@ -179,6 +186,27 @@
   (let ((stackoverflow-id (my/parse-stackoverflow-url)))
     (request
       (concat "https://api.stackexchange.com/2.3/questions/" stackoverflow-id "?site=stackoverflow")
+      :parser 'json-read
+      :success (cl-function
+                (lambda (&key data &allow-other-keys)
+                  (org-set-property "title" (assoc-default 'title (aref (assoc-default 'items data) 0)))
+                  (org-set-property "score" (number-to-string (assoc-default 'score (aref (assoc-default 'items data) 0))))
+                  (org-set-property "views" (number-to-string (assoc-default 'view_count (aref (assoc-default 'items data) 0))))
+                  (org-set-property "asked-at" (format-time-string "%Y-%m-%dT%TZ%z" (assoc-default 'creation_date (aref (assoc-default 'items data) 0))))
+                  (org-set-property "fetched-at" (format-time-string "%Y-%m-%dT%TZ%z")))))))
+
+(defun my/parse-stackexchange-url ()
+  (let ((line-content (my/get-current-line-content)))
+    (string-match ".*?https://\\(.*?\\).stackexchange.com/questions/\\([0-9]*\\)/.*" line-content)
+    (list (match-string 1 line-content)
+          (match-string 2 line-content))))
+
+(defun my/fetch-stackexchange-stats ()
+  "Fetch StackExchange REST API and add the returned values in a PROPERTIES drawer"
+  (interactive)
+  (seq-let (site question-id) (my/parse-stackexchange-url)
+    (request
+      (concat "https://api.stackexchange.com/2.3/questions/" question-id "?site=" site)
       :parser 'json-read
       :success (cl-function
                 (lambda (&key data &allow-other-keys)
