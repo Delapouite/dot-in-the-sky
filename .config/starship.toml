@@ -44,6 +44,7 @@ format = "[$time]($style) "
 [directory]
 truncation_length = 4
 truncate_to_repo = false
+repo_root_style = "bold"
 style = "bold yellow"
 
 [git_commit]
