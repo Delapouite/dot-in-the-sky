@@ -4,6 +4,7 @@ Name | Web / Source | Arch | Lang | TLDR | Date | Version |
 -----|--------------|------|------|------|------|---------|
 bat | https://github.com/sharkdp/bat | ✓ | 🦀 | ✓ | ![lc](https://img.shields.io/github/last-commit/sharkdp/bat?label=) | ![v](https://img.shields.io/github/v/release/sharkdp/bat?sort=semver&label=)
 bat-extras | https://github.com/eth-p/bat-extras | AUR | sh |   | ![lc](https://img.shields.io/github/last-commit/eth-p/bat-extras?label=) | ![v](https://img.shields.io/github/v/release/eth-p/bat-extras?sort=semver&label=)
+bottom | https://github.com/ClementTsang/bottom| ✓ | 🦀 | ✓ | ![lc](https://img.shields.io/github/last-commit/ClementTsang/bottom?label=) | ![v](https://img.shields.io/github/v/release/ClementTsang/bottom?sort=semver&label=)
 broot | https://github.com/Canop/broot | ✓ | 🦀 |   | ![lc](https://img.shields.io/github/last-commit/Canop/broot?label=) | ![v](https://img.shields.io/github/v/release/Canop/broot?sort=semver&label=)
 caddy | https://github.com/caddyserver/caddy| ✓ | 🐹 | ✓ | ![lc](https://img.shields.io/github/last-commit/caddyserver/caddy?label=) | ![v](https://img.shields.io/github/v/release/caddyserver/caddy?sort=semver&label=)
 chars | https://github.com/antifuchs/chars | AUR | 🦀 | ✓ | ![lc](https://img.shields.io/github/last-commit/antifuchs/chars?label=) | ![v](https://img.shields.io/github/v/release/antifuchs/chars?sort=semver&label=)
