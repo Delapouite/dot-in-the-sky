@@ -28,16 +28,18 @@
 ;; `load-theme' function. This is the default:
 (setq doom-theme 'doom-dracula)
 (custom-set-faces!
- '(bold :weight bold :foreground "#8be9fd")
- '(org-document-title :height 180))
+  '(bold :weight bold :foreground "#8be9fd")
+  '(org-document-title :height 180)
+  '(outline-1 :height 120)
+  ;; TODO why the need to reset?
+  '(outline-2 :height 90))
 
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
 (setq org-directory "~/Sync/org/")
-(setq org-roam-directory "~/Sync/org/roam")
-(setq org-agenda-files '("~/Sync/org/roam/20201217195416-todo.org"))
-(setq deft-directory "~/Sync/org/roam")
-(setq deft-extensions '("txt" "tex" "org"))
+;; The following settings just make Emacs hang :(
+;; See the vulpea functions at the end for a dynamic list
+; (setq org-agenda-files '("~/Sync/org/roam/"))
 
 ;; This determines the style of line numbers in effect. If set to `nil', line
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
@@ -68,11 +70,11 @@
 
 ;; modeline
 (defun get-buffer-file-mtime ()
-   (let* ((fname (buffer-file-name))
-          (mtime (file-attribute-modification-time
-                      (file-attributes fname))))
-     (when mtime
-        (format-time-string " %Y-%m-%d %H:%M:%S" mtime))))
+  (let* ((fname (buffer-file-name))
+         (mtime (file-attribute-modification-time
+                 (file-attributes fname))))
+    (when mtime
+      (format-time-string " %Y-%m-%d %H:%M:%S" mtime))))
 
 (use-package! doom-modeline
   :config
@@ -89,15 +91,29 @@
     (doom-modeline-set-modeline 'delapouite)))
 
 (use-package! org-roam
+  :custom
+  (org-roam-directory "~/Sync/org/roam")
+  (org-roam-mode-section-functions
+   (list #'org-roam-backlinks-section
+         #'org-roam-reflinks-section
+        ;#'org-roam-unlinked-references-section
+         ))
+  (org-roam-capture-templates
+   '(("d" "default" plain "%?"
+      :target (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n")
+      :unnarrowed t)
+     ("a" "artist" plain "%?"
+      :target (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+filetags: Artist\n\n* Wiki\n* Albums")
+      :unnarrowed t)
+     ("p" "person" plain "%?"
+      :target (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+filetags: Person\n")
+      :unnarrowed t)
+     ("t" "tool" plain "%?"
+      :target (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+filetags: Tool\n\n* Wiki\n* Doc\n\* Repo\n* Usage")
+      :unnarrowed t)))
   :config
   (add-hook 'org-mode-hook `doom-modeline-set-delapouite-modeline)
-  ;; only in v2
   (setq org-roam-node-display-template "${title:*} ${tags:50}")
-  (setq org-roam-mode-section-functions
-        (list #'org-roam-backlinks-section
-              #'org-roam-reflinks-section
-              ;#'org-roam-unlinked-references-section
-        ))
   (defface org-link-id
     '((t :foreground "#50fa7b"
          :weight bold
@@ -110,12 +126,17 @@
          :underline t))
     "Face for Org-Mode links starting with file:."
     :group 'org-faces)
-  (org-link-set-parameters
-   "id"
-   :face 'org-link-id)
-  (org-link-set-parameters
-   "file"
-   :face 'org-link-file))
+  (org-link-set-parameters "id" :face 'org-link-id)
+  (org-link-set-parameters "file" :face 'org-link-file)
+  ;; not used because too slow :(
+  (cl-defmethod org-roam-node-backlinkscount ((node org-roam-node))
+    (let* ((count (caar (org-roam-db-query
+                         [:select (funcall count source)
+                          :from links
+                          :where (= dest $s1)
+                          :and (= type "id")]
+                         (org-roam-node-id node)))))
+      (format "[%d]" count))))
 
 (use-package! websocket
     :after org-roam)
@@ -144,16 +165,19 @@
 (defun my/get-current-line-content ()
   (buffer-substring-no-properties (line-beginning-position) (line-end-position)))
 
-(defun my/parse-github-url ()
+(defun my/parse-url (re)
   (let ((line-content (my/get-current-line-content)))
-    (string-match ".*?https://github.com/\\([a-zA-Z0-9-_\.]*\\)/\\([a-zA-Z0-9-_\.]*\\).*" line-content)
+    (string-match re line-content)
     (list (match-string 1 line-content)
-          (match-string 2 line-content))))
+          (match-string 2 line-content)
+          (match-string 3 line-content))))
+
+(defvar my/github-re ".*?https://github.com/\\([a-zA-Z0-9-_\.]*\\)/\\([a-zA-Z0-9-_\.]*\\).*")
 
 (defun my/fetch-github-stats ()
   "Fetch GitHub REST API and add the returned values in a PROPERTIES drawer"
   (interactive)
-  (seq-let (org name) (my/parse-github-url)
+  (seq-let (org name) (my/parse-url my/github-re)
     (request
       (concat "https://api.github.com/repos/" org  "/" name)
       :parser 'json-read
@@ -174,57 +198,75 @@
                   (org-set-property "last-commit-at" (assoc-default 'date (assoc-default 'author (assoc-default 'commit (aref data 0)))))
                   (org-set-property "fetched-at" (format-time-string "%Y-%m-%dT%TZ%z")))))))
 
-(defun my/parse-stackoverflow-url ()
-  (let ((line-content (my/get-current-line-content)))
-    (string-match ".*?https://stackoverflow.com/questions/\\([0-9]*\\)/.*" line-content)
-    (match-string 1 line-content)))
+(cl-defun my/parse-stack-response (&key data &allow-other-keys)
+  (progn
+    (org-set-property "title" (assoc-default 'title (aref (assoc-default 'items data) 0)))
+    (org-set-property "score" (number-to-string (assoc-default 'score (aref (assoc-default 'items data) 0))))
+    (org-set-property "views" (number-to-string (assoc-default 'view_count (aref (assoc-default 'items data) 0))))
+    (org-set-property "asked-at" (format-time-string "%Y-%m-%dT%TZ%z" (assoc-default 'creation_date (aref (assoc-default 'items data) 0))))
+    (org-set-property "fetched-at" (format-time-string "%Y-%m-%dT%TZ%z"))))
 
+(defvar my/stackoverflow-re ".*?https://stackoverflow.com/questions/\\([0-9]*\\)/.*")
 
 (defun my/fetch-stackoverflow-stats ()
   "Fetch StackOverflow REST API and add the returned values in a PROPERTIES drawer"
   (interactive)
-  (let ((stackoverflow-id (my/parse-stackoverflow-url)))
+  (seq-let (question-id) (my/parse-url my/stackoverflow-re)
     (request
-      (concat "https://api.stackexchange.com/2.3/questions/" stackoverflow-id "?site=stackoverflow")
+      (concat "https://api.stackexchange.com/2.3/questions/" question-id "?site=stackoverflow")
       :parser 'json-read
-      :success (cl-function
-                (lambda (&key data &allow-other-keys)
-                  (org-set-property "title" (assoc-default 'title (aref (assoc-default 'items data) 0)))
-                  (org-set-property "score" (number-to-string (assoc-default 'score (aref (assoc-default 'items data) 0))))
-                  (org-set-property "views" (number-to-string (assoc-default 'view_count (aref (assoc-default 'items data) 0))))
-                  (org-set-property "asked-at" (format-time-string "%Y-%m-%dT%TZ%z" (assoc-default 'creation_date (aref (assoc-default 'items data) 0))))
-                  (org-set-property "fetched-at" (format-time-string "%Y-%m-%dT%TZ%z")))))))
+      :success 'my/parse-stack-response)))
 
-(defun my/parse-stackexchange-url ()
-  (let ((line-content (my/get-current-line-content)))
-    (string-match ".*?https://\\(.*?\\).stackexchange.com/questions/\\([0-9]*\\)/.*" line-content)
-    (list (match-string 1 line-content)
-          (match-string 2 line-content))))
+(defvar my/serverfault-re ".*?https://serverfault.com/questions/\\([0-9]*\\)/.*")
+
+(defun my/fetch-serverfault-stats ()
+  "Fetch ServerFault REST API and add the returned values in a PROPERTIES drawer"
+  (interactive)
+  (seq-let (question-id) (my/parse-url my/serverfault-re)
+    (request
+      (concat "https://api.stackexchange.com/2.3/questions/" question-id "?site=serverfault")
+      :parser 'json-read
+      :success 'my/parse-stack-response)))
+
+(defvar my/superuser-re ".*?https://superuser.com/questions/\\([0-9]*\\)/.*")
+
+(defun my/fetch-superuser-stats ()
+  "Fetch SuperUser REST API and add the returned values in a PROPERTIES drawer"
+  (interactive)
+  (seq-let (question-id) (my/parse-url my/superuser-re)
+    (request
+      (concat "https://api.stackexchange.com/2.3/questions/" question-id "?site=superuser")
+      :parser 'json-read
+      :success 'my/parse-stack-response)))
+
+(defvar my/askubuntu-re ".*?https://askubuntu.com/questions/\\([0-9]*\\)/.*")
+
+(defun my/fetch-askubuntu-stats ()
+  "Fetch AskUbuntu REST API and add the returned values in a PROPERTIES drawer"
+  (interactive)
+  (seq-let (question-id) (my/parse-url my/askubuntu-re)
+    (request
+      (concat "https://api.stackexchange.com/2.3/questions/" question-id "?site=askubuntu")
+      :parser 'json-read
+      :success 'my/parse-stack-response)))
+
+(defvar my/stackexchange-re ".*?https://\\(.*?\\).stackexchange.com/questions/\\([0-9]*\\)/.*")
 
 (defun my/fetch-stackexchange-stats ()
   "Fetch StackExchange REST API and add the returned values in a PROPERTIES drawer"
   (interactive)
-  (seq-let (site question-id) (my/parse-stackexchange-url)
+  (seq-let (site question-id) (my/parse-url my/stackexchange-re)
     (request
       (concat "https://api.stackexchange.com/2.3/questions/" question-id "?site=" site)
       :parser 'json-read
-      :success (cl-function
-                (lambda (&key data &allow-other-keys)
-                  (org-set-property "title" (assoc-default 'title (aref (assoc-default 'items data) 0)))
-                  (org-set-property "score" (number-to-string (assoc-default 'score (aref (assoc-default 'items data) 0))))
-                  (org-set-property "views" (number-to-string (assoc-default 'view_count (aref (assoc-default 'items data) 0))))
-                  (org-set-property "asked-at" (format-time-string "%Y-%m-%dT%TZ%z" (assoc-default 'creation_date (aref (assoc-default 'items data) 0))))
-                  (org-set-property "fetched-at" (format-time-string "%Y-%m-%dT%TZ%z")))))))
+      :success 'my/parse-stack-response)))
 
-(defun my/parse-youtube-url ()
-  (let ((line-content (my/get-current-line-content)))
-    (string-match ".*?https://www.youtube.com/watch\\?v=\\([a-zA-Z0-9-_]*\\).*" line-content)
-    (match-string 1 line-content)))
+(defvar my/youtube-re ".*?https://www.youtube.com/watch\\?v=\\([a-zA-Z0-9-_]*\\).*")
 
 (defun my/fetch-youtube-stats ()
   "Fetch Youtube REST API and add the returned values in a PROPERTIES drawer"
   (interactive)
-  (let ((youtube-id (my/parse-youtube-url)))
+  (seq-let (youtube-id) (my/parse-url my/youtube-re)
     (request
       (concat "https://youtube.googleapis.com/youtube/v3/videos?part=snippet%2CcontentDetails%2Cstatistics&id=" youtube-id "&key=" youtube-api-key)
       :parser 'json-read
@@ -237,15 +279,12 @@
                   (org-set-property "published-at" (assoc-default 'publishedAt (assoc-default 'snippet (aref (assoc-default 'items data) 0))))
                   (org-set-property "fetched-at" (format-time-string "%Y-%m-%dT%TZ%z")))))))
 
-(defun my/parse-npm-url ()
-  (let ((line-content (my/get-current-line-content)))
-    (string-match ".*?https://www.npmjs.com/package/\\([a-zA-Z0-9-_]*\\).*" line-content)
-    (match-string 1 line-content)))
+(defvar my/npm-re ".*?https://www.npmjs.com/package/\\([a-zA-Z0-9-_]*\\).*")
 
 (defun my/fetch-npm-stats ()
   "Fetch Npm REST API and add the returned values in a PROPERTIES drawer"
   (interactive)
-  (let ((npm-id (my/parse-npm-url)))
+  (seq-let (npm-id) (my/parse-url my/npm-re)
     (request
       (concat "https://api.npmjs.org/downloads/point/last-month/" npm-id)
       :parser 'json-read
@@ -262,15 +301,12 @@
                   (org-set-property "last-version" (assoc-default 'latest (assoc-default 'dist-tags data)))
                   (org-set-property "fetched-at" (format-time-string "%Y-%m-%dT%TZ%z")))))))
 
-(defun my/parse-musicbrainz-url ()
-  (let ((line-content (my/get-current-line-content)))
-    (string-match ".*?https://musicbrainz.org/artist/\\([a-zA-Z0-9-_]*\\).*" line-content)
-    (match-string 1 line-content)))
+(defvar my/musicbrainz-re ".*?https://musicbrainz.org/artist/\\([a-zA-Z0-9-_]*\\).*")
 
 (defun my/fetch-musicbrainz-stats ()
   "Fetch MusicBrainz REST API and add the returned values in a PROPERTIES drawer"
   (interactive)
-  (let ((artist-id (my/parse-musicbrainz-url)))
+  (seq-let (artist-id) (my/parse-url my/musicbrainz-re)
     (request
       (concat "https://musicbrainz.org/ws/2/artist/" artist-id "?fmt=json&inc=url-rels")
       :parser 'json-read
@@ -281,5 +317,61 @@
                     (if bandcamp (org-set-property "bandcamp" (assoc-default 'resource (assoc-default 'url bandcamp)))))
                   (let ((songkick (--find (string-equal (assoc-default 'type it) "songkick") (append (assoc-default 'relations data) nil))))
                     (if songkick (org-set-property "songkick" (assoc-default 'resource (assoc-default 'url songkick)))))
+                  (let ((soundcloud (--find (string-equal (assoc-default 'type it) "soundcloud") (append (assoc-default 'relations data) nil))))
+                    (if soundcloud (org-set-property "soundcloud" (assoc-default 'resource (assoc-default 'url soundcloud)))))
+                  (let ((youtube (--find (string-equal (assoc-default 'type it) "youtube") (append (assoc-default 'relations data) nil))))
+                    (if youtube (org-set-property "youtube" (assoc-default 'resource (assoc-default 'url youtube)))))
                   (org-set-property "fetched-at" (format-time-string "%Y-%m-%dT%TZ%z")))))))
+
+(defvar my/archlinux-re ".*?https://archlinux.org/packages/\\(community\\|core\\|extra\\)/\\(any\\|x86_64\\)/\\([a-zA-Z0-9-_]*\\)/.*")
+
+(defun my/fetch-archlinux-stats ()
+  "Fetch Archlinux REST API and add the returned values in a PROPERTIES drawer"
+  (interactive)
+  (seq-let (repo arch package-id) (my/parse-url my/archlinux-re)
+    (request
+      (concat "https://www.archlinux.org/packages/" repo "/" arch "/" package-id "/json")
+      :parser 'json-read
+      :success (cl-function
+                (lambda (&key data &allow-other-keys)
+                  (org-set-property "name" (assoc-default 'pkgname data))
+                  (org-set-property "description" (assoc-default 'pkgdesc data))
+                  (org-set-property "version" (assoc-default 'pkgver data))
+                  (org-set-property "built-at" (assoc-default 'build_date data))
+                  (org-set-property "updated-at" (assoc-default 'last_update data))
+                  (org-set-property "fetched-at" (format-time-string "%Y-%m-%dT%TZ%z")))))))
+
+(defvar my/aur-re ".*?https://aur.archlinux.org/packages/\\([a-zA-Z0-9-_]*\\)/.*")
+
+(defun my/fetch-aur-stats ()
+  "Fetch AUR REST API and add the returned values in a PROPERTIES drawer"
+  (interactive)
+  (seq-let (package-id) (my/parse-url my/aur-re)
+    (request
+      (concat "https://aur.archlinux.org/rpc/?v=5&type=info&arg=" package-id)
+      :parser 'json-read
+      :success (cl-function
+                (lambda (&key data &allow-other-keys)
+                  (org-set-property "name" (assoc-default 'Name (aref (assoc-default 'results data) 0)))
+                  (org-set-property "description" (assoc-default 'Description (aref (assoc-default 'results data) 0)))
+                  (org-set-property "version" (assoc-default 'Version (aref (assoc-default 'results data) 0)))
+                  (org-set-property "updated-at" (format-time-string "%Y-%m-%dT%TZ%z" (assoc-default 'LastModified (aref (assoc-default 'results data) 0))))
+                  (org-set-property "fetched-at" (format-time-string "%Y-%m-%dT%TZ%z")))))))
+
+(defun my/fetch-stats ()
+  "Fetch current website REST API and add the returned values in a PROPERTIES drawer"
+  (interactive)
+  (let ((line-content (my/get-current-line-content)))
+    (cond
+      ((string-match-p my/archlinux-re line-content) (my/fetch-archlinux-stats))
+      ((string-match-p my/askubuntu-re line-content) (my/fetch-askubuntu-stats))
+      ((string-match-p my/aur-re line-content) (my/fetch-aur-stats))
+      ((string-match-p my/github-re line-content) (my/fetch-github-stats))
+      ((string-match-p my/musicbrainz-re line-content) (my/fetch-musicbrainz-stats))
+      ((string-match-p my/npm-re line-content) (my/fetch-npm-stats))
+      ((string-match-p my/serverfault-re line-content) (my/fetch-serverfault-stats))
+      ((string-match-p my/superuser-re line-content) (my/fetch-superuser-stats))
+      ((string-match-p my/stackexchange-re line-content) (my/fetch-stackexchange-stats))
+      ((string-match-p my/stackoverflow-re line-content) (my/fetch-stackoverflow-stats))
+      ((string-match-p my/youtube-re line-content) (my/fetch-youtube-stats)))))
 
