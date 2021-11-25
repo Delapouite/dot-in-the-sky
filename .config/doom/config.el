@@ -113,7 +113,7 @@
       :unnarrowed t)))
   :config
   (add-hook 'org-mode-hook `doom-modeline-set-delapouite-modeline)
-  (setq org-roam-node-display-template "${title:*} ${tags:50}")
+  (setq org-roam-node-display-template "${title:*} ${my-level} | ${mtime} | ${tags:50}")
   (defface org-link-id
     '((t :foreground "#50fa7b"
          :weight bold
@@ -128,6 +128,10 @@
     :group 'org-faces)
   (org-link-set-parameters "id" :face 'org-link-id)
   (org-link-set-parameters "file" :face 'org-link-file)
+  (cl-defmethod org-roam-node-my-level ((node org-roam-node))
+    (number-to-string (org-roam-node-level node)))
+  (cl-defmethod org-roam-node-mtime ((node org-roam-node))
+    (format-time-string "%Y-%m-%d %H:%M:%S" (org-roam-node-file-mtime node)))
   ;; not used because too slow :(
   (cl-defmethod org-roam-node-backlinkscount ((node org-roam-node))
     (let* ((count (caar (org-roam-db-query
