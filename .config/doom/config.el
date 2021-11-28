@@ -114,6 +114,7 @@
   :config
   (add-hook 'org-mode-hook `doom-modeline-set-delapouite-modeline)
   (setq org-roam-node-display-template "${title:*} ${my-level} | ${mtime} | ${tags:50}")
+  (setq org-tags-exclude-from-inheritance '("Album" "Artist"))
   (defface org-link-id
     '((t :foreground "#50fa7b"
          :weight bold
