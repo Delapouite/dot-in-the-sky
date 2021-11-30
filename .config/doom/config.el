@@ -169,6 +169,7 @@
 
 (require 'request)
 (require 'json)
+(require 'xml)
 
 (defun my/get-current-line-content ()
   (buffer-substring-no-properties (line-beginning-position) (line-end-position)))
@@ -208,7 +209,7 @@
 
 (cl-defun my/parse-stack-response (&key data &allow-other-keys)
   (progn
-    (org-set-property "title" (assoc-default 'title (aref (assoc-default 'items data) 0)))
+    (org-set-property "title" (xml-substitute-special (assoc-default 'title (aref (assoc-default 'items data) 0))))
     (org-set-property "score" (number-to-string (assoc-default 'score (aref (assoc-default 'items data) 0))))
     (org-set-property "views" (number-to-string (assoc-default 'view_count (aref (assoc-default 'items data) 0))))
     (org-set-property "asked-at" (format-time-string "%Y-%m-%dT%TZ%z" (assoc-default 'creation_date (aref (assoc-default 'items data) 0))))
