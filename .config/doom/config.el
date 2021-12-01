@@ -132,6 +132,16 @@
     :group 'org-faces)
   (org-link-set-parameters "id" :face 'org-link-id)
   (org-link-set-parameters "file" :face 'org-link-file)
+  (defun my/print-nodes-list (&rest search)
+    "Print a org-roam nodes list having SEARCH tag(s)"
+    ; (princ (concat "Generated at " (format-time-string "%Y-%m-%d %H:%M:%S\n" (current-time))))
+    (let ((hits (apply #'org-roam-db-query (cons [:select [id title]
+                                                  :from [nodes tags]
+                                                  ; TODO fix 3 tags limit
+                                                  :where (and (= node_id id) (in tag [$s2 $s3 $s4]))
+                                                  :group-by title
+                                                  :having (= (funcall count title) $s1)] (cons (length search) search)))))
+      (dolist (hit hits) (princ (concat "[[id:" (car hit) "][" (cadr hit) "]]\n")))))
   (cl-defmethod org-roam-node-my-level ((node org-roam-node))
     (number-to-string (org-roam-node-level node)))
   (cl-defmethod org-roam-node-mtime ((node org-roam-node))
