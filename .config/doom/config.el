@@ -217,6 +217,25 @@
                   (org-set-property "last-commit-at" (assoc-default 'date (assoc-default 'author (assoc-default 'commit (aref data 0)))))
                   (org-set-property "fetched-at" (format-time-string "%Y-%m-%dT%TZ%z")))))))
 
+(defvar my/github-issues-re ".*?https://github.com/\\([a-zA-Z0-9-_\.]*\\)/\\([a-zA-Z0-9-_\.]*\\)/issues/\\([a-zA-Z0-9-_\.]*\\).*")
+
+(defun my/fetch-github-issues-stats ()
+  "Fetch GitHub REST API for issues and add the returned values in a PROPERTIES drawer"
+  (interactive)
+  (seq-let (org name issue-id) (my/parse-url my/github-issues-re)
+    (request
+      (concat "https://api.github.com/repos/" org  "/" name "/issues/" issue-id)
+      :parser 'json-read
+      :success (cl-function
+                (lambda (&key data &allow-other-keys)
+                  (org-set-property "title" (assoc-default 'title data))
+                  (org-set-property "state" (assoc-default 'state data))
+                  (org-set-property "comments" (number-to-string (assoc-default 'comments data)))
+                  (org-set-property "created-at" (assoc-default 'created_at data))
+                  (org-set-property "updated-at" (assoc-default 'updated_at data))
+                  (org-set-property "closed-at" (assoc-default 'closed_at data))
+                  (org-set-property "fetched-at" (format-time-string "%Y-%m-%dT%TZ%z")))))))
+
 (cl-defun my/parse-stack-response (&key data &allow-other-keys)
   (progn
     (org-set-property "title" (xml-substitute-special (assoc-default 'title (aref (assoc-default 'items data) 0))))
@@ -225,7 +244,13 @@
     (org-set-property "asked-at" (format-time-string "%Y-%m-%dT%TZ%z" (assoc-default 'creation_date (aref (assoc-default 'items data) 0))))
     (org-set-property "fetched-at" (format-time-string "%Y-%m-%dT%TZ%z"))))
 
+(cl-defun my/parse-stack-tags-response (&key data &allow-other-keys)
+  (progn
+    (org-set-property "count" (number-to-string (assoc-default 'count (aref (assoc-default 'items data) 0))))
+    (org-set-property "fetched-at" (format-time-string "%Y-%m-%dT%TZ%z"))))
+
 (defvar my/stackoverflow-re ".*?https://stackoverflow.com/questions/\\([0-9]*\\)/.*")
+(defvar my/stackoverflow-tags-re ".*?https://stackoverflow.com/questions/tagged/\\([a-zA-Z0-9-_\.]*\\).*")
 
 (defun my/fetch-stackoverflow-stats ()
   "Fetch StackOverflow REST API and add the returned values in a PROPERTIES drawer"
@@ -235,6 +260,15 @@
       (concat "https://api.stackexchange.com/2.3/questions/" question-id "?site=stackoverflow")
       :parser 'json-read
       :success 'my/parse-stack-response)))
+
+(defun my/fetch-stackoverflow-tags-stats ()
+  "Fetch StackOverflow REST API for tags and add the returned values in a PROPERTIES drawer"
+  (interactive)
+  (seq-let (tag) (my/parse-url my/stackoverflow-tags-re)
+    (request
+      (concat "https://api.stackexchange.com/2.3/tags/" tag "/info?site=stackoverflow")
+      :parser 'json-read
+      :success 'my/parse-stack-tags-response)))
 
 (defvar my/serverfault-re ".*?https://serverfault.com/questions/\\([0-9]*\\)/.*")
 
@@ -270,6 +304,7 @@
       :success 'my/parse-stack-response)))
 
 (defvar my/stackexchange-re ".*?https://\\(.*?\\).stackexchange.com/questions/\\([0-9]*\\)/.*")
+(defvar my/stackexchange-tags-re ".*?https://\\(.*?\\).stackexchange.com/questions/tagged/\\([a-zA-Z0-9-_\.]*\\).*")
 
 (defun my/fetch-stackexchange-stats ()
   "Fetch StackExchange REST API and add the returned values in a PROPERTIES drawer"
@@ -279,6 +314,15 @@
       (concat "https://api.stackexchange.com/2.3/questions/" question-id "?site=" site)
       :parser 'json-read
       :success 'my/parse-stack-response)))
+
+(defun my/fetch-stackexchange-tags-stats ()
+  "Fetch StackExchange REST API for tag and add the returned values in a PROPERTIES drawer"
+  (interactive)
+  (seq-let (site tag) (my/parse-url my/stackexchange-tags-re)
+    (request
+      (concat "https://api.stackexchange.com/2.3/tags/" tag "/info?site=" site)
+      :parser 'json-read
+      :success 'my/parse-stack-tags-response)))
 
 (defvar my/youtube-re ".*?https://www.youtube.com/watch\\?v=\\([a-zA-Z0-9-_]*\\).*")
 
@@ -385,12 +429,15 @@
       ((string-match-p my/archlinux-re line-content) (my/fetch-archlinux-stats))
       ((string-match-p my/askubuntu-re line-content) (my/fetch-askubuntu-stats))
       ((string-match-p my/aur-re line-content) (my/fetch-aur-stats))
+      ((string-match-p my/github-issues-re line-content) (my/fetch-github-issues-stats))
       ((string-match-p my/github-re line-content) (my/fetch-github-stats))
       ((string-match-p my/musicbrainz-re line-content) (my/fetch-musicbrainz-stats))
       ((string-match-p my/npm-re line-content) (my/fetch-npm-stats))
       ((string-match-p my/serverfault-re line-content) (my/fetch-serverfault-stats))
       ((string-match-p my/superuser-re line-content) (my/fetch-superuser-stats))
+      ((string-match-p my/stackexchange-tags-re line-content) (my/fetch-stackexchange-tags-stats))
       ((string-match-p my/stackexchange-re line-content) (my/fetch-stackexchange-stats))
+      ((string-match-p my/stackoverflow-tags-re line-content) (my/fetch-stackoverflow-tags-stats))
       ((string-match-p my/stackoverflow-re line-content) (my/fetch-stackoverflow-stats))
       ((string-match-p my/youtube-re line-content) (my/fetch-youtube-stats)))))
 
