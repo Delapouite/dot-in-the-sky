@@ -29,7 +29,11 @@
 (setq doom-theme 'doom-dracula)
 (custom-set-faces!
   '(bold :weight bold :foreground "#8be9fd")
+  '(org-roam-header-line :weight bold :height 180 :foreground "#f1fa8c")
+  '(magit-section-heading :height 120 :foreground "#8be9fd")
   '(org-document-title :height 180)
+  '(org-roam-title :weight bold :height 120)
+  '(org-roam-olp :foreground "#6272a4")
   '(outline-1 :height 120)
   ;; TODO why the need to reset?
   '(outline-2 :height 90))
