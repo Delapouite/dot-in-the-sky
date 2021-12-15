@@ -1,6 +1,11 @@
 {
-  // editor
-  "editor.codeLens": false,
+  "diffEditor.ignoreTrimWhitespace": false,
+  "files.exclude": {
+    "**/.classpath": true,
+    "**/.project": true,
+    "**/.settings": true,
+    "**/.factorypath": true
+  },
   "editor.cursorStyle": "block",
   "editor.cursorSurroundingLines": 10,
   "editor.fontSize": 12,
@@ -16,143 +21,129 @@
   "editor.tabSize": 2,
   "editor.wordBasedSuggestions": true,
   "editor.wordBasedSuggestionsMode": "allDocuments",
-  // builtin
+  "editor.bracketPairColorization.enabled": true,
+  "editor.guides.bracketPairs":"active",
+  "explorer.confirmDragAndDrop": false,
+  "explorer.confirmDelete": false,
   "problems.showCurrentInStatus": true,
   "references.preferredLocation": "view",
   "terminal.integrated.fontFamily": "iosevka",
   "terminal.integrated.fontSize": 12,
+  "terminal.integrated.scrollback": 10000,
   "update.mode": "none",
   "window.menuBarVisibility": "toggle",
   "workbench.colorTheme": "Dracula",
   "workbench.startupEditor": "newUntitledFile",
   "workbench.statusBar.visible": true,
+  "workbench.experimental.sidePanel.enabled": true,
+  // languages
+  "debug.javascript.autoAttachFilter": "disabled",
+  "javascript.updateImportsOnFileMove.enabled": "always",
+  "typescript.implementationsCodeLens.enabled": true,
+  "typescript.referencesCodeLens.enabled": true,
+  "typescript.updateImportsOnFileMove.enabled": "always",
+  "python.analysis.typeCheckingMode": "strict",
   // extensions
   "atlascode.bitbucket.enabled": true,
   "atlascode.bitbucket.explorer.relatedJiraIssues.enabled": true,
-  "bracket-pair-colorizer-2.colors": [
-    "#bd93f9",
-    "#8be9fd",
-    "#50fa7b",
-    "#f1fa8c",
-    "#ffb86c",
-    "#f1fa8c"
+  "atlascode.bitbucket.pipelines.explorerEnabled": true,
+  "azureFunctions.showProjectWarning": false,
+  "docker.containers.groupBy": "State",
+  "docker.containers.description": [
+    "ContainerName",
+    "State",
+    "Status"
   ],
-  "cSpell.language": "en,fr",
   "eslint.alwaysShowStatus": true,
+  "eslint.debug": true,
   "gitlens.codeLens.enabled": false,
+  "gitlens.sortBranchesBy": "date:desc",
+  "gitlens.views.remotes.branches.layout": "list",
   // format
   "prettier.semi": false,
   "prettier.trailingComma": "all",
-  "[html]": {
+  "[html][javascript][json][jsonc][typescript][typescriptreact][yaml]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
-  "[javascript]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  // telemetry
+  "telemetry.telemetryLevel": "off",
+  "nxConsole.enableTelemetry": false,
+  "partialDiff.enableTelemetry": false,
+  "redhat.telemetry.enabled": false,
+  "dance.modes": {
+    "normal": {
+      "lineNumbers": "relative",
+      "cursorStyle": "block",
+      "selectionBehavior": "character",
+      "decorations": {
+        "applyTo": "main",
+        "backgroundColor": "$editor.hoverHighlightBackground",
+        "isWholeLine": false
+      },
+      "onEnterMode": [
+        [
+          ".selections.restore",
+          {
+            "register": " ^",
+            "try": true
+          }
+        ]
+      ],
+      "onLeaveMode": [
+        [
+          ".selections.save",
+          {
+            "register": " ^",
+            "style": {
+              "borderColor": "$editor.selectionBackground",
+              "borderStyle": "solid",
+              "borderWidth": "2px",
+              "borderRadius": "1px"
+            },
+            "until": [
+              [
+                "mode-did-change",
+                {
+                  "include": "normal"
+                }
+              ],
+              [
+                "selections-did-change"
+              ]
+            ]
+          }
+        ]
+      ]
+    }
   },
-  "[json]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "[jsonc]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "[typescript]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "[typescriptreact]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "[yaml]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  // vim
-  "vim.cursorStylePerMode.normal": "block",
-  "vim.easymotion": false,
-  "vim.highlightedyank.enable": true,
-  "vim.hlsearch": true,
-  "vim.leader": "<space>",
-  "vim.replaceWithRegister": true,
-  "vim.sneak": true,
-  "vim.useSystemClipboard": true,
-  "vim.insertModeKeyBindings": [
-    {
-      "before": ["j", "j"],
-      "after": ["<Esc>"]
+  "dance.menus": {
+    "buffer": {
+      "items": {
+        "bf": {
+          "text": "find",
+          "command": "workbench.action.quickOpen"
+        },
+        "j": {
+          "text": "next",
+          "command": "workbench.action.nextEditorInGroup"
+        },
+        "k": {
+          "text": "previous",
+          "command": "workbench.action.previousEditorInGroup"
+        },
+        "d": {
+          "text": "delete",
+          "command": "workbench.action.closeActiveEditor"
+        },
+        "o": {
+          "text": "delete others",
+          "command": "workbench.action.closeOtherEditors"
+        },
+        "c": {
+          "text": "config",
+          "command": "workbench.action.openSettingsJson"
+        },
+      }
     }
   ],
-  "vim.normalModeKeyBindingsNonRecursive": [
-    // fixes
-    {
-      "before": ["K"],
-      "after": ["i", "<CR>", "<Esc>", "k", "$"]
-    },
-    {
-      "before": ["U"],
-      "after": ["<C-r>"]
-    },
-    {
-      "before": ["Y"],
-      "after": ["y", "$"]
-    },
-    // moves
-    {
-      "before": ["q"],
-      "after": ["b"]
-    },
-    {
-      "before": ["Q"],
-      "after": ["B"]
-    },
-    // extend
-    {
-      "before": ["m"],
-      "after": ["v", "%"]
-    },
-    // leader
-    {
-      "before": ["<leader>", "n"],
-      "commands": ["workbench.action.nextEditor"]
-    },
-    {
-      "before": ["<leader>", "p"],
-      "commands": ["workbench.action.previousEditor"]
-    },
-    {
-      "before": ["<leader>", "="],
-      "commands": ["editor.action.formatDocument"]
-    },
-    // goto
-    {
-      "before": ["g", "h"],
-      "after": ["0"]
-    },
-    {
-      "before": ["g", "i"],
-      "after": ["^"]
-    },
-    {
-      "before": ["g", "l"],
-      "after": ["$"]
-    },
-    {
-      "before": ["g", "m"],
-      "after": ["%"]
-    },
-    // LSP
-    {
-      "before": ["g", "d"],
-      "commands": ["editor.action.goToTypeDefinition"]
-    },
-    {
-      "before": ["g", "D"],
-      "commands": ["editor.action.goToImplementation"]
-    },
-    {
-      "before": ["g", "s"],
-      "commands": ["workbench.action.gotoSymbol"]
-    },
-    {
-      "before": ["g", "t"],
-      "commands": ["workbench.action.showAllSymbols"]
-    }
-  ]
 }
