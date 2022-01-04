@@ -60,6 +60,27 @@
                   (org-set-property "closed-at" (assoc-default 'closed_at data))
                   (org-set-property "fetched-at" (format-time-string "%Y-%m-%dT%TZ%z")))))))
 
+(defvar my/github-pull-re ".*?https://github.com/\\([a-zA-Z0-9-_\.]*\\)/\\([a-zA-Z0-9-_\.]*\\)/pull/\\([a-zA-Z0-9-_\.]*\\).*")
+
+(defun my/fetch-github-pull-stats ()
+  "Fetch GitHub REST API for pull-requests and add the returned values in a PROPERTIES drawer"
+  (interactive)
+  (seq-let (org name pull-id) (my/parse-url my/github-pull-re)
+    (print (concat "requestd endpoint → https://api.github.com/repos/" org  "/" name "/pulls/" pull-id))
+    (request
+      (concat "https://api.github.com/repos/" org  "/" name "/pulls/" pull-id)
+      :parser 'json-read
+      :success (cl-function
+                (lambda (&key data &allow-other-keys)
+                  (org-set-property "title" (assoc-default 'title data))
+                  (org-set-property "state" (assoc-default 'state data))
+                  (org-set-property "comments" (number-to-string (assoc-default 'comments data)))
+                  (org-set-property "created-at" (assoc-default 'created_at data))
+                  (org-set-property "updated-at" (assoc-default 'updated_at data))
+                  (org-set-property "closed-at" (assoc-default 'closed_at data))
+                  (org-set-property "merged-at" (assoc-default 'merged_at data))
+                  (org-set-property "fetched-at" (format-time-string "%Y-%m-%dT%TZ%z")))))))
+
 (cl-defun my/parse-stack-response (&key data &allow-other-keys)
   (progn
     (org-set-property "title" (xml-substitute-special (assoc-default 'title (aref (assoc-default 'items data) 0))))
@@ -293,6 +314,7 @@
       ((string-match-p my/docker-hub-re line-content) (my/fetch-docker-hub))
       ((string-match-p my/docker-hub-official-re line-content) (my/fetch-docker-official-hub))
       ((string-match-p my/github-issues-re line-content) (my/fetch-github-issues-stats))
+      ((string-match-p my/github-pull-re line-content) (my/fetch-github-pull-stats))
       ((string-match-p my/github-re line-content) (my/fetch-github-stats))
       ((string-match-p my/musicbrainz-re line-content) (my/fetch-musicbrainz-stats))
       ((string-match-p my/npm-re line-content) (my/fetch-npm-stats))
