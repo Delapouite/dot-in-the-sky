@@ -33,6 +33,7 @@
   '(bold :weight bold :foreground "#8be9fd")
   '(org-roam-header-line :weight bold :height 180 :foreground "#f1fa8c")
   '(magit-section-heading :height 120 :foreground "#8be9fd")
+  '(org-quote :slant italic :foreground "#f8f8f2")
   '(org-document-title :height 180)
   '(org-roam-title :weight bold :height 120)
   '(org-roam-olp :foreground "#6272a4")
