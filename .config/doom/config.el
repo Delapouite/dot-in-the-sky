@@ -51,6 +51,7 @@
 ;; This determines the style of line numbers in effect. If set to `nil', line
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
 (setq display-line-numbers-type t)
+(setq scroll-margin 10)
 
 ;; Here are some additional functions/macros that could help you configure Doom:
 ;;
@@ -75,16 +76,15 @@
 (map! :leader
       :desc "Find roam" "r" #'org-roam-node-find)
 
-;; modeline
-(defun get-buffer-file-mtime ()
-  (let* ((fname (buffer-file-name))
-         (mtime (file-attribute-modification-time
-                 (file-attributes fname))))
-    (when mtime
-      (format-time-string " %Y-%m-%d %H:%M:%S" mtime))))
-
 (use-package! doom-modeline
   :config
+  (defun get-buffer-file-mtime ()
+    (let* ((fname (buffer-file-name))
+           (mtime (file-attribute-modification-time
+                   (file-attributes fname))))
+      (when mtime
+        (format-time-string " %Y-%m-%d %H:%M:%S" mtime))))
+
   (doom-modeline-def-segment buffer-mtime
     "Define buffer-mtime modeline segment"
     (propertize (get-buffer-file-mtime) 'face 'mode-line))
@@ -100,11 +100,6 @@
 (use-package! org-roam
   :custom
   (org-roam-directory "~/Sync/org/roam")
-  (org-roam-mode-section-functions
-   (list #'org-roam-backlinks-section
-         #'org-roam-reflinks-section
-        ;#'org-roam-unlinked-references-section
-         ))
   (org-roam-capture-templates
    '(("d" "default" plain "%?"
       :target (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n")
@@ -121,10 +116,31 @@
      ("t" "tool" plain "%?"
       :target (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+filetags: Tool\n\n* Wiki\n* Doc\n\* Repo\n* Usage")
       :unnarrowed t)))
+
   :config
   (add-hook 'org-mode-hook `doom-modeline-set-delapouite-modeline)
   (setq org-roam-node-display-template "${title:*} ${my-level} | ${mtime} | ${tags:50}")
-  (setq org-tags-exclude-from-inheritance '("Album" "Artist"))
+  (setq org-tags-exclude-from-inheritance '("Album" "Artist" "Debut" "Top"))
+
+  ; Sections in sidebar
+
+  (defun my/org-roam-links-section (node)
+    "The links section with counters for NODE."
+    (magit-insert-section (org-roam-links)
+      (magit-insert-heading "Links")
+      (let ((hits (org-roam-db-query [:select [(funcall count pos) type]
+                                      :from [links]
+                                      :where (= source $s1)
+                                      :group-by type]
+                                     (org-roam-node-id node))))
+        (dolist (hit hits) (insert (concat (number-to-string (car hit)) " - " (cadr hit) "\n"))))
+      (insert ?\n)))
+
+  (setq org-roam-mode-section-functions
+        (list #'my/org-roam-links-section
+              #'org-roam-backlinks-section
+              #'org-roam-reflinks-section))
+
   (defface org-link-id
     '((t :foreground "#50fa7b"
          :weight bold
@@ -139,6 +155,41 @@
     :group 'org-faces)
   (org-link-set-parameters "id" :face 'org-link-id)
   (org-link-set-parameters "file" :face 'org-link-file)
+
+  (defun my/org-roam-visit-node-at-point ()
+    (interactive)
+    (when-let (node (org-roam-node-from-title-or-alias (word-at-point t)))
+      (org-roam-node-visit node)))
+
+  ;; random predicate natively implemented in https://github.com/org-roam/org-roam/pull/2050
+
+  (defun org-roam-node-random-tag (search &optional other-window)
+    (let ((random-row (seq-random-elt (org-roam-db-query [:select [id file pos]
+                                                          :from [nodes tags]
+                                                          :where (and (= node_id id) (= tag $s1))] search))))
+      (org-roam-node-visit (org-roam-node-create :id (nth 0 random-row)
+                                                 :file (nth 1 random-row)
+                                                 :point (nth 2 random-row))
+                           other-window)))
+
+  (defun org-roam-node-random-tool (&optional other-window)
+    "Find and open a random Org-roam tool node.
+        With prefix argument OTHER-WINDOW, visit the node in another window instead."
+    (interactive current-prefix-arg)
+    (org-roam-node-random-tag "Tool" other-window))
+
+  (defun org-roam-node-random-artist (&optional other-window)
+    "Find and open a random Org-roam artist node.
+        With prefix argument OTHER-WINDOW, visit the node in another window instead."
+    (interactive current-prefix-arg)
+    (org-roam-node-random-tag "Artist" other-window))
+
+  (defun org-roam-node-random-album (&optional other-window)
+    "Find and open a random Org-roam album node.
+        With prefix argument OTHER-WINDOW, visit the node in another window instead."
+    (interactive current-prefix-arg)
+    (org-roam-node-random-tag "Album" other-window))
+
   (defun my/print-nodes-list (&rest search)
     "Print a org-roam nodes list having SEARCH tag(s)"
     ; (princ (concat "Generated at " (format-time-string "%Y-%m-%d %H:%M:%S\n" (current-time))))
