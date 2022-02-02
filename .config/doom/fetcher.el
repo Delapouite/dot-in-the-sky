@@ -205,9 +205,14 @@
       :parser 'json-read
       :success (cl-function
                 (lambda (&key data &allow-other-keys)
-                  ; TODO add dependencies
-                  (org-set-property "last-version" (assoc-default 'latest (assoc-default 'dist-tags data)))
-                  (org-set-property "fetched-at" (format-time-string "%Y-%m-%dT%TZ%z")))))))
+                  (let* ((last-version (assoc-default 'latest (assoc-default 'dist-tags data)))
+                         (version (assoc-default (intern last-version) (assoc-default 'versions data)))
+                         (dependencies (length (assoc-default 'dependencies version)))
+                         (types (assoc-default 'types version)))
+                         (org-set-property "dependencies" (number-to-string dependencies))
+                         (org-set-property "last-version" last-version)
+                         (org-set-property "types" (or types "null"))
+                         (org-set-property "fetched-at" (format-time-string "%Y-%m-%dT%TZ%z"))))))))
 
 (defvar my/musicbrainz-re ".*?https://musicbrainz.org/artist/\\([a-zA-Z0-9-_]*\\).*")
 
