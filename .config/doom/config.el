@@ -70,9 +70,12 @@
 ;; You can also try 'gd' (or 'C-c c d') to jump to their definition and see how
 ;; they are implemented.
 
-(map! :n "q" #'evil-backward-word-begin)
-(map! :n "Q" #'evil-backward-WORD-begin)
-(map! :n "U" #'evil-redo)
+(map! :n "q" #'evil-backward-word-begin
+      :n "Q" #'evil-backward-WORD-begin
+      :n "U" #'evil-redo
+      :n "b n" #'next-buffer
+      :n "b p" #'previous-buffer
+      :n "b s" #'save-buffer)
 (map! :leader
       :desc "Find roam" "r" #'org-roam-node-find)
 
