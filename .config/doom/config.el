@@ -73,6 +73,7 @@
 (map! :n "q" #'evil-backward-word-begin
       :n "Q" #'evil-backward-WORD-begin
       :n "U" #'evil-redo
+      :n "b d" #'kill-current-buffer
       :n "b n" #'next-buffer
       :n "b p" #'previous-buffer
       :n "b s" #'save-buffer)
@@ -164,6 +165,8 @@
     (when-let (node (org-roam-node-from-title-or-alias (word-at-point t)))
       (org-roam-node-visit node)))
 
+  (advice-add '+org/dwim-at-point :after #'my/org-roam-visit-node-at-point)
+
   ;; random predicate natively implemented in https://github.com/org-roam/org-roam/pull/2050
 
   (defun org-roam-node-random-tag (search &optional other-window)
@@ -234,4 +237,172 @@
 
 (setq company-selection-wrap-around t)
 
+(use-package! org-download
+  :config
+  (setq-default org-download-image-dir "~/.cache/org-download")
+  (org-download-enable))
+
+; org-babel
+
+(setq org-plantuml-exec-mode 'plantuml)
+(add-to-list 'org-src-lang-modes '("plantuml" . plantuml))
+
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '((lilypond . t)
+   (plantuml . t)
+   (emacs-lisp . nil)))
+
+;; To dynamically build org-agenda-files when a TODO is present
+
+(use-package! vulpea
+  :config
+  (defun vulpea-agenda-p ()
+    "Return non-nil if current buffer has any todo entry.
+
+    TODO entries marked as done are ignored, meaning that this
+    function returns nil if current buffer contains only completed tasks."
+    (seq-find
+     (lambda (type) (eq type 'todo))
+     (org-element-map
+         (org-element-parse-buffer 'headline)
+         'headline
+       (lambda (h)
+         (org-element-property :todo-type h)))))
+
+  (defun vulpea-agenda-update-tag ()
+    "Update AGENDA tag in the current buffer."
+    (when (and (not (active-minibuffer-window))
+               (vulpea-buffer-p))
+      (save-excursion
+        (goto-char (point-min))
+        (let* ((tags (vulpea-buffer-tags-get))
+               (original-tags tags))
+          (if (vulpea-agenda-p)
+              (setq tags (cons "Agenda" tags))
+            (setq tags (remove "Agenda" tags)))
+
+          ;; cleanup duplicates
+          (setq tags (seq-uniq tags))
+
+          ;; update tags if changed
+          (when (or (seq-difference tags original-tags)
+                    (seq-difference original-tags tags))
+            (apply #'vulpea-buffer-tags-set tags))))))
+
+  (defun vulpea-buffer-p ()
+    "Return non-nil if the currently visited buffer is a note."
+    (and buffer-file-name
+         (string-prefix-p
+          (expand-file-name (file-name-as-directory org-roam-directory))
+          (file-name-directory buffer-file-name))))
+
+  (defun vulpea-agenda-files ()
+    "Return a list of note files containing 'Agenda' tag." ;
+    (seq-uniq
+     (seq-map
+      #'car
+      (org-roam-db-query
+       [:select [nodes:file]
+        :from tags
+        :left-join nodes
+        :on (= tags:node-id nodes:id)
+        :where (like tag (quote "%\"Agenda\"%"))]))))
+
+  (defun vulpea-agenda-files-update (&rest _)
+    "Update the value of `org-agenda-files'."
+    (setq org-agenda-files (vulpea-agenda-files)))
+
+  ; (add-hook 'find-file-hook #'vulpea-agenda-update-tag)
+  (add-hook 'before-save-hook #'vulpea-agenda-update-tag)
+
+  (advice-add 'org-agenda :before #'vulpea-agenda-files-update))
+
+; relative dates in drawers
+
+(require 'cl-lib)
+
+(defcustom org+-dateprop-reltime-number-of-items 3
+  "Number of time items shown for relative time."
+  :type 'number
+  :group 'org)
+
+(defcustom org+-dateprop-properties '("created-at" "updated-at" "last-commit-at" "fetched-at" "asked-at")
+  "Names of properties with dates."
+  :type 'org+-dateprop-properties-widget
+  :group 'org)
+
+(defun org+-next-property-drawer (&optional limit)
+  "Search for the next property drawer.
+When a property drawer is found position point behind :PROPERTIES:
+and return the property-drawer as org-element.
+Otherwise position point at the end of the buffer and return nil."
+  (let (found drawer)
+    (while (and (setq found (re-search-forward org-drawer-regexp limit 1)
+              found (match-string-no-properties 1))
+        (or (and (setq drawer (org-element-context))
+             (null (eq (org-element-type drawer) 'property-drawer)))
+            (string-match found "END"))))
+    (and found drawer)))
+
+(defun org+-time-since-string (date)
+  "Return a string representing the time since DATE."
+  (let* ((time-diff (nreverse (seq-subseq (decode-time (time-subtract (current-time) (encode-time date))) 0 6)))
+     (cnt 0))
+    (setf (car time-diff) (- (car time-diff) 1970))
+    (mapconcat
+     #'identity
+     (cl-loop
+      for cnt from 1 upto org+-dateprop-reltime-number-of-items
+      for val in time-diff
+      for time-str in '("year" "month" "day" "hour" "minute" "second")
+      unless (= val 0)
+      collect (format "%d %s%s" val time-str (if (> val 1) "s" ""))
+      )
+     " ")))
+
+(defvar-local org+-dateprop--overlays nil
+  "List of overlays used for custom properties.")
+
+(defun org+-dateprop-properties-re (properties)
+  "Return regular expression corresponding to `org+-dateprop-properties'."
+  (org-re-property (regexp-opt properties) t))
+
+(defvar org+-dateprop--properties-re (org+-dateprop-properties-re org+-dateprop-properties)
+  "Regular expression matching the properties listed in `org+-dateprop-properties'.
+You should not set this regexp diretly but through customization of `org+-dateprop-properties'.")
+
+(defun my/org-dateprop (&optional absolute)
+  "Toggle display of ABSOLUTE or relative time of
+properties in `org-dateprop-properties'."
+  (interactive "P")
+  (if org+-dateprop--overlays
+      (progn (mapc #'delete-overlay org+-dateprop--overlays)
+         (setq org+-dateprop--overlays nil))
+    (unless absolute
+      (org-with-wide-buffer
+       (goto-char (point-min))
+       (let (drawer-el)
+     (while (setq drawer-el (org+-next-property-drawer))
+       (let ((drawer-end (org-element-property :contents-end drawer-el)))
+         (while (re-search-forward org+-dateprop--properties-re drawer-end t)
+           ;; See `org-property-re' for the regexp-groups.
+           ;; Group 3 is PROPVAL without surrounding whitespace.
+           (let* ((val-begin (match-beginning 3))
+              (val-end (match-end 3))
+              (time (org-parse-time-string (replace-regexp-in-string "[[:alpha:]]" " " (match-string 3))))
+              (time-diff-string (format "%s ago" (org+-time-since-string time)))
+              (o (make-overlay val-begin val-end)))
+         (overlay-put o 'display time-diff-string)
+         (overlay-put o 'org+-dateprop t)
+         (push o org+-dateprop--overlays))
+           ))))))))
+
+(define-widget 'org+-dateprop-properties-widget
+  'repeat
+  "Like widget '(repeat string) but also updates `org+-dateprop-properties'."
+  :value-to-external
+  (lambda (_ value)
+    (setq org+-dateprop--properties-re (org+-dateprop-properties-re value)) value)
+  :args '(string))
 

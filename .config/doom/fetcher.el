@@ -57,7 +57,7 @@
                   (org-set-property "comments" (number-to-string (assoc-default 'comments data)))
                   (org-set-property "created-at" (assoc-default 'created_at data))
                   (org-set-property "updated-at" (assoc-default 'updated_at data))
-                  (org-set-property "closed-at" (assoc-default 'closed_at data))
+                  (org-set-property "closed-at" (or (assoc-default 'closed_at data) "null"))
                   (org-set-property "fetched-at" (format-time-string "%Y-%m-%dT%TZ%z")))))))
 
 (defvar my/github-pull-re ".*?https://github.com/\\([a-zA-Z0-9-_\.]*\\)/\\([a-zA-Z0-9-_\.]*\\)/pull/\\([a-zA-Z0-9-_\.]*\\).*")
