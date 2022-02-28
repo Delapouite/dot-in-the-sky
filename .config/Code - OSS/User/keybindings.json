@@ -1,39 +1,39 @@
 [
   // sidebar
   {
-    "key": "ctrl+e",
+    "key": "Ctrl+e",
     "command": "workbench.view.explorer",
     "when": "vim.mode != 'Insert'"
   },
   {
-    "key": "ctrl+f",
+    "key": "Ctrl+f",
     "command": "workbench.action.findInFiles",
     "when": "vim.mode != 'Insert'"
   },
   // palette
   {
-    "key": "ctrl+0",
+    "key": "Ctrl+0",
     "command": "workbench.action.showCommands",
     "when": "vim.mode != 'Insert'"
   },
   // layout
   {
-    "key": "ctrl+h",
+    "key": "Ctrl+h",
     "command": "workbench.action.navigateLeft",
     "when": "vim.mode != 'Insert'"
   },
   {
-    "key": "ctrl+j",
+    "key": "Ctrl+j",
     "command": "workbench.action.navigateDown",
     "when": "vim.mode != 'Insert'"
   },
   {
-    "key": "ctrl+k",
+    "key": "Ctrl+k",
     "command": "workbench.action.navigateUp",
     "when": "vim.mode != 'Insert'"
   },
   {
-    "key": "ctrl+l",
+    "key": "Ctrl+l",
     "command": "workbench.action.navigateRight",
     "when": "vim.mode != 'Insert'"
   },
@@ -122,5 +122,15 @@
     "when": "editorTextFocus && dance.mode == 'normal'",
     "title": "Show commands",
     "command": "workbench.action.showCommands"
+  },
+  {
+    "key": "Ctrl+p",
+    "command": "selectPrevSuggestion",
+    "when": "suggestWidgetMultipleSuggestions && suggestWidgetVisible && textInputFocus"
+  },
+  {
+    "key": "Ctrl+n",
+    "command": "selectNextSuggestion",
+    "when": "suggestWidgetMultipleSuggestions && suggestWidgetVisible && textInputFocus"
   }
 ]
