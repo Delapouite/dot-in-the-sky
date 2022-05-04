@@ -22,7 +22,7 @@
   "editor.wordBasedSuggestions": true,
   "editor.wordBasedSuggestionsMode": "allDocuments",
   "editor.bracketPairColorization.enabled": true,
-  "editor.guides.bracketPairs":"active",
+  "editor.guides.bracketPairs": "active",
   "explorer.confirmDragAndDrop": false,
   "explorer.confirmDelete": false,
   "problems.showCurrentInStatus": true,
@@ -59,6 +59,7 @@
   "gitlens.codeLens.enabled": false,
   "gitlens.sortBranchesBy": "date:desc",
   "gitlens.views.remotes.branches.layout": "list",
+  "terraform.codelens.referenceCount": true,
   // format
   "prettier.semi": false,
   "prettier.trailingComma": "all",
