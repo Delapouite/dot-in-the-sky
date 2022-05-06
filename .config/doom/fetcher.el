@@ -26,7 +26,7 @@
       :parser 'json-read
       :success (cl-function
                 (lambda (&key data &allow-other-keys)
-                  (org-set-property "description" (assoc-default 'description data))
+                  (org-set-property "description" (or (assoc-default 'description data) "null"))
                   (org-set-property "stars" (number-to-string (assoc-default 'stargazers_count data)))
                   (org-set-property "open-issues" (number-to-string (assoc-default 'open_issues data)))
                   (org-set-property "language" (or (assoc-default 'language data) "null"))
@@ -66,7 +66,6 @@
   "Fetch GitHub REST API for pull-requests and add the returned values in a PROPERTIES drawer"
   (interactive)
   (seq-let (org name pull-id) (my/parse-url my/github-pull-re)
-    (print (concat "requestd endpoint → https://api.github.com/repos/" org  "/" name "/pulls/" pull-id))
     (request
       (concat "https://api.github.com/repos/" org  "/" name "/pulls/" pull-id)
       :parser 'json-read
@@ -206,7 +205,7 @@
       :success (cl-function
                 (lambda (&key data &allow-other-keys)
                   (let* ((last-version (assoc-default 'latest (assoc-default 'dist-tags data)))
-                         (version (assoc-default (intern last-version) (assoc-default 'versions data)))
+                         (version (or (message data) (assoc-default (intern last-version) (assoc-default 'versions data))))
                          (dependencies (length (assoc-default 'dependencies version)))
                          (types (assoc-default 'types version)))
                          (org-set-property "dependencies" (number-to-string dependencies))
@@ -297,13 +296,12 @@
       (end-of-line)
       (insert (concat "\n#+begin_src dockerfile\n" dockerfile "#+end_src")))))
 
-(defvar my/bundlephobia-re "*.?https://bundlephobia.com/result\\?p=\\([a-zA-Z0-9-_@.]*\\).*")
+(defvar my/bundlephobia-re "*.?https://bundlephobia.com/package/\\([a-zA-Z0-9-_@.]*\\).*")
 
 (defun my/fetch-bundlephobia-stats ()
   "Fetch Bundle Phobia REST API and add the returned values in a PROPERTIES drawer"
   (interactive)
   (seq-let (package) (my/parse-url my/bundlephobia-re)
-    (print "bundddeeel")
     (request
       (concat "https://bundlephobia.com/api/size?record=true&package=" package)
       :parser 'json-read
@@ -312,6 +310,43 @@
                   (org-set-property "size" (number-to-string (assoc-default 'size data)))
                   (org-set-property "gzip" (number-to-string (assoc-default 'gzip data)))
                   (org-set-property "fetched-at" (format-time-string "%Y-%m-%dT%TZ%z")))))))
+
+(defvar my/vscode-re "*.?https://marketplace.visualstudio.com/items\\?itemName=\\([a-zA-Z0-9-_@.]*\\).*")
+
+(defun my/fetch-vscode ()
+  "Fetch VSCode Marketplace REST API and add the returned values in a PROPERTIES drawer"
+  (interactive)
+  (seq-let (extension-name) (my/parse-url my/vscode-re)
+    (request
+      "https://marketplace.visualstudio.com/_apis/public/gallery/extensionquery"
+      :headers '(("accept" . "application/json;api-version=3.0-preview.1") ("content-type" . "application/json"))
+      :data (concat "{\"filters\":[{\"criteria\":[{\"filterType\":7,\"value\":\"" extension-name "\"},{\"filterType\":8,\"value\":\"Microsoft.VisualStudio.Code\"}],\"pageNumber\":1,\"pageSize\":1,\"sortBy\":0,\"sortOrder\":0}],\"assetTypes\":[],\"flags\":950}")
+      :parser 'json-read
+      :success (cl-function
+                (lambda (&key data &allow-other-keys)
+                  (let* ((extension (aref (assoc-default 'extensions (aref (assoc-default 'results data) 0)) 0))
+                         (last-version (aref (assoc-default 'versions extension) 0))
+                         (manifest (assoc-default 'source (aref (assoc-default 'files last-version) 0))))
+                    (org-set-property "name" (assoc-default 'displayName extension))
+                    (org-set-property "description" (assoc-default 'shortDescription extension))
+                    (org-set-property "version" (assoc-default 'version last-version))
+                    (org-set-property "manifest" manifest)
+                    (org-set-property "updated-at" (assoc-default 'lastUpdated extension))
+                    (request manifest
+                      :parser 'json-read
+                      :success (cl-function
+                                (lambda (&key data &allow-other-keys)
+                                  (let* ((contributes (assoc-default 'contributes data)))
+                                    (org-set-property "commands" (number-to-string(length (assoc-default 'commands contributes))))
+                                    (org-set-property "configuration" (number-to-string(length (assoc-default 'configuration contributes))))
+                                    (org-set-property "grammars" (number-to-string(length (assoc-default 'grammars contributes))))
+                                    (org-set-property "keybindings" (number-to-string(length (assoc-default 'keybindings contributes))))
+                                    (org-set-property "languages" (number-to-string(length (assoc-default 'language contributes))))
+                                    (org-set-property "menus" (number-to-string(length (assoc-default 'menus contributes))))
+                                    (org-set-property "json-validation" (number-to-string(length (assoc-default 'jsonValidation contributes))))
+                                    (org-set-property "views" (number-to-string(length (assoc-default 'views contributes))))
+                                    (org-set-property "views-containers" (number-to-string(length (assoc-default 'viewsContainers contributes))))
+                                    (org-set-property "fetched-at" (format-time-string "%Y-%m-%dT%TZ%z"))))))))))))
 
 (defun my/fetch-stats ()
   "Fetch current website REST API and add the returned values in a PROPERTIES drawer"
@@ -335,4 +370,5 @@
       ((string-match-p my/stackexchange-re line-content) (my/fetch-stackexchange-stats))
       ((string-match-p my/stackoverflow-tags-re line-content) (my/fetch-stackoverflow-tags-stats))
       ((string-match-p my/stackoverflow-re line-content) (my/fetch-stackoverflow-stats))
+      ((string-match-p my/vscode-re line-content) (my/fetch-vscode))
       ((string-match-p my/youtube-re line-content) (my/fetch-youtube-stats)))))
