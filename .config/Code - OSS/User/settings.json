@@ -63,7 +63,7 @@
   // format
   "prettier.semi": false,
   "prettier.trailingComma": "all",
-  "[html][javascript][json][jsonc][typescript][typescriptreact][yaml]": {
+  "[html][javascript][json][jsonc][scss][typescript][typescriptreact][yaml]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   // telemetry
