@@ -80,6 +80,23 @@
                   (org-set-property "merged-at" (or (assoc-default 'merged_at data) "null"))
                   (org-set-property "fetched-at" (format-time-string "%Y-%m-%dT%TZ%z")))))))
 
+(defvar my/gitlab-re ".*?https://gitlab.com/\\([a-zA-Z0-9-_\.]*\\)/\\([a-zA-Z0-9-_\.]*\\).*")
+
+(defun my/fetch-gitlab-stats ()
+  "Fetch GitLab REST API and add the returned values in a PROPERTIES drawer"
+  (interactive)
+  (seq-let (org name) (my/parse-url my/gitlab-re)
+    (request
+      (concat "https://gitlab.com/api/v4/projects/" org  "%2F" name)
+      :parser 'json-read
+      :success (cl-function
+                (lambda (&key data &allow-other-keys)
+                  (org-set-property "description" (assoc-default 'description data))
+                  (org-set-property "stars" (number-to-string (assoc-default 'star_count data)))
+                  (org-set-property "created-at" (assoc-default 'created_at data))
+                  (org-set-property "updated-at" (assoc-default 'last_activity_at data))
+                  (org-set-property "fetched-at" (format-time-string "%Y-%m-%dT%TZ%z")))))))
+
 (cl-defun my/parse-stack-response (&key data &allow-other-keys)
   (progn
     (org-set-property "title" (xml-substitute-special (assoc-default 'title (aref (assoc-default 'items data) 0))))
@@ -362,6 +379,7 @@
       ((string-match-p my/github-issues-re line-content) (my/fetch-github-issues-stats))
       ((string-match-p my/github-pull-re line-content) (my/fetch-github-pull-stats))
       ((string-match-p my/github-re line-content) (my/fetch-github-stats))
+      ((string-match-p my/gitlab-re line-content) (my/fetch-gitlab-stats))
       ((string-match-p my/musicbrainz-re line-content) (my/fetch-musicbrainz-stats))
       ((string-match-p my/npm-re line-content) (my/fetch-npm-stats))
       ((string-match-p my/serverfault-re line-content) (my/fetch-serverfault-stats))
