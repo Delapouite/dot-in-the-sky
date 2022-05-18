@@ -36,6 +36,7 @@
 	ci = commit -v
 	co = checkout
 	d = diff
+	draft = !mkdir _drafts && echo '*' > ./_drafts/.gitignore
 	dw = diff --word-diff
 	dsf = "!git diff --color $@ | diff-so-fancy"
 	l = log --graph --format='%C(yellow)%h% %C(red)%d%Creset %s %Cgreen(%cr) %C(blue)%an%Creset'
