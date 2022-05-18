@@ -1,0 +1,88 @@
+# https://fishshell.com/docs/current/interactive.html
+# Use 'fish_config theme save Delacula' to apply this theme
+# name: 'Delacula'
+# preferred_background: 282A36
+
+# default color
+fish_color_normal F8F8F2 #foreground
+
+# commands like echo
+fish_color_command F8F8F2 #foreground
+
+# keywords like if - this falls back on the command color if unset
+fish_color_keyword F8F8F2 #foreground
+
+# quoted text like "abc"
+fish_color_quote F1FA8C #yellow
+
+# IO redirections like >/dev/null
+fish_color_redirection 8BE9FD #cyan
+
+# process separators like ; and &
+fish_color_end 50FA7B #green
+
+# syntax errors
+fish_color_error FF5555 #red
+
+# ordinary command parameters
+fish_color_param FF79C6 #pink
+
+# options starting with “-”, up to the first “--” parameter
+fish_color_option FF79C6 #pink
+
+# parameter expansion operators like * and ~
+fish_color_operator 8BE9FD #cyan
+
+# comments like ‘# important’
+fish_color_comment 6272A4 #comment
+
+# character escapes like \n and \x70
+fish_color_escape 8BE9FD #cyan
+
+# parameters that are filenames (if the file exists)
+fish_color_valid_path --underline
+
+# autosuggestions (the proposed rest of a command)
+fish_color_autosuggestion 6272A4 #comment
+
+# the ‘^C’ indicator on a canceled command
+fish_color_cancel -r
+
+# selected text in vi visual mode
+fish_color_selection F8F8F2 --bold --background=brblack
+
+# history search matches and selected pager items (background only)
+fish_color_search_match bryellow --background=brblack
+
+# used by dirh command
+fish_color_history_current --bold
+
+
+# default prompt (so not really relevant with starship)
+
+# the current working directory in the default prompt
+fish_color_cwd 50FA7B #green
+
+# the current working directory root in the default prompt
+fish_color_cwd_root FF5555 #red
+
+# the username in the default prompt
+fish_color_user 50FA7B #green
+
+# the hostname in the default prompt
+fish_color_host F8F8F2 #foreground
+
+# the hostname in the default prompt for remote sessions (like ssh)
+fish_color_host_remote F8F8F2 #foreground
+
+
+# the fish pager is used when pressing the tab key
+
+fish_pager_color_completion F8F8F2 #foreground
+fish_pager_color_description BD93F9 #purple
+fish_pager_color_prefix F8F8F2 --bold --underline
+fish_pager_color_selected_background --background=44475A #current-line
+
+# bottom indicator "and xxx more rows"
+fish_pager_color_progress -r
+
