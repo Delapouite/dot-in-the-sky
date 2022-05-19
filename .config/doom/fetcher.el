@@ -267,15 +267,18 @@
       :parser 'json-read
       :success (cl-function
                 (lambda (&key data &allow-other-keys)
+                  (setq org-property-format "%-17s %s")
                   (org-set-property "name" (assoc-default 'pkgname data))
                   (org-set-property "description" (assoc-default 'pkgdesc data))
-                  (org-set-property "version" (assoc-default 'pkgver data))
+                  (org-set-property "remote-version" (assoc-default 'pkgver data))
+                  (org-set-property "system-version" (string-trim (shell-command-to-string (concat "pacman -Q " package-id " 2> /dev/null | awk '{ print $2 }'"))))
                   (org-set-property "dependencies" (number-to-string (length (assoc-default 'depends data))))
                   (org-set-property "compressed-size" (number-to-string (assoc-default 'compressed_size data)))
                   (org-set-property "installed-size" (number-to-string (assoc-default 'installed_size data)))
                   (org-set-property "built-at" (assoc-default 'build_date data))
                   (org-set-property "updated-at" (assoc-default 'last_update data))
-                  (org-set-property "fetched-at" (format-time-string "%Y-%m-%dT%TZ%z")))))))
+                  (org-set-property "fetched-at" (format-time-string "%Y-%m-%dT%TZ%z"))
+                  (setq org-property-format "%-10s %s"))))))
 
 (defvar my/aur-re ".*?https://aur.archlinux.org/packages/\\([a-zA-Z0-9-_]*\\)/.*")
 
