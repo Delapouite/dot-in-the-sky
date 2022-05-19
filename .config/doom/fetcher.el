@@ -5,6 +5,10 @@
 (require 'json)
 (require 'xml)
 
+(defun my/fetched-at ()
+  (org-set-property "fetched-at" (format-time-string "%Y-%m-%dT%TZ%z"))
+  (setq org-property-format "%-10s %s"))
+
 (defun my/get-current-line-content ()
   (buffer-substring-no-properties (line-beginning-position) (line-end-position)))
 
@@ -196,12 +200,13 @@
       :parser 'json-read
       :success (cl-function
                 (lambda (&key data &allow-other-keys)
+                  (setq org-property-format "%-14s %s")
                   (org-set-property "channel" (assoc-default 'channelTitle (assoc-default 'snippet (aref (assoc-default 'items data) 0))))
                   (org-set-property "title" (assoc-default 'title (assoc-default 'snippet (aref (assoc-default 'items data) 0))))
                   (org-set-property "views" (assoc-default 'viewCount (assoc-default 'statistics (aref (assoc-default 'items data) 0))))
                   (org-set-property "duration" (assoc-default 'duration (assoc-default 'contentDetails (aref (assoc-default 'items data) 0))))
                   (org-set-property "published-at" (assoc-default 'publishedAt (assoc-default 'snippet (aref (assoc-default 'items data) 0))))
-                  (org-set-property "fetched-at" (format-time-string "%Y-%m-%dT%TZ%z")))))))
+                  (my/fetched-at))))))
 
 (defvar my/npm-re ".*?https://www.npmjs.com/package/\\([a-zA-Z0-9-_]*\\).*")
 
@@ -277,8 +282,7 @@
                   (org-set-property "installed-size" (number-to-string (assoc-default 'installed_size data)))
                   (org-set-property "built-at" (assoc-default 'build_date data))
                   (org-set-property "updated-at" (assoc-default 'last_update data))
-                  (org-set-property "fetched-at" (format-time-string "%Y-%m-%dT%TZ%z"))
-                  (setq org-property-format "%-10s %s"))))))
+                  (my/fetched-at))))))
 
 (defvar my/aur-re ".*?https://aur.archlinux.org/packages/\\([a-zA-Z0-9-_]*\\)/.*")
 
@@ -347,6 +351,7 @@
                   (let* ((extension (aref (assoc-default 'extensions (aref (assoc-default 'results data) 0)) 0))
                          (last-version (aref (assoc-default 'versions extension) 0))
                          (manifest (assoc-default 'source (aref (assoc-default 'files last-version) 0))))
+                    (setq org-property-format "%-18s %s")
                     (org-set-property "name" (assoc-default 'displayName extension))
                     (org-set-property "description" (assoc-default 'shortDescription extension))
                     (org-set-property "version" (assoc-default 'version last-version))
@@ -366,7 +371,7 @@
                                     (org-set-property "json-validation" (number-to-string(length (assoc-default 'jsonValidation contributes))))
                                     (org-set-property "views" (number-to-string(length (assoc-default 'views contributes))))
                                     (org-set-property "views-containers" (number-to-string(length (assoc-default 'viewsContainers contributes))))
-                                    (org-set-property "fetched-at" (format-time-string "%Y-%m-%dT%TZ%z"))))))))))))
+                                    (my/fetched-at)))))))))))
 
 (defun my/fetch-stats ()
   "Fetch current website REST API and add the returned values in a PROPERTIES drawer"
