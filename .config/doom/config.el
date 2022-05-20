@@ -91,7 +91,8 @@
 
   (doom-modeline-def-segment buffer-mtime
     "Define buffer-mtime modeline segment"
-    (propertize (get-buffer-file-mtime) 'face 'mode-line))
+    (let ((mtime (get-buffer-file-mtime)))
+      (propertize mtime 'face (if (string-prefix-p " 2021" mtime) 'compilation-error 'mode-line))))
 
   (doom-modeline-def-modeline 'delapouite
     '(bar window-number modals matches buffer-info-simple buffer-mtime buffer-position word-count parrot selection-info)
@@ -125,6 +126,7 @@
   (add-hook 'org-mode-hook `doom-modeline-set-delapouite-modeline)
   (setq org-roam-node-display-template "${title:*} ${my-level} | ${mtime} | ${tags:50}")
   (setq org-tags-exclude-from-inheritance '("Album" "Artist" "Debut" "Top"))
+  (setq counsel-rg-base-command '("rg" "--max-columns" "240" "--with-filename" "--no-heading" "--line-number" "--color" "never" "--sortr" "modified" "%s"))
 
   ; Sections in sidebar
 
@@ -327,7 +329,7 @@
   :type 'number
   :group 'org)
 
-(defcustom org+-dateprop-properties '("created-at" "updated-at" "last-commit-at" "fetched-at" "asked-at")
+(defcustom org+-dateprop-properties '("created-at" "updated-at" "last-commit-at" "fetched-at" "asked-at" "built-at" "closed-at" "merged-at")
   "Names of properties with dates."
   :type 'org+-dateprop-properties-widget
   :group 'org)
@@ -406,3 +408,6 @@ properties in `org-dateprop-properties'."
     (setq org+-dateprop--properties-re (org+-dateprop-properties-re value)) value)
   :args '(string))
 
+(defun my/search-cwd (prefix)
+  (defun my/search-cwd-internal () (insert prefix))
+  (minibuffer-with-setup-hook #'my/search-cwd-internal (call-interactively #'+default/search-cwd)))
