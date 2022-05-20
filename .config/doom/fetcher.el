@@ -30,20 +30,20 @@
       :parser 'json-read
       :success (cl-function
                 (lambda (&key data &allow-other-keys)
+                  (setq org-property-format "%-16s %s")
                   (org-set-property "description" (or (assoc-default 'description data) "null"))
                   (org-set-property "stars" (number-to-string (assoc-default 'stargazers_count data)))
                   (org-set-property "open-issues" (number-to-string (assoc-default 'open_issues data)))
                   (org-set-property "language" (or (assoc-default 'language data) "null"))
                   (org-set-property "created-at" (assoc-default 'created_at data))
                   (org-set-property "updated-at" (assoc-default 'updated_at data))
-                  (org-set-property "fetched-at" (format-time-string "%Y-%m-%dT%TZ%z")))))
-    (request
-      (concat "https://api.github.com/repos/" org  "/" name "/commits")
-      :parser 'json-read
-      :success (cl-function
-                (lambda (&key data &allow-other-keys)
-                  (org-set-property "last-commit-at" (assoc-default 'date (assoc-default 'author (assoc-default 'commit (aref data 0)))))
-                  (org-set-property "fetched-at" (format-time-string "%Y-%m-%dT%TZ%z")))))))
+                  (request
+                    (concat "https://api.github.com/repos/" org  "/" name "/commits")
+                    :parser 'json-read
+                    :success (cl-function
+                              (lambda (&key data &allow-other-keys)
+                                (org-set-property "last-commit-at" (assoc-default 'date (assoc-default 'author (assoc-default 'commit (aref data 0)))))
+                                (my/fetched-at)))))))))
 
 (defvar my/github-issues-re ".*?https://github.com/\\([a-zA-Z0-9-_\.]*\\)/\\([a-zA-Z0-9-_\.]*\\)/issues/\\([a-zA-Z0-9-_\.]*\\).*")
 
@@ -56,13 +56,14 @@
       :parser 'json-read
       :success (cl-function
                 (lambda (&key data &allow-other-keys)
+                  (setq org-property-format "%-12s %s")
                   (org-set-property "title" (assoc-default 'title data))
                   (org-set-property "state" (assoc-default 'state data))
                   (org-set-property "comments" (number-to-string (assoc-default 'comments data)))
                   (org-set-property "created-at" (assoc-default 'created_at data))
                   (org-set-property "updated-at" (assoc-default 'updated_at data))
                   (org-set-property "closed-at" (or (assoc-default 'closed_at data) "null"))
-                  (org-set-property "fetched-at" (format-time-string "%Y-%m-%dT%TZ%z")))))))
+                  (my/fetched-at))))))
 
 (defvar my/github-pull-re ".*?https://github.com/\\([a-zA-Z0-9-_\.]*\\)/\\([a-zA-Z0-9-_\.]*\\)/pull/\\([a-zA-Z0-9-_\.]*\\).*")
 
@@ -75,6 +76,7 @@
       :parser 'json-read
       :success (cl-function
                 (lambda (&key data &allow-other-keys)
+                  (setq org-property-format "%-12s %s")
                   (org-set-property "title" (assoc-default 'title data))
                   (org-set-property "state" (assoc-default 'state data))
                   (org-set-property "comments" (number-to-string (assoc-default 'comments data)))
@@ -82,7 +84,7 @@
                   (org-set-property "updated-at" (assoc-default 'updated_at data))
                   (org-set-property "closed-at" (or (assoc-default 'closed_at data) "null"))
                   (org-set-property "merged-at" (or (assoc-default 'merged_at data) "null"))
-                  (org-set-property "fetched-at" (format-time-string "%Y-%m-%dT%TZ%z")))))))
+                  (my/fetched-at))))))
 
 (defvar my/gitlab-re ".*?https://gitlab.com/\\([a-zA-Z0-9-_\.]*\\)/\\([a-zA-Z0-9-_\.]*\\).*")
 
@@ -95,24 +97,27 @@
       :parser 'json-read
       :success (cl-function
                 (lambda (&key data &allow-other-keys)
+                  (setq org-property-format "%-13s %s")
                   (org-set-property "description" (assoc-default 'description data))
                   (org-set-property "stars" (number-to-string (assoc-default 'star_count data)))
                   (org-set-property "created-at" (assoc-default 'created_at data))
                   (org-set-property "updated-at" (assoc-default 'last_activity_at data))
-                  (org-set-property "fetched-at" (format-time-string "%Y-%m-%dT%TZ%z")))))))
+                  (my/fetched-at))))))
 
 (cl-defun my/parse-stack-response (&key data &allow-other-keys)
   (progn
+    (setq org-property-format "%-12s %s")
     (org-set-property "title" (xml-substitute-special (assoc-default 'title (aref (assoc-default 'items data) 0))))
     (org-set-property "score" (number-to-string (assoc-default 'score (aref (assoc-default 'items data) 0))))
     (org-set-property "views" (number-to-string (assoc-default 'view_count (aref (assoc-default 'items data) 0))))
     (org-set-property "asked-at" (format-time-string "%Y-%m-%dT%TZ%z" (assoc-default 'creation_date (aref (assoc-default 'items data) 0))))
-    (org-set-property "fetched-at" (format-time-string "%Y-%m-%dT%TZ%z"))))
+    (my/fetched-at)))
 
 (cl-defun my/parse-stack-tags-response (&key data &allow-other-keys)
   (progn
+    (setq org-property-format "%-12s %s")
     (org-set-property "count" (number-to-string (assoc-default 'count (aref (assoc-default 'items data) 0))))
-    (org-set-property "fetched-at" (format-time-string "%Y-%m-%dT%TZ%z"))))
+    (my/fetched-at)))
 
 (defvar my/stackoverflow-re ".*?https://stackoverflow.com/questions/\\([0-9]*\\)/.*")
 (defvar my/stackoverflow-tags-re ".*?https://stackoverflow.com/questions/tagged/\\([a-zA-Z0-9-_\.]*\\).*")
@@ -196,7 +201,7 @@
   (interactive)
   (seq-let (youtube-id) (my/parse-url my/youtube-re)
     (request
-      (concat "https://youtube.googleapis.com/youtube/v3/videos?part=snippet%2CcontentDetails%2Cstatistics&id=" youtube-id "&key=" youtube-api-key)
+      (concat "https://youtube.googleapis.com/youtube/v3/videos?part=snippet%2CcontentDetails%2Cstatistics&id=" youtube-id "&key=" my/youtube-api-key)
       :parser 'json-read
       :success (cl-function
                 (lambda (&key data &allow-other-keys)
@@ -215,25 +220,25 @@
   (interactive)
   (seq-let (npm-id) (my/parse-url my/npm-re)
     (request
-      (concat "https://api.npmjs.org/downloads/point/last-month/" npm-id)
-      :parser 'json-read
-      :success (cl-function
-                (lambda (&key data &allow-other-keys)
-                  (org-set-property "downloads" (number-to-string (assoc-default 'downloads data)))
-                  (org-set-property "fetched-at" (format-time-string "%Y-%m-%dT%TZ%z")))))
-    (request
       (concat "https://registry.npmjs.com/" npm-id)
       :parser 'json-read
       :success (cl-function
                 (lambda (&key data &allow-other-keys)
                   (let* ((last-version (assoc-default 'latest (assoc-default 'dist-tags data)))
-                         (version (or (message data) (assoc-default (intern last-version) (assoc-default 'versions data))))
+                         (version (assoc-default (intern last-version) (assoc-default 'versions data)))
                          (dependencies (length (assoc-default 'dependencies version)))
                          (types (assoc-default 'types version)))
-                         (org-set-property "dependencies" (number-to-string dependencies))
-                         (org-set-property "last-version" last-version)
-                         (org-set-property "types" (or types "null"))
-                         (org-set-property "fetched-at" (format-time-string "%Y-%m-%dT%TZ%z"))))))))
+                    (setq org-property-format "%-14s %s")
+                    (org-set-property "dependencies" (number-to-string dependencies))
+                    (org-set-property "last-version" last-version)
+                    (org-set-property "types" (or types "null"))
+                    (request
+                      (concat "https://api.npmjs.org/downloads/point/last-month/" npm-id)
+                      :parser 'json-read
+                      :success (cl-function
+                                (lambda (&key data &allow-other-keys)
+                                  (org-set-property "downloads" (number-to-string (assoc-default 'downloads data)))
+                                  (my/fetched-at))))))))))
 
 (defvar my/musicbrainz-re ".*?https://musicbrainz.org/artist/\\([a-zA-Z0-9-_]*\\).*")
 
@@ -246,6 +251,7 @@
       :parser 'json-read
       :success (cl-function
                 (lambda (&key data &allow-other-keys)
+                  (setq org-property-format "%-12s %s")
                   ; append is needed to cast the vector into a list
                   (let ((bandcamp (--find (string-equal (assoc-default 'type it) "bandcamp") (append (assoc-default 'relations data) nil))))
                     (if bandcamp (org-set-property "bandcamp" (assoc-default 'resource (assoc-default 'url bandcamp)))))
@@ -259,7 +265,7 @@
                     (if soundcloud (org-set-property "soundcloud" (assoc-default 'resource (assoc-default 'url soundcloud)))))
                   (let ((youtube (--find (string-equal (assoc-default 'type it) "youtube") (append (assoc-default 'relations data) nil))))
                     (if youtube (org-set-property "youtube" (assoc-default 'resource (assoc-default 'url youtube)))))
-                  (org-set-property "fetched-at" (format-time-string "%Y-%m-%dT%TZ%z")))))))
+                  (my/fetched-at))))))
 
 (defvar my/archlinux-re ".*?https://archlinux.org/packages/\\(community\\|core\\|extra\\)/\\(any\\|x86_64\\)/\\([a-zA-Z0-9-_]*\\)/.*")
 
@@ -295,11 +301,12 @@
       :parser 'json-read
       :success (cl-function
                 (lambda (&key data &allow-other-keys)
+                  (setq org-property-format "%-13s %s")
                   (org-set-property "name" (assoc-default 'Name (aref (assoc-default 'results data) 0)))
                   (org-set-property "description" (assoc-default 'Description (aref (assoc-default 'results data) 0)))
                   (org-set-property "version" (assoc-default 'Version (aref (assoc-default 'results data) 0)))
                   (org-set-property "updated-at" (format-time-string "%Y-%m-%dT%TZ%z" (assoc-default 'LastModified (aref (assoc-default 'results data) 0))))
-                  (org-set-property "fetched-at" (format-time-string "%Y-%m-%dT%TZ%z")))))))
+                  (my/fetched-at))))))
 
 (defvar my/docker-hub-re "*.?https://hub.docker.com/r/\\([a-zA-Z0-9-_]*\\)/\\([a-zA-Z0-9-_]*\\).*")
 (defvar my/docker-hub-official-re "*.?https://hub.docker.com/_/\\([a-zA-Z0-9-_]*\\).*")
@@ -331,9 +338,10 @@
       :parser 'json-read
       :success (cl-function
                 (lambda (&key data &allow-other-keys)
+                  (setq org-property-format "%-12s %s")
                   (org-set-property "size" (number-to-string (assoc-default 'size data)))
                   (org-set-property "gzip" (number-to-string (assoc-default 'gzip data)))
-                  (org-set-property "fetched-at" (format-time-string "%Y-%m-%dT%TZ%z")))))))
+                  (my/fetched-at))))))
 
 (defvar my/vscode-re "*.?https://marketplace.visualstudio.com/items\\?itemName=\\([a-zA-Z0-9-_@.]*\\).*")
 
@@ -373,6 +381,21 @@
                                     (org-set-property "views-containers" (number-to-string(length (assoc-default 'viewsContainers contributes))))
                                     (my/fetched-at)))))))))))
 
+(defvar my/wikipedia-re "*.?https://en.wikipedia.org/wiki/\\([a-zA-Z0-9-_@.]*\\).*")
+
+(defun my/fetch-wikipedia-stats ()
+  "Fetch Wikipedia REST API and add the returned values in a PROPERTIES drawer"
+  (interactive)
+  (seq-let (page) (my/parse-url my/wikipedia-re)
+    (request
+      (concat "https://en.wikipedia.org/w/rest.php/v1/page/" page "/history")
+      :parser 'json-read
+      :success (cl-function
+                (lambda (&key data &allow-other-keys)
+                  (setq org-property-format "%-12s %s")
+                  (org-set-property "updated-at" (assoc-default 'timestamp (aref (assoc-default 'revisions data) 0)))
+                  (my/fetched-at))))))
+
 (defun my/fetch-stats ()
   "Fetch current website REST API and add the returned values in a PROPERTIES drawer"
   (interactive)
@@ -397,4 +420,5 @@
       ((string-match-p my/stackoverflow-tags-re line-content) (my/fetch-stackoverflow-tags-stats))
       ((string-match-p my/stackoverflow-re line-content) (my/fetch-stackoverflow-stats))
       ((string-match-p my/vscode-re line-content) (my/fetch-vscode))
+      ((string-match-p my/wikipedia-re line-content) (my/fetch-wikipedia-stats))
       ((string-match-p my/youtube-re line-content) (my/fetch-youtube-stats)))))
