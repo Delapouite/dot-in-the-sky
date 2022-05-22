@@ -54,7 +54,7 @@
 
 ;; This determines the style of line numbers in effect. If set to `nil', line
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
-(setq display-line-numbers-type t)
+(setq display-line-numbers-type nil)
 (setq scroll-margin 10)
 
 ;; Here are some additional functions/macros that could help you configure Doom:
@@ -171,7 +171,7 @@
     (when-let (node (org-roam-node-from-title-or-alias (word-at-point t)))
       (org-roam-node-visit node)))
 
-  (advice-add '+org/dwim-at-point :after #'my/org-roam-visit-node-at-point)
+  (map! :n "M-<return>" #'my/org-roam-visit-node-at-point)
 
   ;; random predicate natively implemented in https://github.com/org-roam/org-roam/pull/2050
 
@@ -211,7 +211,9 @@
                                                   :where (and (= node_id id) (in tag [$s2 $s3 $s4]))
                                                   :group-by title
                                                   :having (= (funcall count title) $s1)] (cons (length search) search)))))
+      (when (> (length hits) 10) (princ (concat (number-to-string (length hits)) " items\n")))
       (dolist (hit hits) (princ (concat "[[id:" (car hit) "][" (cadr hit) "]]\n")))))
+
   (cl-defmethod org-roam-node-my-level ((node org-roam-node))
     (number-to-string (org-roam-node-level node)))
   (cl-defmethod org-roam-node-mtime ((node org-roam-node))
