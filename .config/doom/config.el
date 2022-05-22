@@ -29,17 +29,21 @@
 ;; available. You can either set `doom-theme' or manually load a theme with the
 ;; `load-theme' function. This is the default:
 (setq doom-theme 'doom-dracula)
+;; ~/.config/emacs/.local/straight/repos/themes
 (custom-set-faces!
   '(bold :weight bold :foreground "#8be9fd")
-  '(org-roam-header-line :weight bold :height 180 :foreground "#f1fa8c")
-  '(magit-section-heading :height 120 :foreground "#8be9fd")
-  '(org-quote :slant italic :foreground "#f8f8f2")
-  '(org-document-title :height 180)
-  '(org-roam-title :weight bold :height 120)
+  ;; yellow titles: in regular buffer and sidebar
+  '(org-document-title :height 2.0 :foreground "#f1fa8c")
+  '(org-roam-header-line :weight bold :height 2.0 :foreground "#f1fa8c")
+  ;; blue Links / Backlinks titles in sidebar
+  '(magit-section-heading :height 1.4 :foreground "#8be9fd")
+  ;; outline in sidebar
   '(org-roam-olp :foreground "#6272a4")
-  '(outline-1 :height 120)
-  ;; TODO why the need to reset?
-  '(outline-2 :height 90))
+  ;; nodes titles in sidebar
+  '(org-roam-title :weight bold :height 1.4)
+  '(outline-1 :height 1.4)
+  '(outline-2 :height 0.8)
+  '(org-quote :slant italic :foreground "#f8f8f2"))
 
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
