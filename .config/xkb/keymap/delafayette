@@ -73,7 +73,7 @@ xkb_keymap {
     key <AC07> {[ j               , J               , downarrow       , U21D3           ],[ VoidSymbol      , VoidSymbol      ]}; // j J ↓ ⇓
     key <AC08> {[ k               , K               , uparrow         , U21D1           ],[ VoidSymbol      , VoidSymbol      ]}; // k K ↑ ⇑
     key <AC09> {[ l               , L               , rightarrow      , U21D2           ],[ VoidSymbol      , VoidSymbol      ]}; // l L → ⇒
-    key <AC10> {[ ISO_Level3_Latch, ISO_Level3_Latch, grave           , grave           ],[ VoidSymbol      , VoidSymbol      ]}; //     ` `
+    key <AC10> {[ ISO_Level3_Latch, ISO_Level3_Latch, Multi_key       , Multi_key       ],[ VoidSymbol      , VoidSymbol      ]}; // magic
 
     // Letters, third row
     key <AB01> {[ z               , Z               , VoidSymbol      , VoidSymbol      ],[ underscore      , VoidSymbol      ]}; // z Z     _
@@ -82,7 +82,7 @@ xkb_keymap {
     key <AB04> {[ v               , V               , U2713           , U2714           ],[ dollar          , VoidSymbol      ]}; // v V ✓ ✔ $
     key <AB05> {[ b               , B               , dagger          , doubledagger    ],[ ampersand       , VoidSymbol      ]}; // b B † ‡ &
     key <AB06> {[ n               , N               , ntilde          , Ntilde          ],[ VoidSymbol      , VoidSymbol      ]}; // n N ñ Ñ
-    key <AB07> {[ m               , M               , Multi_key       , masculine       ],[ VoidSymbol      , VoidSymbol      ]}; // m M ⎄ º
+    key <AB07> {[ m               , M               , mu              , masculine       ],[ VoidSymbol      , VoidSymbol      ]}; // m M µ º
     key <AB08> {[ comma           , semicolon       , periodcentered  , U2022           ],[ comma           , VoidSymbol      ]}; // , ; · • ,
     key <AB09> {[ period          , colon           , ellipsis        , notsign         ],[ period          , VoidSymbol      ]}; // . : … ¬ .
     key <AB10> {[ slash           , question        , backslash       , questiondown    ],[ U061F           , VoidSymbol      ]}; // / ? \ ¿ ؟
