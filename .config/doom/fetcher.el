@@ -213,7 +213,7 @@
                   (org-set-property "published-at" (assoc-default 'publishedAt (assoc-default 'snippet (aref (assoc-default 'items data) 0))))
                   (my/fetched-at))))))
 
-(defvar my/npm-re ".*?https://www.npmjs.com/package/\\([a-zA-Z0-9-_]*\\).*")
+(defvar my/npm-re ".*?https://www.npmjs.com/package/\\([a-zA-Z0-9-_@/]*\\).*")
 
 (defun my/fetch-npm-stats ()
   "Fetch Npm REST API and add the returned values in a PROPERTIES drawer"
@@ -232,6 +232,8 @@
                     (org-set-property "dependencies" (number-to-string dependencies))
                     (org-set-property "last-version" last-version)
                     (org-set-property "types" (or types "null"))
+                    (org-set-property "created-at" (assoc-default 'created (assoc-default 'time data)))
+                    (org-set-property "updated-at" (assoc-default 'modified (assoc-default 'time data)))
                     (request
                       (concat "https://api.npmjs.org/downloads/point/last-month/" npm-id)
                       :parser 'json-read
