@@ -49,11 +49,7 @@
   "atlascode.bitbucket.pipelines.explorerEnabled": true,
   "azureFunctions.showProjectWarning": false,
   "docker.containers.groupBy": "State",
-  "docker.containers.description": [
-    "ContainerName",
-    "State",
-    "Status"
-  ],
+  "docker.containers.description": ["ContainerName", "State", "Status"],
   "eslint.alwaysShowStatus": true,
   "eslint.debug": true,
   "gitlens.codeLens.enabled": false,
@@ -65,6 +61,21 @@
   "prettier.trailingComma": "all",
   "[html][javascript][json][jsonc][scss][typescript][typescriptreact][yaml]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  // schemas
+  "json.schemas": [
+    {
+      "fileMatch": ["nest-cli.json"],
+      "url": "https://json.schemastore.org/nest-cli"
+    },
+    {
+      "fileMatch": ["angular.json"],
+      "url": "https://raw.githubusercontent.com/angular/angular-cli/master/packages/angular/cli/lib/config/workspace-schema.json"
+    }
+  ],
+  // point to this specific version fixing the "condition" keys
+  "yaml.schemas": {
+    "https://bitbucket.org/atlassianlabs/atlascode/raw/f61ec5b742d3df75932b3c65d78e3c7e1cb67854/resources/schemas/pipelines-schema.json": "bitbucket-pipelines.yml"
   },
   // telemetry
   "telemetry.telemetryLevel": "off",
@@ -108,9 +119,7 @@
                   "include": "normal"
                 }
               ],
-              [
-                "selections-did-change"
-              ]
+              ["selections-did-change"]
             ]
           }
         ]
