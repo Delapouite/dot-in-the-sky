@@ -36,18 +36,18 @@ hook global BufSetOption lsp_diagnostic_warning_count=.* update-status
 # map ctrl+return send_text all \u240D // ␍
 # map ctrl+space send_text all \u2420 // ␠
 
-map global normal ⓘ '<tab>'
+map global normal <c-i> '<tab>'
 
 # <a-k> equivalent is defined afer auto-percent is loaded
 map global normal <a-j> ': extend-line-down %val{count}<ret>' -docstring 'extend line down'
 map global normal C '<a-j>'                                   -docstring 'join lines'
 map global normal <a-C> '<a-J>'                               -docstring 'join lines and select spaces'
 
-map global normal ⓙ 'C'                                       -docstring 'copy selection on next line'
+map global normal <c-j> 'C'                                   -docstring 'copy selection on next line'
 map global normal <c-k> '<a-C>'                               -docstring 'copy selection on previous line'
 
 map global normal <c-l> ']p;'                                 -docstring 'next paragraph'
-map global normal ⓗ '[p;'                                     -docstring 'previous paragraph'
+map global normal <c-h> '[p;'                                 -docstring 'previous paragraph'
 
 map global normal <space> ,                                   -docstring 'leader'
 map global normal <backspace> <space>                         -docstring 'remove all selections except main'
