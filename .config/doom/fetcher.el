@@ -292,7 +292,7 @@
                   (org-set-property "updated-at" (assoc-default 'last_update data))
                   (my/fetched-at))))))
 
-(defvar my/aur-re ".*?https://aur.archlinux.org/packages/\\([a-zA-Z0-9-_]*\\)/.*")
+(defvar my/aur-re ".*?https://aur.archlinux.org/packages/\\([a-zA-Z0-9-_]*\\).*")
 
 (defun my/fetch-aur-stats ()
   "Fetch AUR REST API and add the returned values in a PROPERTIES drawer"
@@ -307,6 +307,7 @@
                   (org-set-property "name" (assoc-default 'Name (aref (assoc-default 'results data) 0)))
                   (org-set-property "description" (assoc-default 'Description (aref (assoc-default 'results data) 0)))
                   (org-set-property "version" (assoc-default 'Version (aref (assoc-default 'results data) 0)))
+                  (org-set-property "created-at" (format-time-string "%Y-%m-%dT%TZ%z" (assoc-default 'FirstSubmitted (aref (assoc-default 'results data) 0))))
                   (org-set-property "updated-at" (format-time-string "%Y-%m-%dT%TZ%z" (assoc-default 'LastModified (aref (assoc-default 'results data) 0))))
                   (my/fetched-at))))))
 
