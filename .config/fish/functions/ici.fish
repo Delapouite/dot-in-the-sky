@@ -225,9 +225,14 @@ function ici_typescript
 		if test -f package.json
 			set --local ici_typescript_desired_version (jq --raw-output .devDependencies.typescript package.json)
 			printf "📦 desired $ici_typescript_desired_version\n"
+
+			set --local ici_typescript_eslint_desired_version (jq --raw-output '.devDependencies["@typescript-eslint/parser"]' package.json)
+			printf "📦 @typescript-eslint/parser $ici_typescript_eslint_desired_version\n"
 		end
 
-		fd --hidden --exclude .git --type file 'tsconfig'
+		for config in $(fd --strip-cwd-prefix --hidden --exclude .git --type file 'tsconfig');
+			echo "$config $(jq .extends $config 2> /dev/null || echo 'INVALID JSON (extra commas…)')"
+		end
 	end
 end
 
@@ -302,10 +307,16 @@ function ici_eslint
 		if test -f package.json
 			set --local ici_eslint_desired_version (jq --raw-output .devDependencies.eslint package.json)
 			printf "📦 desired $ici_eslint_desired_version\n"
+
+			set --local ici_typescript_eslint_desired_version (jq --raw-output '.devDependencies["@typescript-eslint/parser"]' package.json)
+			printf "📦 @typescript-eslint/parser $ici_typescript_eslint_desired_version\n"
 		end
 
 		# https://eslint.org/docs/user-guide/configuring/
-		fd --hidden --exclude .git --type file 'eslintrc'
+		for config in $(fd --strip-cwd-prefix --hidden --exclude .git --type file 'eslintrc');
+			echo "$config $(jq .extends $config 2> /dev/null || echo 'INVALID JSON (extra commas…)')"
+		end
+
 		fd --hidden --exclude .git --type file 'eslintignore'
 	end
 end
