@@ -5,6 +5,19 @@
 (require 'json)
 (require 'xml)
 
+(defun my/kill-drawer ()
+  (interactive)
+  (let ((element (org-element-context)))
+    (unless (eq (car element) 'drawer)
+      (setq element (org-element-property :parent element)))
+    (kill-region (org-element-property :begin element)
+                 (org-element-property :end element))))
+
+(defun my/empty-property-drawer ()
+  (let ((element (org-get-property-block)))
+    (when element
+      (kill-region (car element) (cdr element)))))
+
 (defun my/fetched-at ()
   (org-set-property "fetched-at" (format-time-string "%Y-%m-%dT%TZ%z"))
   (setq org-property-format "%-10s %s"))
@@ -31,6 +44,7 @@
       :success (cl-function
                 (lambda (&key data &allow-other-keys)
                   (setq org-property-format "%-16s %s")
+                  (my/empty-property-drawer)
                   (org-set-property "description" (or (assoc-default 'description data) "null"))
                   (org-set-property "stars" (number-to-string (assoc-default 'stargazers_count data)))
                   (org-set-property "open-issues" (number-to-string (assoc-default 'open_issues data)))
@@ -57,6 +71,7 @@
       :success (cl-function
                 (lambda (&key data &allow-other-keys)
                   (setq org-property-format "%-12s %s")
+                  (my/empty-property-drawer)
                   (org-set-property "title" (assoc-default 'title data))
                   (org-set-property "state" (assoc-default 'state data))
                   (org-set-property "comments" (number-to-string (assoc-default 'comments data)))
@@ -77,6 +92,7 @@
       :success (cl-function
                 (lambda (&key data &allow-other-keys)
                   (setq org-property-format "%-12s %s")
+                  (my/empty-property-drawer)
                   (org-set-property "title" (assoc-default 'title data))
                   (org-set-property "state" (assoc-default 'state data))
                   (org-set-property "comments" (number-to-string (assoc-default 'comments data)))
@@ -98,6 +114,7 @@
       :success (cl-function
                 (lambda (&key data &allow-other-keys)
                   (setq org-property-format "%-13s %s")
+                  (my/empty-property-drawer)
                   (org-set-property "description" (assoc-default 'description data))
                   (org-set-property "stars" (number-to-string (assoc-default 'star_count data)))
                   (org-set-property "created-at" (assoc-default 'created_at data))
@@ -107,6 +124,7 @@
 (cl-defun my/parse-stack-response (&key data &allow-other-keys)
   (progn
     (setq org-property-format "%-12s %s")
+    (my/empty-property-drawer)
     (org-set-property "title" (xml-substitute-special (assoc-default 'title (aref (assoc-default 'items data) 0))))
     (org-set-property "score" (number-to-string (assoc-default 'score (aref (assoc-default 'items data) 0))))
     (org-set-property "views" (number-to-string (assoc-default 'view_count (aref (assoc-default 'items data) 0))))
@@ -116,6 +134,7 @@
 (cl-defun my/parse-stack-tags-response (&key data &allow-other-keys)
   (progn
     (setq org-property-format "%-12s %s")
+    (my/empty-property-drawer)
     (org-set-property "count" (number-to-string (assoc-default 'count (aref (assoc-default 'items data) 0))))
     (my/fetched-at)))
 
@@ -206,6 +225,7 @@
       :success (cl-function
                 (lambda (&key data &allow-other-keys)
                   (setq org-property-format "%-14s %s")
+                  (my/empty-property-drawer)
                   (org-set-property "channel" (assoc-default 'channelTitle (assoc-default 'snippet (aref (assoc-default 'items data) 0))))
                   (org-set-property "title" (assoc-default 'title (assoc-default 'snippet (aref (assoc-default 'items data) 0))))
                   (org-set-property "views" (assoc-default 'viewCount (assoc-default 'statistics (aref (assoc-default 'items data) 0))))
@@ -229,6 +249,7 @@
                          (dependencies (length (assoc-default 'dependencies version)))
                          (types (assoc-default 'types version)))
                     (setq org-property-format "%-14s %s")
+                    (my/empty-property-drawer)
                     (org-set-property "dependencies" (number-to-string dependencies))
                     (org-set-property "last-version" last-version)
                     (org-set-property "types" (or types "null"))
@@ -254,6 +275,7 @@
       :success (cl-function
                 (lambda (&key data &allow-other-keys)
                   (setq org-property-format "%-12s %s")
+                  (my/empty-property-drawer)
                   ; append is needed to cast the vector into a list
                   (let ((bandcamp (--find (string-equal (assoc-default 'type it) "bandcamp") (append (assoc-default 'relations data) nil))))
                     (if bandcamp (org-set-property "bandcamp" (assoc-default 'resource (assoc-default 'url bandcamp)))))
@@ -281,6 +303,7 @@
       :success (cl-function
                 (lambda (&key data &allow-other-keys)
                   (setq org-property-format "%-17s %s")
+                  (my/empty-property-drawer)
                   (org-set-property "name" (assoc-default 'pkgname data))
                   (org-set-property "description" (assoc-default 'pkgdesc data))
                   (org-set-property "remote-version" (assoc-default 'pkgver data))
@@ -304,6 +327,7 @@
       :success (cl-function
                 (lambda (&key data &allow-other-keys)
                   (setq org-property-format "%-13s %s")
+                  (my/empty-property-drawer)
                   (org-set-property "name" (assoc-default 'Name (aref (assoc-default 'results data) 0)))
                   (org-set-property "description" (assoc-default 'Description (aref (assoc-default 'results data) 0)))
                   (org-set-property "version" (assoc-default 'Version (aref (assoc-default 'results data) 0)))
@@ -342,6 +366,7 @@
       :success (cl-function
                 (lambda (&key data &allow-other-keys)
                   (setq org-property-format "%-12s %s")
+                  (my/empty-property-drawer)
                   (org-set-property "size" (number-to-string (assoc-default 'size data)))
                   (org-set-property "gzip" (number-to-string (assoc-default 'gzip data)))
                   (my/fetched-at))))))
@@ -363,6 +388,7 @@
                          (last-version (aref (assoc-default 'versions extension) 0))
                          (manifest (assoc-default 'source (aref (assoc-default 'files last-version) 0))))
                     (setq org-property-format "%-18s %s")
+                    (my/empty-property-drawer)
                     (org-set-property "name" (assoc-default 'displayName extension))
                     (org-set-property "description" (assoc-default 'shortDescription extension))
                     (org-set-property "version" (assoc-default 'version last-version))
@@ -396,6 +422,7 @@
       :success (cl-function
                 (lambda (&key data &allow-other-keys)
                   (setq org-property-format "%-12s %s")
+                  (my/empty-property-drawer)
                   (org-set-property "updated-at" (assoc-default 'timestamp (aref (assoc-default 'revisions data) 0)))
                   (my/fetched-at))))))
 
