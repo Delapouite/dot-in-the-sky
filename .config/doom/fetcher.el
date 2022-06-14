@@ -57,7 +57,15 @@
                     :success (cl-function
                               (lambda (&key data &allow-other-keys)
                                 (org-set-property "last-commit-at" (assoc-default 'date (assoc-default 'author (assoc-default 'commit (aref data 0)))))
-                                (my/fetched-at)))))))))
+                                (request
+                                  (concat "https://api.github.com/repos/" org  "/" name "/releases")
+                                  :parser 'json-read
+                                  :success (cl-function
+                                            (lambda (&key data &allow-other-keys)
+                                              (when (> (length data) 0)
+                                                (org-set-property "last-release" (assoc-default 'tag_name (aref data 0)))
+                                                (org-set-property "published-at" (assoc-default 'published_at (aref data 0))))
+                                              (my/fetched-at))))))))))))
 
 (defvar my/github-issues-re ".*?https://github.com/\\([a-zA-Z0-9-_\.]*\\)/\\([a-zA-Z0-9-_\.]*\\)/issues/\\([a-zA-Z0-9-_\.]*\\).*")
 
