@@ -62,7 +62,7 @@ visidata | https://www.visidata.org/ https://github.com/saulpw/visidata | ✓ | 
 websocketd | http://websocketd.com/ https://github.com/joewalnes/websocketd | AUR | 🐹 |   | ![lc](https://img.shields.io/github/last-commit/joewalnes/websocketd?label=) | ![v](https://img.shields.io/github/v/release/joewalnes/websocketd?sort=semver&label=)
 xcwd | https://github.com/schischi/xcwd | ✓ | C |   | ![lc](https://img.shields.io/github/last-commit/schischi/xcwd?label=) | ![v](https://img.shields.io/github/v/release/schischi/xcwd?sort=semver&label=)
 xkb | https://www.x.org/wiki/XKB/ https://cgit.freedesktop.org/xorg/xserver/tree/xkb | ✓ | C |
-xsv | https://github.com/BurntSushi/xsv| AUR | 🦀 | ✓ | ![lc](https://img.shields.io/github/last-commit/BurntSushi/xsv?label=) | ![v](https://img.shields.io/github/v/release/BurntSushi/xsv?sort=semver&label=)
+xsv | https://github.com/BurntSushi/xsv | ✓ | 🦀 | ✓ | ![lc](https://img.shields.io/github/last-commit/BurntSushi/xsv?label=) | ![v](https://img.shields.io/github/v/release/BurntSushi/xsv?sort=semver&label=)
 zola | https://www.getzola.org https://github.com/getzola/zola | ✓ | 🦀 | ✓ | ![lc](https://img.shields.io/github/last-commit/getzola/zola?label=) | ![v](https://img.shields.io/github/v/release/getzola/zola?sort=semver&label=)
 
 ## init
