@@ -7,19 +7,19 @@ function ici --description 'show info about current repo and tools'
 
 	case 'git'
 	ici_git
-	
+
 	case 'node'
 	ici_node
-	
+
 	case 'npm'
 	ici_npm
 
 	case 'yarn'
 	ici_yarn
-	
+
 	case 'docker'
 	ici_docker
-	
+
 	case 'package'
 	ici_package
 
@@ -28,7 +28,7 @@ function ici --description 'show info about current repo and tools'
 
 	case 'prettier'
 	ici_prettier
-	
+
 	case 'eslint'
 	ici_eslint
 
@@ -52,6 +52,8 @@ function ici --description 'show info about current repo and tools'
 	end
 end
 
+# helpers
+
 function ici_init
 	set --global ici_git_repo false
 
@@ -62,12 +64,35 @@ function ici_init
 	end
 end
 
-function ici_env
+function ici_print_header
 	set_color --bold
-	printf "\nEnv - https://www.dotenv.org\n"
+	printf "\n$argv\n"
 	set_color normal
+end
 
-	fd --hidden --no-ignore --exclude .git --exclude node_modules --type file '\.env'
+function ici_print_dev_dependencies
+	if test -f package.json
+		for package in $argv
+			set --local ici_package_desired_version (jq --raw-output ".devDependencies[\"$package\"]" package.json)
+			printf "📦 $package $ici_package_desired_version\n"
+		end
+	end
+end
+
+function ici_print_config
+	for config in $(fd --strip-cwd-prefix --color never --hidden --exclude .git --type file $argv[1])
+		printf "⚙️ $config\n"
+	end
+end
+
+function ici_print_ignore
+	for ignore in $(fd --strip-cwd-prefix --color never --hidden --exclude .git --type file $argv[1])
+		printf "👁️ $ignore\n"
+	end
+end
+
+function ici_env
+	ici_print_header "Env - https://www.dotenv.org"
 
 	if test $ici_git_repo = true
 		if test -f package.json
@@ -75,12 +100,20 @@ function ici_env
 			printf "📦 desired $ici_dotenv_desired_version\n"
 		end
 	end
+
+	for config in $(fd --strip-cwd-prefix --color never --hidden --no-ignore --exclude .git --exclude node_modules --type file '\.env')
+		printf "⚙️ $config\n"
+	end
+
+	printf "\n⚗️ direnv\n"
+	direnv status
+
+	printf "\n🔎 'process.env' occurences\n"
+	rg --count process.env
 end
 
 function ici_git
-	set_color --bold
-	printf "\nGit - https://git-scm.com\n"
-	set_color normal
+	ici_print_header "Git - https://git-scm.com"
 	printf "📚 https://git-scm.com/doc\n"
 
 	if type -q git
@@ -98,7 +131,7 @@ function ici_git
 		printf "✅ in a repo\n"
 		set --global ici_git_repo true
 
-		fd --hidden --exclude .git --type file '.gitignore'
+		ici_print_ignore 'gitignore'
 	else
 		printf "❌ not in a repo\n"
 		set --global ici_git_repo false
@@ -106,9 +139,7 @@ function ici_git
 end
 
 function ici_node
-	set_color --bold
-	printf "\nNode.js - https://nodejs.org\n"
-	set_color normal
+	ici_print_header "Node.js - https://nodejs.org"
 	printf "📚 https://nodejs.org/dist/latest-v18.x/docs/api/\n"
 
 	if type -q node
@@ -123,23 +154,19 @@ function ici_node
 	end
 
 	if test $ici_git_repo = true
-		if test -f .nvmrc
-			printf "⚙️ .nvmrc\n"
-		end
+		ici_print_config 'nvmrc'
 	end
 end
 
 function ici_npm
-	set_color --bold
-	printf "\nNpm - https://npmjs.com\n"
-	set_color normal
+	ici_print_header "Npm - https://npmjs.com"
 	printf "📚 https://docs.npmjs.com\n"
 
 	if type -q npm
 		set --local ici_npm_latest_version (curl --silent 'https://archlinux.org/packages/community/any/npm/json/' | jq --raw-output .pkgver)
 		printf "🌍 latest $ici_npm_latest_version - https://archlinux.org/packages/community/any/npm/\n"
 
-		# x.y.z		
+		# x.y.z
 		set --local ici_npm_global_version (npm --version)
 		printf "✅ global $ici_npm_global_version\n"
 	else
@@ -148,9 +175,7 @@ function ici_npm
 end
 
 function ici_yarn
-	set_color --bold
-	printf "\nYarn - https://yarnpkg.com\n"
-	set_color normal
+	ici_print_header "Yarn - https://yarnpkg.com"
 	printf "📚 https://yarnpkg.com/getting-started\n"
 
 	if type -q yarn
@@ -163,25 +188,24 @@ function ici_yarn
 	else
 		printf "❌ global none\n"
 	end
+
+	# https://yarnpkg.com/configuration/yarnrc
+	ici_print_config 'yarnrc'
 end
 
 function ici_docker
-	set_color --bold
-	printf "\nDocker - https://www.docker.com\n"
-	set_color normal
+	ici_print_header "Docker - https://www.docker.com"
 	printf "📚 https://docs.docker.com\n"
 
 	if test $ici_git_repo = true
-		fd --hidden --exclude .git --type file 'Dockerfile'
-		fd --hidden --exclude .git --type file 'docker-compose'
-		fd --hidden --exclude .git --type file 'dockerignore'
+		ici_print_config 'Dockerfile'
+		ici_print_config 'docker-compose'
+		ici_print_ignore 'dockerignore'
 	end
 end
 
 function ici_package
-	set_color --bold
-	printf "\nPackage\n"
-	set_color normal
+	ici_print_header "Package"
 
 	if test -f package.json
 		set --local ici_package_name (jq --raw-output .name package.json)
@@ -192,22 +216,30 @@ function ici_package
 
 		if test "$ici_package_workspaces" != null
 			printf "✅ workspaces\n"
+
+			# displaying only the package.json .workspaces keys is not enough
+			if type -q yarn
+				yarn workspaces list --json | jq --raw-output '"⛺ " + .location + " " + .name'
+			end
 		else
 			printf "❌ workspaces\n"
 		end
+
+	# --prune is needed to avoid going to deep
+	for node_modules in $(fd --strip-cwd-prefix --color never --hidden --no-ignore --exclude .git --prune --type directory 'node_modules')
+		printf "📁 $(du --human-readable --summarize $node_modules)\n"
+	end
 	end
 end
 
 function ici_typescript
-	set_color --bold
-	printf "\nTypeScript - https://www.typescriptlang.org\n"
-	set_color normal
+	ici_print_header "TypeScript - https://www.typescriptlang.org"
 	printf "📚 https://www.typescriptlang.org/docs/\n"
 
 	if type -q tsc
 		set --local ici_tsc_latest_arch_version (curl --silent 'https://archlinux.org/packages/community/any/typescript/json/' | jq --raw-output .pkgver)
 		printf "🌍 latest $ici_tsc_latest_arch_version - https://archlinux.org/packages/community/any/typescript/\n"
-		
+
 		set --local ici_tsc_latest_version (curl --silent 'https://registry.npmjs.com/typescript' | jq --raw-output '.["dist-tags"].latest')
 		printf "🌍 latest $ici_tsc_latest_version - https://registry.npmjs.com/typescript\n"
 
@@ -222,24 +254,16 @@ function ici_typescript
 		set --local ici_tsc_reported_version (npx tsc --version | string sub --start=9)
 		printf "✅ local  $ici_tsc_reported_version\n"
 
-		if test -f package.json
-			set --local ici_typescript_desired_version (jq --raw-output .devDependencies.typescript package.json)
-			printf "📦 desired $ici_typescript_desired_version\n"
-
-			set --local ici_typescript_eslint_desired_version (jq --raw-output '.devDependencies["@typescript-eslint/parser"]' package.json)
-			printf "📦 @typescript-eslint/parser $ici_typescript_eslint_desired_version\n"
-		end
+		ici_print_dev_dependencies 'typescript' '@typescript-eslint/parser'
 
 		for config in $(fd --strip-cwd-prefix --hidden --exclude .git --type file 'tsconfig');
-			echo "$config $(jq .extends $config 2> /dev/null || echo 'INVALID JSON (extra commas…)')"
+			echo "⚙️ $config $(jq .extends $config 2> /dev/null || echo 'INVALID JSON (extra commas…)')"
 		end
 	end
 end
 
 function ici_prettier
-	set_color --bold
-	printf "\nPrettier - https://prettier.io\n"
-	set_color normal
+	ici_print_header "Prettier - https://prettier.io"
 	printf "📚 https://prettier.io/docs/en/index.html\n"
 
 	set --local ici_prettier_latest_version (curl --silent 'https://registry.npmjs.com/prettier' | jq --raw-output '.["dist-tags"].latest')
@@ -258,18 +282,7 @@ function ici_prettier
 		printf "✅ local  $ici_prettier_reported_version\n"
 
 		if test -f package.json
-			set --local ici_prettier_desired_version (jq --raw-output .devDependencies.prettier package.json)
-			printf "📦 desired $ici_prettier_desired_version\n"
-
-			set --local ici_prettier_eslint_config_desired_version (jq --raw-output '.devDependencies["eslint-config-prettier"]' package.json)
-			if test "$ici_prettier_eslint_config_desired_version" != null
-				printf "📦 eslint-config-prettier $ici_prettier_eslint_config_desired_version\n"
-			end
-
-			set --local ici_prettier_eslint_plugin_desired_version (jq --raw-output '.devDependencies["eslint-plugin-prettier"]' package.json)
-			if test "$ici_prettier_eslint_plugin_desired_version" != null
-				printf "📦 eslint-plugin-prettier $ici_prettier_eslint_plugin_desired_version\n"
-			end
+			ici_print_dev_dependencies 'prettier' 'eslint-config-prettier' 'eslint-plugin-prettier'
 
 			set --local ici_prettier_package_config (jq --raw-output .prettier package.json)
 			if test "$ici_prettier_package_config" != null
@@ -278,8 +291,8 @@ function ici_prettier
 		end
 
 		# https://prettier.io/docs/en/configuration.html
-		fd --hidden --exclude .git --type file 'prettierrc'
-		fd --hidden --exclude .git --type file 'prettierignore'
+		ici_print_config 'prettierrc'
+		ici_print_ignore 'prettierignore'
 	end
 end
 
@@ -304,20 +317,14 @@ function ici_eslint
 		set --local ici_eslint_reported_version (npx eslint --version | string sub --start=2)
 		printf "✅ local  $ici_eslint_reported_version\n"
 
-		if test -f package.json
-			set --local ici_eslint_desired_version (jq --raw-output .devDependencies.eslint package.json)
-			printf "📦 desired $ici_eslint_desired_version\n"
-
-			set --local ici_typescript_eslint_desired_version (jq --raw-output '.devDependencies["@typescript-eslint/parser"]' package.json)
-			printf "📦 @typescript-eslint/parser $ici_typescript_eslint_desired_version\n"
-		end
+		ici_print_dev_dependencies 'eslint' 'eslint-config-prettier' 'eslint-config-google' 'eslint-plugin-import' '@typescript-eslint/parser'
 
 		# https://eslint.org/docs/user-guide/configuring/
 		for config in $(fd --strip-cwd-prefix --hidden --exclude .git --type file 'eslintrc');
-			echo "$config $(jq .extends $config 2> /dev/null || echo 'INVALID JSON (extra commas…)')"
+			echo "⚙️ $config $(jq .extends $config 2> /dev/null || echo 'INVALID JSON (extra commas…)')"
 		end
 
-		fd --hidden --exclude .git --type file 'eslintignore'
+		ici_print_ignore 'eslintignore'
 	end
 end
 
@@ -342,18 +349,10 @@ function ici_jest
 		set --local ici_jest_reported_version (npx jest --version)
 		printf "✅ local $ici_jest_reported_version\n"
 
-		if test -f package.json
-			set --local ici_jest_desired_version (jq --raw-output .devDependencies.jest package.json)
-			printf "📦 jest $ici_jest_desired_version\n"
+		ici_print_dev_dependencies 'jest' '@types/jest' 'ts-jest' 'jest-marbles' '@angular-builders/jest' '@nrwl/jest'
 
-			set --local ici_type_jest_desired_version (jq --raw-output '.devDependencies["@types/jest"]' package.json)
-			printf "📦 @types/jest $ici_type_jest_desired_version\n"
-
-			set --local ici_ts_jest_desired_version (jq --raw-output '.devDependencies["ts-jest"]' package.json)
-			printf "📦 ts-jest $ici_ts_jest_desired_version\n"
-		end
-
-		fd --hidden --exclude .git --type file 'jest\.config'
+		# https://jestjs.io/docs/configuration
+		ici_print_config 'jest\.config'
 	end
 end
 
