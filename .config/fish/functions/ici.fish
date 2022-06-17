@@ -20,6 +20,9 @@ function ici --description 'show info about current repo and tools'
 	case 'docker'
 	ici_docker
 
+	case 'terraform'
+	ici_terraform
+
 	case 'package'
 	ici_package
 
@@ -42,6 +45,7 @@ function ici --description 'show info about current repo and tools'
 	ici_npm
 	ici_yarn
 	ici_docker
+	ici_terraform
 
 	ici_package
 
@@ -191,16 +195,48 @@ function ici_yarn
 
 	# https://yarnpkg.com/configuration/yarnrc
 	ici_print_config 'yarnrc'
+	ici_print_config 'yarn.lock'
 end
 
 function ici_docker
 	ici_print_header "Docker - https://www.docker.com"
 	printf "📚 https://docs.docker.com\n"
 
+	if type -q docker
+		set --local ici_docker_latest_version (curl --silent 'https://archlinux.org/packages/community/x86_64/docker/json/' | jq --raw-output .pkgver)
+		printf "🌍 latest $ici_docker_latest_version - https://archlinux.org/packages/community/x86_64/docker/\n"
+
+		# Docker version 20.10.16, build aa7e414fdc
+		set --local ici_docker_global_version (docker --version | string sub --start 16 --end 23)
+		set --local ici_docker_global_path (command -v docker)
+		printf "✅ global $ici_docker_global_version - $ici_docker_global_path\n"
+	end
+
 	if test $ici_git_repo = true
 		ici_print_config 'Dockerfile'
 		ici_print_config 'docker-compose'
 		ici_print_ignore 'dockerignore'
+	end
+end
+
+function ici_terraform
+	ici_print_header "Terraform - https://www.terraform.io"
+	printf "📚 https://www.terraform.io/docs\n"
+
+	if type -q terraform
+		set --local ici_terraform_latest_version (curl --silent 'https://archlinux.org/packages/community/x86_64/terraform/json/' | jq --raw-output .pkgver)
+		printf "🌍 latest $ici_terraform_latest_version - https://archlinux.org/packages/community/x86_64/terraform/\n"
+
+		# Terraform v1.1.9
+		set --local ici_terraform_global_version (terraform --version | head -n 1 |  string sub --start 12)
+		set --local ici_terraform_global_path (command -v terraform)
+		printf "✅ global $ici_terraform_global_version - $ici_terraform_global_path\n"
+	end
+
+	if test $ici_git_repo = true
+		ici_print_config '\.tf'
+		ici_print_config 'tfvars'
+		ici_print_config '.terraform.lock.hcl'
 	end
 end
 
