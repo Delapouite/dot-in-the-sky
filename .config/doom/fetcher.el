@@ -422,7 +422,7 @@
                                     (org-set-property "views-containers" (number-to-string(length (assoc-default 'viewsContainers contributes))))
                                     (my/fetched-at)))))))))))
 
-(defvar my/wikipedia-re "*.?https://en.wikipedia.org/wiki/\\([a-zA-Z0-9-_@.]*\\).*")
+(defvar my/wikipedia-re "*.?https://en.wikipedia.org/wiki/\\([a-zA-Z0-9-_@.%]*\\).*")
 
 (defun my/fetch-wikipedia-stats ()
   "Fetch Wikipedia REST API and add the returned values in a PROPERTIES drawer"
