@@ -1,58 +1,64 @@
 function ici --description 'show info about current repo and tools'
 	ici_init
 
-	switch $argv[1]
-	case 'env'
-	ici_env
+	if test (count $argv) -eq 0;
+		ici_env
+		ici_git
+		ici_node
+		ici_npm
+		ici_yarn
+		ici_docker
+		ici_terraform
 
-	case 'git'
-	ici_git
+		ici_package
 
-	case 'node'
-	ici_node
+		ici_typescript
+		ici_prettier
+		ici_eslint
+		ici_jest
+	else
+		for tool in $argv
+			switch $tool
+			case 'env'
+			ici_env
 
-	case 'npm'
-	ici_npm
+			case 'git'
+			ici_git
 
-	case 'yarn'
-	ici_yarn
+			case 'node'
+			ici_node
 
-	case 'docker'
-	ici_docker
+			case 'npm'
+			ici_npm
 
-	case 'terraform'
-	ici_terraform
+			case 'yarn'
+			ici_yarn
 
-	case 'package'
-	ici_package
+			case 'docker'
+			ici_docker
 
-	case 'typescript'
-	ici_typescript
+			case 'terraform'
+			ici_terraform
 
-	case 'prettier'
-	ici_prettier
+			case 'package'
+			ici_package
 
-	case 'eslint'
-	ici_eslint
+			case 'typescript'
+			ici_typescript
 
-	case 'jest'
-	ici_jest
+			case 'prettier'
+			ici_prettier
 
-	case '*'
-	ici_env
-	ici_git
-	ici_node
-	ici_npm
-	ici_yarn
-	ici_docker
-	ici_terraform
+			case 'eslint'
+			ici_eslint
 
-	ici_package
+			case 'jest'
+			ici_jest
 
-	ici_typescript
-	ici_prettier
-	ici_eslint
-	ici_jest
+			case '*'
+			printf "unknown tool"
+			end
+		end
 	end
 end
 
@@ -350,9 +356,7 @@ function ici_prettier
 end
 
 function ici_eslint
-	set_color --bold
-	printf "\nESLint - https://eslint.org\n"
-	set_color normal
+	ici_print_header "ESLint - https://eslint.org"
 	printf "📚 https://eslint.org/docs/user-guide/\n"
 
 	set --local latest_version (curl --silent 'https://registry.npmjs.com/eslint' | jq --raw-output '.["dist-tags"].latest')
@@ -383,9 +387,7 @@ function ici_eslint
 end
 
 function ici_jest
-	set_color --bold
-	printf "\nJest - https://jestjs.io\n"
-	set_color normal
+	ici_print_header "Jest - https://jestjs.io"
 	printf "📚 https://jestjs.io/docs/getting-started\n"
 
 	set --local latest_version (curl --silent 'https://registry.npmjs.com/jest' | jq --raw-output '.["dist-tags"].latest')
