@@ -69,7 +69,7 @@ function ici_init
 end
 
 function ici_print_header
-	set_color --bold
+	set_color --bold cyan
 	printf "\n$argv\n"
 	set_color normal
 end
@@ -77,9 +77,20 @@ end
 function ici_print_dev_dependencies
 	if test -f package.json
 		for package in $argv
-			set --local ici_package_desired_version (jq --raw-output ".devDependencies[\"$package\"]" package.json)
-			printf "📦 $package $ici_package_desired_version\n"
+			set --local desired_version (jq --raw-output ".devDependencies[\"$package\"]" package.json)
+			printf "📦 $package $desired_version\n"
 		end
+	end
+end
+
+function ici_print_version --argument-names latest installed
+	if test "$latest" = "$installed"
+		printf $installed
+	else
+		# probably outdated
+		set_color red
+		printf $installed
+		set_color normal
 	end
 end
 
@@ -100,8 +111,8 @@ function ici_env
 
 	if test $ici_git_repo = true
 		if test -f package.json
-			set --local ici_dotenv_desired_version (jq --raw-output .devDependencies.dotenv package.json)
-			printf "📦 desired $ici_dotenv_desired_version\n"
+			set --local desired_version (jq --raw-output .devDependencies.dotenv package.json)
+			printf "📦 desired $desired_version\n"
 		end
 	end
 
@@ -113,7 +124,7 @@ function ici_env
 	direnv status
 
 	printf "\n🔎 'process.env' occurences\n"
-	rg --count process.env
+	rg --count --color never process.env
 end
 
 function ici_git
@@ -121,12 +132,13 @@ function ici_git
 	printf "📚 https://git-scm.com/doc\n"
 
 	if type -q git
-		set --local ici_git_latest_version (curl --silent 'https://archlinux.org/packages/extra/x86_64/git/json/' | jq --raw-output .pkgver)
-		printf "🌍 latest $ici_git_latest_version - https://archlinux.org/packages/extra/x86_64/git/\n"
+		set --local latest_version (curl --silent 'https://archlinux.org/packages/extra/x86_64/git/json/' | jq --raw-output .pkgver)
+		printf "🌍 latest $latest_version - https://archlinux.org/packages/extra/x86_64/git/\n"
 
 		# git version x.y.z
-		set --local ici_git_global_version (git --version | string sub --start 13)
-		printf "✅ global $ici_git_global_version\n"
+		set --local global_version (git --version | string sub --start 13)
+		set --local global_path (command -v git)
+		printf "✅ global $(ici_print_version $latest_version $global_version) - $global_path\n"
 	else
 		printf "❌ global none\n"
 	end
@@ -147,12 +159,13 @@ function ici_node
 	printf "📚 https://nodejs.org/dist/latest-v18.x/docs/api/\n"
 
 	if type -q node
-		set --local ici_node_latest_version (curl --silent 'https://archlinux.org/packages/community/x86_64/nodejs/json/' | jq --raw-output .pkgver)
-		printf "🌍 latest $ici_node_latest_version - https://archlinux.org/packages/community/x86_64/nodejs/\n"
+		set --local latest_version (curl --silent 'https://archlinux.org/packages/community/x86_64/nodejs/json/' | jq --raw-output .pkgver)
+		printf "🌍 latest $latest_version - https://archlinux.org/packages/community/x86_64/nodejs/\n"
 
 		# vx.y.z
-		set --local ici_node_global_version (node --version | string sub --start 2)
-		printf "✅ global $ici_node_global_version\n"
+		set --local global_version (node --version | string sub --start 2)
+		set --local global_path (command -v node)
+		printf "✅ global $(ici_print_version $latest_version $global_version) - $global_path\n"
 	else
 		printf "❌ global none\n"
 	end
@@ -167,12 +180,13 @@ function ici_npm
 	printf "📚 https://docs.npmjs.com\n"
 
 	if type -q npm
-		set --local ici_npm_latest_version (curl --silent 'https://archlinux.org/packages/community/any/npm/json/' | jq --raw-output .pkgver)
-		printf "🌍 latest $ici_npm_latest_version - https://archlinux.org/packages/community/any/npm/\n"
+		set --local latest_version (curl --silent 'https://archlinux.org/packages/community/any/npm/json/' | jq --raw-output .pkgver)
+		printf "🌍 latest $latest_version - https://archlinux.org/packages/community/any/npm/\n"
 
 		# x.y.z
-		set --local ici_npm_global_version (npm --version)
-		printf "✅ global $ici_npm_global_version\n"
+		set --local global_version (npm --version)
+		set --local global_path (command -v npm)
+		printf "✅ global $(ici_print_version $latest_version $global_version) - $global_path\n"
 	else
 		printf "❌ global none\n"
 	end
@@ -183,12 +197,13 @@ function ici_yarn
 	printf "📚 https://yarnpkg.com/getting-started\n"
 
 	if type -q yarn
-		set --local ici_yarn_latest_version (curl --silent 'https://archlinux.org/packages/community/any/yarn/json/' | jq --raw-output .pkgver)
-		printf "🌍 latest $ici_yarn_latest_version - https://archlinux.org/packages/community/any/yarn/\n"
+		set --local latest_version (curl --silent 'https://archlinux.org/packages/community/any/yarn/json/' | jq --raw-output .pkgver)
+		printf "🌍 latest $latest_version - https://archlinux.org/packages/community/any/yarn/\n"
+
 		# x.y.z
-		set --local ici_yarn_global_version (yarn --version)
-		set --local ici_yarn_global_path (command -v yarn)
-		printf "✅ global $ici_yarn_global_version - $ici_yarn_global_path\n"
+		set --local global_version (yarn --version)
+		set --local global_path (command -v yarn)
+		printf "✅ global $(ici_print_version $latest_version $global_version) - $global_path\n"
 	else
 		printf "❌ global none\n"
 	end
@@ -203,13 +218,13 @@ function ici_docker
 	printf "📚 https://docs.docker.com\n"
 
 	if type -q docker
-		set --local ici_docker_latest_version (curl --silent 'https://archlinux.org/packages/community/x86_64/docker/json/' | jq --raw-output .pkgver)
-		printf "🌍 latest $ici_docker_latest_version - https://archlinux.org/packages/community/x86_64/docker/\n"
+		set --local latest_version (curl --silent 'https://archlinux.org/packages/community/x86_64/docker/json/' | jq --raw-output .pkgver)
+		printf "🌍 latest $latest_version - https://archlinux.org/packages/community/x86_64/docker/\n"
 
 		# Docker version 20.10.16, build aa7e414fdc
-		set --local ici_docker_global_version (docker --version | string sub --start 16 --end 23)
-		set --local ici_docker_global_path (command -v docker)
-		printf "✅ global $ici_docker_global_version - $ici_docker_global_path\n"
+		set --local global_version (docker --version | string sub --start 16 --end 23)
+		set --local global_path (command -v docker)
+		printf "✅ global $(ici_print_version $latest_version $global_version) - $global_path\n"
 	end
 
 	if test $ici_git_repo = true
@@ -224,13 +239,13 @@ function ici_terraform
 	printf "📚 https://www.terraform.io/docs\n"
 
 	if type -q terraform
-		set --local ici_terraform_latest_version (curl --silent 'https://archlinux.org/packages/community/x86_64/terraform/json/' | jq --raw-output .pkgver)
-		printf "🌍 latest $ici_terraform_latest_version - https://archlinux.org/packages/community/x86_64/terraform/\n"
+		set --local latest_version (curl --silent 'https://archlinux.org/packages/community/x86_64/terraform/json/' | jq --raw-output .pkgver)
+		printf "🌍 latest $latest_version - https://archlinux.org/packages/community/x86_64/terraform/\n"
 
 		# Terraform v1.1.9
-		set --local ici_terraform_global_version (terraform --version | head -n 1 |  string sub --start 12)
-		set --local ici_terraform_global_path (command -v terraform)
-		printf "✅ global $ici_terraform_global_version - $ici_terraform_global_path\n"
+		set --local global_version (terraform --version | head -n 1 | string sub --start 12)
+		set --local global_path (command -v terraform)
+		printf "✅ global $(ici_print_version $latest_version $global_version) - $global_path\n"
 	end
 
 	if test $ici_git_repo = true
@@ -244,13 +259,13 @@ function ici_package
 	ici_print_header "Package"
 
 	if test -f package.json
-		set --local ici_package_name (jq --raw-output .name package.json)
-		set --local ici_package_version (jq --raw-output .version package.json)
-		set --local ici_package_workspaces (jq --raw-output .workspaces package.json)
+		set --local package_name (jq --raw-output .name package.json)
+		set --local package_version (jq --raw-output .version package.json)
+		set --local package_workspaces (jq --raw-output .workspaces package.json)
 
-		printf "📦 $ici_package_name@$ici_package_version\n"
+		printf "📦 $package_name@$package_version\n"
 
-		if test "$ici_package_workspaces" != null
+		if test "$package_workspaces" != null
 			printf "✅ workspaces\n"
 
 			# displaying only the package.json .workspaces keys is not enough
@@ -273,22 +288,23 @@ function ici_typescript
 	printf "📚 https://www.typescriptlang.org/docs/\n"
 
 	if type -q tsc
-		set --local ici_tsc_latest_arch_version (curl --silent 'https://archlinux.org/packages/community/any/typescript/json/' | jq --raw-output .pkgver)
-		printf "🌍 latest $ici_tsc_latest_arch_version - https://archlinux.org/packages/community/any/typescript/\n"
+		set --local latest_arch_version (curl --silent 'https://archlinux.org/packages/community/any/typescript/json/' | jq --raw-output .pkgver)
+		printf "🌍 latest $latest_arch_version - https://archlinux.org/packages/community/any/typescript/\n"
 
-		set --local ici_tsc_latest_version (curl --silent 'https://registry.npmjs.com/typescript' | jq --raw-output '.["dist-tags"].latest')
-		printf "🌍 latest $ici_tsc_latest_version - https://registry.npmjs.com/typescript\n"
+		set --local latest_version (curl --silent 'https://registry.npmjs.com/typescript' | jq --raw-output '.["dist-tags"].latest')
+		printf "🌍 latest $latest_version - https://registry.npmjs.com/typescript\n"
 
 		# Version x.y.z
-		set --local ici_tsc_global_version (tsc --version | string sub --start=9)
-		printf "✅ global $ici_tsc_global_version\n"
+		set --local global_version (tsc --version | string sub --start=9)
+		set --local global_path (command -v tsc)
+		printf "✅ global $(ici_print_version $latest_version $global_version) - $global_path\n"
 	else
 		printf "❌ global none\n"
 	end
 
 	if test $ici_git_repo = true
-		set --local ici_tsc_reported_version (npx tsc --version | string sub --start=9)
-		printf "✅ local  $ici_tsc_reported_version\n"
+		set --local reported_version (npx tsc --version | string sub --start=9)
+		printf "✅ local $reported_version\n"
 
 		ici_print_dev_dependencies 'typescript' '@typescript-eslint/parser'
 
@@ -302,26 +318,27 @@ function ici_prettier
 	ici_print_header "Prettier - https://prettier.io"
 	printf "📚 https://prettier.io/docs/en/index.html\n"
 
-	set --local ici_prettier_latest_version (curl --silent 'https://registry.npmjs.com/prettier' | jq --raw-output '.["dist-tags"].latest')
-	printf "🌍 latest $ici_prettier_latest_version - https://registry.npmjs.com/prettier\n"
+	set --local prettier_latest_version (curl --silent 'https://registry.npmjs.com/prettier' | jq --raw-output '.["dist-tags"].latest')
+	printf "🌍 latest $prettier_latest_version - https://registry.npmjs.com/prettier\n"
 
 	if type -q prettier
 		# x.y.z
-		set --local ici_prettier_global_version (prettier --version)
-		printf "✅ global $ici_prettier_global_version\n"
+		set --local prettier_global_version (prettier --version)
+		set --local global_path (command -v prettier)
+		printf "✅ global $(ici_print_version $latest_version $global_version) - $global_path\n"
 	else
 		printf "❌ global none\n"
 	end
 
 	if test $ici_git_repo = true
-		set --local ici_prettier_reported_version (npx prettier --version)
-		printf "✅ local  $ici_prettier_reported_version\n"
+		set --local reported_version (npx prettier --version)
+		printf "✅ local $reported_version\n"
 
 		if test -f package.json
 			ici_print_dev_dependencies 'prettier' 'eslint-config-prettier' 'eslint-plugin-prettier'
 
-			set --local ici_prettier_package_config (jq --raw-output .prettier package.json)
-			if test "$ici_prettier_package_config" != null
+			set --local package_config (jq --raw-output .prettier package.json)
+			if test "$package_config" != null
 				printf "⚙️ package.json\n"
 			end
 		end
@@ -338,20 +355,21 @@ function ici_eslint
 	set_color normal
 	printf "📚 https://eslint.org/docs/user-guide/\n"
 
-	set --local ici_eslint_latest_version (curl --silent 'https://registry.npmjs.com/eslint' | jq --raw-output '.["dist-tags"].latest')
-	printf "🌍 latest $ici_eslint_latest_version - https://registry.npmjs.com/eslint\n"
+	set --local latest_version (curl --silent 'https://registry.npmjs.com/eslint' | jq --raw-output '.["dist-tags"].latest')
+	printf "🌍 latest $latest_version - https://registry.npmjs.com/eslint\n"
 
 	if type -q eslint
 		# vx.y.z
-		set --local ici_eslint_global_version (eslint --version | string sub --start=2)
-		printf "✅ global $ici_eslint_global_version\n"
+		set --local global_version (eslint --version | string sub --start=2)
+		set --local global_path (command -v eslint)
+		printf "✅ global $(ici_print_version $latest_version $global_version) - $global_path\n"
 	else
 		printf "❌ global none\n"
 	end
 
 	if test $ici_git_repo = true
-		set --local ici_eslint_reported_version (npx eslint --version | string sub --start=2)
-		printf "✅ local  $ici_eslint_reported_version\n"
+		set --local reported_version (npx eslint --version | string sub --start=2)
+		printf "✅ local $reported_version\n"
 
 		ici_print_dev_dependencies 'eslint' 'eslint-config-prettier' 'eslint-config-google' 'eslint-plugin-import' '@typescript-eslint/parser'
 
@@ -370,20 +388,21 @@ function ici_jest
 	set_color normal
 	printf "📚 https://jestjs.io/docs/getting-started\n"
 
-	set --local ici_jest_latest_version (curl --silent 'https://registry.npmjs.com/jest' | jq --raw-output '.["dist-tags"].latest')
-	printf "🌍 latest $ici_jest_latest_version - https://registry.npmjs.com/jest\n"
+	set --local latest_version (curl --silent 'https://registry.npmjs.com/jest' | jq --raw-output '.["dist-tags"].latest')
+	printf "🌍 latest $latest_version - https://registry.npmjs.com/jest\n"
 
 	if type -q jest
 		# x.y.z
-		set --local ici_jest_global_version (jest --version)
-		printf "✅ global $ici_jest_global_version\n"
+		set --local global_version (jest --version)
+		set --local global_path (command -v jest)
+		printf "✅ global $(ici_print_version $latest_version $global_version) - $global_path\n"
 	else
 		printf "❌ global none\n"
 	end
 
 	if test $ici_git_repo = true
-		set --local ici_jest_reported_version (npx jest --version)
-		printf "✅ local $ici_jest_reported_version\n"
+		set --local reported_version (npx jest --version)
+		printf "✅ local $reported_version\n"
 
 		ici_print_dev_dependencies 'jest' '@types/jest' 'ts-jest' 'jest-marbles' '@angular-builders/jest' '@nrwl/jest'
 
