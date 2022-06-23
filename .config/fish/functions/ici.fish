@@ -270,7 +270,16 @@ function ici_terraform
 	end
 
 	if test $ici_git_repo = true
-		ici_print_config '\.tf'
+		for config in $(fd --strip-cwd-prefix --color never --exclude .git --type file '\.tf' --exclude 'variables.tf')
+			printf "⚙️ $config\n"
+		end
+
+
+		ici_print_doc "https://www.terraform.io/language/values/variables"
+		for config in $(fd --strip-cwd-prefix --color never --exclude .git --type file 'variables.tf')
+			printf "⚙️ $config - $(rg --count '^variable ' $config) variable(s)\n"
+		end
+
 		ici_print_config 'tfvars'
 		ici_print_config '.terraform.lock.hcl'
 	end
