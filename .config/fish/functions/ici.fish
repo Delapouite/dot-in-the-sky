@@ -9,6 +9,7 @@ function ici --description 'show info about current repo and tools'
 		ici_yarn
 		ici_docker
 		ici_terraform
+		ici_vscode
 
 		ici_package
 
@@ -39,6 +40,9 @@ function ici --description 'show info about current repo and tools'
 
 			case 'terraform'
 			ici_terraform
+			
+			case 'vscode'
+			ici_vscode
 
 			case 'package'
 			ici_package
@@ -296,9 +300,10 @@ function ici_package
 		printf "📦 $package_name@$package_version\n"
 
 		if test "$package_workspaces" != null
-			printf '✅ workspaces\n'
+  		set --local workspaces_count (yarn workspaces list --json | wc -l)
+			printf "✅ $workspaces_count workspaces\n"
 
-			# displaying only the package.json .workspaces keys is not enough
+			# displaying only the package.json .workspaces keys is not enough because of glob
 			if type -q yarn
 				yarn workspaces list --json | jq --raw-output '"⛺ " + .location + " " + .name'
 			end
@@ -309,6 +314,10 @@ function ici_package
 		# --prune is needed to avoid going to deep
 		for node_modules in $(fd --strip-cwd-prefix --color never --hidden --no-ignore --exclude .git --prune --type directory 'node_modules')
 			printf "📁 $(du --human-readable --summarize $node_modules)\n"
+		end
+
+		if test -d .yarn
+			printf "📁 $(du --human-readable --summarize .yarn)\n"
 		end
 	end
 end
@@ -444,3 +453,24 @@ function ici_jest
 	end
 end
 
+function ici_vscode
+	ici_print_header 'VSCode - https://code.visualstudio.com/'
+	ici_print_doc 'https://code.visualstudio.com/docs'
+	ici_print_repo 'https://github.com/microsoft/vscode'
+
+	if type -q code
+		set --local latest_version (curl --silent 'https://archlinux.org/packages/community/x86_64/code/json/' | jq --raw-output .pkgver)
+		printf "🌍 latest $latest_version - https://archlinux.org/packages/community/x86_64/code/\n"
+
+		# 1.68.0
+		set --local global_version (code --version | head -n 1)
+		set --local global_path (command -v code)
+		printf "✅ global $(ici_print_version $latest_version $global_version) - $global_path\n"
+	end
+	
+	if test $ici_git_repo = true
+		ici_print_config 'extensions.json'
+		ici_print_config 'launch.json'
+		ici_print_config 'settings.json'
+	end
+end
