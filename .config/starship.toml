@@ -1,38 +1,44 @@
+# https://starship.rs/config/
 format = """
 $time\
-  $username\
-  $hostname\
-  $kubernetes\
-  $directory\
-  $git_branch\
-  $git_commit\
-  $git_state\
-  ${custom.git}\
-  $git_status\
-  $package\
-  $dotnet\
-  $golang\
-  $java\
-  $nodejs\
-  $python\
-  $ruby\
-  $rust\
-  $nix_shell\
-  $conda\
-  $memory_usage\
-  $aws\
-  $env_var\
-  ${custom.docker}\
-  $vagrant\
-  $cmd_duration\
-  $line_break\
-  $jobs\
-  $battery\
-  ${custom.ssh_keys}\
-  ${custom.direnv_allowed}\
-  ${custom.direnv_denied}\
-  ${custom.sudo}\
-  $character\
+$username\
+$hostname\
+$kubernetes\
+$directory\
+$git_branch\
+$git_commit\
+$git_state\
+${custom.git}\
+$git_status\
+$package\
+$dotnet\
+$golang\
+$java\
+$nodejs\
+$python\
+$ruby\
+$rust\
+$nix_shell\
+$conda\
+$memory_usage\
+$aws\
+$env_var\
+${custom.docker}\
+$vagrant\
+$azure\
+$cmd_duration\
+
+$line_break\
+
+$jobs\
+$battery\
+${custom.ssh_keys}\
+${custom.direnv_allowed}\
+${custom.direnv_denied}\
+${custom.envars}\
+${custom.sudo}\
+$shell\
+$character\
 """
 
 [time]
@@ -40,6 +46,12 @@ disabled = false
 style = ""
 time_format = "%T"
 format = "[$time]($style) "
+
+[shell]
+disabled = true
+# does not work yet, nushell keeps displaying the fish :(
+fish_indicator = "🐟"
+unknown_indicator = "mystery shell"
 
 [directory]
 truncation_length = 4
@@ -67,6 +79,12 @@ disabled = true
 [character]
 error_symbol = "[✖](bold red)"
 
+[azure]
+disabled = true
+format = "on [$symbol($subscription)]($style) "
+symbol = "ﴃ "
+style = "blue"
+
 [custom.git]
 description = "Author and date of last git commit"
 command = "git log -1 --format='%cn - %cd' --date=relative"
@@ -86,7 +104,7 @@ description = "Valid sudo timestamp marker"
 command = "echo -n 'sudo'"
 when = "sudo -vn &>/dev/null"
 format = "[$output]($style)"
-style = "bold green"
+style = "bold cyan"
 
 [custom.ssh_keys]
 description = "SSH key count"
@@ -112,3 +130,11 @@ when = "direnv status | grep -q 'Found RC allowed false'"
 format = "[$output]($style)$symbol"
 symbol = "🌑"
 style = "bold red"
+
+[custom.envars]
+description = "Envars count"
+command = "env | wc -l"
+when = "true"
+format = "[$output]($style)$symbol"
+symbol = "🌱"
+style = "normal"
