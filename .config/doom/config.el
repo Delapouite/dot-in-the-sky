@@ -96,7 +96,7 @@
   (doom-modeline-def-segment buffer-mtime
     "Define buffer-mtime modeline segment"
     (let ((mtime (get-buffer-file-mtime)))
-      (propertize mtime 'face (if (string-prefix-p " 2021" mtime) 'compilation-error 'mode-line))))
+      (propertize mtime 'face (if (or (string-prefix-p " 2021" mtime) (string-prefix-p " 2022-01" mtime)) 'compilation-error 'mode-line))))
 
   (doom-modeline-def-modeline 'delapouite
     '(bar window-number modals matches buffer-info-simple buffer-mtime buffer-position word-count parrot selection-info)
@@ -202,6 +202,11 @@
     (interactive current-prefix-arg)
     (org-roam-node-random-tag "Album" other-window))
 
+  (defun org-roam-node-random-2021 ()
+    (interactive)
+    (org-roam-node-random nil (lambda (node)
+                                (string-prefix-p "2021" (org-roam-node-mtime node)))))
+
   (defun my/print-nodes-list (&rest search)
     "Print a org-roam nodes list having SEARCH tag(s)"
     ; (princ (concat "Generated at " (format-time-string "%Y-%m-%d %H:%M:%S\n" (current-time))))
@@ -244,6 +249,7 @@
           org-roam-ui-open-on-start t))
 
 (setq company-selection-wrap-around t)
+(setq completion-ignore-case t)
 
 (use-package! org-download
   :config
