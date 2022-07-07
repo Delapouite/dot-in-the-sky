@@ -41,6 +41,13 @@
           (match-string 2 line-content)
           (match-string 3 line-content))))
 
+  (defun my/visit-url (&optional initial-read)
+    (interactive)
+    (let* ((links (org-roam-db-query [:select [dest] :from [links] :where (= type "https")]))
+           (link (completing-read "Links: " links nil nil initial-read)))
+      (browse-url (concat "https:" link))))
+
+(defun my/visit-github () (interactive) (my/visit-url "github.com"))
 (defvar my/github-re ".*?https://github.com/\\([a-zA-Z0-9-_\.]*\\)/\\([a-zA-Z0-9-_\.]*\\).*")
 
 (defun my/fetch-github-stats ()
@@ -70,6 +77,7 @@
                                              (org-set-property "published-at" (assoc-default 'published_at (aref data 0))))
                                            (my/fetched-at))))))))))))
 
+(defun my/visit-github-issues () (interactive) (my/visit-url "github.com issues"))
 (defvar my/github-issues-re ".*?https://github.com/\\([a-zA-Z0-9-_\.]*\\)/\\([a-zA-Z0-9-_\.]*\\)/issues/\\([a-zA-Z0-9-_\.]*\\).*")
 
 (defun my/fetch-github-issues-stats ()
@@ -89,6 +97,7 @@
                  (org-set-property "closed-at" (or (assoc-default 'closed_at data) "null"))
                  (my/fetched-at))))))
 
+(defun my/visit-github-pull () (interactive) (my/visit-url "github.com pull"))
 (defvar my/github-pull-re ".*?https://github.com/\\([a-zA-Z0-9-_\.]*\\)/\\([a-zA-Z0-9-_\.]*\\)/pull/\\([a-zA-Z0-9-_\.]*\\).*")
 
 (defun my/fetch-github-pull-stats ()
@@ -109,6 +118,7 @@
                  (org-set-property "merged-at" (or (assoc-default 'merged_at data) "null"))
                  (my/fetched-at))))))
 
+(defun my/visit-gitlab () (interactive) (my/visit-url "gitlab.com"))
 (defvar my/gitlab-re ".*?https://gitlab.com/\\([a-zA-Z0-9-_\.]*\\)/\\([a-zA-Z0-9-_\.]*\\).*")
 
 (defun my/fetch-gitlab-stats ()
@@ -144,6 +154,7 @@
     (org-set-property "count" (number-to-string (assoc-default 'count (aref (assoc-default 'items data) 0))))
     (my/fetched-at)))
 
+(defun my/visit-stackoverflow () (interactive) (my/visit-url "stackoverflow.com"))
 (defvar my/stackoverflow-re ".*?https://stackoverflow.com/questions/\\([0-9]*\\)/.*")
 (defvar my/stackoverflow-tags-re ".*?https://stackoverflow.com/questions/tagged/\\([a-zA-Z0-9-_\.]*\\).*")
 
@@ -161,6 +172,7 @@
     (my/fetch (concat "https://api.stackexchange.com/2.3/tags/" tag "/info?site=stackoverflow")
               'my/parse-stack-tags-response)))
 
+(defun my/visit-serverfault () (interactive) (my/visit-url "serverfault.com"))
 (defvar my/serverfault-re ".*?https://serverfault.com/questions/\\([0-9]*\\)/.*")
 
 (defun my/fetch-serverfault-stats ()
@@ -170,6 +182,7 @@
     (my/fetch (concat "https://api.stackexchange.com/2.3/questions/" question-id "?site=serverfault")
               'my/parse-stack-response)))
 
+(defun my/visit-superuser () (interactive) (my/visit-url "superuser.com"))
 (defvar my/superuser-re ".*?https://superuser.com/questions/\\([0-9]*\\)/.*")
 (defvar my/superuser-tags-re ".*?https://superuser.com/questions/tagged/\\([a-zA-Z0-9-_\.]*\\).*")
 
@@ -187,6 +200,7 @@
     (my/fetch (concat "https://api.stackexchange.com/2.3/tags/" tag "/info?site=superuser")
               'my/parse-stack-tags-response)))
 
+(defun my/visit-askubuntu () (interactive) (my/visit-url "askubuntu.com"))
 (defvar my/askubuntu-re ".*?https://askubuntu.com/questions/\\([0-9]*\\)/.*")
 
 (defun my/fetch-askubuntu-stats ()
@@ -196,6 +210,7 @@
     (my/fetch (concat "https://api.stackexchange.com/2.3/questions/" question-id "?site=askubuntu")
               'my/parse-stack-response)))
 
+(defun my/visit-stackexchange () (interactive) (my/visit-url "stackexchange.com"))
 (defvar my/stackexchange-re ".*?https://\\(.*?\\).stackexchange.com/questions/\\([0-9]*\\)/.*")
 (defvar my/stackexchange-tags-re ".*?https://\\(.*?\\).stackexchange.com/questions/tagged/\\([a-zA-Z0-9-_\.]*\\).*")
 
@@ -213,6 +228,7 @@
     (my/fetch (concat "https://api.stackexchange.com/2.3/tags/" tag "/info?site=" site)
               'my/parse-stack-tags-response)))
 
+(defun my/visit-youtube () (interactive) (my/visit-url "youtube.com"))
 (defvar my/youtube-re ".*?https://www.youtube.com/watch\\?v=\\([a-zA-Z0-9-_]*\\).*")
 
 (defun my/fetch-youtube-stats ()
@@ -232,6 +248,7 @@
                    (org-set-property "published-at" (assoc-default 'publishedAt (assoc-default 'snippet item))))
                  (my/fetched-at))))))
 
+(defun my/visit-npm () (interactive) (my/visit-url "npmjs.com"))
 (defvar my/npm-re ".*?https://www.npmjs.com/package/\\([a-zA-Z0-9-_@/]*\\).*")
 
 (defun my/fetch-npm-stats ()
@@ -258,6 +275,7 @@
                                 (my/org-set-number-prop "downloads" 'downloads data)
                                 (my/fetched-at))))))))))
 
+(defun my/visit-musicbrainz () (interactive) (my/visit-url "musicbrainz.org"))
 (defvar my/musicbrainz-re ".*?https://musicbrainz.org/artist/\\([a-zA-Z0-9-_]*\\).*")
 
 (defun my/fetch-musicbrainz-stats ()
@@ -284,6 +302,9 @@
                    (if youtube (org-set-property "youtube" (assoc-default 'resource (assoc-default 'url youtube)))))
                  (my/fetched-at))))))
 
+(defun my/visit-archlinux () (interactive) (my/visit-url "/archlinux.org"))
+(defun my/visit-archlinux-man () (interactive) (my/visit-url "man.archlinux.org"))
+(defun my/visit-archlinux-wiki () (interactive) (my/visit-url "wiki.archlinux.org"))
 (defvar my/archlinux-re ".*?https://archlinux.org/packages/\\(community\\|core\\|extra\\)/\\(any\\|x86_64\\)/\\([a-zA-Z0-9-_]*\\)/.*")
 
 (defun my/fetch-archlinux-stats ()
@@ -306,6 +327,7 @@
                  (my/org-set-prop "updated-at" 'last_update data)
                  (my/fetched-at))))))
 
+(defun my/visit-aur () (interactive) (my/visit-url "aur.archlinux.org"))
 (defvar my/aur-re ".*?https://aur.archlinux.org/packages/\\([a-zA-Z0-9-_]*\\).*")
 
 (defun my/fetch-aur-stats ()
@@ -326,6 +348,7 @@
                    (org-set-property "updated-at" (format-time-string "%Y-%m-%dT%TZ%z" (assoc-default 'LastModified item))))
                  (my/fetched-at))))))
 
+(defun my/visit-docker-hub () (interactive) (my/visit-url "hub.docker.com"))
 (defvar my/docker-hub-re "*.?https://hub.docker.com/r/\\([a-zA-Z0-9-_]*\\)/\\([a-zA-Z0-9-_]*\\).*")
 (defvar my/docker-hub-official-re "*.?https://hub.docker.com/_/\\([a-zA-Z0-9-_]*\\).*")
 
@@ -345,6 +368,7 @@
       (end-of-line)
       (insert (concat "\n#+begin_src dockerfile\n" dockerfile "#+end_src")))))
 
+(defun my/visit-bundlephobia () (interactive) (my/visit-url "bundlephobia.com"))
 (defvar my/bundlephobia-re "*.?https://bundlephobia.com/package/\\([a-zA-Z0-9-_@.]*\\).*")
 
 (defun my/fetch-bundlephobia-stats ()
@@ -360,6 +384,7 @@
                  (my/org-set-number-prop "gzip" 'gzip data)
                  (my/fetched-at))))))
 
+(defun my/visit-vscode () (interactive) (my/visit-url "marketplace.visualstudio.com"))
 (defvar my/vscode-re "*.?https://marketplace.visualstudio.com/items\\?itemName=\\([a-zA-Z0-9-_@.]*\\).*")
 
 (defun my/fetch-vscode ()
@@ -398,6 +423,7 @@
                                    (org-set-property "views-containers" (number-to-string(length (assoc-default 'viewsContainers contributes))))
                                    (my/fetched-at)))))))))))
 
+(defun my/visit-wikipedia () (interactive) (my/visit-url "en.wikipedia.org"))
 (defvar my/wikipedia-re "*.?https://en.wikipedia.org/wiki/\\([a-zA-Z0-9-_@.%]*\\).*")
 
 (defun my/fetch-wikipedia-stats ()
