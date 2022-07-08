@@ -11,31 +11,35 @@
 
 [core]
 	editor = kak
+	# pager = delta --theme='Monokai Extended'
 
 [alias]
 	# plurals
 	aliases = !git config -l | grep alias | cut -c 7-
-	branches = branch -a --sort=-committerdate --format='%(committerdate:short) %(color:green)%(refname:short)%(color:reset) - %(color:cyan)%(contents:subject)%(color:reset) - %(authorname)'
+	branches = branch --all --sort=-committerdate --format='%(committerdate:short) %(color:green)%(refname:short)%(color:reset) - %(color:cyan)%(contents:subject)%(color:reset) - %(authorname)'
 	hooks = !fd . .git/hooks --exclude '*.sample'
 	remotes = remote -v
 	stashes = stash list
 	tags = tag -n
 
 	# synonyms
-	amend = commit --amend
 	authors = shortlog -sne
 	first = !git rev-list --max-parents=0 HEAD | xargs git show
 	fix = rebase -i HEAD~2
 	nuke = !git branch --merged | grep -v -P '^\\*|master|main|staging|develop' | xargs -n1 -r git branch -d
-	uncommit = reset --mixed HEAD~
-	unstage = restore --staged
 	tidy = rebase -i @{upstream}..
 
-	a = add
+	# undo
+	amend = commit --amend
+	uncommit = reset --mixed HEAD~
+	unstage = restore --staged
+
+	# personal
+	bh = log --branches --no-walk --author=bheridet
+
 	b = branches
 	ci = commit -v
 	co = checkout
-	d = diff
 	draft = !mkdir _drafts && echo '*' > ./_drafts/.gitignore
 	dw = diff --word-diff
 	dsf = "!git diff --color $@ | diff-so-fancy"
