@@ -36,6 +36,7 @@ ${custom.ssh_keys}\
 ${custom.direnv_allowed}\
 ${custom.direnv_denied}\
 ${custom.envars}\
+${custom.files_hidden}\
 ${custom.sudo}\
 $shell\
 $character\
@@ -119,7 +120,7 @@ style = "bold green"
 description = "Direnv allowed"
 command = "echo -n 'direnv'"
 when = "direnv status | grep -q 'Found RC allowed true'"
-format = "[$output]($style)$symbol"
+format = " [$output]($style)$symbol"
 symbol = "🌕"
 style = "bold green"
 
@@ -127,7 +128,7 @@ style = "bold green"
 description = "Direnv denied"
 command = "echo -n 'direnv'"
 when = "direnv status | grep -q 'Found RC allowed false'"
-format = "[$output]($style)$symbol"
+format = " [$output]($style)$symbol"
 symbol = "🌑"
 style = "bold red"
 
@@ -135,6 +136,14 @@ style = "bold red"
 description = "Envars count"
 command = "env | wc -l"
 when = "true"
-format = "[$output]($style)$symbol"
+format = " [$output]($style)$symbol"
 symbol = "🌱"
+style = "normal"
+
+[custom.files_hidden]
+description = 'Number of hidden files'
+command = "ll -d .* | wc -l"
+when = "ll -d .*"
+format = " [$output]($style)$symbol"
+symbol = "🥷"
 style = "normal"
