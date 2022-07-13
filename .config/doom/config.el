@@ -166,6 +166,36 @@
   (org-link-set-parameters "id" :face 'org-link-id)
   (org-link-set-parameters "file" :face 'org-link-file)
 
+  ; override to store more stuffs in the properties column for https links
+
+  (defun my/org-roam-db-insert-link (link)
+    "Insert link data for LINK at current point into the Org-roam cache."
+    (save-excursion
+      (goto-char (org-element-property :begin link))
+      (let* ((type (org-element-property :type link))
+             (path (org-element-property :path link))
+             (source (org-roam-id-at-point))
+             (properties (list :outline (ignore-errors
+                                          ;; This can error if link is not under any headline
+                                          (org-get-outline-path 'with-self 'use-cache))
+                               :drawer (if (string-equal type "https") (org-entry-properties) '()))))
+        ;; For Org-ref links, we need to split the path into the cite keys
+        (when (and source path)
+          (if (and (boundp 'org-ref-cite-types)
+                   (or (assoc type org-ref-cite-types)
+                       (member type org-ref-cite-types)))
+              (org-roam-db-query
+               [:insert :into citations
+                :values $v1]
+               (mapcar (lambda (k) (vector source k (point) properties))
+                       (org-roam-org-ref-path-to-keys path)))
+            (org-roam-db-query
+             [:insert :into links
+              :values $v1]
+             (vector (point) source path type properties)))))))
+
+  (advice-add 'org-roam-db-insert-link :override #'my/org-roam-db-insert-link)
+
   (defun my/org-roam-visit-node-at-point ()
     (interactive)
     (when-let (node (org-roam-node-from-title-or-alias (word-at-point t)))
