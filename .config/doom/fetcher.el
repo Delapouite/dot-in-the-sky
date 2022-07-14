@@ -445,14 +445,14 @@
                                    (org-set-property "views-containers" (number-to-string(length (assoc-default 'viewsContainers contributes))))
                                    (my/fetched-at)))))))))))
 
-(defun my/visit-wikipedia () (interactive) (my/visit-url "en.wikipedia.org"))
-(defvar my/wikipedia-re "*.?https://en.wikipedia.org/wiki/\\([a-zA-Z0-9-_@.%]*\\).*")
+(defun my/visit-wikipedia () (interactive) (my/visit-url "wikipedia.org"))
+(defvar my/wikipedia-re "*.?https://\\(.*?\\).wikipedia.org/wiki/\\([a-zA-Z0-9-_@.%]*\\).*")
 
 (defun my/fetch-wikipedia-stats ()
   "Fetch Wikipedia REST API and add the returned values in a PROPERTIES drawer"
   (interactive)
-  (seq-let (page) (my/parse-url my/wikipedia-re)
-    (my/fetch (concat "https://en.wikipedia.org/w/rest.php/v1/page/" page "/history")
+  (seq-let (lang page) (my/parse-url my/wikipedia-re)
+    (my/fetch (concat "https://" lang ".wikipedia.org/w/rest.php/v1/page/" page "/history")
               (cl-function
                (lambda (&key data &allow-other-keys)
                  (setq org-property-format "%-12s %s")
