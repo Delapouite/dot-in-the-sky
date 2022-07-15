@@ -1,3 +1,4 @@
+# https://github.com/ncmpcpp/ncmpcpp/blob/master/doc/bindings
 def_key "k"
     scroll_up
 def_key "j"
@@ -10,4 +11,8 @@ def_key "n"
     next_found_item
 def_key "N"
     previous_found_item
+def_key "right"
+    seek_forward
+def_key "left"
+    seek_backward
 
