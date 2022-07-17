@@ -84,6 +84,31 @@
 (map! :leader
       :desc "Find roam" "r" #'org-roam-node-find)
 
+;; Example of obsolete variable: org-roam-current-node
+;; Example of obsolete function: org-roam-setup
+(defun obsoletep (symbol)
+  "Return non nil if SYMBOL is obsolete"
+  (or (plist-member (symbol-plist symbol) 'byte-obsolete-info)
+      (plist-member (symbol-plist symbol) 'byte-obsolete-variable)))
+
+(use-package! counsel
+  :config
+  (setq counsel-rg-base-command '("rg" "--max-columns" "240" "--with-filename" "--no-heading" "--line-number" "--color" "never" "--sortr" "modified" "%s"))
+
+  (defun my/counsel-describe-function-transformer (function-name)
+    "Propertize FUNCTION-NAME if it's an interactive function or an obsolete function."
+    (cond ((commandp (intern function-name)) (ivy-append-face function-name 'ivy-highlight-face))
+          ((obsoletep (intern function-name)) (ivy-append-face function-name 'font-lock-comment-face))
+          (t function-name)))
+  (advice-add 'counsel-describe-function-transformer :override #'my/counsel-describe-function-transformer)
+
+  (defun my/counsel-describe-variable-transformer (var)
+    "Propertize VAR if it's a custom variable or an obsolete variable."
+    (cond ((custom-variable-p (intern var))  (ivy-append-face var 'ivy-highlight-face))
+          ((obsoletep (intern var)) (ivy-append-face var 'font-lock-comment-face))
+          (t var)))
+  (advice-add 'counsel-describe-variable-transformer :override #'my/counsel-describe-variable-transformer))
+
 (use-package! doom-modeline
   :config
   (defun get-buffer-file-mtime ()
@@ -130,7 +155,6 @@
   (add-hook 'org-mode-hook `doom-modeline-set-delapouite-modeline)
   (setq org-roam-node-display-template "${title:*} ${my-level} | ${mtime} | ${tags:50}")
   (setq org-tags-exclude-from-inheritance '("Album" "Artist" "Debut" "Top"))
-  (setq counsel-rg-base-command '("rg" "--max-columns" "240" "--with-filename" "--no-heading" "--line-number" "--color" "never" "--sortr" "modified" "%s"))
 
   ; Sections in sidebar
 
