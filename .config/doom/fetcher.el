@@ -460,12 +460,28 @@
                  (org-set-property "updated-at" (assoc-default 'timestamp (aref (assoc-default 'revisions data) 0)))
                  (my/fetched-at))))))
 
+(defun my/visit-archlinux-wiki () (interactive) (my/visit-url "wiki.archlinux.org"))
+(defvar my/archlinux-wiki-re "*.?https://wiki.archlinux.org/title/\\([a-zA-Z0-9-_@.%]*\\).*")
+
+(defun my/fetch-archlinux-wiki-stats ()
+  "Fetch Arch Wiki REST API and add the returned values in a PROPERTIES drawer"
+  (interactive)
+  (seq-let (page) (my/parse-url my/archlinux-wiki-re)
+    (my/fetch (concat "https://wiki.archlinux.org/rest.php/v1/page/" page "/history")
+              (cl-function
+               (lambda (&key data &allow-other-keys)
+                 (setq org-property-format "%-12s %s")
+                 (my/empty-property-drawer)
+                 (org-set-property "updated-at" (assoc-default 'timestamp (aref (assoc-default 'revisions data) 0)))
+                 (my/fetched-at))))))
+
 (defun my/fetch-stats ()
   "Fetch current website REST API and add the returned values in a PROPERTIES drawer"
   (interactive)
   (let ((line-content (my/get-current-line-content)))
     (cond
       ((string-match-p my/archlinux-re line-content) (my/fetch-archlinux-stats))
+      ((string-match-p my/archlinux-wiki-re line-content) (my/fetch-archlinux-wiki-stats))
       ((string-match-p my/askubuntu-re line-content) (my/fetch-askubuntu-stats))
       ((string-match-p my/aur-re line-content) (my/fetch-aur-stats))
       ((string-match-p my/bundlephobia-re line-content) (my/fetch-bundlephobia-stats))
