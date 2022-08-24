@@ -11,7 +11,4 @@ if type -q starship
 	starship init fish | source
 end
 
-bind --erase \cf
-bind \ct __fzf_search_current_dir
-
 direnv hook fish | source
