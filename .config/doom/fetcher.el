@@ -475,6 +475,26 @@
                  (org-set-property "updated-at" (assoc-default 'timestamp (aref (assoc-default 'revisions data) 0)))
                  (my/fetched-at))))))
 
+(defun my/visit-hacker-news () (interactive) (my/visit-url "news.ycombinator.com"))
+(defvar my/hacker-news-re ".*?https://news.ycombinator.com/item\\?id=\\([a-zA-Z0-9-_]*\\).*")
+
+(defun my/fetch-hacker-news-stats ()
+  "Fetch Hacker News REST API and add the returned values in a PROPERTIES drawer"
+  (interactive)
+  (seq-let (item) (my/parse-url my/hacker-news-re)
+    (my/fetch (concat "https://hacker-news.firebaseio.com/v0/item/" item ".json")
+              (cl-function
+               (lambda (&key data &allow-other-keys)
+                 (setq org-property-format "%-12s %s")
+                 (my/empty-property-drawer)
+                 (org-set-property "title" (or (assoc-default 'title data) "null"))
+                 (org-set-property "url" (or (assoc-default 'url data) "null"))
+                 (my/org-set-prop "author" 'by data)
+                 (my/org-set-number-prop "score" 'score data)
+                 (my/org-set-number-prop "posts" 'descendants data)
+                 (org-set-property "created-at" (format-time-string "%Y-%m-%dT%TZ%z" (assoc-default 'time data)))
+                 (my/fetched-at))))))
+
 (defun my/fetch-stats ()
   "Fetch current website REST API and add the returned values in a PROPERTIES drawer"
   (interactive)
@@ -487,6 +507,7 @@
       ((string-match-p my/bundlephobia-re line-content) (my/fetch-bundlephobia-stats))
       ((string-match-p my/docker-hub-re line-content) (my/fetch-docker-hub))
       ((string-match-p my/docker-hub-official-re line-content) (my/fetch-docker-official-hub))
+      ((string-match-p my/hacker-news-re line-content) (my/fetch-hacker-news-stats))
       ((string-match-p my/github-issues-re line-content) (my/fetch-github-issues-stats))
       ((string-match-p my/github-pull-re line-content) (my/fetch-github-pull-stats))
       ((string-match-p my/github-re line-content) (my/fetch-github-stats))
