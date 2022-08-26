@@ -31,6 +31,10 @@
   (org-set-property "fetched-at" (format-time-string "%Y-%m-%dT%TZ%z"))
   (setq org-property-format "%-10s %s"))
 
+(defun my/upgraded-at ()
+  (interactive)
+  (org-set-property "upgraded-at" (format-time-string "%Y-%m-%dT%TZ%z")))
+
 (defun my/get-current-line-content ()
   (buffer-substring-no-properties (line-beginning-position) (line-end-position)))
 
