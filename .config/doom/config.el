@@ -83,6 +83,8 @@
       :n "b s" #'save-buffer)
 (map! :leader
       :desc "Find roam" "r" #'org-roam-node-find)
+(map! :leader
+      :desc "Fetch stats" "j" #'my/fetch-stats)
 
 ;; Example of obsolete variable: org-roam-current-node
 ;; Example of obsolete function: org-roam-setup
@@ -395,7 +397,7 @@
   :type 'number
   :group 'org)
 
-(defcustom org+-dateprop-properties '("created-at" "updated-at" "last-commit-at" "fetched-at" "asked-at" "built-at" "closed-at" "merged-at")
+(defcustom org+-dateprop-properties '("created-at" "updated-at" "last-commit-at" "fetched-at" "asked-at" "built-at" "closed-at" "merged-at" "contributed-at")
   "Names of properties with dates."
   :type 'org+-dateprop-properties-widget
   :group 'org)
