@@ -1,5 +1,4 @@
 {
-  "diffEditor.ignoreTrimWhitespace": false,
   "files.exclude": {
     "**/.classpath": true,
     "**/.project": true,
@@ -9,12 +8,12 @@
   "editor.cursorStyle": "block",
   "editor.cursorSurroundingLines": 10,
   "editor.fontSize": 12,
-  "editor.minimap.enabled": false,
   "editor.quickSuggestions": {
     "other": true,
     "comments": true,
     "strings": true
   },
+  "editor.minimap.enabled": false,
   "editor.renderLineHighlight": "all",
   "editor.renderWhitespace": "all",
   "editor.suggestSelection": "first",
@@ -25,10 +24,16 @@
   "editor.guides.bracketPairs": "active",
   "explorer.confirmDragAndDrop": false,
   "explorer.confirmDelete": false,
+  "explorer.fileNesting.enabled": true,
   "problems.showCurrentInStatus": true,
   "references.preferredLocation": "view",
-  "terminal.integrated.fontFamily": "iosevka",
-  "terminal.integrated.fontSize": 12,
+  "search.exclude": {
+    ".yarn": true,
+    "yarn.lock": true
+  },
+  "search.mode": "reuseEditor",
+  "terminal.integrated.fontFamily": "iosevka term",
+  "terminal.integrated.fontSize": 13,
   "terminal.integrated.scrollback": 10000,
   "update.mode": "none",
   "window.menuBarVisibility": "toggle",
@@ -38,23 +43,38 @@
   "workbench.experimental.sidePanel.enabled": true,
   // languages
   "debug.javascript.autoAttachFilter": "disabled",
+  /// js
+  "javascript.referencesCodeLens.enabled": true,
+  "javascript.referencesCodeLens.showOnAllFunctions": true,
   "javascript.updateImportsOnFileMove.enabled": "always",
+  /// ts
   "typescript.implementationsCodeLens.enabled": true,
   "typescript.referencesCodeLens.enabled": true,
+  "typescript.referencesCodeLens.showOnAllFunctions": true,
   "typescript.updateImportsOnFileMove.enabled": "always",
+  /// py
   "python.analysis.typeCheckingMode": "strict",
   // extensions
   "atlascode.bitbucket.enabled": true,
   "atlascode.bitbucket.explorer.relatedJiraIssues.enabled": true,
   "atlascode.bitbucket.pipelines.explorerEnabled": true,
+  "atlascode.jira.enabled": false,
   "azureFunctions.showProjectWarning": false,
+  "cosmosDB.showSavePrompt": false,
   "docker.containers.groupBy": "State",
   "docker.containers.description": ["ContainerName", "State", "Status"],
   "eslint.alwaysShowStatus": true,
   "eslint.debug": true,
+  "gitlens.blame.ignoreWhitespace": true,
   "gitlens.codeLens.enabled": false,
   "gitlens.sortBranchesBy": "date:desc",
   "gitlens.views.remotes.branches.layout": "list",
+  /*
+  "jest.autoRun": {
+    "watch": false,
+    "onSave": "test-src-file"
+  },
+  */
   "terraform.codelens.referenceCount": true,
   // format
   "prettier.semi": false,
@@ -71,6 +91,10 @@
     {
       "fileMatch": ["angular.json"],
       "url": "https://raw.githubusercontent.com/angular/angular-cli/master/packages/angular/cli/lib/config/workspace-schema.json"
+    },
+    {
+      "fileMatch": ["cypress.json", "cypress-config-dev.json"],
+      "url": "https://raw.githubusercontent.com/cypress-io/cypress/v9.5.3/cli/schema/cypress.schema.json"
     }
   ],
   // point to this specific version fixing the "condition" keys
