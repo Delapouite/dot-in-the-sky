@@ -74,6 +74,9 @@ staged = '+$count'
 untracked= '?$count'
 style = "blue"
 
+[package]
+display_private = true
+
 [battery]
 disabled = true
 
