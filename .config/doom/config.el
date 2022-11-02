@@ -191,6 +191,9 @@
     :group 'org-faces)
   (org-link-set-parameters "id" :face 'org-link-id)
   (org-link-set-parameters "file" :face 'org-link-file)
+  (org-link-set-parameters "env" :face 'org-formula)
+  (org-link-set-parameters "flag" :face 'org-formula)
+  (org-link-set-parameters "header" :face 'org-formula)
 
   ; override to store more stuffs in the properties column for https links
 
