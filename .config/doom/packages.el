@@ -48,9 +48,7 @@
 ;(unpin! pinned-package another-pinned-package)
 ;; ...Or *all* packages (NOT RECOMMENDED; will likely break things)
 ;(unpin! t)
-;
-(package! websocket)
-(package! org-roam-ui :recipe (:host github :repo "org-roam/org-roam-ui" :files ("*.el" "out")))
+
 (package! org-download)
 (package! vulpea)
 (package! fish-mode)
