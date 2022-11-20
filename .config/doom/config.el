@@ -123,7 +123,12 @@
   (doom-modeline-def-segment buffer-mtime
     "Define buffer-mtime modeline segment"
     (let ((mtime (get-buffer-file-mtime)))
-      (propertize mtime 'face (if (or (string-prefix-p " 2021" mtime) (string-prefix-p " 2022-01" mtime)) 'compilation-error 'mode-line))))
+      (propertize mtime 'face (if (or
+                                   (string-prefix-p " 2021" mtime)
+                                   (string-prefix-p " 2022-01" mtime)
+                                   (string-prefix-p " 2022-02" mtime)
+                                   (string-prefix-p " 2022-03" mtime))
+                                  'compilation-error 'mode-line))))
 
   (doom-modeline-def-modeline 'delapouite
     '(bar window-number modals matches buffer-info-simple buffer-mtime buffer-position word-count parrot selection-info)
@@ -291,21 +296,6 @@
                           :and (= type "id")]
                          (org-roam-node-id node)))))
       (format "[%d]" count))))
-
-(use-package! websocket
-    :after org-roam)
-
-(use-package! org-roam-ui
-    :after org-roam ;; or :after org
-;;         normally we'd recommend hooking orui after org-roam, but since org-roam does not have
-;;         a hookable mode anymore, you're advised to pick something yourself
-;;         if you don't care about startup time, use
-;;  :hook (after-init . org-roam-ui-mode)
-    :config
-    (setq org-roam-ui-sync-theme t
-          org-roam-ui-follow t
-          org-roam-ui-update-on-save t
-          org-roam-ui-open-on-start t))
 
 (setq company-selection-wrap-around t)
 (setq completion-ignore-case t)
