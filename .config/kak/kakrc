@@ -156,8 +156,9 @@ hook global NormalIdle .* %{
 }
 
 hook global WinCreate .* %{
-  add-highlighter window/ number-lines -relative -hlcursor
+  add-highlighter window/ number-lines -hlcursor
   add-highlighter window/ show-whitespaces
+  add-highlighter window/trailing-whitespaces regex '\h+$' 0:Error
   add-highlighter window/ dynregex '%opt{curword}' 0:+ub
   add-highlighter window/ show-matching
   add-highlighter window/ ranges show_matching_range
