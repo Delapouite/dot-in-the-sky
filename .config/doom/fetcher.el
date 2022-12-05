@@ -24,11 +24,15 @@
 (defun my/org-set-number-prop (prop key alist)
   (org-set-property prop (number-to-string (assoc-default key alist))))
 
+(defun my/org-set-boolean-prop (prop key alist)
+  (unless (eq :json-false (assoc-default key alist))
+    (org-set-property prop "true")))
+
 (defun my/fetch (url success)
   '(message (concat "fetching " url))
   (request url :parser 'json-read :success success :error
     (cl-function (lambda (&rest args &key error-thrown &allow-other-keys)
-                   (message "Got error: %S" error-thrown)))))
+                   (message "Got error: %s %S" url error-thrown)))))
 
 (defun my/fetched-at ()
   (org-set-property "fetched-at" (format-time-string "%Y-%m-%dT%TZ%z"))
@@ -88,6 +92,7 @@
                  (my/org-set-number-prop "stars" 'stargazers_count data)
                  (my/org-set-number-prop "open-issues" 'open_issues data)
                  (org-set-property "language" (or (assoc-default 'language data) "null"))
+                 (my/org-set-boolean-prop "archived" 'archived data)
                  (my/org-set-prop "created-at" 'created_at data)
                  (my/org-set-prop "updated-at" 'updated_at data)
                  (my/fetch (concat "https://api.github.com/repos/" org  "/" name "/commits")
@@ -104,7 +109,26 @@
                                                      (cl-function
                                                       (lambda (&key data &allow-other-keys)
                                                         (when (> (length data) 0)
-                                                          (org-set-property "contributed-at" (assoc-default 'date (assoc-default 'author (assoc-default 'commit (aref data 0))))))
+                                                          (org-set-property "contributed-at" (assoc-default 'date (assoc-default 'author (assoc-default 'commit (aref data 0)))))
+                                                          (org-set-property "contributions" (concat "https://github.com/" org "/" name "/commits?author=Delapouite")))
+                                                        (request (concat "https://api.github.com/user/starred/" org "/" name)
+                                                          :sync t
+                                                          :headers `(("Authorization" . ,(concat "Bearer " my/github-api-key)))
+                                                          :error (cl-function (lambda (&rest args &key error-thrown &allow-other-keys)
+                                                                                (message "Got error: %S" error-thrown)))
+                                                          :complete (cl-function
+                                                                     (lambda (&key response &allow-other-keys)
+                                                                       (when (= 204 (request-response-status-code response))
+                                                                         (org-set-property "starred" "true")))))
+                                                        (request (concat "https://api.github.com/user/subscriptions/" org "/" name)
+                                                          :sync t
+                                                          :headers `(("Authorization" . ,(concat "Bearer " my/github-api-key)))
+                                                          :error (cl-function (lambda (&rest args &key error-thrown &allow-other-keys)
+                                                                                (message "Got error: %S" error-thrown)))
+                                                          :complete (cl-function
+                                                                     (lambda (&key response &allow-other-keys)
+                                                                       (when (= 204 (request-response-status-code response))
+                                                                         (org-set-property "subscribed" "true")))))
                                                         (my/fetched-at)))))))))))))))
 
 (defun my/visit-github-issues () (interactive) (my/visit-url "github.com issues"))
@@ -315,11 +339,15 @@
                               (lambda (&key data &allow-other-keys)
                                 (my/org-set-number-prop "dependents" 'dependents_count data)
                                 (my/org-set-number-prop "source-rank" 'rank data)
-                                (my/fetch (concat "https://api.npmjs.org/downloads/point/last-month/" npm-id)
+                                (my/fetch (concat "https://packagephobia.com/api.json?p=" npm-id)
                                           (cl-function
                                            (lambda (&key data &allow-other-keys)
-                                             (my/org-set-number-prop "downloads" 'downloads data)
-                                             (my/fetched-at)))))))))))))
+                                             (my/org-set-number-prop "install-size" 'installSize data)
+                                             (my/fetch (concat "https://api.npmjs.org/downloads/point/last-month/" npm-id)
+                                                       (cl-function
+                                                        (lambda (&key data &allow-other-keys)
+                                                          (my/org-set-number-prop "downloads" 'downloads data)
+                                                          (my/fetched-at))))))))))))))))
 
 (defun my/visit-musicbrainz () (interactive) (my/visit-url "musicbrainz.org"))
 (defvar my/musicbrainz-re ".*?https://musicbrainz.org/artist/\\([a-zA-Z0-9-_]*\\).*")
