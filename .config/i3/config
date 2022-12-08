@@ -20,6 +20,10 @@ bindsym $mod+Shift+space focus mode_toggle
 
 bindsym $mod+Return exec kitty
 bindsym $mod+BackSpace exec kitty -d $(xcwd)
+bindsym $mod+backslash resize set width 30 ppt
+bindsym $mod+F1 exec kitty --name=scratchpad
+for_window [instance="scratchpad"] move scratchpad; scratchpad show
+for_window [instance="floating-term"] floating enable, resize set 640 480, move position center
 
 bindsym $mod+Escape kill
 
