@@ -1,4 +1,5 @@
 ;;; $DOOMDIR/config.el -*- lexical-binding: t; -*-
+;;; https://github.com/doomemacs/doomemacs/blob/master/templates/config.example.el
 
 ;; Place your private configuration here! Remember, you do not need to run 'doom
 ;; sync' after modifying this file!
@@ -7,22 +8,29 @@
 (load! "fetcher.el")
 
 ;; Some functionality uses this to identify you, e.g. GPG configuration, email
-;; clients, file templates and snippets.
+;; clients, file templates and snippets. It is optional.
 (setq user-full-name "Delapouite"
       user-mail-address "delapouite@gmail.com")
 
-;; Doom exposes five (optional) variables for controlling fonts in Doom. Here
-;; are the three important ones:
+;; Doom exposes five (optional) variables for controlling fonts in Doom:
 ;;
-;; + `doom-font'
-;; + `doom-variable-pitch-font'
-;; + `doom-big-font' -- used for `doom-big-font-mode'; use this for
+;; - `doom-font' -- the primary font to use
+;; - `doom-variable-pitch-font' -- a non-monospace font (where applicable)
+;; - `doom-big-font' -- used for `doom-big-font-mode'; use this for
 ;;   presentations or streaming.
+;; - `doom-unicode-font' -- for unicode glyphs
+;; - `doom-serif-font' -- for the `fixed-pitch-serif' face
 ;;
-;; They all accept either a font-spec, font string ("Input Mono-12"), or xlfd
-;; font string. You generally only need these two:
-;; (setq doom-font (font-spec :family "monospace" :size 12 :weight 'semi-light)
-;;       doom-variable-pitch-font (font-spec :family "sans" :size 13))
+;; See 'C-h v doom-font' for documentation and more examples of what they
+;; accept. For example:
+;;
+;;(setq doom-font (font-spec :family "Fira Code" :size 12 :weight 'semi-light)
+;;      doom-variable-pitch-font (font-spec :family "Fira Sans" :size 13))
+;;
+;; If you or Emacs can't find your font, use 'M-x describe-font' to look them
+;; up, `M-x eval-region' to execute elisp code, and 'M-x doom/reload-font' to
+;; refresh your font settings. If Emacs still can't find your font, it likely
+;; wasn't installed correctly. Font issues are rarely Doom issues!
 (setq doom-font (font-spec :family "iosevka" :size 12))
 
 ;; There are two ways to load a theme. Both assume the theme is installed and
@@ -57,7 +65,20 @@
 (setq display-line-numbers-type nil)
 (setq scroll-margin 10)
 
-;; Here are some additional functions/macros that could help you configure Doom:
+;; Whenever you reconfigure a package, make sure to wrap your config in an
+;; `after!' block, otherwise Doom's defaults may override your settings. E.g.
+;;
+;;   (after! PACKAGE
+;;     (setq x y))
+;;
+;; The exceptions to this rule:
+;;
+;;   - Setting file/directory variables (like `org-directory')
+;;   - Setting variables which explicitly tell you to set them before their
+;;     package is loaded (see 'C-h v VARIABLE' to look up their documentation).
+;;   - Setting doom variables (which start with 'doom-' or '+').
+;;
+;; Here are some additional functions/macros that will help you configure Doom.
 ;;
 ;; - `load!' for loading external *.el files relative to this one
 ;; - `use-package!' for configuring packages
@@ -70,6 +91,8 @@
 ;; To get information about any of these functions/macros, move the cursor over
 ;; the highlighted symbol at press 'K' (non-evil users must press 'C-c c k').
 ;; This will open documentation for it, including demos of how they are used.
+;; Alternatively, use `C-h o' to look up a symbol (functions, variables, faces,
+;; etc).
 ;;
 ;; You can also try 'gd' (or 'C-c c d') to jump to their definition and see how
 ;; they are implemented.
@@ -85,31 +108,6 @@
       :desc "Find roam" "r" #'org-roam-node-find)
 (map! :leader
       :desc "Fetch stats" "j" #'my/fetch-stats)
-
-;; Example of obsolete variable: org-roam-current-node
-;; Example of obsolete function: org-roam-setup
-(defun obsoletep (symbol)
-  "Return non nil if SYMBOL is obsolete"
-  (or (plist-member (symbol-plist symbol) 'byte-obsolete-info)
-      (plist-member (symbol-plist symbol) 'byte-obsolete-variable)))
-
-(use-package! counsel
-  :config
-  (setq counsel-rg-base-command '("rg" "--max-columns" "240" "--with-filename" "--no-heading" "--line-number" "--color" "never" "--sortr" "modified" "%s"))
-
-  (defun my/counsel-describe-function-transformer (function-name)
-    "Propertize FUNCTION-NAME if it's an interactive function or an obsolete function."
-    (cond ((commandp (intern function-name)) (ivy-append-face function-name 'ivy-highlight-face))
-          ((obsoletep (intern function-name)) (ivy-append-face function-name 'font-lock-comment-face))
-          (t function-name)))
-  (advice-add 'counsel-describe-function-transformer :override #'my/counsel-describe-function-transformer)
-
-  (defun my/counsel-describe-variable-transformer (var)
-    "Propertize VAR if it's a custom variable or an obsolete variable."
-    (cond ((custom-variable-p (intern var))  (ivy-append-face var 'ivy-highlight-face))
-          ((obsoletep (intern var)) (ivy-append-face var 'font-lock-comment-face))
-          (t var)))
-  (advice-add 'counsel-describe-variable-transformer :override #'my/counsel-describe-variable-transformer))
 
 (use-package! doom-modeline
   :config
