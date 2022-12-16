@@ -92,6 +92,7 @@ bindsym $mod+Shift+8 move container to workspace 8
 bindsym $mod+Shift+9 move container to workspace 9
 bindsym $mod+Shift+0 move container to workspace 10
 
+# hover window title
 bindsym $mod+button2 kill
 
 # modes
@@ -104,16 +105,15 @@ mode $openmode {
   bindsym e exec emacs ; mode "default"
   bindsym f exec firefox ; mode "default"
   bindsym g exec gimp ; mode "default"
-  bindsym k exec kitty -e "kak" ; mode "default"
+  bindsym k exec kitty kak ; mode "default"
   bindsym i exec inkscape ; mode "default"
-  bindsym l exec kitty -e "lf" ; mode "default"
-  bindsym m exec kitty -e "ncmpcpp" ; mode "default"
-  bindsym n exec kitty -e "node" ; mode "default"
-  bindsym o exec rofi -show run ; mode "default"
+  bindsym l exec kitty lf ; mode "default"
+  bindsym m exec kitty ncmpcpp  ; mode "default"
+  bindsym n exec kitty node ; mode "default"
+  bindsym o exec kitty --class floating-term ~/bin/fzf-rofi.sh ; mode "default"
   bindsym s exec flameshot gui ; mode "default"
   bindsym u exec chromium ; mode "default"
-  bindsym v exec kitty -e "nvim"; mode "default"
-  bindsym w exec rofi-vscode-workspaces ; mode "default"
+  bindsym v exec kitty nvim ; mode "default"
 
   bindsym Return mode "default"
   bindsym Escape mode "default"
@@ -129,7 +129,7 @@ mode $firefoxmode {
   bindsym l exec (i3-msg [class="Firefox" title="Lobsters"] focus | grep true) || firefox https://lobste.rs; mode "default"
   bindsym m exec (i3-msg [class="Firefox" title="Inbox"] focus | grep true) || firefox https://gmail.com ; mode "default"
   bindsym r exec (i3-msg [class="Firefox" title="reddit"] focus | grep true) || firefox https://reddit.com ; mode "default"
-  
+
   bindsym Return mode "default"
   bindsym Escape mode "default"
 }
@@ -165,7 +165,7 @@ bindsym $mod+Delete mode $i3mode
 
 mode $i3mode {
   bindsym a restart
-  bindsym c exec termite -e "kak ~/.config/i3/config" ; mode "default"
+  bindsym c exec kitty 'kak' '~/.config/i3/config' ; mode "default"
   bindsym e exit
   bindsym r reload
 
