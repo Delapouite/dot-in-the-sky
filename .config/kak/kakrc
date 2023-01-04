@@ -49,9 +49,8 @@ map global normal <c-k> '<a-C>'                               -docstring 'copy s
 map global normal <c-l> ']p;'                                 -docstring 'next paragraph'
 map global normal <c-h> '[p;'                                 -docstring 'previous paragraph'
 
-map global normal <space> ,                                   -docstring 'leader'
-map global normal <backspace> <space>                         -docstring 'remove all selections except main'
-map global normal <a-backspace> <a-space>                     -docstring 'remove main sel'
+map global normal <backspace> ,                               -docstring 'remove all selections except main'
+map global normal <a-backspace> <a-,>                         -docstring 'remove main sel'
 
 map global normal . ':'                                       -docstring 'enter command prompt'
 map global normal : '.'                                       -docstring 'repeat last insert'
@@ -249,7 +248,7 @@ plug 'delapouite/kakoune-text-objects' %{
 
 plug 'delapouite/kakoune-user-modes' %{
   alias global u enter-user-mode
-  map global normal , ': enter-user-mode anchor<ret>'   -docstring 'anchor mode'
+  map global normal <semicolon> ': enter-user-mode anchor<ret>'   -docstring 'anchor mode'
   map global user s ': enter-user-mode echo<ret>'       -docstring 'echo mode'
   map global user / ': enter-user-mode search<ret>'     -docstring 'search mode'
   map global user l ': enter-user-mode lint<ret>'       -docstring 'lint mode'
