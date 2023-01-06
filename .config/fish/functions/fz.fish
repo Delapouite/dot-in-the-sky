@@ -1,9 +1,11 @@
 function fz --description 'entry point for all the fuzziness glory'
 	set --local commands \
+		bins \
 		files \
 		git-log \
 		git-status \
 		pacman \
+		podman-pods \
 		processes \
 		shell-functions \
 		shell-history \
@@ -14,6 +16,10 @@ function fz --description 'entry point for all the fuzziness glory'
 
 	# commands starting with _fzf are from https://github.com/PatrickF1/fzf.fish
 	switch $argv[1]
+
+	case bins
+		set --local bin (complete -C '' | awk '{print $1}' | fzf --prompt $prompt)
+		i3-msg -q "exec --no-startup-id $bin"
 
 	case files
 		_fzf_search_directory
@@ -29,6 +35,9 @@ function fz --description 'entry point for all the fuzziness glory'
 			--prompt $prompt \
 			--preview 'pacman --query --info --list {}' \
 			--bind 'enter:execute(pacman --query --info --list {} | bat)'
+
+	case podman-pods
+		podman pod ls | fzf
 
 	case processes
 		_fzf_search_processes
@@ -53,11 +62,10 @@ function fz --description 'entry point for all the fuzziness glory'
 
 	# by default let the user discover and choose the input source
 	case '*'
-	set --local selected_command (for command in $commands
-		echo $command	
-	end | fzf --prompt 'fz ❯ ' --tac)
-
-	fz $selected_command
+		set --local selected_command (for command in $commands
+			echo $command
+		end | fzf --prompt 'fz ❯ ' --tac)
+		fz $selected_command
 
 	end
 end
