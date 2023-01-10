@@ -4,13 +4,15 @@ function fz --description 'entry point for all the fuzziness glory'
 		files \
 		git-log \
 		git-status \
+		i3-windows \
 		pacman \
 		podman-pods \
 		processes \
 		shell-functions \
 		shell-history \
 		ssh-keys \
-		systemd
+		systemd \
+		vscode-workspaces
 
 	set --local prompt "$argv[1] ❯ "
 
@@ -19,7 +21,7 @@ function fz --description 'entry point for all the fuzziness glory'
 
 	case bins
 		set --local bin (complete -C '' | awk '{print $1}' | fzf --prompt $prompt)
-		i3-msg -q "exec --no-startup-id $bin"
+		i3-msg --quiet "exec --no-startup-id $bin"
 
 	case files
 		_fzf_search_directory
@@ -29,6 +31,10 @@ function fz --description 'entry point for all the fuzziness glory'
 
 	case git-status
 		_fzf_search_git_status
+
+	case i3-windows
+		set --local con_id (~/bin/i3-windows.js | fzf --prompt $prompt --with-nth=2.. | awk '{print $1}')
+		i3-msg --quiet "[con_id=$con_id] focus"
 
 	case pacman
 		pacman --query --quiet | fzf \
@@ -59,6 +65,11 @@ function fz --description 'entry point for all the fuzziness glory'
 
 	case systemd
 		sysz
+
+	case vscode-workspaces
+		set --local dir "$HOME/code/workspaces/"
+		set --local workspace (fd .code-workspace "$dir" | fzf --prompt $prompt)
+		code "$workspace"
 
 	# by default let the user discover and choose the input source
 	case '*'
