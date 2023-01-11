@@ -4,30 +4,35 @@
 # Please see http://i3wm.org/docs/userguide.html for a complete reference!
 
 font pango:DejaVu Sans Mono 10
+# avoid black flash on new terminals
+exec --no-startup-id xsetroot -solid "#282a36"
 
 # use Mouse+$mod to drag floating windows
 set $mod Mod4
+
+# floating
 floating_modifier $mod
-
-floating_minimum_size 100 x 100
+floating_minimum_size 100 x 36
 floating_maximum_size -1 x -1
-
+for_window [instance="scratchpad"] move scratchpad; scratchpad show
+for_window [instance="floating-term"] floating enable, resize set 640 480, move position center
+for_window [instance="floating-bar"] floating enable, resize set 78ppt 40, move position 11ppt 0
 # toggle tiling / floating
 bindsym $mod+space floating toggle
-
 # change focus between tiling / floating windows
 bindsym $mod+Shift+space focus mode_toggle
 
-bindsym $mod+Return exec kitty
-bindsym $mod+BackSpace exec kitty -d $(xcwd)
-bindsym $mod+backslash resize set width 30 ppt
-bindsym $mod+F1 exec kitty --name=scratchpad
-for_window [instance="scratchpad"] move scratchpad; scratchpad show
-for_window [instance="floating-term"] floating enable, resize set 640 480, move position center
-
 bindsym $mod+Escape kill
+# hover window title
+bindsym $mod+button2 kill
 
-bindsym $mod+p exec rofi -show window
+bindsym $mod+Return exec kitty --single-instance
+bindsym $mod+BackSpace exec kitty --single-instance --directory $(xcwd)
+bindsym $mod+backslash resize set width 30 ppt
+bindsym $mod+F1 exec kitty --single-instance --name=scratchpad
+
+bindsym $mod+p exec kitty --single-instance --class floating-term fish -c 'fz i3-windows' ; mode default
+bindsym $mod+minus exec kitty --single-instance --class floating-bar fish -c browser-search
 
 bindsym $mod+Shift+grave move scratchpad
 bindsym $mod+grave scratchpad show
@@ -46,25 +51,36 @@ bindsym $mod+Shift+j move down
 bindsym $mod+Shift+k move up
 bindsym $mod+Shift+l move right
 
+bindsym --whole-window $mod+button9 move left
+bindsym --whole-window $mod+button8 move right
+
+# the first available screen of each list will be used
+set $laptop_screens eDP-1
+set $external_screens DP-1 HDMI-1
+
 # change focus between screens
-bindsym $mod+q focus output eDP-1
-bindsym $mod+w focus output DP-1
+bindsym $mod+q focus output $laptop_screens
+bindsym $mod+w focus output $external_screens
 
 # move focused workspace between screens
-bindsym $mod+Shift+q move workspace to output eDP-1
-bindsym $mod+Shift+w move workspace to output DP-1
+bindsym $mod+Shift+q move workspace to output $laptop_screens
+bindsym $mod+Shift+w move workspace to output $external_screens
 
-# horizontal orientation is [][][]
-bindsym $mod+s split h
-bindsym $mod+v split v
-
+# fullscreen
 bindsym $mod+f fullscreen toggle
 bindsym $mod+Shift+f fullscreen toggle global
 
 # change container layout
 bindsym $mod+z layout stacking
 bindsym $mod+x layout tabbed
-bindsym $mod+c layout toggle split
+bindsym $mod+c layout splith
+bindsym $mod+v layout splitv
+
+# horizontal orientation is [][][]
+bindsym $mod+Shift+c split h
+bindsym $mod+Shift+v split v
+
+# workspaces
 
 bindsym $mod+Tab workspace back_and_forth
 bindsym $mod+Left workspace prev
@@ -92,51 +108,32 @@ bindsym $mod+Shift+8 move container to workspace 8
 bindsym $mod+Shift+9 move container to workspace 9
 bindsym $mod+Shift+0 move container to workspace 10
 
-# hover window title
-bindsym $mod+button2 kill
-
 # modes
 
-set $openmode "open: r[o]fi chromi[u]m [f]irefox [g]imp [k]akoune [i]nkscape [l]f nc[m]pcpp [n]ode"
 bindsym $mod+o mode $openmode
-
+set $openmode "open: vs[c]ode [e]macs [f]irefox [g]imp [k]akoune [i]nkscape [l]f nc[m]pcpp [n]ode [s]creenshot"
 mode $openmode {
-  bindsym c exec code ; mode "default"
-  bindsym e exec emacs ; mode "default"
-  bindsym f exec firefox ; mode "default"
-  bindsym g exec gimp ; mode "default"
-  bindsym k exec kitty kak ; mode "default"
-  bindsym i exec inkscape ; mode "default"
-  bindsym l exec kitty lf ; mode "default"
-  bindsym m exec kitty ncmpcpp  ; mode "default"
-  bindsym n exec kitty node ; mode "default"
-  bindsym o exec kitty --class floating-term ~/bin/fzf-rofi.sh ; mode "default"
-  bindsym s exec flameshot gui ; mode "default"
-  bindsym u exec chromium ; mode "default"
-  bindsym v exec kitty nvim ; mode "default"
+  bindsym o exec kitty --single-instance --class floating-term fish -c 'fz bins' ; mode default
 
-  bindsym Return mode "default"
-  bindsym Escape mode "default"
+  bindsym c exec code ; mode default
+  bindsym e exec emacs --background-color '#282a36'; mode default
+  bindsym f exec firefox-developer-edition ; mode default
+  bindsym g exec gimp ; mode default
+  bindsym k exec kitty --single-instance kak ; mode default
+  bindsym i exec inkscape ; mode default
+  bindsym l exec kitty --single-instance lf ; mode default
+  bindsym m exec kitty --single-instance ncmpcpp ; mode default
+  bindsym n exec kitty --single-instance node ; mode default
+  bindsym s exec flameshot gui ; mode default
+  bindsym u exec chromium ; mode default
+  bindsym v exec kitty --single-instance nvim ; mode default
+
+  bindsym Return mode default
+  bindsym Escape mode default
 }
 
-set $firefoxmode "firefox: [d]evdocs [g]ithub [l]obsters g[m]ail [r]eddit"
-bindsym $mod+i mode $firefoxmode
-
-mode $firefoxmode {
-  bindsym d exec (i3-msg [class="Firefox" title="DevDocs"] focus | grep true) || firefox https://devdocs.io; mode "default"
-  bindsym g exec (i3-msg [class="Firefox" title="GitHub"] focus | grep true) || firefox https://github.com; mode "default"
-  bindsym n exec (i3-msg [class="Firefox" title="Notifications"] focus | grep true) || firefox https://github.com/notifications; mode "default"
-  bindsym l exec (i3-msg [class="Firefox" title="Lobsters"] focus | grep true) || firefox https://lobste.rs; mode "default"
-  bindsym m exec (i3-msg [class="Firefox" title="Inbox"] focus | grep true) || firefox https://gmail.com ; mode "default"
-  bindsym r exec (i3-msg [class="Firefox" title="reddit"] focus | grep true) || firefox https://reddit.com ; mode "default"
-
-  bindsym Return mode "default"
-  bindsym Escape mode "default"
-}
-
-set $musicmode "music: [hp]rev [ln]ext [t]oggle [r]andom [f]av [y]outube"
 bindsym $mod+m mode $musicmode
-
+set $musicmode "music: [hp]rev [ln]ext [t]oggle [r]andom [f]av [y]outube"
 mode $musicmode {
   bindsym h exec "mpc prev"
   bindsym p exec "mpc prev"
@@ -145,47 +142,71 @@ mode $musicmode {
   bindsym t exec "mpc toggle"
   bindsym r exec "mpc random"
   bindsym f exec mpd-fav
-  bindsym y exec mpd-youtube; mode "default"
+  bindsym y exec mpd-youtube; mode default
 
-  bindsym Return mode "default"
-  bindsym Escape mode "default"
+  bindsym Return mode default
+  bindsym Escape mode default
 }
 
-# sound
+# https://cgit.freedesktop.org/xorg/proto/x11proto/tree/XF86keysym.h
+# sound F1-F4
 bindsym XF86AudioMute exec "amixer set Master toggle"
 bindsym XF86AudioLowerVolume exec "amixer set Master 3%-"
 bindsym XF86AudioRaiseVolume exec "amixer set Master 3%+"
 bindsym XF86AudioMicMute exec "amixer set Mic toggle"
+
 bindsym XF86AudioPrev exec "mpc prev"
 bindsym XF86AudioPlay exec "mpc toggle"
 bindsym XF86AudioNext exec "mpc next"
 
-set $i3mode "i3: [c]onfig rest[a]rt [e]xit [r]eload [b]ar [l]ock"
 bindsym $mod+Delete mode $i3mode
-
+set $i3mode "i3: [c]onfig [d]oc [q]uit [l]ock [b]ar b[o]rder [g]aps [r]esize"
 mode $i3mode {
-  bindsym a restart
-  bindsym c exec kitty 'kak' '~/.config/i3/config' ; mode "default"
-  bindsym e exit
-  bindsym r reload
+  bindsym Delete reload; restart
+  bindsym c exec kitty --single-instance 'kak' '~/.config/i3/config' ; mode default
+  bindsym d exec firefox-developer-edition 'https://i3wm.org/docs/userguide.html' ; mode default
+  bindsym q exit
 
-  bindsym l --release exec slock ; mode "default"
+  bindsym l --release exec i3lock --no-unlock-indicator --image ~/images/wallpapers/bsod.png ; mode default
 
-  # bar
-  bindsym b bar mode toggle
-  bindsym i bar mode invisible; mode "default"
+  # sub-modes
+  bindsym b mode $barmode ; bar mode dock;
+  bindsym o mode $bordermode
+  bindsym g mode $gapsmode
+  bindsym r mode $resizemode
 
   # monitors
-  bindsym 1 exec mons -o ; mode "default"
-  bindsym 2 exec mons -e top ; mode "default"
+  bindsym 1 exec mons -o ; mode default
+  bindsym 2 exec mons -e top ; mode default
 
-  bindsym Return mode "default"
-  bindsym Escape mode "default"
+  bindsym Return mode default
+  bindsym Escape mode default
 }
 
-bindsym $mod+r mode "resize"
+# https://i3wm.org/docs/userguide.html#_display_mode
+set $barmode "bar: [d]ock [h]ide [i]nvisible [t]oggle"
+mode $barmode {
+  # always visible
+  bindsym d bar mode dock;
+  # appear on pressing $mod or emergency
+  bindsym h bar mode hide;
+  # always invisible
+  bindsym i bar mode invisible;
+  # toggle between dock and hide modes
+  bindsym t bar mode toggle;
 
-mode "resize" {
+  # hidden_state only works when in hide mode
+  bindsym a bar hidden_state hide;
+  bindsym s bar hidden_state show;
+  # toggle between show and hide hidden_state
+  bindsym y bar hidden_state toggle;
+
+  bindsym Return mode default
+  bindsym Escape mode default
+}
+
+set $resizemode "resize: [1-0] size [hjkl]"
+mode $resizemode {
   bindsym $mod+h focus left
   bindsym $mod+j focus down
   bindsym $mod+k focus up
@@ -226,13 +247,11 @@ mode "resize" {
   bindsym i resize set height 80 ppt
   bindsym o resize set height 90 ppt
 
-  bindsym Return mode "default"
-  bindsym Escape mode "default"
+  bindsym Return mode default
+  bindsym Escape mode default
 }
 
-set $bordermode "border: [1-0] [t]oggle"
-bindsym $mod+b mode $bordermode
-
+set $bordermode "border: [1-0] size [t]oggle"
 mode $bordermode {
   bindsym 1 border pixel 1
   bindsym 2 border pixel 2
@@ -246,56 +265,55 @@ mode $bordermode {
   bindsym 0 border pixel 10
   bindsym t border toggle
 
-  bindsym Return mode "default"
-  bindsym Escape mode "default"
+  bindsym Return mode default
+  bindsym Escape mode default
 }
 
 set $gapspx 0
+set $gapsdeltapx 10
 gaps inner $gapspx
 gaps outer $gapspx
 smart_gaps on
 
 set $gapsmode "gaps: [i]nner [o]uter"
-bindsym $mod+g mode $gapsmode
-
 mode $gapsmode {
   bindsym i mode $gapsmodeinner
   bindsym o mode $gapsmodeouter
 
-  bindsym Return mode "default"
-  bindsym Escape mode "default"
+  bindsym Return mode default
+  bindsym Escape mode default
 }
 
-set $gapsmodeinner "gaps-inner: [hl] all [jk] current [r]eset"
+set $gapsmodeinner "gaps-inner: [hl] all [jk] current [r]eset [i]nner"
 mode $gapsmodeinner {
-  bindsym h gaps inner all minus $gapspx
-  bindsym l gaps inner all plus $gapspx
+  bindsym h gaps inner all minus $gapsdeltapx
+  bindsym l gaps inner all plus $gapsdeltapx
 
-  bindsym j gaps inner current minus $gapspx
-  bindsym k gaps inner current plus $gapspx
+  bindsym j gaps inner current minus $gapsdeltapx
+  bindsym k gaps inner current plus $gapsdeltapx
 
   bindsym r gaps inner all set 0
 
   bindsym o mode $gapsmodeouter
 
-  bindsym Return mode "default"
-  bindsym Escape mode "default"
+  bindsym Return mode default
+  bindsym Escape mode default
 }
 
-set $gapsmodeouter "gaps-outer: [hl] all [jk] current [r]eset"
+set $gapsmodeouter "gaps-outer: [hl] all [jk] current [r]eset [o]uter"
 mode $gapsmodeouter {
-  bindsym h gaps outer all minus $gapspx
-  bindsym l gaps outer all plus $gapspx
+  bindsym h gaps outer all minus $gapsdeltapx
+  bindsym l gaps outer all plus $gapsdeltapx
 
-  bindsym j gaps outer current minus $gapspx
-  bindsym k gaps outer current plus $gapspx
+  bindsym j gaps outer current minus $gapsdeltapx
+  bindsym k gaps outer current plus $gapsdeltapx
 
   bindsym r gaps outer all set 0
 
   bindsym i mode $gapsmodeinner
 
-  bindsym Return mode "default"
-  bindsym Escape mode "default"
+  bindsym Return mode default
+  bindsym Escape mode default
 }
 
 # decorations
@@ -317,17 +335,18 @@ set $purple "#bd93f9"
 set $red "#ff5555"
 set $yellow "#f1fa8c"
 
-# class                 border  backgr. text    indicator child_border
-client.focused          $white  $black  $white  $pink     $cyan
-client.focused_inactive #333333 #5f676a #ffffff $pink     #5f676a
-client.unfocused        #333333 #222222 #888888 $pink     #222222
-client.urgent           #2f343a #900000 #ffffff $pink     #900000
-client.placeholder      #000000 #0c0c0c #ffffff $pink     #0c0c0c
+# class                 border  bg      text    indicator child_border
+client.focused          $cyan   $blue   $white  $pink     $cyan
+client.focused_inactive $gray   $black  $gray   $pink     $void
+client.unfocused        $gray   $black  $blue   $pink     $void
+# sleep 3; echo -e '\a'
+client.urgent           $red    $red    $white  $pink     $red
+client.placeholder      $void   $black  $white  $void     $black
 client.background       $black
 
 # Start i3bar to display a workspace bar (plus i3status info)
 bar {
-  status_command py3status
+  status_command i3status-rs
   mode invisible
   position top
   tray_output none
@@ -336,12 +355,13 @@ bar {
   colors {
     background $black
     statusline $white
-    separator $grey
+    separator  $gray
 
-    focused_workspace  $white $cyan $black
-    active_workspace   $black $black $white
-    inactive_workspace #333333 #222222 #888888
-    urgent_workspace   #2f343a #900000 #ffffff
-    binding_mode       $black $pink $black
+    #                  border  bg      text
+    focused_workspace  $white  $cyan   $black
+    active_workspace   $white  $black  $white
+    inactive_workspace $gray   $black  $white
+    urgent_workspace   $white  $red    $white
+    binding_mode       $black  $pink   $black
   }
 }
