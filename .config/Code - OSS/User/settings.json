@@ -111,6 +111,7 @@
   "nxConsole.enableTelemetry": false,
   "partialDiff.enableTelemetry": false,
   "redhat.telemetry.enabled": false,
+  "stylelint.validate": ["css", "scss"],
   "dance.modes": {
     "normal": {
       "lineNumbers": "relative",
