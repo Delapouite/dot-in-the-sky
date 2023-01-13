@@ -1,4 +1,4 @@
-# https://fishshell.com/docs/current/interactive.html
+# https://fishshell.com/docs/current/interactive.html#syntax-highlighting
 # Use 'fish_config theme save Delacula' to apply this theme
 # name: 'Delacula'
 # preferred_background: 282A36
@@ -28,7 +28,7 @@ fish_color_error FF5555 #red
 fish_color_param FF79C6 #pink
 
 # options starting with “-”, up to the first “--” parameter
-fish_color_option FF79C6 #pink
+fish_color_option FFB86C #orange
 
 # parameter expansion operators like * and ~
 fish_color_operator 8BE9FD #cyan
