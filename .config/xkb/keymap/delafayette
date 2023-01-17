@@ -101,10 +101,12 @@ xkb_keymap {
     key <SPCE> {[ space           , space           , VoidSymbol      , VoidSymbol      ],[ Escape          , nobreakspace    ]};
 
     // Arrows - AltGr + Arrow is hard to type :(
-    key <LEFT> {symbols[1] = [ NoSymbol, Home     , U25C0,    U25C1], [ Home      ]};
-    key <DOWN> {symbols[1] = [ NoSymbol, Page_Down, U25BC,    U25BD], [ Page_Down ]};
-    key <UP>   {symbols[1] = [ NoSymbol, Page_Up  , U25B2,    U25B3], [ Page_Up   ]};
-    key <RGHT> {symbols[1] = [ NoSymbol, End      , U25B6,    U25B7], [ End       ]};
+    key <LEFT> {[ NoSymbol        , Home            , U25C0           , U25C1           ],[ Home      ]};
+    key <DOWN> {[ NoSymbol        , Page_Down       , U25BC           , U25BD           ],[ Page_Down ]};
+    key <UP>   {[ NoSymbol        , Page_Up         , U25B2           , U25B3           ],[ Page_Up   ]};
+    key <RGHT> {[ NoSymbol        , End             , U25B6           , U25B7           ],[ End       ]};
+    key <PGUP> {[ NoSymbol        , Home            , Home            , Home            ],[ Home      ]};
+    key <PGDN> {[ NoSymbol        , End             , End             , End             ],[ End       ]};
 
     // AltGr
     // Note: the `ISO_Level5_Latch` here is meaningless but helps with Chromium (no idea why)
