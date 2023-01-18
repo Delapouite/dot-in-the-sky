@@ -14,7 +14,7 @@ set $mod Mod4
 floating_modifier $mod
 floating_minimum_size 100 x 36
 floating_maximum_size -1 x -1
-for_window [instance="scratchpad"] move scratchpad; scratchpad show
+for_window [instance="scratchpad"] move scratchpad ; scratchpad show
 for_window [instance="floating-term"] floating enable, resize set 640 480, move position center
 for_window [instance="floating-bar"] floating enable, resize set 78ppt 40, move position 11ppt 0
 # toggle tiling / floating
@@ -26,10 +26,15 @@ bindsym $mod+Escape kill
 # hover window title
 bindsym $mod+button2 kill
 
+# mirror Kitty keybindings
+bindsym $mod+F1 exec firefox-developer-edition 'https://i3wm.org/docs/userguide.html'
+bindsym $mod+F2 exec kitty --single-instance 'kak' '~/.config/i3/config'
+bindsym $mod+F5 reload
+
 bindsym $mod+Return exec kitty --single-instance
 bindsym $mod+BackSpace exec kitty --single-instance --directory $(xcwd)
 bindsym $mod+backslash resize set width 30 ppt
-bindsym $mod+F1 exec kitty --single-instance --name=scratchpad
+bindsym $mod+s exec kitty --single-instance --name=scratchpad
 
 bindsym $mod+p exec kitty --single-instance --class floating-term fish -c 'fz i3-windows' ; mode default
 bindsym $mod+minus exec kitty --single-instance --class floating-bar fish -c browser-search
@@ -163,7 +168,9 @@ bindsym $mod+Delete mode $i3mode
 set $i3mode "i3: [c]onfig [d]oc [q]uit [l]ock [b]ar b[o]rder [g]aps [r]esize"
 mode $i3mode {
   bindsym Delete reload; restart
+  # also $mod+F2
   bindsym c exec kitty --single-instance 'kak' '~/.config/i3/config' ; mode default
+  # also $mod+F1
   bindsym d exec firefox-developer-edition 'https://i3wm.org/docs/userguide.html' ; mode default
   bindsym q exit
 
