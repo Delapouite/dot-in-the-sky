@@ -2,12 +2,13 @@ function browser-search --description 'browser search with various engines'
 	set --function engine "$argv[1]"
 	set --function query "$argv[1..-1]"
 
-	set --function browser firefox-developer-edition
+	set --function browser xdg-open
 	set --function engines \
 		arch \
 		arch-wiki \
 		bitbucket \
 		bugzilla \
+		devdocs \
 		duckduckgo \
 		gitlab \
 		github \
@@ -54,6 +55,9 @@ function browser-search --description 'browser search with various engines'
 
 	case bugzilla
 		$browser "https://bugzilla.mozilla.org/buglist.cgi?quicksearch=$query"
+
+	case devdocs
+		$browser "https://devdocs.io/?q=$query"
 
 	case duckduckgo ddg
 		$browser "https://duckduckgo.com/?q=$query"
