@@ -1,3 +1,3 @@
 function ll --description 'verbose ls'
-	exa --long --git --links --classify $argv
+	exa --long --git --links --classify --octal-permissions $argv
 end
