@@ -5,6 +5,7 @@ function fz --description 'entry point for all the fuzziness glory'
 		git-log \
 		git-status \
 		i3-windows \
+		linux-kernel-modules \
 		npm-scripts \
 		pacman \
 		podman-pods \
@@ -36,6 +37,12 @@ function fz --description 'entry point for all the fuzziness glory'
 	case i3-windows
 		set --local con_id (~/bin/i3-windows.js | fzf --prompt $prompt --with-nth=2.. | awk '{print $1}')
 		i3-msg --quiet "[con_id=$con_id] focus"
+
+	case linux-kernel-modules
+		lsmod | tail --lines +2 | fzf \
+			--prompt $prompt \
+			--preview 'modinfo {1}' \
+			--bind 'enter:execute(modinfo {1})'
 
 	case npm-scripts
 		set --local script (jq -r '.scripts | to_entries | .[] | "\(.key) \(.value)"' package.json | fzf --prompt $prompt | awk '{print $1}')
