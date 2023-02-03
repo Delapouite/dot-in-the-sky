@@ -498,7 +498,7 @@
                                    (my/fetched-at)))))))))))
 
 (defun my/visit-wikipedia () (interactive) (my/visit-url "wikipedia.org"))
-(defvar my/wikipedia-re "*.?https://\\(.*?\\).wikipedia.org/wiki/\\([a-zA-Z0-9-_@.%]*\\).*")
+(defvar my/wikipedia-re "*.?https://\\(.*?\\).wikipedia.org/wiki/\\([a-zA-Z0-9-_@.%()]*\\).*")
 
 (defun my/fetch-wikipedia-stats ()
   "Fetch Wikipedia REST API and add the returned values in a PROPERTIES drawer"
