@@ -1,6 +1,10 @@
 function fz --description 'entry point for all the fuzziness glory'
 	set --local commands \
 		bins \
+		docker-containers \
+		docker-images \
+		docker-networks \
+		docker-volumes \
 		files \
 		git-log \
 		git-status \
@@ -24,6 +28,18 @@ function fz --description 'entry point for all the fuzziness glory'
 	case bins
 		set --local bin (complete -C '' | awk '{print $1}' | fzf --prompt $prompt)
 		i3-msg --quiet "exec --no-startup-id $bin"
+
+	case docker-containers
+		docker container ls -a | fzf --prompt $prompt
+
+	case docker-images
+		docker image ls | fzf --prompt $prompt
+
+	case docker-networks
+		docker network ls | fzf --prompt $prompt
+
+	case docker-volumes
+		docker volume ls | fzf --prompt $prompt
 
 	case files
 		_fzf_search_directory
