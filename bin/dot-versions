@@ -14,7 +14,6 @@ echo "git $(git --version | awk '{ print $3 }')"
 gitui --version
 grex --version
 echo "htop $(htop --version | head -n 1 | awk '{ print $2 }')"
-echo "httpie $(http --version)"
 hyperfine --version
 echo "i3 $(i3 --version | awk '{ print $3 }')"
 jo -v
