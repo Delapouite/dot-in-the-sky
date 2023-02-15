@@ -3,6 +3,7 @@ function fz --description 'entry point for all the fuzziness glory'
 		bins \
 		docker-containers \
 		docker-images \
+		docker-images-dangling \
 		docker-networks \
 		docker-volumes \
 		files \
@@ -30,16 +31,19 @@ function fz --description 'entry point for all the fuzziness glory'
 		i3-msg --quiet "exec --no-startup-id $bin"
 
 	case docker-containers
-		docker container ls -a | fzf --prompt $prompt
+		docker container ls -a | tail --lines +2 | fzf --prompt $prompt
 
 	case docker-images
-		docker image ls | fzf --prompt $prompt
+		docker image ls | tail --lines +2 | fzf --prompt $prompt
+
+	case docker-images-dangling
+		docker image ls --filter 'dangling=true' | tail --lines +2 | fzf --prompt $prompt
 
 	case docker-networks
-		docker network ls | fzf --prompt $prompt
+		docker network ls | tail --lines +2 | fzf --prompt $prompt
 
 	case docker-volumes
-		docker volume ls | fzf --prompt $prompt
+		docker volume ls | tail --lines +2 | fzf --prompt $prompt
 
 	case files
 		_fzf_search_directory
