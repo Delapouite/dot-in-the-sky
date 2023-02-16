@@ -31,19 +31,49 @@ function fz --description 'entry point for all the fuzziness glory'
 		i3-msg --quiet "exec --no-startup-id $bin"
 
 	case docker-containers
-		docker container ls -a | tail --lines +2 | fzf --prompt $prompt
+		if systemctl is-active docker > /dev/null
+			docker container ls -a | tail --lines +2 | fzf \
+				--prompt $prompt \
+				--preview 'docker container inspect {1} | jq .[0] | bat --plain --language json --color always'
+		else
+			echo 'docker daemon is not active'
+		end
 
 	case docker-images
-		docker image ls | tail --lines +2 | fzf --prompt $prompt
+		if systemctl is-active docker > /dev/null
+			docker image ls | tail --lines +2 | fzf \
+				--prompt $prompt \
+				--preview 'docker image inspect {3} | jq .[0] | bat --plain --language json --color always'
+		else
+			echo 'docker daemon is not active'
+		end
 
 	case docker-images-dangling
-		docker image ls --filter 'dangling=true' | tail --lines +2 | fzf --prompt $prompt
+		if systemctl is-active docker > /dev/null
+			docker image ls --filter 'dangling=true' | tail --lines +2 | fzf \
+				--prompt $prompt \
+				--preview 'docker image inspect {3} | jq .[0] | bat --plain --language json --color always'
+		else
+			echo 'docker daemon is not active'
+		end
 
 	case docker-networks
-		docker network ls | tail --lines +2 | fzf --prompt $prompt
+		if systemctl is-active docker > /dev/null
+			docker network ls | tail --lines +2 | fzf \
+				--prompt $prompt \
+				--preview 'docker network inspect {1} | jq .[0] | bat --plain --language json --color always'
+		else
+			echo 'docker daemon is not active'
+		end
 
 	case docker-volumes
-		docker volume ls | tail --lines +2 | fzf --prompt $prompt
+		if systemctl is-active docker > /dev/null
+			docker volume ls | tail --lines +2 | fzf \
+				--prompt $prompt \
+				--preview 'docker volume inspect {2} | jq .[0] | bat --plain --language json --color always'
+		else
+			echo 'docker daemon is not active'
+		end
 
 	case files
 		_fzf_search_directory
@@ -65,8 +95,14 @@ function fz --description 'entry point for all the fuzziness glory'
 			--bind 'enter:execute(modinfo {1})'
 
 	case npm-scripts
-		set --local script (jq -r '.scripts | to_entries | .[] | "\(.key) \(.value)"' package.json | fzf --prompt $prompt | awk '{print $1}')
-		npm run "$script"
+		if test ! -e './package.json'
+			echo 'no package.json in current directory'
+		else
+			set --local script (jq -r '.scripts | to_entries | .[] | "\(.key) \(.value)"' package.json | fzf --prompt $prompt | awk '{print $1}')
+			if test -n "$script"
+				npm run "$script"
+			end
+		end
 
 	case pacman
 		pacman --query --quiet | fzf \
@@ -108,7 +144,8 @@ function fz --description 'entry point for all the fuzziness glory'
 		set --local selected_command (for command in $commands
 			echo $command
 		end | fzf --prompt 'fz ❯ ' --tac)
-		fz $selected_command
-
+		if test -n "$selected_command"
+			fz $selected_command
+		end
 	end
 end
