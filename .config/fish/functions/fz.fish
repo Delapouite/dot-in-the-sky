@@ -19,7 +19,8 @@ function fz --description 'entry point for all the fuzziness glory'
 		shell-history \
 		ssh-keys \
 		systemd \
-		vscode-workspaces
+		vscode-workspaces \
+		xinput-devices
 
 	set --local prompt "$argv[1] ❯ "
 
@@ -138,6 +139,11 @@ function fz --description 'entry point for all the fuzziness glory'
 		set --local dir "$HOME/code/workspaces/"
 		set --local workspace (fd .code-workspace "$dir" | fzf --prompt $prompt)
 		code "$workspace"
+
+	case xinput-devices
+		xinput --list --name-only | fzf \
+			--prompt $prompt \
+			--preview 'xinput --list {}'
 
 	# by default let the user discover and choose the input source
 	case '*'
