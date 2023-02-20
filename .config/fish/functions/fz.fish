@@ -10,6 +10,7 @@ function fz --description 'entry point for all the fuzziness glory'
 		git-log \
 		git-status \
 		i3-windows \
+		ip-addresses \
 		linux-kernel-modules \
 		npm-scripts \
 		pacman \
@@ -88,6 +89,11 @@ function fz --description 'entry point for all the fuzziness glory'
 	case i3-windows
 		set --local con_id (~/bin/i3-windows.js | fzf --prompt $prompt --with-nth=2.. | awk '{print $1}')
 		i3-msg --quiet "[con_id=$con_id] focus"
+
+	case ip-addresses
+		ip -oneline address | fzf --ansi \
+			--prompt $prompt \
+			--preview 'ip address show {2}'
 
 	case linux-kernel-modules
 		lsmod | tail --lines +2 | fzf \
