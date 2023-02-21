@@ -1,6 +1,7 @@
 function fz --description 'entry point for all the fuzziness glory'
 	set --local commands \
 		bins \
+		browser-bookmarks \
 		docker-containers \
 		docker-images \
 		docker-images-dangling \
@@ -31,6 +32,13 @@ function fz --description 'entry point for all the fuzziness glory'
 	case bins
 		set --local bin (complete -C '' | awk '{print $1}' | fzf --prompt $prompt)
 		i3-msg --quiet "exec --no-startup-id $bin"
+
+	case browser-bookmarks
+		cat ~/.cache/browser-bookmarks \
+			| awk -F \u001f '{printf "%-12s \x1b[36m%s\x1b[m %s\n", $1, $2, $3}' \
+			| fzf --prompt $prompt --ansi \
+			| sed 's#.*\(https*://\)#\1#' \
+			| xargs xdg-open
 
 	case docker-containers
 		if systemctl is-active docker > /dev/null
