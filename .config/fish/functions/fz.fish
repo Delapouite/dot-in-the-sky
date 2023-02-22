@@ -11,6 +11,7 @@ function fz --description 'entry point for all the fuzziness glory'
 		git-log \
 		git-status \
 		i3-windows \
+		i3-workspaces \
 		ip-addresses \
 		linux-kernel-modules \
 		npm-scripts \
@@ -97,6 +98,10 @@ function fz --description 'entry point for all the fuzziness glory'
 	case i3-windows
 		set --local con_id (~/bin/i3-windows.js | fzf --prompt $prompt --with-nth=2.. | awk '{print $1}')
 		i3-msg --quiet "[con_id=$con_id] focus"
+
+	case i3-workspaces
+		set --local workspace_id (i3-msg -t get_workspaces | jq --raw-output '.[] .name' | fzf --prompt $prompt)
+		i3-msg --quiet "workspace $workspace_id"
 
 	case ip-addresses
 		ip -oneline address | fzf --ansi \
