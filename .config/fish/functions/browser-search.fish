@@ -28,7 +28,7 @@ function browser-search --description 'browser search with various engines'
 		wordnik
 
 	if test -z "$engine"
-		set --function engine (printf '%s\n' $engines | fzf --prompt 'engine> ' --info inline --reverse --no-separator)
+		set --function engine (printf '%s\n' $engines | fzf --prompt 'search-engines ❯ ' --info inline --reverse --no-separator)
 	end
 	# pressing escape/enter key
 	if test -z "$engine"

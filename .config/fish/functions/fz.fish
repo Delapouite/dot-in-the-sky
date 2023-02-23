@@ -22,29 +22,29 @@ function fz --description 'entry point for all the fuzziness glory'
 		shell-history \
 		ssh-keys \
 		systemd \
+		vscode-extensions \
 		vscode-workspaces \
 		xinput-devices
 
-	set --local prompt "$argv[1] ❯ "
+	alias _fzf="fzf --ansi --reverse --info inline --no-separator --preview-window=bottom --prompt '$argv[1] ❯ '"
 
 	# commands starting with _fzf are from https://github.com/PatrickF1/fzf.fish
 	switch $argv[1]
 
 	case bins
-		set --local bin (complete -C '' | awk '{print $1}' | fzf --prompt $prompt)
+		set --local bin (complete -C '' | awk '{print $1}' | _fzf)
 		i3-msg --quiet "exec --no-startup-id $bin"
 
 	case browser-bookmarks
 		cat ~/.cache/browser-bookmarks \
 			| awk -F \u001f '{printf "%-12s \x1b[36m%s\x1b[m %s\n", $1, $2, $3}' \
-			| fzf --prompt $prompt --ansi \
+			| _fzf \
 			| sed 's#.*\(https*://\)#\1#' \
 			| xargs xdg-open
 
 	case docker-containers
 		if systemctl is-active docker > /dev/null
-			docker container ls -a | tail --lines +2 | fzf \
-				--prompt $prompt \
+			docker container ls -a | tail --lines +2 | _fzf \
 				--preview 'docker container inspect {1} | jq .[0] | bat --plain --language json --color always'
 		else
 			echo 'docker daemon is not active'
@@ -52,8 +52,7 @@ function fz --description 'entry point for all the fuzziness glory'
 
 	case docker-images
 		if systemctl is-active docker > /dev/null
-			docker image ls | tail --lines +2 | fzf \
-				--prompt $prompt \
+			docker image ls | tail --lines +2 | _fzf \
 				--preview 'docker image inspect {3} | jq .[0] | bat --plain --language json --color always'
 		else
 			echo 'docker daemon is not active'
@@ -61,8 +60,7 @@ function fz --description 'entry point for all the fuzziness glory'
 
 	case docker-images-dangling
 		if systemctl is-active docker > /dev/null
-			docker image ls --filter 'dangling=true' | tail --lines +2 | fzf \
-				--prompt $prompt \
+			docker image ls --filter 'dangling=true' | tail --lines +2 | _fzf \
 				--preview 'docker image inspect {3} | jq .[0] | bat --plain --language json --color always'
 		else
 			echo 'docker daemon is not active'
@@ -70,8 +68,7 @@ function fz --description 'entry point for all the fuzziness glory'
 
 	case docker-networks
 		if systemctl is-active docker > /dev/null
-			docker network ls | tail --lines +2 | fzf \
-				--prompt $prompt \
+			docker network ls | tail --lines +2 | _fzf \
 				--preview 'docker network inspect {1} | jq .[0] | bat --plain --language json --color always'
 		else
 			echo 'docker daemon is not active'
@@ -79,8 +76,7 @@ function fz --description 'entry point for all the fuzziness glory'
 
 	case docker-volumes
 		if systemctl is-active docker > /dev/null
-			docker volume ls | tail --lines +2 | fzf \
-				--prompt $prompt \
+			docker volume ls | tail --lines +2 | _fzf \
 				--preview 'docker volume inspect {2} | jq .[0] | bat --plain --language json --color always'
 		else
 			echo 'docker daemon is not active'
@@ -96,21 +92,23 @@ function fz --description 'entry point for all the fuzziness glory'
 		_fzf_search_git_status
 
 	case i3-windows
-		set --local con_id (~/bin/i3-windows.js | fzf --prompt $prompt --with-nth=2.. | awk '{print $1}')
-		i3-msg --quiet "[con_id=$con_id] focus"
+		set --local con_id (~/bin/i3-windows.js | _fzf --with-nth=2.. | awk '{print $1}')
+		if test -n "$con_id"
+			i3-msg --quiet "[con_id=$con_id] focus"
+		end
 
 	case i3-workspaces
-		set --local workspace_id (i3-msg -t get_workspaces | jq --raw-output '.[] .name' | fzf --prompt $prompt)
-		i3-msg --quiet "workspace $workspace_id"
+		set --local workspace_id (i3-msg -t get_workspaces | jq --raw-output '.[] .name' | _fzf)
+		if test -n "$workspace_id"
+			i3-msg --quiet "workspace $workspace_id"
+		end
 
 	case ip-addresses
-		ip -oneline address | fzf --ansi \
-			--prompt $prompt \
-			--preview 'ip address show {2}'
+		ip -oneline address | _fzf \
+			--preview 'ip address show {2}' \
 
 	case linux-kernel-modules
-		lsmod | tail --lines +2 | fzf \
-			--prompt $prompt \
+		lsmod | tail --lines +2 | _fzf \
 			--preview 'modinfo {1}' \
 			--bind 'enter:execute(modinfo {1})'
 
@@ -118,20 +116,19 @@ function fz --description 'entry point for all the fuzziness glory'
 		if test ! -e './package.json'
 			echo 'no package.json in current directory'
 		else
-			set --local script (jq -r '.scripts | to_entries | .[] | "\(.key) \(.value)"' package.json | fzf --prompt $prompt | awk '{print $1}')
+			set --local script (jq -r '.scripts | to_entries | .[] | "\(.key) \(.value)"' package.json | _fzf | awk '{print $1}')
 			if test -n "$script"
 				npm run "$script"
 			end
 		end
 
 	case pacman
-		pacman --query --quiet | fzf \
-			--prompt $prompt \
+		pacman --query --quiet | _fzf \
 			--preview 'pacman --query --info --list {}' \
 			--bind 'enter:execute(pacman --query --info --list {} | bat)'
 
 	case podman-pods
-		podman pod ls | fzf
+		podman pod ls | _fzf
 
 	case processes
 		_fzf_search_processes
@@ -143,32 +140,36 @@ function fz --description 'entry point for all the fuzziness glory'
 			printf $name
 			set_color normal
 			printf " $details[-1]\n"
-		end | fzf --ansi --prompt $prompt
+		end | _fzf
 
 	case shell-history
 		_fzf_search_history
 
 	case ssh-keys
-		ssh-add -l | fzf --prompt $prompt
+		ssh-add -l | _fzf
 
 	case systemd
 		sysz
 
+	case vscode-extensions
+		code --list-extensions --show-versions 2> /dev/null | _fzf
+
 	case vscode-workspaces
 		set --local dir "$HOME/code/workspaces/"
-		set --local workspace (fd .code-workspace "$dir" | fzf --prompt $prompt)
-		code "$workspace"
+		set --local workspace (fd .code-workspace "$dir" | _fzf)
+		if test -n "$workspace"
+			code "$workspace"
+		end
 
 	case xinput-devices
-		xinput --list --name-only | fzf \
-			--prompt $prompt \
+		xinput --list --name-only | _fzf \
 			--preview 'xinput --list {}'
 
 	# by default let the user discover and choose the input source
 	case '*'
 		set --local selected_command (for command in $commands
 			echo $command
-		end | fzf --prompt 'fz ❯ ' --tac)
+		end | _fzf --prompt 'fz ❯ ')
 		if test -n "$selected_command"
 			fz $selected_command
 		end
