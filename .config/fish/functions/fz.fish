@@ -92,7 +92,8 @@ function fz --description 'entry point for all the fuzziness glory'
 		_fzf_search_git_status
 
 	case i3-windows
-		set --local con_id (~/bin/i3-windows.js | _fzf --with-nth=2.. | awk '{print $1}')
+		set --local jq_filter '.. | objects | select(.window_type == "normal") | "\(.id) \(.window_properties.class): \(.name)"'
+		set --local con_id (i3-msg -t get_tree | jq --raw-output "$jq_filter" | awk '{printf "%s \x1b[36m%s\x1b[m %s\n", $1, $2, $3}' | _fzf --with-nth=2.. | awk '{print $1}')
 		if test -n "$con_id"
 			i3-msg --quiet "[con_id=$con_id] focus"
 		end
