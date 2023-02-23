@@ -15,8 +15,7 @@ floating_modifier $mod
 floating_minimum_size 100 x 36
 floating_maximum_size -1 x -1
 for_window [instance="scratchpad"] move scratchpad ; scratchpad show
-for_window [instance="floating-term"] floating enable, resize set 640 480, move position center
-for_window [instance="floating-bar"] floating enable, resize set 78ppt 40, move position 11ppt 0
+for_window [instance="floating-term"] floating enable, resize set 80ppt 40ppt, move position center
 # toggle tiling / floating
 bindsym $mod+space floating toggle
 # change focus between tiling / floating windows
@@ -36,8 +35,9 @@ bindsym $mod+BackSpace exec kitty --single-instance --directory $(xcwd)
 bindsym $mod+backslash resize set width 30 ppt
 bindsym $mod+s exec kitty --single-instance --name=scratchpad
 
-bindsym $mod+p exec kitty --single-instance --class floating-term fish -c 'fz i3-windows' ; mode default
-bindsym $mod+minus exec kitty --single-instance --class floating-bar fish -c browser-search
+bindsym $mod+p exec kitty --single-instance --class floating-term fish -c 'fz i3-windows'
+bindsym $mod+minus exec kitty --single-instance --class floating-term fish -c browser-search
+bindsym $mod+plus exec kitty --single-instance --class floating-term fish -c 'fz browser-bookmarks'
 
 bindsym $mod+Shift+grave move scratchpad
 bindsym $mod+grave scratchpad show
