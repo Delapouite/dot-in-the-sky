@@ -87,6 +87,10 @@
   "[html][javascript][json][jsonc][scss][typescript][typescriptreact][yaml]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
+  "[terraform][terraform-vars]": {
+    "editor.defaultFormatter": "hashicorp.terraform"
+  },
+  "ini.format.enable": false,
   // schemas
   "json.schemas": [
     {
