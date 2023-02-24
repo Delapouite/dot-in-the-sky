@@ -15,15 +15,16 @@
 
 [alias]
 	# plurals
-	aliases = !git config -l | grep alias | cut -c 7-
+	aliases = !git config --list | grep alias | cut --characters 7-
 	branches = branch --all --sort=-committerdate --format='%(committerdate:short) %(color:green)%(refname:short)%(color:reset) - %(color:cyan)%(contents:subject)%(color:reset) - %(authorname)'
 	hooks = !fd . .git/hooks --exclude '*.sample'
-	remotes = remote -v
+	remotes = remote --verbose
 	stashes = stash list
 	tags = tag -n
 
 	# synonyms
-	authors = shortlog -sne
+	# remember to use .mailmap to merge authors
+	authors = shortlog --summary --numbered --email
 	first = !git rev-list --max-parents=0 HEAD | xargs git show
 	fix = rebase -i HEAD~2
 	nuke = !git branch --merged | grep -v -P '^\\*|master|main|staging|develop' | xargs -n1 -r git branch -d
