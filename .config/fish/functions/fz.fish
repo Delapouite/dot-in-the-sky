@@ -8,6 +8,7 @@ function fz --description 'entry point for all the fuzziness glory'
 		docker-networks \
 		docker-volumes \
 		files \
+		fonts \
 		git-log \
 		git-status \
 		i3-windows \
@@ -84,6 +85,9 @@ function fz --description 'entry point for all the fuzziness glory'
 
 	case files
 		_fzf_search_directory
+
+	case fonts
+		fontpreview
 
 	case git-log
 		_fzf_search_git_log
