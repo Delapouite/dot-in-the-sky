@@ -11,6 +11,7 @@ function fz --description 'entry point for all the fuzziness glory'
 		fonts \
 		git-log \
 		git-status \
+		gpg-keys \
 		i3-windows \
 		i3-workspaces \
 		ip-addresses \
@@ -94,6 +95,9 @@ function fz --description 'entry point for all the fuzziness glory'
 
 	case git-status
 		_fzf_search_git_status
+
+	case gpg-keys
+		gpg --list-keys --with-colons | rg uid | awk -F ':' '{ print $8 " " $10 }' | _fzf
 
 	case i3-windows
 		set --local jq_filter '.. | objects | select(.window_type == "normal") | "\(.id) \(.window_properties.class): \(.name)"'
