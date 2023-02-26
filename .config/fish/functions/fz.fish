@@ -1,33 +1,4 @@
 function fz --description 'entry point for all the fuzziness glory'
-	set --local commands \
-		bins \
-		browser-bookmarks \
-		docker-containers \
-		docker-images \
-		docker-images-dangling \
-		docker-networks \
-		docker-volumes \
-		files \
-		fonts \
-		git-log \
-		git-status \
-		gpg-keys \
-		i3-windows \
-		i3-workspaces \
-		ip-addresses \
-		linux-kernel-modules \
-		npm-scripts \
-		pacman \
-		podman-pods \
-		processes \
-		shell-functions \
-		shell-history \
-		ssh-keys \
-		systemd \
-		vscode-extensions \
-		vscode-workspaces \
-		xinput-devices
-
 	alias _fzf="fzf --ansi --reverse --info inline --no-separator --preview-window=bottom --prompt '$argv[1] ❯ '"
 
 	# commands starting with _fzf are from https://github.com/PatrickF1/fzf.fish
@@ -160,6 +131,9 @@ function fz --description 'entry point for all the fuzziness glory'
 	case systemd
 		sysz
 
+	case usb-devices
+		lsusb | _fzf --preview 'lsusb --verbose -d {6} 2> /dev/null'
+
 	case vscode-extensions
 		code --list-extensions --show-versions 2> /dev/null | _fzf
 
@@ -174,11 +148,48 @@ function fz --description 'entry point for all the fuzziness glory'
 		xinput --list --name-only | _fzf \
 			--preview 'xinput --list {}'
 
+	case '--help'
+		if test -n "$argv[2]"
+			echo "no special help yet for $argv[2]"
+		else
+			echo "fz is a wrapper around fzf with predefined input sources"
+		end
+
 	# by default let the user discover and choose the input source
 	case '*'
+		set --local commands \
+			bins \
+			browser-bookmarks \
+			docker-containers \
+			docker-images \
+			docker-images-dangling \
+			docker-networks \
+			docker-volumes \
+			files \
+			fonts \
+			git-log \
+			git-status \
+			gpg-keys \
+			i3-windows \
+			i3-workspaces \
+			ip-addresses \
+			linux-kernel-modules \
+			npm-scripts \
+			pacman \
+			podman-pods \
+			processes \
+			shell-functions \
+			shell-history \
+			ssh-keys \
+			systemd \
+			usb-devices \
+			vscode-extensions \
+			vscode-workspaces \
+			xinput-devices
+
 		set --local selected_command (for command in $commands
 			echo $command
-		end | _fzf --prompt 'fz ❯ ')
+		end | _fzf --prompt 'fz ❯ ' --preview 'fz --help {}')
 		if test -n "$selected_command"
 			fz $selected_command
 		end
