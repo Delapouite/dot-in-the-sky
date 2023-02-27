@@ -108,6 +108,19 @@
       :desc "Find roam" "r" #'org-roam-node-find)
 (map! :leader
       :desc "Fetch stats" "j" #'my/fetch-stats)
+;; Related to help map
+;; TODO: describe-alias, describe-obsolete
+(map! :leader :desc "Describe binding" "d b" #'describe-binding
+      :leader :desc "Describe char" "d c" #'describe-char
+      :leader :desc "Describe function" "d f" #'describe-function
+      :leader :desc "Describe face" "d F" #'describe-face
+      :leader :desc "Describe key" "d k" #'describe-key
+      :leader :desc "Describe mode" "d m" #'describe-mode
+      :leader :desc "Describe package" "d p" #'describe-package
+      :leader :desc "Describe theme" "d t" #'describe-theme
+      :leader :desc "Describe variable" "d v" #'describe-variable
+      :leader :desc "Describe widget" "d w" #'describe-widget
+      :leader :desc "Describe command" "d x" #'describe-command)
 
 (use-package! doom-modeline
   :config
