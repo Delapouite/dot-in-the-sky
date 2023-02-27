@@ -138,7 +138,9 @@
                                    (string-prefix-p " 2021" mtime)
                                    (string-prefix-p " 2022-01" mtime)
                                    (string-prefix-p " 2022-02" mtime)
-                                   (string-prefix-p " 2022-03" mtime))
+                                   (string-prefix-p " 2022-03" mtime)
+                                   (string-prefix-p " 2022-04" mtime)
+                                   (string-prefix-p " 2022-05" mtime))
                                   'compilation-error 'mode-line))))
 
   (doom-modeline-def-modeline 'delapouite
