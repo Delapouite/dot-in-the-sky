@@ -9,8 +9,12 @@
 [includeIf "gitdir:~/code/gitlab/"]
 	path = ~/code/gitlab/.gitconfig
 
+[includeIf "gitdir:~/projects/"]
+	path = ~/projects/.gitconfig
+
 [core]
 	editor = kak
+	hooksPath = ~/.config/git/hooks/
 	# pager = delta --theme='Monokai Extended'
 
 [alias]
