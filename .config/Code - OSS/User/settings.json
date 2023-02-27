@@ -5,6 +5,7 @@
     "**/.settings": true,
     "**/.factorypath": true
   },
+  "diffEditor.ignoreTrimWhitespace": false,
   "editor.cursorStyle": "block",
   "editor.cursorSurroundingLines": 10,
   "editor.fontSize": 12,
@@ -13,9 +14,10 @@
     "comments": true,
     "strings": true
   },
-  "editor.minimap.enabled": false,
   "editor.renderLineHighlight": "all",
   "editor.renderWhitespace": "all",
+  "editor.scrollbar.verticalScrollbarSize": 32,
+  "editor.stickyScroll.enabled": true,
   "editor.suggestSelection": "first",
   "editor.tabSize": 2,
   "editor.wordBasedSuggestions": true,
@@ -25,6 +27,14 @@
   "explorer.confirmDragAndDrop": false,
   "explorer.confirmDelete": false,
   "explorer.fileNesting.enabled": true,
+  "explorer.fileNesting.patterns": {
+    ".env": ".envrc,.env.example,.env.template",
+    ".eslintrc.json": ".eslintcache",
+    ".prettierrc": ".prettierignore",
+    "jest.config.js": "jest.*.js,jest.*.ts",
+    "package.json": "package-lock.json,yarn.lock,pnpm-lock.yaml,.yarnrc.yml",
+    "GemFile": "Gemfile.lock"
+  },
   "problems.showCurrentInStatus": true,
   "references.preferredLocation": "view",
   "search.exclude": {
