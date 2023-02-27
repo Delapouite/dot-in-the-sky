@@ -241,7 +241,7 @@
               :values $v1]
              (vector (point) source path type properties)))))))
 
-  (advice-add 'org-roam-db-insert-link :override #'my/org-roam-db-insert-link)
+  '(advice-add 'org-roam-db-insert-link :override #'my/org-roam-db-insert-link)
 
   (defun my/org-roam-visit-node-at-point ()
     (interactive)
@@ -249,6 +249,13 @@
       (org-roam-node-visit node)))
 
   (map! :n "M-<return>" #'my/org-roam-visit-node-at-point)
+
+  (defun my/visited-at ()
+    (when (eq 'headline (car (org-element-at-point)))
+      (when (string= "https" (org-element-property :type (org-element-context)))
+        (org-set-property "visited-at" (format-time-string "%Y-%m-%dT%TZ%z")))))
+
+  '(add-hook 'org-follow-link-hook #'my/visited-at)
 
   ;; random predicate natively implemented in https://github.com/org-roam/org-roam/pull/2050
 
@@ -485,3 +492,18 @@ properties in `org-dateprop-properties'."
 (defun my/search-cwd (prefix)
   (defun my/search-cwd-internal () (insert prefix))
   (minibuffer-with-setup-hook #'my/search-cwd-internal (call-interactively #'+default/search-cwd)))
+
+(define-advice elisp-get-fnsym-args-string (:around (orig-fun sym &rest r) docstring)
+  "If SYM is a function, append its docstring."
+  (concat
+   (apply orig-fun sym r)
+   (let* ((doc (and (fboundp sym) (documentation sym 'raw)))
+          (oneline (and doc (substring doc 0 (string-match "\n" doc)))))
+     (and oneline
+          (stringp oneline)
+          (not (string= "" oneline))
+          (concat " | " (propertize oneline 'face 'italic))))))
+
+(require 'ol-man)
+
+(setq ispell-personal-dictionary "~/Sync/ispell.dictionary")
