@@ -55,17 +55,20 @@ fish_indicator = "🐟"
 unknown_indicator = "mystery shell"
 
 [directory]
+disabled = false
 truncation_length = 4
 truncate_to_repo = false
 repo_root_style = "bold"
 style = "bold yellow"
 
 [git_commit]
+disabled = false
 only_detached = false
 tag_disabled = false
 style = "purple"
 
 [git_status]
+disabled = false
 conflicted = '=$count'
 deleted = '✘$count'
 modified = '!$count'
@@ -75,12 +78,14 @@ untracked= '?$count'
 style = "blue"
 
 [package]
+disabled = false
 display_private = true
 
 [battery]
 disabled = true
 
 [character]
+disabled = false
 error_symbol = "[✖](bold red)"
 
 [azure]
@@ -90,6 +95,7 @@ symbol = "ﴃ "
 style = "blue"
 
 [custom.git]
+disabled = false
 description = "Author and date of last git commit"
 command = "git log -1 --format='%cn - %cd' --date=relative"
 when = "true"
@@ -97,56 +103,55 @@ format = "[$output]($style) "
 style = "cyan"
 
 [custom.docker]
+disabled = false
 description = "Docker symbol if the current directory has Dockerfile or docker-compose.yml files"
-command = "echo 🐳"
 shell = ["bash", "--noprofile", "--norc"]
-files = ["Dockerfile", "docker-compose.yml", "docker-compose.yaml"]
+detect_files = ["Dockerfile", "docker-compose.yml", "docker-compose.yaml"]
 when = "command -v docker &> /dev/null; exit (echo $?);"
+format = "🐳 "
 
 [custom.sudo]
+disabled = false
 description = "Valid sudo timestamp marker"
-command = "echo -n 'sudo'"
 when = "sudo -vn &>/dev/null"
-format = "[$output]($style)"
+format = "[sudo]($style)"
 style = "bold cyan"
 
 [custom.ssh_keys]
+disabled = false
 description = "SSH key count"
-command = "ssh-add -l | grep -v 'no identities' | wc -l"
-when = "ssh-add -l | grep -v -q 'no identities'"
+command = "ssh-add -l | grep --invert-match 'no identities' | wc --lines"
+when = "ssh-add -l | grep --invert-match --quiet 'no identities'"
 shell = ["bash", "--noprofile", "--norc"]
-format = "[$output]($style)$symbol"
-symbol = "🔑"
+format = "[$output]($style)🔑"
 style = "bold green"
 
 [custom.direnv_allowed]
+disabled = false
 description = "Direnv allowed"
-command = "echo -n 'direnv'"
-when = "direnv status | grep -q 'Found RC allowed true'"
-format = " [$output]($style)$symbol"
-symbol = "🌕"
+when = "direnv status | grep --quiet 'Found RC allowed true'"
+format = " [direnv]($style)🌕"
 style = "bold green"
 
 [custom.direnv_denied]
+disabled = false
 description = "Direnv denied"
-command = "echo -n 'direnv'"
-when = "direnv status | grep -q 'Found RC allowed false'"
-format = " [$output]($style)$symbol"
-symbol = "🌑"
+when = "direnv status | grep --quiet 'Found RC allowed false'"
+format = " [direnv]($style)🌑"
 style = "bold red"
 
 [custom.envars]
+disabled = false
 description = "Envars count"
-command = "env | wc -l"
+command = "env | wc --lines"
 when = "true"
-format = " [$output]($style)$symbol"
-symbol = "🌱"
+format = " [$output]($style)🌱"
 style = "normal"
 
 [custom.files_hidden]
+disabled = false
 description = 'Number of hidden files'
-command = "ll -d .* | wc -l"
+command = "ll -d .* | wc --lines"
 when = "ll -d .*"
-format = " [$output]($style)$symbol"
-symbol = "🥷"
+format = " [$output]($style)🥷"
 style = "normal"
