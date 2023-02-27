@@ -33,3 +33,7 @@ end
 if type -q zoxide
 	zoxide init fish | source
 end
+
+if test -e /opt/asdf-vm/asdf.fish
+	source /opt/asdf-vm/asdf.fish
+end
