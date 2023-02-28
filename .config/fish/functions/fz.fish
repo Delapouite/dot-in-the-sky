@@ -61,6 +61,9 @@ function fz --description 'entry point for all the fuzziness glory'
 	case fonts
 		fontpreview
 
+	case git-branches
+		git branches --color=always | _fzf --preview 'git show {2} --color=always'
+
 	case git-log
 		_fzf_search_git_log
 
@@ -167,6 +170,7 @@ function fz --description 'entry point for all the fuzziness glory'
 			docker-volumes \
 			files \
 			fonts \
+			git-branches \
 			git-log \
 			git-status \
 			gpg-keys \

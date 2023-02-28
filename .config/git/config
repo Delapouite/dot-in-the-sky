@@ -20,7 +20,7 @@
 [alias]
 	# plurals
 	aliases = !git config --list | grep alias | cut --characters 7-
-	branches = branch --all --sort=-committerdate --format='%(committerdate:short) %(color:green)%(refname:short)%(color:reset) - %(color:cyan)%(contents:subject)%(color:reset) - %(authorname)'
+	branches = branch --all --sort=-committerdate --format='%(committerdate:short) %(color:magenta)%(objectname:short) %(refname:short)%(color:reset) - %(contents:subject) - %(color:cyan)%(authorname)%(color:reset)'
 	hooks = !fd . .git/hooks --exclude '*.sample'
 	remotes = remote --verbose
 	stashes = stash list
