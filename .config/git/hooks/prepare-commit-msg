@@ -6,5 +6,8 @@ TEMP="$(mktemp /tmp/git-XXXXX)"
 USER_NAME="$(git config --get user.name)"
 USER_EMAIL="$(git config --get user.email)"
 
-(echo "# User: $USER_NAME ($USER_EMAIL)"; cat "$ORIG_MSG_FILE") > "$TEMP"
+(echo -e "\n# User: $USER_NAME ($USER_EMAIL)\n"; \
+git log --oneline | head -n 5 | sed 's/^/# /'; \
+cat "$ORIG_MSG_FILE") > "$TEMP"
+
 cat "$TEMP" > "$ORIG_MSG_FILE"
