@@ -4,6 +4,19 @@ function fz --description 'entry point for all the fuzziness glory'
 	# commands starting with _fzf are from https://github.com/PatrickF1/fzf.fish
 	switch $argv[1]
 
+	case azure-accounts
+		az account list | jq --raw-output '.[] | "\(.name) \(.user.name) \(.tenantId)"' | _fzf
+
+	case azure-resource-groups
+		az group list | jq --raw-output '.[] | "\(.name) \(.location)"' \
+			| _fzf --preview 'az resource list --resource-group {1} | jq ".[] | .name"'
+
+	case azure-resources
+		az resource list \
+			| jq --raw-output '.[] | "\(.name)\u001f\(.type)\u001f\(.resourceGroup)"' \
+			| awk -F \u001f '{printf "\x1b[36m%s\x1b[m %s %s\n", $1, $2, $3}' \
+			| _fzf --preview 'az resource show --name {1} --resource-type {-2} --resource-group {-1}'
+
 	case bins
 		set --local bin (complete -C '' | awk '{print $1}' | _fzf)
 		i3-msg --quiet "exec --no-startup-id $bin"
@@ -161,6 +174,9 @@ function fz --description 'entry point for all the fuzziness glory'
 	# by default let the user discover and choose the input source
 	case '*'
 		set --local commands \
+			azure-accounts \
+			azure-resource-groups \
+			azure-resources \
 			bins \
 			browser-bookmarks \
 			docker-containers \
