@@ -1,5 +1,6 @@
 function fz --description 'entry point for all the fuzziness glory'
 	alias _fzf="fzf --ansi --reverse --info inline --no-separator --preview-window=bottom --prompt '$argv[1] ❯ '"
+	set --local bat_json 'bat --plain --language json --color always'
 
 	# commands starting with _fzf are from https://github.com/PatrickF1/fzf.fish
 	switch $argv[1]
@@ -31,7 +32,7 @@ function fz --description 'entry point for all the fuzziness glory'
 	case docker-containers
 		if systemctl is-active docker > /dev/null
 			docker container ls -a | tail --lines +2 | _fzf \
-				--preview 'docker container inspect {1} | jq .[0] | bat --plain --language json --color always'
+				--preview "docker container inspect {1} | jq .[0] | $bat_json"
 		else
 			echo 'docker daemon is not active'
 		end
@@ -39,7 +40,7 @@ function fz --description 'entry point for all the fuzziness glory'
 	case docker-images
 		if systemctl is-active docker > /dev/null
 			docker image ls | tail --lines +2 | _fzf \
-				--preview 'docker image inspect {3} | jq .[0] | bat --plain --language json --color always'
+				--preview "docker image inspect {3} | jq .[0] | $bat_json"
 		else
 			echo 'docker daemon is not active'
 		end
@@ -47,7 +48,7 @@ function fz --description 'entry point for all the fuzziness glory'
 	case docker-images-dangling
 		if systemctl is-active docker > /dev/null
 			docker image ls --filter 'dangling=true' | tail --lines +2 | _fzf \
-				--preview 'docker image inspect {3} | jq .[0] | bat --plain --language json --color always'
+				--preview "docker image inspect {3} | jq .[0] | $bat_json"
 		else
 			echo 'docker daemon is not active'
 		end
@@ -55,7 +56,7 @@ function fz --description 'entry point for all the fuzziness glory'
 	case docker-networks
 		if systemctl is-active docker > /dev/null
 			docker network ls | tail --lines +2 | _fzf \
-				--preview 'docker network inspect {1} | jq .[0] | bat --plain --language json --color always'
+				--preview "docker network inspect {1} | jq .[0] | $bat_json"
 		else
 			echo 'docker daemon is not active'
 		end
@@ -63,7 +64,7 @@ function fz --description 'entry point for all the fuzziness glory'
 	case docker-volumes
 		if systemctl is-active docker > /dev/null
 			docker volume ls | tail --lines +2 | _fzf \
-				--preview 'docker volume inspect {2} | jq .[0] | bat --plain --language json --color always'
+				--preview "docker volume inspect {2} | jq .[0] | $bat_json"
 		else
 			echo 'docker daemon is not active'
 		end
@@ -154,8 +155,8 @@ function fz --description 'entry point for all the fuzziness glory'
 		code --list-extensions --show-versions 2> /dev/null | _fzf
 
 	case vscode-workspaces
-		set --local dir "$HOME/code/workspaces/"
-		set --local workspace (fd .code-workspace "$dir" | _fzf)
+		set --local dir "$HOME/projects/vscode-workspaces/"
+		set --local workspace (fd .code-workspace "$dir" | _fzf --preview 'bat {} --plain --language json --color always')
 		if test -n "$workspace"
 			code "$workspace"
 		end
