@@ -29,6 +29,12 @@ function fz --description 'entry point for all the fuzziness glory'
 			| sed 's#.*\(https*://\)#\1#' \
 			| xargs xdg-open
 
+	case browser-tabs
+		firefoxctl tab list \
+			| jq --raw-output '.[] | "\(.id) \(.title) \(.url)"' \
+			| _fzf \
+			| awk '{print $1}'
+
 	case docker-containers
 		if systemctl is-active docker > /dev/null
 			docker container ls -a | tail --lines +2 | _fzf \
@@ -180,6 +186,7 @@ function fz --description 'entry point for all the fuzziness glory'
 			azure-resources \
 			bins \
 			browser-bookmarks \
+			browser-tabs \
 			docker-containers \
 			docker-images \
 			docker-images-dangling \
