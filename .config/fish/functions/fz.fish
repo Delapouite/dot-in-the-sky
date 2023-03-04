@@ -90,6 +90,12 @@ function fz --description 'entry point for all the fuzziness glory'
 	case git-status
 		_fzf_search_git_status
 
+	case github-repositories
+		set --local repo (gh repo list | _fzf --preview 'gh repo view {1}' | awk '{print $1}')
+		if test -n "$repo"
+			gh repo view --web "$repo"
+		end
+
 	case gpg-keys
 		gpg --list-keys --with-colons | rg uid | awk -F ':' '{ print $8 " " $10 }' | _fzf
 
@@ -197,6 +203,7 @@ function fz --description 'entry point for all the fuzziness glory'
 			git-branches \
 			git-log \
 			git-status \
+			github-repositories \
 			gpg-keys \
 			i3-windows \
 			i3-workspaces \
