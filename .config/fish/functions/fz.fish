@@ -82,6 +82,9 @@ function fz --description 'entry point for all the fuzziness glory'
 			echo 'docker daemon is not active'
 		end
 
+	case environment-variables
+		_fzf_search_variables (set --show | psub) (set --names | psub)
+
 	case files
 		_fzf_search_directory
 
@@ -206,6 +209,7 @@ function fz --description 'entry point for all the fuzziness glory'
 			docker-images-dangling \
 			docker-networks \
 			docker-volumes \
+			environment-variables \
 			files \
 			fonts \
 			git-branches \
