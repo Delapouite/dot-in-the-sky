@@ -32,10 +32,13 @@ function fz --description 'entry point for all the fuzziness glory'
 			| xargs xdg-open
 
 	case browser-tabs
-		firefoxctl tab list \
+		set --local tab_id (firefoxctl tab list \
 			| jq --raw-output '.[] | "\(.id) \(.title) \(.url)"' \
 			| _fzf \
-			| awk '{print $1}'
+			| awk '{print $1}')
+		if test -n "$tab_id"
+			firefoxctl tab activate "$tab_id"
+		end
 
 	case docker-containers
 		if systemctl is-active docker > /dev/null
