@@ -20,7 +20,9 @@ function fz --description 'entry point for all the fuzziness glory'
 
 	case bins
 		set --local bin (complete -C '' | awk '{print $1}' | _fzf)
-		i3-msg --quiet "exec --no-startup-id $bin"
+		if test -n "$bin"
+			i3-msg --quiet "exec --no-startup-id $bin"
+		end
 
 	case browser-bookmarks
 		cat ~/.cache/browser-bookmarks \
@@ -37,7 +39,8 @@ function fz --description 'entry point for all the fuzziness glory'
 
 	case docker-containers
 		if systemctl is-active docker > /dev/null
-			docker container ls -a | tail --lines +2 | _fzf \
+			docker container ls -a | _fzf \
+				--header-lines=1 \
 				--preview "docker container inspect {1} | jq .[0] | $bat_json"
 		else
 			echo 'docker daemon is not active'
@@ -45,7 +48,8 @@ function fz --description 'entry point for all the fuzziness glory'
 
 	case docker-images
 		if systemctl is-active docker > /dev/null
-			docker image ls | tail --lines +2 | _fzf \
+			docker image ls | _fzf \
+				--header-lines=1 \
 				--preview "docker image inspect {3} | jq .[0] | $bat_json"
 		else
 			echo 'docker daemon is not active'
@@ -53,7 +57,8 @@ function fz --description 'entry point for all the fuzziness glory'
 
 	case docker-images-dangling
 		if systemctl is-active docker > /dev/null
-			docker image ls --filter 'dangling=true' | tail --lines +2 | _fzf \
+			docker image ls --filter 'dangling=true' | _fzf \
+				--header-lines=1 \
 				--preview "docker image inspect {3} | jq .[0] | $bat_json"
 		else
 			echo 'docker daemon is not active'
@@ -61,7 +66,8 @@ function fz --description 'entry point for all the fuzziness glory'
 
 	case docker-networks
 		if systemctl is-active docker > /dev/null
-			docker network ls | tail --lines +2 | _fzf \
+			docker network ls | _fzf \
+				--header-lines=1 \
 				--preview "docker network inspect {1} | jq .[0] | $bat_json"
 		else
 			echo 'docker daemon is not active'
@@ -69,7 +75,8 @@ function fz --description 'entry point for all the fuzziness glory'
 
 	case docker-volumes
 		if systemctl is-active docker > /dev/null
-			docker volume ls | tail --lines +2 | _fzf \
+			docker volume ls | _fzf \
+				--header-lines=1 \
 				--preview "docker volume inspect {2} | jq .[0] | $bat_json"
 		else
 			echo 'docker daemon is not active'
@@ -117,7 +124,8 @@ function fz --description 'entry point for all the fuzziness glory'
 			--preview 'ip address show {2}' \
 
 	case linux-kernel-modules
-		lsmod | tail --lines +2 | _fzf \
+		lsmod | _fzf \
+			--header-lines=1 \
 			--preview 'modinfo {1}' \
 			--bind 'enter:execute(modinfo {1})'
 
