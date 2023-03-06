@@ -156,6 +156,12 @@ function fz --description 'entry point for all the fuzziness glory'
 	case processes
 		_fzf_search_processes
 
+	case shell-abbreviations
+		abbr | _fzf
+
+	case shell-aliases
+		alias | _fzf
+
 	case shell-functions
 		for name in (functions)
 			set --local details (functions --details --verbose $name)
@@ -228,6 +234,8 @@ function fz --description 'entry point for all the fuzziness glory'
 			pacman \
 			podman-pods \
 			processes \
+			shell-abbreviations \
+			shell-aliases \
 			shell-functions \
 			shell-history \
 			ssh-keys \
