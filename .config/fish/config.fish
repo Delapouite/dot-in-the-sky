@@ -9,6 +9,9 @@ alias ......='cd ../../../../../'
 # plurals
 alias builtins='builtin --names'
 
+# curl
+abbr --add --position anywhere -- --jwt '--header "Authorization: Bearer $JWT"'
+
 # ← arrow
 bind \e\[1\;3D backward-kill-word
 bind \e\[1\;4D backward-kill-bigword
