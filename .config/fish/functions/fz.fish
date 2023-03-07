@@ -5,6 +5,9 @@ function fz --description 'entry point for all the fuzziness glory'
 	# commands starting with _fzf are from https://github.com/PatrickF1/fzf.fish
 	switch $argv[1]
 
+	case acpi-devices
+		acpi --everything | _fzf
+
 	case azure-accounts
 		az account list | jq --raw-output '.[] | "\(.name) \(.user.name) \(.tenantId)"' | _fzf
 
@@ -210,6 +213,7 @@ function fz --description 'entry point for all the fuzziness glory'
 	# by default let the user discover and choose the input source
 	case '*'
 		set --local commands \
+			acpi-devices \
 			azure-accounts \
 			azure-resource-groups \
 			azure-resources \
