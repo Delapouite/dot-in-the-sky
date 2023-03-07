@@ -150,6 +150,9 @@ function fz --description 'entry point for all the fuzziness glory'
 			--preview 'pacman --query --info --list {}' \
 			--bind 'enter:execute(pacman --query --info --list {} | bat)'
 
+	case pastel-colors
+		pastel list | _fzf --preview 'pastel --force-color paint {} █▓▒░ pastel'
+
 	case podman-pods
 		podman pod ls | _fzf
 
@@ -232,6 +235,7 @@ function fz --description 'entry point for all the fuzziness glory'
 			linux-kernel-modules \
 			npm-scripts \
 			pacman \
+			pastel-colors \
 			podman-pods \
 			processes \
 			shell-abbreviations \
