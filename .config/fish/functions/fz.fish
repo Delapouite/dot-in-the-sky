@@ -138,6 +138,9 @@ function fz --description 'entry point for all the fuzziness glory'
 			--preview 'modinfo {1}' \
 			--bind 'enter:execute(modinfo {1})'
 
+	case man-pages
+		man -k . | _fzf --preview 'man {1}'
+
 	case npm-scripts
 		if test ! -e './package.json'
 			echo 'no package.json in current directory'
@@ -237,6 +240,7 @@ function fz --description 'entry point for all the fuzziness glory'
 			i3-workspaces \
 			ip-addresses \
 			linux-kernel-modules \
+			man-pages \
 			npm-scripts \
 			pacman \
 			pastel-colors \
