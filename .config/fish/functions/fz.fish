@@ -183,6 +183,12 @@ function fz --description 'entry point for all the fuzziness glory'
 	case shell-history
 		_fzf_search_history
 
+	case shell-prompts
+		fish_config prompt list | _fzf --preview 'fish_config prompt show {}'
+
+	case shell-themes
+		fish_config theme list | _fzf --preview 'fish_config theme show {}'
+
 	case ssh-keys
 		ssh-add -l | _fzf
 
@@ -250,6 +256,8 @@ function fz --description 'entry point for all the fuzziness glory'
 			shell-aliases \
 			shell-functions \
 			shell-history \
+			shell-prompts \
+			shell-themes \
 			ssh-keys \
 			systemd \
 			usb-devices \
