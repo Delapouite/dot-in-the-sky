@@ -192,6 +192,12 @@ function fz --description 'entry point for all the fuzziness glory'
 	case ssh-keys
 		ssh-add -l | _fzf
 
+	case starship-modules
+		starship module --list | tail --lines +3 | _fzf
+
+	case starship-presets
+		starship preset --list | _fzf
+
 	case systemd
 		sysz
 
@@ -259,6 +265,8 @@ function fz --description 'entry point for all the fuzziness glory'
 			shell-prompts \
 			shell-themes \
 			ssh-keys \
+			starship-modules \
+			starship-presets \
 			systemd \
 			usb-devices \
 			vscode-extensions \
