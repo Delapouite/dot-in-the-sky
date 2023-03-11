@@ -94,6 +94,9 @@ function fz --description 'entry point for all the fuzziness glory'
 	case files
 		_fzf_search_directory
 
+	case file-descriptors
+		lsfd | _fzf --header-lines=1
+
 	case fonts
 		fontpreview
 
@@ -242,6 +245,7 @@ function fz --description 'entry point for all the fuzziness glory'
 			docker-volumes \
 			environment-variables \
 			files \
+			file-descriptors \
 			fonts \
 			git-branches \
 			git-log \
