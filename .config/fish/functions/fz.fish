@@ -144,6 +144,18 @@ function fz --description 'entry point for all the fuzziness glory'
 	case man-pages
 		man -k . | _fzf --preview 'man {1}'
 
+	case music-albums
+		mpc list album | _fzf --preview 'mpc search album {}'
+
+	case music-artists
+		mpc list artist | _fzf --preview 'mpc search artist {}'
+
+	case music-dates
+		mpc list date | _fzf --preview 'mpc search date {}'
+
+	case music-playlists
+		mpc lsplaylist | _fzf --preview 'mpc playlist {}'
+
 	case npm-scripts
 		if test ! -e './package.json'
 			echo 'no package.json in current directory'
@@ -257,6 +269,10 @@ function fz --description 'entry point for all the fuzziness glory'
 			ip-addresses \
 			linux-kernel-modules \
 			man-pages \
+			music-albums \
+			music-artists \
+			music-dates \
+			music-playlists \
 			npm-scripts \
 			pacman \
 			pastel-colors \
