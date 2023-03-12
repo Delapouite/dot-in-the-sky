@@ -135,6 +135,9 @@ function fz --description 'entry point for all the fuzziness glory'
 		ip -oneline address | _fzf \
 			--preview 'ip address show {2}' \
 
+	case kakoune-sessions
+		kak -l | _fzf
+
 	case linux-kernel-modules
 		lsmod | _fzf \
 			--header-lines=1 \
@@ -267,6 +270,7 @@ function fz --description 'entry point for all the fuzziness glory'
 			i3-windows \
 			i3-workspaces \
 			ip-addresses \
+			kakoune-sessions \
 			linux-kernel-modules \
 			man-pages \
 			music-albums \
