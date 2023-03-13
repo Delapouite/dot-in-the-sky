@@ -334,6 +334,14 @@ function fz --description 'entry point for all the fuzziness glory'
 
 		man -k . | _fzf --preview 'man {1}'
 
+	case monitors
+		if test "$argv[2]" = "--help"
+			echo "list monitors using xrandr"
+			return
+		end
+
+		xrandr --listmonitors | _fzf --header-lines=1
+
 	case music-albums
 		if test "$argv[2]" = "--help"
 			echo "no special help yet for $argv[1]"
@@ -568,6 +576,7 @@ function fz --description 'entry point for all the fuzziness glory'
 			kakoune-sessions \
 			linux-kernel-modules \
 			man-pages \
+			monitors \
 			music-albums \
 			music-artists \
 			music-dates \
