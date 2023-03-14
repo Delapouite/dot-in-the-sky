@@ -19,6 +19,7 @@ function fz --description 'entry point for all the fuzziness glory'
 			acpi --everything | _fzf
 		else
 			echo 'acpi command not found'
+			return 1
 		end
 
 	case azure-accounts
@@ -35,6 +36,7 @@ function fz --description 'entry point for all the fuzziness glory'
 			az account list | jq --raw-output '.[] | "\(.name) \(.user.name) \(.tenantId)"' | _fzf
 		else
 			echo 'az command not found'
+			return 1
 		end
 
 	case azure-resource-groups
@@ -52,6 +54,7 @@ function fz --description 'entry point for all the fuzziness glory'
 				| _fzf --preview 'az resource list --resource-group {1} | jq ".[] | .name"'
 		else
 			echo 'az command not found'
+			return 1
 		end
 
 	case azure-resources
@@ -71,6 +74,7 @@ function fz --description 'entry point for all the fuzziness glory'
 				| _fzf --preview 'az resource show --name {1} --resource-type {-2} --resource-group {-1}'
 		else
 			echo 'az command not found'
+			return 1
 		end
 
 	case bins
@@ -126,6 +130,7 @@ function fz --description 'entry point for all the fuzziness glory'
 				--preview "docker container inspect {1} | jq .[0] | $bat_json"
 		else
 			echo 'docker daemon is not active'
+			return 1
 		end
 
 	case docker-images
@@ -144,6 +149,7 @@ function fz --description 'entry point for all the fuzziness glory'
 				--preview "docker image inspect {3} | jq .[0] | $bat_json"
 		else
 			echo 'docker daemon is not active'
+			return 1
 		end
 
 	case docker-images-dangling
@@ -162,6 +168,7 @@ function fz --description 'entry point for all the fuzziness glory'
 				--preview "docker image inspect {3} | jq .[0] | $bat_json"
 		else
 			echo 'docker daemon is not active'
+			return 1
 		end
 
 	case docker-networks
@@ -180,6 +187,7 @@ function fz --description 'entry point for all the fuzziness glory'
 				--preview "docker network inspect {1} | jq .[0] | $bat_json"
 		else
 			echo 'docker daemon is not active'
+			return 1
 		end
 
 	case docker-volumes
@@ -198,6 +206,7 @@ function fz --description 'entry point for all the fuzziness glory'
 				--preview "docker volume inspect {2} | jq .[0] | $bat_json"
 		else
 			echo 'docker daemon is not active'
+			return 1
 		end
 
 	case environment-variables
@@ -226,11 +235,20 @@ function fz --description 'entry point for all the fuzziness glory'
 
 	case fonts
 		if test "$argv[2]" = "--help"
-			echo "no special help yet for $argv[1]"
+			if command -q fontpreview
+				echo 'list all fonts'
+			else
+				set_color red; echo 'fontpreview command not found'
+			end
 			return
 		end
 
-		fontpreview
+		if command -q fontpreview
+			fontpreview
+		else
+			echo 'fontpreview command not found'
+			return 1
+		end
 
 	case git-branches
 		if test "$argv[2]" = "--help"
