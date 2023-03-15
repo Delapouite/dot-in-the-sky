@@ -419,11 +419,20 @@ function fz --description 'entry point for all the fuzziness glory'
 
 	case pastel-colors
 		if test "$argv[2]" = "--help"
-			echo "no special help yet for $argv[1]"
+			if command -q pastel
+				echo 'list all pastel colors'
+			else
+				set_color red; echo 'pastel command not found'
+			end
 			return
 		end
 
-		pastel list | _fzf --preview 'pastel --force-color paint {} █▓▒░ pastel'
+		if command -q pastel
+			pastel list | _fzf --preview 'pastel --force-color paint {} █▓▒░ pastel'
+		else
+			echo 'pastel command not found'
+			return 1
+		end
 
 	case podman-pods
 		if test "$argv[2]" = "--help"
