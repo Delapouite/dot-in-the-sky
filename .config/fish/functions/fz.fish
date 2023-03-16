@@ -70,7 +70,7 @@ function fz --description 'entry point for all the fuzziness glory'
 		if command -q az
 			az resource list \
 				| jq --raw-output '.[] | "\(.name)\u001f\(.type)\u001f\(.resourceGroup)"' \
-				| awk -F \u001f '{printf "\x1b[36m%s\x1b[m %s %s\n", $1, $2, $3}' \
+				| awk -F \u001f '{printf "%s \x1b[38;2;98;114;164m%s %s\x1b[m\n", $1, $2, $3}' \
 				| _fzf --preview 'az resource show --name {1} --resource-type {-2} --resource-group {-1}'
 		else
 			echo 'az command not found'
@@ -409,13 +409,15 @@ function fz --description 'entry point for all the fuzziness glory'
 
 	case pacman
 		if test "$argv[2]" = "--help"
-			echo "no special help yet for $argv[1]"
+			printf "list: packages and their version\npreview: package details"
 			return
 		end
 
-		pacman --query --quiet | _fzf \
-			--preview 'pacman --query --info --list {}' \
-			--bind 'enter:execute(pacman --query --info --list {} | bat)'
+		pacman --query \
+			| awk '{printf "%s \x1b[38;2;98;114;164m%s\x1b[m\n", $1, $2}' \
+			| _fzf \
+				--preview 'pacman --query --info --list {1}' \
+				--bind 'enter:execute(pacman --query --info --list {1} | bat)'
 
 	case pastel-colors
 		if test "$argv[2]" = "--help"
