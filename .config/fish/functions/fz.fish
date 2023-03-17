@@ -508,11 +508,11 @@ function fz --description 'entry point for all the fuzziness glory'
 
 	case ssh-keys
 		if test "$argv[2]" = "--help"
-			echo "no special help yet for $argv[1]"
+			printf "list: ssh keys SHA256 fingerprints\npreview: full public key"
 			return
 		end
 
-		ssh-add -l | _fzf
+		ssh-add -l | _fzf --preview 'ssh-add -L | rg {3}' --preview-window wrap
 
 	case starship-modules
 		if test "$argv[2]" = "--help"
