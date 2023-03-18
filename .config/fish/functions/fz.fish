@@ -392,6 +392,14 @@ function fz --description 'entry point for all the fuzziness glory'
 
 		mpc lsplaylist | _fzf --preview 'mpc playlist {}'
 
+	case network-ports
+		if test "$argv[2]" = "--help"
+			echo "list: tcp and upd ports registered by IANA"
+			return
+		end
+
+		cat /etc/services | tail --lines +3 | _fzf
+
 	case npm-scripts
 		if test "$argv[2]" = "--help"
 			echo "no special help yet for $argv[1]"
@@ -610,6 +618,7 @@ function fz --description 'entry point for all the fuzziness glory'
 			music-artists \
 			music-dates \
 			music-playlists \
+			network-ports \
 			npm-scripts \
 			pacman \
 			pastel-colors \
