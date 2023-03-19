@@ -344,6 +344,14 @@ function fz --description 'entry point for all the fuzziness glory'
 			--preview 'modinfo {1}' \
 			--bind 'enter:execute(modinfo {1})'
 
+	case linux-namespaces
+		if test "$argv[2]" = "--help"
+			echo "no special help yet for $argv[1]"
+			return
+		end
+
+	lsns | _fzf --header-lines=1
+
 	case man-pages
 		if test "$argv[2]" = "--help"
 			echo "no special help yet for $argv[1]"
@@ -612,6 +620,7 @@ function fz --description 'entry point for all the fuzziness glory'
 			ip-addresses \
 			kakoune-sessions \
 			linux-kernel-modules \
+			linux-namespaces \
 			man-pages \
 			monitors \
 			music-albums \
