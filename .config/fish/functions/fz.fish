@@ -107,7 +107,7 @@ function fz --description 'entry point for all the fuzziness glory'
 		end
 
 		set --local tab_id (firefoxctl tab list \
-			| jq --raw-output '.[] | "\(.id) \(.title) \(.url)"' \
+			| jq --raw-output '.[] | "\(.id) \(.lastAccessed)\t\(.title) \u001b[38;2;98;114;164m\(.url)\u001b[m"' \
 			| _fzf \
 			| awk '{print $1}')
 		if test -n "$tab_id"
