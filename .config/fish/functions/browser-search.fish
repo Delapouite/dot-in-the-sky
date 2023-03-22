@@ -8,6 +8,7 @@ function browser-search --description 'browser search with various engines'
 		arch-wiki \
 		bitbucket \
 		bugzilla \
+		deepl \
 		devdocs \
 		duckduckgo \
 		gitlab \
@@ -28,7 +29,7 @@ function browser-search --description 'browser search with various engines'
 		wordnik
 
 	if test -z "$engine"
-		set --function engine (printf '%s\n' $engines | fzf --prompt 'search-engines ❯ ' --info inline --reverse --no-separator)
+		set --function engine (printf '%s\n' $engines | fzf --prompt 'browser-search ❯ ' --info inline --reverse --no-separator)
 	end
 	# pressing escape/enter key
 	if test -z "$engine"
@@ -36,7 +37,7 @@ function browser-search --description 'browser search with various engines'
 	end
 
 	if test -z "$query"
-		read --prompt-str "$engine> " query
+		read --prompt-str "$engine ❯ " query
 	end
 	# pressing enter key
 	if test -z "$query"
@@ -55,6 +56,9 @@ function browser-search --description 'browser search with various engines'
 
 	case bugzilla
 		$browser "https://bugzilla.mozilla.org/buglist.cgi?quicksearch=$query"
+
+	case deepl
+		$browser "https://www.deepl.com/translator#en/fr/$query"
 
 	case devdocs
 		$browser "https://devdocs.io/?q=$query"
