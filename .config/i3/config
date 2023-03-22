@@ -31,7 +31,8 @@ bindsym $mod+F2 exec kitty --single-instance 'kak' '~/.config/i3/config'
 bindsym $mod+F5 reload
 
 bindsym $mod+Return exec kitty --single-instance
-bindsym $mod+BackSpace exec kitty --single-instance --directory $(xcwd)
+bindsym $mod+BackSpace exec kitty --single-instance --class floating-term fish -c browser
+
 bindsym $mod+backslash resize set width 30 ppt
 bindsym $mod+s exec kitty --single-instance --name=scratchpad
 
