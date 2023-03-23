@@ -114,6 +114,10 @@
     {
       "fileMatch": ["cypress.json", "cypress-config-dev.json"],
       "url": "https://raw.githubusercontent.com/cypress-io/cypress/v9.5.3/cli/schema/cypress.schema.json"
+    },
+    {
+      "fileMatch": ["manifest.json"],
+      "url": "https://json.schemastore.org/webextension.json"
     }
   ],
   // point to this specific version fixing the "condition" keys
