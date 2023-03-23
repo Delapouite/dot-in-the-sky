@@ -563,6 +563,14 @@ function fz --description 'entry point for all the fuzziness glory'
 			return 1
 		end
 
+	case top-level-domains
+		if test "$argv[2]" = "--help"
+			echo "list: TLDs fetched from IANA.org"
+			return
+		end
+
+		curl --silent 'https://data.iana.org/TLD/tlds-alpha-by-domain.txt' | _fzf --header-lines=1
+
 	case usb-devices
 		if test "$argv[2]" = "--help"
 			echo "no special help yet for $argv[1]"
@@ -652,6 +660,7 @@ function fz --description 'entry point for all the fuzziness glory'
 			starship-modules \
 			starship-presets \
 			systemd \
+			top-level-domains \
 			usb-devices \
 			vscode-extensions \
 			vscode-workspaces \
