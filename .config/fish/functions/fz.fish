@@ -8,7 +8,7 @@ function fz --description 'entry point for all the fuzziness glory'
 	case acpi-devices
 		if test "$argv[2]" = "--help"
 			if command -q acpi
-				echo 'list all acpi devices'
+				echo 'list: acpi devices'
 			else
 				set_color red; echo 'acpi command not found'
 			end
@@ -25,7 +25,7 @@ function fz --description 'entry point for all the fuzziness glory'
 	case azure-accounts
 		if test "$argv[2]" = "--help"
 			if command -q az
-				echo 'list all azure accounts'
+				echo 'list: azure accounts using az'
 			else
 				set_color red; echo 'az command not found'
 			end
@@ -42,7 +42,7 @@ function fz --description 'entry point for all the fuzziness glory'
 	case azure-resource-groups
 		if test "$argv[2]" = "--help"
 			if command -q az
-				echo 'list all azure resource groups'
+				echo 'list: azure resource groups using az'
 			else
 				set_color red; echo 'az command not found'
 			end
@@ -60,7 +60,7 @@ function fz --description 'entry point for all the fuzziness glory'
 	case azure-resources
 		if test "$argv[2]" = "--help"
 			if command -q az
-				echo 'list all azure resources'
+				echo 'list: azure resources using az'
 			else
 				set_color red; echo 'az command not found'
 			end
@@ -117,7 +117,7 @@ function fz --description 'entry point for all the fuzziness glory'
 	case docker-containers
 		if test "$argv[2]" = "--help"
 			if systemctl is-active docker > /dev/null
-				echo 'list all docker containers'
+				echo 'list: docker containers'
 			else
 				set_color red; echo 'docker daemon is not active'
 			end
@@ -136,7 +136,7 @@ function fz --description 'entry point for all the fuzziness glory'
 	case docker-images
 		if test "$argv[2]" = "--help"
 			if systemctl is-active docker > /dev/null
-				echo 'list all docker images'
+				echo 'list: docker images'
 			else
 				set_color red; echo 'docker daemon is not active'
 			end
@@ -155,7 +155,7 @@ function fz --description 'entry point for all the fuzziness glory'
 	case docker-images-dangling
 		if test "$argv[2]" = "--help"
 			if systemctl is-active docker > /dev/null
-				echo 'list all docker dangling images'
+				echo 'list: docker dangling images'
 			else
 				set_color red; echo 'docker daemon is not active'
 			end
@@ -174,7 +174,7 @@ function fz --description 'entry point for all the fuzziness glory'
 	case docker-networks
 		if test "$argv[2]" = "--help"
 			if systemctl is-active docker > /dev/null
-				echo 'list all docker networks'
+				echo 'list: docker networks'
 			else
 				set_color red; echo 'docker daemon is not active'
 			end
@@ -193,7 +193,7 @@ function fz --description 'entry point for all the fuzziness glory'
 	case docker-volumes
 		if test "$argv[2]" = "--help"
 			if systemctl is-active docker > /dev/null
-				echo 'list all docker volumes'
+				echo 'list: docker volumes'
 			else
 				set_color red; echo 'docker daemon is not active'
 			end
@@ -236,7 +236,7 @@ function fz --description 'entry point for all the fuzziness glory'
 	case fonts
 		if test "$argv[2]" = "--help"
 			if command -q fontpreview
-				echo 'list all fonts'
+				echo 'list: fonts using fontpreview'
 			else
 				set_color red; echo 'fontpreview command not found'
 			end
@@ -362,7 +362,7 @@ function fz --description 'entry point for all the fuzziness glory'
 
 	case monitors
 		if test "$argv[2]" = "--help"
-			echo "list monitors using xrandr"
+			echo "list: monitors using xrandr"
 			return
 		end
 
@@ -438,7 +438,7 @@ function fz --description 'entry point for all the fuzziness glory'
 	case pastel-colors
 		if test "$argv[2]" = "--help"
 			if command -q pastel
-				echo 'list all pastel colors'
+				echo 'list: pastel colors\npreview: colored example'
 			else
 				set_color red; echo 'pastel command not found'
 			end
@@ -548,11 +548,20 @@ function fz --description 'entry point for all the fuzziness glory'
 
 	case systemd
 		if test "$argv[2]" = "--help"
-			echo "no special help yet for $argv[1]"
+			if command -q sysz
+				echo "list: systemd units and unit-files using sysz"
+			else
+				set_color red; echo 'sysz command not found'
+			end
 			return
 		end
 
-		sysz
+		if command -q sysz
+			sysz
+		else
+			echo 'sysz command not found'
+			return 1
+		end
 
 	case usb-devices
 		if test "$argv[2]" = "--help"
