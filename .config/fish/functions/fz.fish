@@ -360,6 +360,14 @@ function fz --description 'entry point for all the fuzziness glory'
 
 		man -k . | _fzf --preview 'man {1}'
 
+	case media-types
+		if test "$argv[2]" = "--help"
+			echo "list: media-types registered by IANA"
+			return
+		end
+
+		cat /etc/mime.types | tail --lines +14 | _fzf
+
 	case monitors
 		if test "$argv[2]" = "--help"
 			echo "list: monitors using xrandr"
@@ -639,6 +647,7 @@ function fz --description 'entry point for all the fuzziness glory'
 			linux-kernel-modules \
 			linux-namespaces \
 			man-pages \
+			media-types \
 			monitors \
 			music-albums \
 			music-artists \
