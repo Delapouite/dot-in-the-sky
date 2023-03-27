@@ -1,5 +1,12 @@
 function fz --description 'entry point for all the fuzziness glory'
-	alias _fzf="fzf --ansi --reverse --info inline --no-separator --preview-window=bottom --prompt '$argv[1] ❯ '"
+	set --local cmd "fzf --ansi --reverse --info inline --no-separator --preview-window=bottom --prompt '$argv[1] ❯ '"
+
+	if test -n "$argv[2]"
+		set cmd "$cmd --query $argv[2]"
+	end
+
+	alias _fzf="$cmd"
+
 	set --local bat_json 'bat --plain --language json --color always'
 
 	# commands starting with _fzf are from https://github.com/PatrickF1/fzf.fish
@@ -42,7 +49,7 @@ function fz --description 'entry point for all the fuzziness glory'
 	case azure-resource-groups
 		if test "$argv[2]" = "--help"
 			if command -q az
-				echo 'list: azure resource groups using az'
+				printf 'list: azure resource groups using az\npreview: azure resources in this rg\naction: fz azure-resources rg'
 			else
 				set_color red; echo 'az command not found'
 			end
@@ -50,8 +57,13 @@ function fz --description 'entry point for all the fuzziness glory'
 		end
 
 		if command -q az
-			az group list | jq --raw-output '.[] | "\(.name) \(.location)"' \
-				| _fzf --preview 'az resource list --resource-group {1} | jq ".[] | .name"'
+			set --local rg (az group list \
+				| jq --raw-output '.[] | "\(.name) \(.location)"' \
+				| _fzf --preview 'az resource list --resource-group {1} | jq ".[] | .name"' \
+				| awk '{print $1}')
+			if test -n "$rg"
+				fz azure-resources "'$rg'"
+			end
 		else
 			echo 'az command not found'
 			return 1
@@ -446,7 +458,7 @@ function fz --description 'entry point for all the fuzziness glory'
 	case pastel-colors
 		if test "$argv[2]" = "--help"
 			if command -q pastel
-				echo 'list: pastel colors\npreview: colored example'
+				printf 'list: pastel colors\npreview: colored example'
 			else
 				set_color red; echo 'pastel command not found'
 			end
