@@ -106,7 +106,8 @@ function fz --description 'entry point for all the fuzziness glory'
 			return
 		end
 
-		cat ~/.cache/browser-bookmarks \
+		cat ~/.local/share/browser-bookmarks/*.bookmarks \
+			| rg -v '^#' | rg -v '^$' \
 			| awk -F \u001f '{printf "%-12s \x1b[36m%s\x1b[m %s\n", $1, $2, $3}' \
 			| _fzf \
 			| sed 's#.*\(https*://\)#\1#' \
