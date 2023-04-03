@@ -543,6 +543,18 @@ function fz --description 'entry point for all the fuzziness glory'
 
 		fish_config theme list | _fzf --preview 'fish_config theme show {}'
 
+	case ssh-hosts
+		if test "$argv[2]" = "--help"
+			printf "list: ssh hosts in ~/.ssh configs"
+			return
+		end
+
+		set --local configs (fd config ~/.ssh/)
+		set --local host (cat $configs | rg 'Host ' | _fzf | awk '{print $2}')
+		if test -n "$host"
+			ssh "$host"
+		end
+
 	case ssh-keys
 		if test "$argv[2]" = "--help"
 			printf "list: ssh keys SHA256 fingerprints\npreview: full public key"
@@ -678,6 +690,7 @@ function fz --description 'entry point for all the fuzziness glory'
 			shell-history \
 			shell-prompts \
 			shell-themes \
+			ssh-hosts \
 			ssh-keys \
 			starship-modules \
 			starship-presets \
