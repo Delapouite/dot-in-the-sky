@@ -32,7 +32,7 @@ function fz --description 'entry point for all the fuzziness glory'
 	case azure-accounts
 		if test "$argv[2]" = "--help"
 			if command -q az
-				echo 'list: azure accounts using az'
+				printf 'list: azure accounts using az\npreview: azure account details\naction: set default account and display resource groups'
 			else
 				set_color red; echo 'az command not found'
 			end
@@ -40,7 +40,91 @@ function fz --description 'entry point for all the fuzziness glory'
 		end
 
 		if command -q az
-			az account list | jq --raw-output '.[] | "\(.name) \(.user.name) \(.tenantId)"' | _fzf
+			set --local account (az account list \
+				| jq --raw-output '.[] | "\(.name)\u001f\(.user.name)\u001f(default:\(.isDefault))\u001f\(.id)"' \
+				| awk -F \u001f '{printf "%s %s %s \x1b[38;2;98;114;164m%s\x1b[m\n", $1, $2, $3, $4}' \
+				| _fzf --preview "az account show --subscription {-1} | $bat_json" \
+				| awk '{print $NF}')
+			if test -n "$account"
+				az account set --subscription "$account"
+				fz azure-resource-groups
+			end
+		else
+			echo 'az command not found'
+			return 1
+		end
+
+	case azure-container-registries
+		if test "$argv[2]" = "--help"
+			if command -q az
+				printf 'list: azure container registries using az\npreview: azure container registry details'
+			else
+				set_color red; echo 'az command not found'
+			end
+			return
+		end
+
+		if command -q az
+			set --local acr (az acr list \
+				| jq --raw-output '.[] | "\(.name) \(.loginServer)\u001f\(.location)\u001f\(.id)"' \
+				| awk -F \u001f '{printf "%s %s \x1b[38;2;98;114;164m%s\x1b[m\n", $1, $2, $3, $4}' \
+				| _fzf --preview "az acr show --name {1} | $bat_json" \
+				| awk '{print $2}')
+			if test -n "$acr"
+				az config set defaults.acr="$acr"
+				fz azure-container-registry-repositories
+			end
+		else
+			echo 'az command not found'
+			return 1
+		end
+
+	case azure-container-registry-manifests
+		if test "$argv[2]" = "--help"
+			if command -q az
+				printf 'list: azure container registry manifests using az'
+			else
+				set_color red; echo 'az command not found'
+			end
+			return
+		end
+
+		if command -q az
+			set --local registry (az config get defaults.acr | jq --raw-output .value)
+			set --local repository (az config get defaults.acrepo | jq --raw-output .value)
+			set --local manifest (az acr manifest list-metadata "$registry/$repository" 2> /dev/null \
+				| jq --raw-output '.[] | .digest' \
+				| _fzf --query '' --prompt "$argv[1] ($registry/$repository) ❯ " \
+					--preview "az acr manifest show-metadata $registry/$repository@{1} 2> /dev/null | $bat_json" \
+				| awk '{print $1}')
+			if test -n "$manifest"
+			end
+		else
+			echo 'az command not found'
+			return 1
+		end
+
+	case azure-container-registry-repositories
+		if test "$argv[2]" = "--help"
+			if command -q az
+				printf 'list: azure container registry repositories using az'
+			else
+				set_color red; echo 'az command not found'
+			end
+			return
+		end
+
+		if command -q az
+			set --local registry (az config get defaults.acr | jq --raw-output .value)
+			set --local repository (az acr repository list 2> /dev/null \
+				| jq --raw-output '.[]' \
+				| _fzf --query '' --prompt "$argv[1] ($registry) ❯ " \
+					--preview "az acr repository show --repository {1} 2> /dev/null | $bat_json" \
+				| awk '{print $1}')
+			if test -n "$repository"
+				az config set defaults.acrepo="$repository"
+				fz azure-container-registry-manifests
+			end
 		else
 			echo 'az command not found'
 			return 1
@@ -58,10 +142,12 @@ function fz --description 'entry point for all the fuzziness glory'
 
 		if command -q az
 			set --local rg (az group list \
-				| jq --raw-output '.[] | "\(.name) \(.location)"' \
-				| _fzf --preview 'az resource list --resource-group {1} | jq ".[] | .name"' \
+				| jq --raw-output '.[] | "\(.name)\u001f\(.location)\u001f\(.id)"' \
+				| awk -F \u001f '{printf "%s %s \x1b[38;2;98;114;164m%s\x1b[m\n", $1, $2, $3}' \
+				| _fzf --preview 'az resource list --resource-group {1} | jq --raw-output ".[] | .name"' \
 				| awk '{print $1}')
 			if test -n "$rg"
+				az config set defaults.rg="$rg"
 				fz azure-resources "'$rg'"
 			end
 		else
@@ -80,10 +166,10 @@ function fz --description 'entry point for all the fuzziness glory'
 		end
 
 		if command -q az
-			az resource list \
+			set --local resource (az resource list \
 				| jq --raw-output '.[] | "\(.name)\u001f\(.type)\u001f\(.resourceGroup)"' \
 				| awk -F \u001f '{printf "%s \x1b[38;2;98;114;164m%s %s\x1b[m\n", $1, $2, $3}' \
-				| _fzf --preview 'az resource show --name {1} --resource-type {-2} --resource-group {-1}'
+				| _fzf --preview "az resource show --name {1} --resource-type {-2} --resource-group {-1} | $bat_json")
 		else
 			echo 'az command not found'
 			return 1
@@ -646,6 +732,9 @@ function fz --description 'entry point for all the fuzziness glory'
 		set --local commands \
 			acpi-devices \
 			azure-accounts \
+			azure-container-registries \
+			azure-container-registry-repositories \
+			azure-container-registry-manifests \
 			azure-resource-groups \
 			azure-resources \
 			bins \
