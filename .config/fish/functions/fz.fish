@@ -351,7 +351,7 @@ function fz --description 'entry point for all the fuzziness glory'
 
 	case git-branches
 		if test "$argv[2]" = "--help"
-			echo "no special help yet for $argv[1]"
+			printf "list: git branches\npreview: branch details"
 			return
 		end
 
@@ -372,6 +372,14 @@ function fz --description 'entry point for all the fuzziness glory'
 		end
 
 		_fzf_search_git_status
+
+	case git-tags
+		if test "$argv[2]" = "--help"
+			printf "list: git tags\npreview: tagged commit details"
+			return
+		end
+
+		git tags | _fzf --preview 'git show {1} --color=always'
 
 	case github-repositories
 		if test "$argv[2]" = "--help"
@@ -752,6 +760,7 @@ function fz --description 'entry point for all the fuzziness glory'
 			git-branches \
 			git-log \
 			git-status \
+			git-tags \
 			github-repositories \
 			gpg-keys \
 			i3-windows \
