@@ -621,6 +621,14 @@ function fz --description 'entry point for all the fuzziness glory'
 
 		_fzf_search_history
 
+	case shell-key-bindings
+		if test "$argv[2]" = "--help"
+			printf "list: fish key-bindings and associated functions"
+			return
+		end
+
+		bind | _fzf
+
 	case shell-prompts
 		if test "$argv[2]" = "--help"
 			echo "no special help yet for $argv[1]"
@@ -786,6 +794,7 @@ function fz --description 'entry point for all the fuzziness glory'
 			shell-aliases \
 			shell-functions \
 			shell-history \
+			shell-key-bindings \
 			shell-prompts \
 			shell-themes \
 			ssh-hosts \
