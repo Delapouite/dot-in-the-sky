@@ -125,9 +125,8 @@
 (use-package! doom-modeline
   :config
   (defun get-buffer-file-mtime ()
-    (let* ((fname (buffer-file-name))
-           (mtime (file-attribute-modification-time
-                   (file-attributes fname))))
+    (let ((mtime (file-attribute-modification-time
+                  (file-attributes (buffer-file-name)))))
       (when mtime
         (format-time-string " %Y-%m-%d %H:%M:%S" mtime))))
 
@@ -169,6 +168,8 @@
 
   :config
   (add-hook 'org-mode-hook `doom-modeline-set-delapouite-modeline)
+  (add-hook 'org-capture-before-finalize-hook 'my/created-at)
+
   (setq org-roam-node-display-template "${title:*} ${my-level} | ${mtime} | ${tags:50}")
   (setq org-tags-exclude-from-inheritance '("Album" "Artist" "Debut" "Top"))
 
@@ -186,10 +187,10 @@
         (dolist (hit hits) (insert (concat (number-to-string (car hit)) " - " (cadr hit) "\n"))))
       (insert ?\n)))
 
-  (setq org-roam-mode-section-functions
-        (list #'my/org-roam-links-section
-              #'org-roam-backlinks-section
-              #'org-roam-reflinks-section))
+  (setq org-roam-mode-sections
+        '(my/org-roam-links-section
+          org-roam-backlinks-section
+          org-roam-reflinks-section))
 
   (defface org-link-id
     '((t :foreground "#50fa7b"

@@ -35,12 +35,18 @@
                    (message "Got error: %s %S" url error-thrown)))))
 
 (defun my/fetched-at ()
-  (org-set-property "fetched-at" (format-time-string "%Y-%m-%dT%TZ%z"))
+  (org-set-property "fetched-at" (format-time-string "%FT%TZ%z"))
   (setq org-property-format "%-10s %s"))
 
-(defun my/upgraded-at ()
+(defun my/created-at ()
+  "Set drawer property created-at to now in ISO8601"
   (interactive)
-  (org-set-property "upgraded-at" (format-time-string "%Y-%m-%dT%TZ%z")))
+ (org-set-property "created-at" (format-time-string "%FT%TZ%z")))
+
+(defun my/upgraded-at ()
+  "Set drawer property upgrated-at to now in ISO8601"
+  (interactive)
+ (org-set-property "upgraded-at" (format-time-string "%FT%TZ%z")))
 
 (defun my/get-current-line-content ()
   (buffer-substring-no-properties (line-beginning-position) (line-end-position)))
@@ -115,7 +121,7 @@
                                                           :sync t
                                                           :headers `(("Authorization" . ,(concat "Bearer " my/github-api-key)))
                                                           :error (cl-function (lambda (&rest args &key error-thrown &allow-other-keys)
-                                                                                (message "Got error: %S" error-thrown)))
+                                                                                (message "Got error: starred %S" error-thrown)))
                                                           :complete (cl-function
                                                                      (lambda (&key response &allow-other-keys)
                                                                        (when (= 204 (request-response-status-code response))
@@ -124,7 +130,7 @@
                                                           :sync t
                                                           :headers `(("Authorization" . ,(concat "Bearer " my/github-api-key)))
                                                           :error (cl-function (lambda (&rest args &key error-thrown &allow-other-keys)
-                                                                                (message "Got error: %S" error-thrown)))
+                                                                                (message "Got error: subscriptions %S" error-thrown)))
                                                           :complete (cl-function
                                                                      (lambda (&key response &allow-other-keys)
                                                                        (when (= 204 (request-response-status-code response))
