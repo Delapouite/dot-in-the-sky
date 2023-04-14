@@ -583,6 +583,44 @@ function fz --description 'entry point for all the fuzziness glory'
 
 		_fzf_search_processes
 
+	case pulseaudio-sinks
+		if test "$argv[2]" = "--help"
+			echo "no special help yet for $argv[1]"
+			return
+		end
+
+		if command -q pactl
+			set --local sink (pactl -f json list sinks \
+				| jq --raw-output '.[] | "\(.description)\u001f\(.active_port)"' \
+				| awk -F \u001f '{printf "%s \x1b[38;2;98;114;164m%s\x1b[m\n", $1, $2}' \
+				| _fzf \
+				| awk '{print $1}')
+			if test -n "$sink"
+			end
+		else
+			echo 'pactl command not found'
+			return 1
+		end
+
+	case pulseaudio-sources
+		if test "$argv[2]" = "--help"
+			echo "no special help yet for $argv[1]"
+			return
+		end
+
+		if command -q pactl
+			set --local src (pactl -f json list sources \
+				| jq --raw-output '.[] | "\(.description)\u001f\(.active_port)"' \
+				| awk -F \u001f '{printf "%s \x1b[38;2;98;114;164m%s\x1b[m\n", $1, $2}' \
+				| _fzf \
+				| awk '{print $1}')
+			if test -n "$src"
+			end
+		else
+			echo 'pactl command not found'
+			return 1
+		end
+
 	case shell-abbreviations
 		if test "$argv[2]" = "--help"
 			echo "no special help yet for $argv[1]"
@@ -790,6 +828,8 @@ function fz --description 'entry point for all the fuzziness glory'
 			pastel-colors \
 			podman-pods \
 			processes \
+			pulseaudio-sinks \
+			pulseaudio-sources \
 			shell-abbreviations \
 			shell-aliases \
 			shell-functions \
