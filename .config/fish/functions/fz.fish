@@ -1,6 +1,7 @@
 function fz --description 'entry point for all the fuzziness glory'
 	set --local cmd "fzf \
 		--ansi \
+		--cycle \
 		--reverse \
 		--info inline \
 		--no-separator \
@@ -18,199 +19,252 @@ function fz --description 'entry point for all the fuzziness glory'
 		--language json
 		--color always'
 
+	function print_error
+		set_color red; printf "$argv[1]\n"; set_color normal;
+	end
+
+	function print_dim
+		set_color brblack; printf "$argv[1]\n"; set_color normal;
+	end
+
 	# commands starting with _fzf are from https://github.com/PatrickF1/fzf.fish
 	switch $argv[1]
 
 	case acpi-devices
+		if not command -q acpi
+			print_error 'acpi command not found'
+			return 1
+		end
+
 		if test "$argv[2]" = "--help"
-			if command -q acpi
-				printf 'list: acpi devices, like battery, adapter, thermal, cooling…\n'
-				set_color brblack; printf 'preview: none\n'
-				set_color brblack; printf 'action: none\n'
-			else
-				set_color red; printf 'acpi command not found'
-			end
+			printf 'list: acpi devices, like battery, adapter, thermal, cooling…\n'
+			print_dim 'preview: none'
+			print_dim 'action: none'
 			return
 		end
 
-		if command -q acpi
-			acpi --everything | _fzf
-		else
-			printf 'acpi command not found'
-			return 1
+		set --local device (acpi --everything | _fzf)
+		if test -n "$device"
 		end
 
 	case azure-accounts
+		if not command -q az
+			print_error 'az command not found'
+			return 1
+		end
+
 		if test "$argv[2]" = "--help"
-			if command -q az
-				printf 'list: azure accounts using az\n'
-				printf 'preview: azure account details\n'
-				printf 'action: set default account and display resource groups\n'
-			else
-				set_color red; printf 'az command not found'
-			end
+			printf 'list: azure accounts using az\n'
+			printf 'preview: azure account details\n'
+			printf 'action: set default account and display resource groups\n'
 			return
 		end
 
-		if command -q az
-			set --local account (az account list \
-				| jq --raw-output '.[] | "\(.name)\u001f\(.user.name)\u001f(default:\(.isDefault))\u001f\(.id)"' \
-				| awk -F \u001f '{printf "%s %s %s \x1b[38;2;98;114;164m%s\x1b[m\n", $1, $2, $3, $4}' \
-				| _fzf --preview "az account show --subscription {-1} | $bat_json" \
-				| awk '{print $NF}')
-			if test -n "$account"
-				az account set --subscription "$account"
-				fz azure-resource-groups
-			end
-		else
-			printf 'az command not found'
-			return 1
+		set --local account (az account list \
+			| jq --raw-output '.[] | "\(.name)\u001f\(.user.name)\u001f(default:\(.isDefault))\u001f\(.id)"' \
+			| awk -F \u001f '{printf "%s %s %s \x1b[38;2;98;114;164m%s\x1b[m\n", $1, $2, $3, $4}' \
+			| _fzf --preview "az account show --subscription {-1} | $bat_json" \
+			| awk '{print $NF}')
+		if test -n "$account"
+			az account set --subscription "$account"
+			fz azure-resource-groups
 		end
 
 	case azure-container-registries
+		if not command -q az
+			print_error 'az command not found'
+			return 1
+		end
+
 		if test "$argv[2]" = "--help"
-			if command -q az
-				printf 'list: azure container registries using az\n'
-				printf 'preview: azure container registry details\n'
-				printf 'action: set default container registry and display container registry repositories\n'
-			else
-				set_color red; printf 'az command not found'
-			end
+			printf 'list: azure container registries using az\n'
+			printf 'preview: azure container registry details\n'
+			printf 'action: set default container registry and display container registry repositories\n'
 			return
 		end
 
-		if command -q az
-			set --local acr (az acr list \
-				| jq --raw-output '.[] | "\(.name) \(.loginServer)\u001f\(.location)\u001f\(.id)"' \
-				| awk -F \u001f '{printf "%s %s \x1b[38;2;98;114;164m%s\x1b[m\n", $1, $2, $3, $4}' \
-				| _fzf --preview "az acr show --name {1} | $bat_json" \
-				| awk '{print $2}')
-			if test -n "$acr"
-				az config set defaults.acr="$acr"
-				fz azure-container-registry-repositories
-			end
-		else
-			printf 'az command not found'
-			return 1
+		set --local acr (az acr list \
+			| jq --raw-output '.[] | "\(.name) \(.loginServer)\u001f\(.location)\u001f\(.id)"' \
+			| awk -F \u001f '{printf "%s %s \x1b[38;2;98;114;164m%s\x1b[m\n", $1, $2, $3, $4}' \
+			| _fzf --preview "az acr show --name {1} | $bat_json" \
+			| awk '{print $2}')
+		if test -n "$acr"
+			az config set defaults.acr="$acr"
+			fz azure-container-registry-repositories
 		end
 
 	case azure-container-registry-manifests
+		if not command -q az
+			print_error 'az command not found'
+			return 1
+		end
+
 		if test "$argv[2]" = "--help"
-			if command -q az
-				printf 'list: azure container registry manifests using az\n'
-				set_color brblack; printf 'preview: container registry manifest metadata\n'
-				set_color brblack; printf 'action: none\n'
-			else
-				set_color red; printf 'az command not found'
-			end
+			printf 'list: azure container registry manifests using az\n'
+			printf 'preview: container registry manifest metadata\n'
+			print_dim 'action: none'
 			return
 		end
 
-		if command -q az
-			set --local registry (az config get defaults.acr | jq --raw-output .value)
-			set --local repository (az config get defaults.acrepo | jq --raw-output .value)
-			set --local manifest (az acr manifest list-metadata "$registry/$repository" 2> /dev/null \
-				| jq --raw-output '.[] | .digest' \
-				| _fzf --query '' \
-					--prompt "$argv[1] ($registry/$repository) ❯ " \
-					--preview "az acr manifest show-metadata $registry/$repository@{1} 2> /dev/null | $bat_json" \
-				| awk '{print $1}')
-			if test -n "$manifest"
-			end
-		else
-			printf 'az command not found'
-			return 1
+		set --local registry (az config get defaults.acr | jq --raw-output .value)
+		set --local repository (az config get defaults.acrepo | jq --raw-output .value)
+		set --local manifest (az acr manifest list-metadata "$registry/$repository" 2> /dev/null \
+			| jq --raw-output '.[] | .digest' \
+			| _fzf --query '' \
+				--prompt "$argv[1] ($registry/$repository) ❯ " \
+				--preview "az acr manifest show-metadata $registry/$repository@{1} 2> /dev/null | $bat_json" \
+			| awk '{print $1}')
+		if test -n "$manifest"
 		end
 
 	case azure-container-registry-repositories
+		if not command -q az
+			print_error 'az command not found'
+			return 1
+		end
+
 		if test "$argv[2]" = "--help"
-			if command -q az
-				printf 'list: azure container registry repositories using az\n'
-				printf 'preview: azure container registry repository\n'
-				printf 'action: set default container registry repository and display container registry manifests\n'
-			else
-				set_color red; printf 'az command not found'
-			end
+			printf 'list: azure container registry repositories using az\n'
+			printf 'preview: azure container registry repository\n'
+			printf 'action: set default container registry repository and display container registry manifests\n'
 			return
 		end
 
-		if command -q az
-			set --local registry (az config get defaults.acr | jq --raw-output .value)
-			set --local repository (az acr repository list 2> /dev/null \
-				| jq --raw-output '.[]' \
-				| _fzf --query '' \
-					--prompt "$argv[1] ($registry) ❯ " \
-					--preview "az acr repository show --repository {1} 2> /dev/null | $bat_json" \
-				| awk '{print $1}')
-			if test -n "$repository"
-				az config set defaults.acrepo="$repository"
-				fz azure-container-registry-manifests
-			end
-		else
-			printf 'az command not found'
-			return 1
+		set --local registry (az config get defaults.acr | jq --raw-output .value)
+		set --local repository (az acr repository list 2> /dev/null \
+			| jq --raw-output '.[]' \
+			| _fzf --query '' \
+				--prompt "$argv[1] ($registry) ❯ " \
+				--preview "az acr repository show --repository {1} 2> /dev/null | $bat_json" \
+			| awk '{print $1}')
+		if test -n "$repository"
+			az config set defaults.acrepo="$repository"
+			fz azure-container-registry-manifests
 		end
 
 	case azure-resource-groups
+		if not command -q az
+			print_error 'az command not found'
+			return 1
+		end
+
 		if test "$argv[2]" = "--help"
-			if command -q az
-				printf 'list: azure resource groups using az\n'
-				printf 'preview: azure resources in this rg\n'
-				printf 'action: set default resource group and display resources\n'
-			else
-				set_color red; printf 'az command not found'
-			end
+			printf 'list: azure resource groups using az\n'
+			printf 'preview: azure resources in this rg\n'
+			printf 'action: set default resource group and display resources\n'
 			return
 		end
 
-		if command -q az
-			set --local rg (az group list \
-				| jq --raw-output '.[] | "\(.name)\u001f\(.location)\u001f\(.id)"' \
-				| awk -F \u001f '{printf "%s %s \x1b[38;2;98;114;164m%s\x1b[m\n", $1, $2, $3}' \
-				| _fzf --preview 'az resource list --resource-group {1} | jq --raw-output ".[] | .name"' \
-				| awk '{print $1}')
-			if test -n "$rg"
-				az config set defaults.rg="$rg"
-				fz azure-resources "'$rg'"
-			end
-		else
-			printf 'az command not found'
-			return 1
+		set --local rg (az group list \
+			| jq --raw-output '.[] | "\(.name)\u001f\(.location)\u001f\(.id)"' \
+			| awk -F \u001f '{printf "%s %s \x1b[38;2;98;114;164m%s\x1b[m\n", $1, $2, $3}' \
+			| _fzf --preview 'az resource list --resource-group {1} | jq --raw-output ".[] | .name"' \
+			| awk '{print $1}')
+		if test -n "$rg"
+			az config set defaults.rg="$rg"
+			fz azure-resources "'$rg'"
 		end
 
 	case azure-resources
+		if not command -q az
+			print_error 'az command not found'
+			return 1
+		end
+
 		if test "$argv[2]" = "--help"
-			if command -q az
-				printf 'list: azure resources using az\n'
-				printf 'preview: azure resource\n'
-				set_color brblack; printf 'action: none\n'
-			else
-				set_color red; printf 'az command not found'
-			end
+			printf 'list: azure resources using az\n'
+			printf 'preview: azure resource\n'
+			print_dim 'action: none'
 			return
 		end
 
-		if command -q az
-			set --local resource (az resource list \
-				| jq --raw-output '.[] | "\(.name)\u001f\(.type)\u001f\(.resourceGroup)"' \
-				| awk -F \u001f '{printf "%s \x1b[38;2;98;114;164m%s %s\x1b[m\n", $1, $2, $3}' \
-				| _fzf --preview "az resource show --name {1} --resource-type {-2} --resource-group {-1} | $bat_json")
-		else
-			printf 'az command not found'
+		set --local resource (az resource list \
+			| jq --raw-output '.[] | "\(.name)\u001f\(.type)\u001f\(.resourceGroup)"' \
+			| awk -F \u001f '{printf "%s \x1b[38;2;98;114;164m%s %s\x1b[m\n", $1, $2, $3}' \
+			| _fzf --preview "az resource show --name {1} --resource-type {-2} --resource-group {-1} | $bat_json")
+
+	case azure-storage-accounts
+		if not command -q az
+			print_error 'az command not found'
 			return 1
+		end
+
+		if test "$argv[2]" = "--help"
+			printf 'list: azure storage accounts using az\n'
+			printf 'preview: azure storage account details\n'
+			printf 'action: set default azure storage account and display containers\n'
+			return
+		end
+
+		set --local account (az storage account list \
+			| jq --raw-output '.[] | "\(.name)\u001f\(.location)\u001f\(.id)"' \
+			| awk -F \u001f '{printf "%s %s \x1b[38;2;98;114;164m%s\x1b[m\n", $1, $2, $3}' \
+			| _fzf --preview "az storage account show --name {1} | $bat_json" \
+			| awk '{print $1}')
+		if test -n "$account"
+			az config set defaults.storageaccount="$account"
+			fz azure-storage-containers "'$account'"
+		end
+
+	case azure-storage-blobs
+		if not command -q az
+			print_error 'az command not found'
+			return 1
+		end
+
+		if test "$argv[2]" = "--help"
+			printf 'list: azure storage blobs using az\n'
+			printf 'preview: blob details\n'
+			print_dim 'action: none'
+			return
+		end
+
+		set --local account (az config get defaults.storageaccount | jq --raw-output .value)
+		set --local container (az config get defaults.storagecontainer | jq --raw-output .value)
+		set --local blob (az storage blob list --account-name "$account" --container-name "$container" 2> /dev/null \
+			| jq --raw-output '.[] | "\(.name)"' \
+			| _fzf --query '' --prompt "$argv[1] ($account/$container) ❯ " \
+				--preview "az storage blob show --account-name="$account" --container-name="$container" --name {1} 2> /dev/null | $bat_json" \
+			| awk '{print $1}')
+		if test -n "$blob"
+		end
+
+	case azure-storage-containers
+		if not command -q az
+			print_error 'az command not found'
+			return 1
+		end
+
+		if test "$argv[2]" = "--help"
+			printf 'list: azure storage containers using az\n'
+			printf 'preview: azure storage container details\n'
+			printf 'action: set default azure storage container and display its blobs\n'
+			return
+		end
+
+		set --local account (az config get defaults.storageaccount | jq --raw-output .value)
+		set --local container (az storage container list --auth-mode login --account-name "$account" 2> /dev/null \
+			| jq --raw-output '.[] | "\(.name)"' \
+			| awk -F \u001f '{printf "%s\n", $1}' \
+			| _fzf --query '' --prompt "$argv[1] ($account) ❯ " \
+				--preview "az storage container show --account-name="$account" --name {1} 2> /dev/null | $bat_json" \
+			| awk '{print $1}')
+		if test -n "$container"
+			az config set defaults.storagecontainer="$container"
+			fz azure-storage-blobs "'$container'"
 		end
 
 	case bins
 		if test "$argv[2]" = "--help"
 			printf 'list: system binaries\n'
-			set_color brblack; printf 'preview: none\n'
-			set_color normal; printf 'action: launch binary\n'
+			printf 'preview: which binary\n'
+			printf 'action: launch binary\n'
 			return
 		end
 
 		set --local bin (complete -C '' \
 			| awk '{print $1}' \
-			| _fzf)
+			| _fzf --preview 'which {1}')
 		if test -n "$bin"
 			i3-msg --quiet "exec --no-startup-id $bin"
 		end
@@ -218,8 +272,8 @@ function fz --description 'entry point for all the fuzziness glory'
 	case browser-bookmarks
 		if test "$argv[2]" = "--help"
 			printf 'list: browser bookmarks\n'
-			set_color brblack; printf 'preview: none\n'
-			set_color normal; printf 'action: open bookmark in default browser\n'
+			print_dim 'preview: none'
+			printf 'action: open bookmark in default browser\n'
 			return
 		end
 
@@ -233,8 +287,8 @@ function fz --description 'entry point for all the fuzziness glory'
 	case browser-tabs
 		if test "$argv[2]" = "--help"
 			printf 'list: browser tabs\n'
-			set_color brblack; printf 'preview: none\n'
-			set_color normal; printf 'action: activate browser tab\n'
+			print_dim 'preview: none'
+			printf 'action: activate browser tab\n'
 			return
 		end
 
@@ -246,119 +300,117 @@ function fz --description 'entry point for all the fuzziness glory'
 			firefoxctl tab activate "$tab_id"
 		end
 
-	case docker-containers
+	case docker-accounts
 		if test "$argv[2]" = "--help"
-			if systemctl is-active docker > /dev/null
-				printf 'list: docker containers\n'
-				printf 'preview: docker container\n'
-				set_color brblack; printf 'action: none\n'
-			else
-				set_color red; printf 'docker daemon is not active'
-			end
+			printf 'list: docker accounts\n'
+			print_dim 'preview: none'
+			print_dim 'action: none'
 			return
 		end
 
-		if systemctl is-active docker > /dev/null
-			set --local container (docker container ls -a \
-				| _fzf \
-					--header-lines=1 \
-					--preview "docker container inspect {1} | jq .[0] | $bat_json")
-		else
-			printf 'docker daemon is not active'
+		jq .auths ~/.docker/config.json \
+			| gron \
+			| rg '.auth =' \
+			| sed --expression 's/json\["\(.*\)"\].auth = "\(.*\)";/\1 \2/' \
+			| teip -sf 2 -- base64 -d \
+			| cut --delimiter ':' --fields 1 \
+			| _fzf
+
+	case docker-containers
+		if not systemctl is-active docker > /dev/null
+			print_error 'docker daemon is not active'
 			return 1
 		end
+
+		if test "$argv[2]" = "--help"
+			printf 'list: docker containers\n'
+			printf 'preview: docker container details\n'
+			print_dim 'action: none'
+			return
+		end
+
+		set --local container (docker container ls -a \
+			| _fzf \
+				--header-lines=1 \
+				--preview "docker container inspect {1} | jq .[0] | $bat_json")
 
 	case docker-images
+		if not systemctl is-active docker > /dev/null
+			print_error 'docker daemon is not active'
+			return 1
+		end
+
 		if test "$argv[2]" = "--help"
-			if systemctl is-active docker > /dev/null
-				printf 'list: docker images\n'
-				printf 'preview: docker image\n'
-				set_color brblack; printf 'action: none\n'
-			else
-				set_color red; printf 'docker daemon is not active'
-			end
+			printf 'list: docker images\n'
+			printf 'preview: docker image details\n'
+			print_dim 'action: none'
 			return
 		end
 
-		if systemctl is-active docker > /dev/null
-			set --local image (docker image ls \
-				| _fzf \
-					--header-lines=1 \
-					--preview "docker image inspect {3} | jq .[0] | $bat_json")
-		else
-			printf 'docker daemon is not active'
-			return 1
-		end
+		set --local image (docker image ls \
+			| _fzf \
+				--header-lines=1 \
+				--preview "docker image inspect {3} | jq .[0] | $bat_json")
 
 	case docker-images-dangling
+		if not systemctl is-active docker > /dev/null
+			print_error 'docker daemon is not active'
+			return 1
+		end
+
 		if test "$argv[2]" = "--help"
-			if systemctl is-active docker > /dev/null
-				printf 'list: docker dangling images\n'
-				printf 'preview: docker image\n'
-				set_color brblack; printf 'action: none\n'
-			else
-				set_color red; printf 'docker daemon is not active'
-			end
+			printf 'list: docker dangling images\n'
+			printf 'preview: docker image details\n'
+			print_dim 'action: none'
 			return
 		end
 
-		if systemctl is-active docker > /dev/null
-			set --local image (docker image ls --filter 'dangling=true' \
-				| _fzf \
-					--header-lines=1 \
-					--preview "docker image inspect {3} | jq .[0] | $bat_json")
-		else
-			printf 'docker daemon is not active'
-			return 1
-		end
+		set --local image (docker image ls --filter 'dangling=true' \
+			| _fzf \
+				--header-lines=1 \
+				--preview "docker image inspect {3} | jq .[0] | $bat_json")
 
 	case docker-networks
+		if not systemctl is-active docker > /dev/null
+			print_error 'docker daemon is not active'
+			return 1
+		end
+
 		if test "$argv[2]" = "--help"
-			if systemctl is-active docker > /dev/null
-				printf 'list: docker networks\n'
-				printf 'preview: docker network\n'
-				set_color brblack; printf 'action: none\n'
-			else
-				set_color red; printf 'docker daemon is not active'
-			end
+			printf 'list: docker networks\n'
+			printf 'preview: docker network details\n'
+			print_dim 'action: none'
 			return
 		end
 
-		if systemctl is-active docker > /dev/null
-			set --local network (docker network ls \
-				| _fzf \
-					--header-lines=1 \
-					--preview "docker network inspect {1} | jq .[0] | $bat_json")
-		else
-			printf 'docker daemon is not active'
-			return 1
-		end
+		set --local network (docker network ls \
+			| _fzf \
+				--header-lines=1 \
+				--preview "docker network inspect {1} | jq .[0] | $bat_json")
 
 	case docker-volumes
+		if not systemctl is-active docker > /dev/null
+			print_error 'docker daemon is not active'
+			return 1
+		end
+
 		if test "$argv[2]" = "--help"
-			if systemctl is-active docker > /dev/null
-				printf 'list: docker volumes\n'
-				printf 'preview: docker volume\n'
-				set_color brblack; printf 'action: none\n'
-			else
-				set_color red; printf 'docker daemon is not active'
-			end
+			printf 'list: docker volumes\n'
+			printf 'preview: docker volume details\n'
+			print_dim 'action: none'
 			return
 		end
 
-		if systemctl is-active docker > /dev/null
-			set --local volume (docker volume ls \
-				| _fzf \
-					--header-lines=1 \
-					--preview "docker volume inspect {2} | jq .[0] | $bat_json")
-		else
-			printf 'docker daemon is not active'
-			return 1
-		end
+		set --local volume (docker volume ls \
+			| _fzf \
+				--header-lines=1 \
+				--preview "docker volume inspect {2} | jq .[0] | $bat_json")
 
 	case environment-variables
 		if test "$argv[2]" = "--help"
-			echo "no special help yet for $argv[1]"
+			printf 'list: environment variables\n'
+			printf 'preview: environment variable content and scope\n'
+			print_dim 'action: none'
 			return
 		end
 
@@ -366,7 +418,9 @@ function fz --description 'entry point for all the fuzziness glory'
 
 	case files
 		if test "$argv[2]" = "--help"
-			echo "no special help yet for $argv[1]"
+			printf 'list: files\n'
+			printf 'preview: file or dir content\n'
+			print_dim 'action: none'
 			return
 		end
 
@@ -374,36 +428,34 @@ function fz --description 'entry point for all the fuzziness glory'
 
 	case file-descriptors
 		if test "$argv[2]" = "--help"
-			echo "no special help yet for $argv[1]"
+			printf 'list: files descriptors using lsfd\n'
+			print_dim 'preview: none'
+			print_dim 'action: none'
 			return
 		end
 
 		lsfd | _fzf --header-lines=1
 
 	case fonts
+		if not command -q fontpreview
+			print_error 'fontpreview command not found'
+			return 1
+		end
+
 		if test "$argv[2]" = "--help"
-			if command -q fontpreview
-				printf 'list: fonts using fontpreview\n'
-				set_color brblack; printf 'preview: none\n'
-				set_color brblack; printf 'action: none\n'
-			else
-				set_color red; printf 'fontpreview command not found'
-			end
+			printf 'list: fonts using fontpreview\n'
+			print_dim 'preview: none'
+			print_dim 'action: none'
 			return
 		end
 
-		if command -q fontpreview
-			fontpreview
-		else
-			printf 'fontpreview command not found'
-			return 1
-		end
+		fontpreview
 
 	case git-branches
 		if test "$argv[2]" = "--help"
 			printf 'list: git branches\n'
-			printf 'preview: branch details\n'
-			set_color brblack; printf 'action: none\n'
+			printf 'preview: git branch details\n'
+			print_dim 'action: none'
 			return
 		end
 
@@ -411,7 +463,9 @@ function fz --description 'entry point for all the fuzziness glory'
 
 	case git-log
 		if test "$argv[2]" = "--help"
-			echo "no special help yet for $argv[1]"
+			printf 'list: git log\n'
+			printf 'preview: git commit details\n'
+			print_dim 'action: none'
 			return
 		end
 
@@ -419,7 +473,9 @@ function fz --description 'entry point for all the fuzziness glory'
 
 	case git-status
 		if test "$argv[2]" = "--help"
-			echo "no special help yet for $argv[1]"
+			printf 'list: git status\n'
+			print_dim 'preview: none'
+			print_dim 'action: none'
 			return
 		end
 
@@ -429,15 +485,22 @@ function fz --description 'entry point for all the fuzziness glory'
 		if test "$argv[2]" = "--help"
 			printf 'list: git tags\n'
 			printf 'preview: tagged commit details\n'
-			set_color brblack; printf 'action: none\n'
+			print_dim 'action: none'
 			return
 		end
 
 		git tags | _fzf --preview 'git show {1} --color=always'
 
 	case github-repositories
+		if not command -q gh
+			print_error 'gh command not found'
+			return 1
+		end
+
 		if test "$argv[2]" = "--help"
-			echo "no special help yet for $argv[1]"
+			printf 'list: github repositories using gh\n'
+			printf 'preview: repository details\n'
+			printf 'action: open repository in browser\n'
 			return
 		end
 
@@ -449,8 +512,15 @@ function fz --description 'entry point for all the fuzziness glory'
 		end
 
 	case gpg-keys
+		if not command -q gpg
+			print_error 'gpg command not found'
+			return 1
+		end
+
 		if test "$argv[2]" = "--help"
-			echo "no special help yet for $argv[1]"
+			printf 'list: git gpg keys\n'
+			print_dim 'preview: none'
+			print_dim 'action: none'
 			return
 		end
 
@@ -460,8 +530,15 @@ function fz --description 'entry point for all the fuzziness glory'
 			| _fzf
 
 	case i3-windows
+		if not command -q i3-msg
+			print_error 'i3-msg command not found'
+			return 1
+		end
+
 		if test "$argv[2]" = "--help"
-			echo "no special help yet for $argv[1]"
+			printf 'list: i3 windows\n'
+			print_dim 'preview: none'
+			printf 'action: focus window\n'
 			return
 		end
 
@@ -476,8 +553,15 @@ function fz --description 'entry point for all the fuzziness glory'
 		end
 
 	case i3-workspaces
+		if not command -q i3-msg
+			print_error 'i3-msg command not found'
+			return 1
+		end
+
 		if test "$argv[2]" = "--help"
-			echo "no special help yet for $argv[1]"
+			printf 'list: i3 workspaces\n'
+			print_dim 'preview: none'
+			printf 'action: focus workspace\n'
 			return
 		end
 
@@ -490,7 +574,9 @@ function fz --description 'entry point for all the fuzziness glory'
 
 	case ip-addresses
 		if test "$argv[2]" = "--help"
-			echo "no special help yet for $argv[1]"
+			printf 'list: ip addresses\n'
+			printf 'preview: ip address details\n'
+			print_dim 'action: none'
 			return
 		end
 
@@ -499,8 +585,15 @@ function fz --description 'entry point for all the fuzziness glory'
 				--preview 'ip address show {2}'
 
 	case kakoune-sessions
+		if not command -q kak
+			print_error 'kak command not found'
+			return 1
+		end
+
 		if test "$argv[2]" = "--help"
-			echo "no special help yet for $argv[1]"
+			printf 'list: kakoune sessions\n'
+			print_dim 'preview: none'
+			print_dim 'action: none'
 			return
 		end
 
@@ -508,19 +601,22 @@ function fz --description 'entry point for all the fuzziness glory'
 
 	case linux-kernel-modules
 		if test "$argv[2]" = "--help"
-			echo "no special help yet for $argv[1]"
+			printf 'list: linux kernel modules using lsmod\n'
+			printf 'preview: modinfo\n'
+			print_dim 'action: none'
 			return
 		end
 
 		lsmod \
 			| _fzf \
 				--header-lines=1 \
-				--preview 'modinfo {1}' \
-				--bind 'enter:execute(modinfo {1})'
+				--preview 'modinfo {1}'
 
 	case linux-namespaces
 		if test "$argv[2]" = "--help"
-			echo "no special help yet for $argv[1]"
+			printf 'list: linux namespaces using lsns\n'
+			print_dim 'preview: none'
+			print_dim 'action: none'
 			return
 		end
 
@@ -528,7 +624,9 @@ function fz --description 'entry point for all the fuzziness glory'
 
 	case man-pages
 		if test "$argv[2]" = "--help"
-			echo "no special help yet for $argv[1]"
+			printf 'list: man pages\n'
+			printf 'preview: man page details\n'
+			print_dim 'action: none'
 			return
 		end
 
@@ -536,59 +634,84 @@ function fz --description 'entry point for all the fuzziness glory'
 
 	case media-types
 		if test "$argv[2]" = "--help"
-			printf "list: media-types registered by IANA\n"
-			set_color brblack; printf 'preview: none\n'
-			set_color brblack; printf 'action: none\n'
+			printf 'list: media-types registered by IANA\n'
+			print_dim 'preview: none'
+			print_dim 'action: none'
 			return
 		end
 
 		cat /etc/mime.types | tail --lines +14 | _fzf
 
 	case monitors
+		if not command -q xrandr
+			print_error 'xrandr command not found'
+			return 1
+		end
+
 		if test "$argv[2]" = "--help"
 			printf 'list: monitors using xrandr\n'
-			set_color brblack; printf 'preview: none\n'
-			set_color brblack; printf 'action: none\n'
+			print_dim 'preview: none'
+			print_dim 'action: none'
 			return
 		end
 
 		xrandr --listmonitors | _fzf --header-lines=1
 
 	case music-albums
+		if not command -q mpc
+			print_error 'mpc command not found'
+			return 1
+		end
+
 		if test "$argv[2]" = "--help"
 			printf 'list: music albums using mpc\n'
 			printf 'preview: music album tracks\n'
-			set_color brblack; printf 'action: none\n'
+			print_dim 'action: none'
 			return
 		end
 
 		mpc list album | _fzf --preview 'mpc search album {}'
 
 	case music-artists
+		if not command -q mpc
+			print_error 'mpc command not found'
+			return 1
+		end
+
 		if test "$argv[2]" = "--help"
 			printf 'list: music artists using mpc\n'
 			printf 'preview: music artist tracks\n'
-			set_color brblack; printf 'action: none\n'
+			print_dim 'action: none'
 			return
 		end
 
 		mpc list artist | _fzf --preview 'mpc search artist {}'
 
 	case music-dates
+		if not command -q mpc
+			print_error 'mpc command not found'
+			return 1
+		end
+
 		if test "$argv[2]" = "--help"
 			printf 'list: music dates using mpc\n'
 			printf 'preview: music dates tracks\n'
-			set_color brblack; printf 'action: none\n'
+			print_dim 'action: none'
 			return
 		end
 
 		mpc list date | _fzf --preview 'mpc search date {}'
 
 	case music-playlists
+		if not command -q mpc
+			print_error 'mpc command not found'
+			return 1
+		end
+
 		if test "$argv[2]" = "--help"
 			printf 'list: music playlists using mpc\n'
 			printf 'preview: music playlist tracks\n'
-			set_color brblack; printf 'action: none\n'
+			print_dim 'action: none'
 			return
 		end
 
@@ -597,70 +720,73 @@ function fz --description 'entry point for all the fuzziness glory'
 	case network-ports
 		if test "$argv[2]" = "--help"
 			printf 'list: tcp and upd ports registered by IANA\n'
-			set_color brblack; printf 'preview: none\n'
-			set_color brblack; printf 'action: none\n'
+			print_dim 'preview: none'
+			print_dim 'action: none'
 			return
 		end
 
 		cat /etc/services | tail --lines +3 | _fzf
 
 	case npm-scripts
+		if not test -e './package.json'
+			print_error 'no package.json in current directory'
+			return 1
+		end
+
 		if test "$argv[2]" = "--help"
 			printf 'list: npm scripts\n'
-			set_color brblack; printf 'preview: none\n'
-			set_color normal; printf 'action: run npm script\n'
+			print_dim 'preview: none'
+			printf 'action: run npm script\n'
 			return
 		end
 
-		if test ! -e './package.json'
-			printf 'no package.json in current directory\n'
-		else
-			set --local script (jq --raw-output \
-				'.scripts | to_entries | .[] | "\(.key)\u001f\(.value)"' package.json \
-				| awk -F \u001f '{printf "%s \x1b[38;2;98;114;164m%s\x1b[m\n", $1, $NF}' \
-				| _fzf \
-				| awk '{print $1}')
-			if test -n "$script"
-				npm run "$script"
-			end
+		set --local script (jq --raw-output \
+			'.scripts | to_entries | .[] | "\(.key)\u001f\(.value)"' package.json \
+			| awk -F \u001f '{printf "%s \x1b[38;2;98;114;164m%s\x1b[m\n", $1, $NF}' \
+			| _fzf \
+			| awk '{print $1}')
+		if test -n "$script"
+			npm run "$script"
 		end
 
 	case pacman
 		if test "$argv[2]" = "--help"
 			printf 'list: packages and their version\n'
 			printf 'preview: package details\n'
-			set_color brblack; printf 'action: none\n'
+			print_dim 'action: none'
 			return
 		end
 
 		pacman --query \
 			| awk '{printf "%s \x1b[38;2;98;114;164m%s\x1b[m\n", $1, $2}' \
 			| _fzf \
-				--preview 'pacman --query --info --list {1}' \
-				--bind 'enter:execute(pacman --query --info --list {1} | bat)'
+				--preview 'pacman --query --info --list {1}'
 
 	case pastel-colors
-		if test "$argv[2]" = "--help"
-			if command -q pastel
-				printf 'list: pastel colors\n'
-				printf 'preview: colored example\n'
-				set_color brblack; printf 'action: none\n'
-			else
-				set_color red; printf 'pastel command not found'
-			end
-			return
-		end
-
-		if command -q pastel
-			pastel list | _fzf --preview 'pastel --force-color paint {} █▓▒░ pastel'
-		else
-			printf 'pastel command not found'
+		if not command -q pastel
+			print_error 'pastel command not found'
 			return 1
 		end
 
-	case podman-pods
 		if test "$argv[2]" = "--help"
-			echo "no special help yet for $argv[1]"
+			printf 'list: pastel colors\n'
+			printf 'preview: colored example\n'
+			print_dim 'action: none'
+			return
+		end
+
+		pastel list | _fzf --preview 'pastel --force-color paint {} █▓▒░ pastel'
+
+	case podman-pods
+		if not command -q podman
+			print_error 'podman command not found'
+			return 1
+		end
+
+		if test "$argv[2]" = "--help"
+			printf 'list: podman pods\n'
+			print_dim 'preview: none'
+			print_dim 'action: none'
 			return
 		end
 
@@ -668,53 +794,61 @@ function fz --description 'entry point for all the fuzziness glory'
 
 	case processes
 		if test "$argv[2]" = "--help"
-			echo "no special help yet for $argv[1]"
+			printf 'list: processes\n'
+			print_dim 'preview: process details'
+			print_dim 'action: none'
 			return
 		end
 
 		_fzf_search_processes
 
 	case pulseaudio-sinks
+		if not command -q pactl
+			print_error 'pactl command not found'
+			return 1
+		end
+
 		if test "$argv[2]" = "--help"
-			echo "no special help yet for $argv[1]"
+			printf 'list: pulseaudio sinks\n'
+			print_dim 'preview: none'
+			print_dim 'action: none'
 			return
 		end
 
-		if command -q pactl
-			set --local sink (pactl -f json list sinks \
-				| jq --raw-output '.[] | "\(.description)\u001f\(.active_port)"' \
-				| awk -F \u001f '{printf "%s \x1b[38;2;98;114;164m%s\x1b[m\n", $1, $2}' \
-				| _fzf \
-				| awk '{print $1}')
-			if test -n "$sink"
-			end
-		else
-			printf 'pactl command not found'
-			return 1
+		set --local sink (pactl -f json list sinks \
+			| jq --raw-output '.[] | "\(.description)\u001f\(.active_port)"' \
+			| awk -F \u001f '{printf "%s \x1b[38;2;98;114;164m%s\x1b[m\n", $1, $2}' \
+			| _fzf \
+			| awk '{print $1}')
+		if test -n "$sink"
 		end
 
 	case pulseaudio-sources
+		if not command -q pactl
+			print_error 'pactl command not found'
+			return 1
+		end
+
 		if test "$argv[2]" = "--help"
-			echo "no special help yet for $argv[1]"
+			printf 'list: pulseaudio sources\n'
+			print_dim 'preview: none'
+			print_dim 'action: none'
 			return
 		end
 
-		if command -q pactl
-			set --local src (pactl -f json list sources \
-				| jq --raw-output '.[] | "\(.description)\u001f\(.active_port)"' \
-				| awk -F \u001f '{printf "%s \x1b[38;2;98;114;164m%s\x1b[m\n", $1, $2}' \
-				| _fzf \
-				| awk '{print $1}')
-			if test -n "$src"
-			end
-		else
-			printf 'pactl command not found'
-			return 1
+		set --local src (pactl -f json list sources \
+			| jq --raw-output '.[] | "\(.description)\u001f\(.active_port)"' \
+			| awk -F \u001f '{printf "%s \x1b[38;2;98;114;164m%s\x1b[m\n", $1, $2}' \
+			| _fzf \
+			| awk '{print $1}')
+		if test -n "$src"
 		end
 
 	case shell-abbreviations
 		if test "$argv[2]" = "--help"
-			echo "no special help yet for $argv[1]"
+			printf 'list: shell abbreviations\n'
+			print_dim 'preview: none'
+			print_dim 'action: none'
 			return
 		end
 
@@ -722,7 +856,9 @@ function fz --description 'entry point for all the fuzziness glory'
 
 	case shell-aliases
 		if test "$argv[2]" = "--help"
-			echo "no special help yet for $argv[1]"
+			printf 'list: shell aliases\n'
+			print_dim 'preview: none'
+			print_dim 'action: none'
 			return
 		end
 
@@ -730,7 +866,9 @@ function fz --description 'entry point for all the fuzziness glory'
 
 	case shell-functions
 		if test "$argv[2]" = "--help"
-			echo "no special help yet for $argv[1]"
+			printf 'list: shell functions\n'
+			print_dim 'preview: none'
+			print_dim 'action: none'
 			return
 		end
 
@@ -744,7 +882,9 @@ function fz --description 'entry point for all the fuzziness glory'
 
 	case shell-history
 		if test "$argv[2]" = "--help"
-			echo "no special help yet for $argv[1]"
+			printf 'list: history\n'
+			printf 'preview: command details\n'
+			print_dim 'action: none'
 			return
 		end
 
@@ -752,9 +892,9 @@ function fz --description 'entry point for all the fuzziness glory'
 
 	case shell-key-bindings
 		if test "$argv[2]" = "--help"
-			printf 'list: fish key-bindings and associated functions\n'
-			set_color brblack; printf 'preview: none\n'
-			set_color brblack; printf 'action: none\n'
+			printf 'list: shell key-bindings and associated functions\n'
+			print_dim 'preview: none'
+			print_dim 'action: none'
 			return
 		end
 
@@ -762,7 +902,9 @@ function fz --description 'entry point for all the fuzziness glory'
 
 	case shell-prompts
 		if test "$argv[2]" = "--help"
-			echo "no special help yet for $argv[1]"
+			printf 'list: shell prompts\n'
+			print_dim 'preview: none'
+			print_dim 'action: none'
 			return
 		end
 
@@ -770,7 +912,9 @@ function fz --description 'entry point for all the fuzziness glory'
 
 	case shell-themes
 		if test "$argv[2]" = "--help"
-			echo "no special help yet for $argv[1]"
+			printf 'list: shell themes\n'
+			print_dim 'preview: none'
+			print_dim 'action: none'
 			return
 		end
 
@@ -779,8 +923,8 @@ function fz --description 'entry point for all the fuzziness glory'
 	case ssh-hosts
 		if test "$argv[2]" = "--help"
 			printf 'list: ssh hosts in ~/.ssh configs\n'
-			set_color brblack; printf 'preview: none\n'
-			set_color normal; printf 'action: connect to ssh server\n'
+			print_dim 'preview: none'
+			printf 'action: connect to ssh server\n'
 			return
 		end
 
@@ -791,53 +935,70 @@ function fz --description 'entry point for all the fuzziness glory'
 		end
 
 	case ssh-keys
+		if not command -q ssh-add
+			print_error 'ssh-add command not found'
+			return 1
+		end
+
 		if test "$argv[2]" = "--help"
 			printf 'list: ssh keys SHA256 fingerprints\n'
 			printf 'preview: full public key\n'
-			set_color brblack; printf 'action: none\n'
+			print_dim 'action: none'
 			return
 		end
 
 		ssh-add -l | _fzf --preview 'ssh-add -L | rg {3}' --preview-window wrap
 
 	case starship-modules
+		if not command -q starship
+			print_error 'starship command not found'
+			return 1
+		end
+
 		if test "$argv[2]" = "--help"
-			echo "no special help yet for $argv[1]"
+			printf 'list: starship modules\n'
+			print_dim 'preview: none'
+			print_dim 'action: none'
 			return
 		end
 
 		starship module --list | tail --lines +3 | _fzf
 
 	case starship-presets
+		if not command -q starship
+			print_error 'starship command not found'
+			return 1
+		end
+
 		if test "$argv[2]" = "--help"
-			echo "no special help yet for $argv[1]"
+			printf 'list: starship presets\n'
+			print_dim 'preview: none'
+			print_dim 'action: none'
 			return
 		end
 
 		starship preset --list | _fzf
 
 	case systemd
+		if not command -q sysz
+			print_error 'sysz command not found'
+			return 1
+		end
+
 		if test "$argv[2]" = "--help"
-			if command -q sysz
-				printf 'list: systemd units and unit-files using sysz\n'
-			else
-				set_color red; printf 'sysz command not found'
-			end
+			printf 'list: systemd units and unit-files using sysz\n'
+			printf 'preview: systemd unit details\n'
+			print_dim 'action: none'
 			return
 		end
 
-		if command -q sysz
-			sysz
-		else
-			printf 'sysz command not found'
-			return 1
-		end
+		sysz
 
 	case top-level-domains
 		if test "$argv[2]" = "--help"
 			printf 'list: TLDs fetched from IANA.org\n'
-			set_color brblack; printf 'preview: none\n'
-			set_color brblack; printf 'action: none\n'
+			print_dim 'preview: none'
+			print_dim 'action: none'
 			return
 		end
 
@@ -845,24 +1006,47 @@ function fz --description 'entry point for all the fuzziness glory'
 			| _fzf --header-lines=1
 
 	case usb-devices
+		if not command -q lsusb
+			print_error 'lsusb command not found'
+			return 1
+		end
+
 		if test "$argv[2]" = "--help"
-			echo "no special help yet for $argv[1]"
+			printf 'list: usb devices with lsusb\n'
+			print_dim 'preview: none'
+			print_dim 'action: none'
 			return
 		end
 
-		lsusb | _fzf --preview 'lsusb --verbose -d {6} 2> /dev/null'
+		set --local device (lsusb | _fzf --preview 'lsusb --verbose -d {6} 2> /dev/null')
 
 	case vscode-extensions
+		if not command -q code
+			print_error 'code command not found'
+			return 1
+		end
+
 		if test "$argv[2]" = "--help"
-			echo "no special help yet for $argv[1]"
+			printf 'list: vscode extensions\n'
+			print_dim 'preview: none'
+			print_dim 'action: none'
 			return
 		end
 
-		code --list-extensions --show-versions 2> /dev/null | _fzf
+		set --local extension (code --list-extensions --show-versions 2> /dev/null | _fzf)
+		if test -n "$extension"
+		end
 
 	case vscode-workspaces
+		if not command -q code
+			print_error 'code command not found'
+			return 1
+		end
+
 		if test "$argv[2]" = "--help"
-			echo "no special help yet for $argv[1]"
+			printf 'list: vscode workspaces\n'
+			printf 'preview: vscode workspace details\n'
+			print_dim 'action: none'
 			return
 		end
 
@@ -874,8 +1058,15 @@ function fz --description 'entry point for all the fuzziness glory'
 		end
 
 	case xinput-devices
+		if not command -q xinput
+			print_error 'xinput command not found'
+			return 1
+		end
+
 		if test "$argv[2]" = "--help"
-			echo "no special help yet for $argv[1]"
+			printf 'list: xinput devices\n'
+			printf 'preview: xinput device detail\n'
+			print_dim 'action: none'
 			return
 		end
 
@@ -893,9 +1084,13 @@ function fz --description 'entry point for all the fuzziness glory'
 			azure-container-registry-manifests \
 			azure-resource-groups \
 			azure-resources \
+			azure-storage-accounts \
+			azure-storage-blobs \
+			azure-storage-containers \
 			bins \
 			browser-bookmarks \
 			browser-tabs \
+			docker-accounts \
 			docker-containers \
 			docker-images \
 			docker-images-dangling \
