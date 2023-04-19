@@ -300,6 +300,28 @@ function fz --description 'entry point for all the fuzziness glory'
 			firefoxctl tab activate "$tab_id"
 		end
 
+	case deno-tasks
+		if not test -e './deno.jsonc'
+			print_error 'no deno.jsonc in current directory'
+			return 1
+		end
+
+		if test "$argv[2]" = "--help"
+			printf 'list: deno tasks\n'
+			print_dim 'preview: none'
+			printf 'action: run deno task\n'
+			return
+		end
+
+		set --local task (jq --raw-output \
+			'.tasks | to_entries | .[] | "\(.key)\u001f\(.value)"' deno.jsonc \
+			| awk -F \u001f '{printf "%s \x1b[38;2;98;114;164m%s\x1b[m\n", $1, $NF}' \
+			| _fzf \
+			| awk '{print $1}')
+		if test -n "$task"
+			deno task "$task"
+		end
+
 	case docker-accounts
 		if test "$argv[2]" = "--help"
 			printf 'list: docker accounts\n'
@@ -1090,6 +1112,7 @@ function fz --description 'entry point for all the fuzziness glory'
 			bins \
 			browser-bookmarks \
 			browser-tabs \
+			deno-tasks \
 			docker-accounts \
 			docker-containers \
 			docker-images \
