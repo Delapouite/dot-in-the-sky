@@ -151,19 +151,19 @@
   (org-roam-directory "~/Sync/org/roam")
   (org-roam-capture-templates
    '(("d" "default" plain "%?"
-      :target (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n")
+      :target (file+head "${slug}.org" "#+title: ${title}\n")
       :unnarrowed t)
      ("l" "album" plain "%?"
-      :target (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+filetags: Album\n\n* Wiki\n* Tracks")
+      :target (file+head "${slug}.org" "#+title: ${title}\n#+filetags: Album\n\n* Wiki\n* Tracks")
       :unnarrowed t)
      ("p" "person" plain "%?"
-      :target (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+filetags: Person\n")
+      :target (file+head "${slug}.org" "#+title: ${title}\n#+filetags: Person\n")
       :unnarrowed t)
      ("r" "artist" plain "%?"
-      :target (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+filetags: Artist\n\n* Wiki\n* Albums")
+      :target (file+head "${slug}.org" "#+title: ${title}\n#+filetags: Artist\n\n* Wiki\n* Albums")
       :unnarrowed t)
      ("t" "tool" plain "%?"
-      :target (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+filetags: Tool\n\n* Wiki\n* Doc\n\* Repo\n* Usage")
+      :target (file+head "${slug}.org" "#+title: ${title}\n#+filetags: Tool\n\n* Wiki\n* Doc\n\* Repo\n* Usage")
       :unnarrowed t)))
 
   :config
@@ -504,3 +504,16 @@ properties in `org-dateprop-properties'."
 (require 'ol-man)
 
 (setq ispell-personal-dictionary "~/Sync/ispell.dictionary")
+
+(defun rename-file-and-buffer ()
+  "Rename the current buffer and file it is visiting."
+  (interactive)
+  (let ((filename (buffer-file-name)))
+    (if (not (and filename (file-exists-p filename)))
+        (message "Buffer is not visiting a file!")
+      (let ((new-name (read-file-name "New name: " filename)))
+        (cond
+         ((vc-backend filename) (vc-rename-file filename new-name))
+         (t
+          (rename-file filename new-name t)
+          (set-visited-file-name new-name t t)))))))

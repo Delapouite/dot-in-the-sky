@@ -43,6 +43,17 @@
   (interactive)
  (org-set-property "created-at" (format-time-string "%FT%TZ%z")))
 
+(defun my/infer-created-at ()
+  "Set drawer property created-at to date in buffer name"
+  (interactive)
+  (let ((y (substring (buffer-name) 0 4))
+        (M (substring (buffer-name) 4 6))
+        (d (substring (buffer-name) 6 8))
+        (h (substring (buffer-name) 8 10))
+        (m (substring (buffer-name) 10 12))
+        (s (substring (buffer-name) 12 14)))
+    (org-set-property "created-at" (concat y "-" M "-" d "T" h ":" m ":" s "Z+0200"))))
+
 (defun my/upgraded-at ()
   "Set drawer property upgrated-at to now in ISO8601"
   (interactive)
