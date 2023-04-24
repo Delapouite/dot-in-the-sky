@@ -35,13 +35,13 @@
                    (message "Got error: %s %S" url error-thrown)))))
 
 (defun my/fetched-at ()
-  (org-set-property "fetched-at" (format-time-string "%FT%TZ%z"))
+  (org-set-property "fetched-at" (iso8601-format))
   (setq org-property-format "%-10s %s"))
 
 (defun my/created-at ()
   "Set drawer property created-at to now in ISO8601"
   (interactive)
- (org-set-property "created-at" (format-time-string "%FT%TZ%z")))
+ (org-set-property "created-at" (iso8601-format)))
 
 (defun my/infer-created-at ()
   "Set drawer property created-at to date in buffer name"
@@ -52,12 +52,12 @@
         (h (substring (buffer-name) 8 10))
         (m (substring (buffer-name) 10 12))
         (s (substring (buffer-name) 12 14)))
-    (org-set-property "created-at" (concat y "-" M "-" d "T" h ":" m ":" s "Z+0200"))))
+    (org-set-property "created-at" (concat y "-" M "-" d "T" h ":" m ":" s "+0200"))))
 
 (defun my/upgraded-at ()
   "Set drawer property upgrated-at to now in ISO8601"
   (interactive)
- (org-set-property "upgraded-at" (format-time-string "%FT%TZ%z")))
+  (org-set-property "upgraded-at" (iso8601-format)))
 
 (defun my/get-current-line-content ()
   (buffer-substring-no-properties (line-beginning-position) (line-end-position)))
@@ -218,8 +218,8 @@
       (org-set-property "author"  (assoc-default 'display_name (assoc-default 'owner item)))
       (my/org-set-number-prop "score" 'score item)
       (my/org-set-number-prop "views" 'view_count item)
-      (org-set-property "asked-at" (format-time-string "%Y-%m-%dT%TZ%z" (assoc-default 'creation_date item)))
-      (org-set-property "updated-at" (format-time-string "%Y-%m-%dT%TZ%z" (assoc-default 'last_activity_date item))))
+      (org-set-property "asked-at" (iso8601-format (assoc-default 'creation_date item)))
+      (org-set-property "updated-at" (iso8601-format (assoc-default 'last_activity_date item))))
     (my/fetched-at)))
 
 (cl-defun my/parse-stack-tags-response (&key data &allow-other-keys)
@@ -435,8 +435,8 @@
                    (my/org-set-prop "description" 'Description item)
                    (my/org-set-prop "remote-version" 'Version item)
                    (org-set-property "system-version" (string-trim (shell-command-to-string (concat "pacman -Q " package-id " 2> /dev/null | awk '{ print $2 }'"))))
-                   (org-set-property "created-at" (format-time-string "%Y-%m-%dT%TZ%z" (assoc-default 'FirstSubmitted item)))
-                   (org-set-property "updated-at" (format-time-string "%Y-%m-%dT%TZ%z" (assoc-default 'LastModified item))))
+                   (org-set-property "created-at" (iso8601-format (assoc-default 'FirstSubmitted item)))
+                   (org-set-property "updated-at" (iso8601-format (assoc-default 'LastModified item))))
                  (my/fetched-at))))))
 
 (defun my/visit-docker-hub () (interactive) (my/visit-url "hub.docker.com"))
@@ -565,7 +565,7 @@
                  (my/org-set-prop "author" 'by data)
                  (my/org-set-number-prop "score" 'score data)
                  (my/org-set-number-prop "posts" 'descendants data)
-                 (org-set-property "created-at" (format-time-string "%Y-%m-%dT%TZ%z" (assoc-default 'time data)))
+                 (org-set-property "created-at" (iso8601-format (assoc-default 'time data)))
                  (my/fetched-at))))))
 
 (defun my/fetch-stats ()

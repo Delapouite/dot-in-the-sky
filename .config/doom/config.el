@@ -122,13 +122,18 @@
       :leader :desc "Describe widget" "d w" #'describe-widget
       :leader :desc "Describe command" "d x" #'describe-command)
 
+(defun iso8601-format (&optional time)
+  "Format time string with %FT%T%z TIME"
+  (format-time-string "%FT%T%z" time))
+
 (use-package! doom-modeline
   :config
+
   (defun get-buffer-file-mtime ()
     (let ((mtime (file-attribute-modification-time
                   (file-attributes (buffer-file-name)))))
       (when mtime
-        (format-time-string " %Y-%m-%d %H:%M:%S" mtime))))
+        (concat " " (iso8601-format mtime)))))
 
   (doom-modeline-def-segment buffer-mtime
     "Define buffer-mtime modeline segment"
@@ -250,7 +255,7 @@
   (defun my/visited-at ()
     (when (eq 'headline (car (org-element-at-point)))
       (when (string= "https" (org-element-property :type (org-element-context)))
-        (org-set-property "visited-at" (format-time-string "%Y-%m-%dT%TZ%z")))))
+        (org-set-property "visited-at" (iso8601-format)))))
 
   '(add-hook 'org-follow-link-hook #'my/visited-at)
 
