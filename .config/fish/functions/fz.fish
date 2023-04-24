@@ -771,7 +771,17 @@ function fz --description 'entry point for all the fuzziness glory'
 			npm run "$script"
 		end
 
-	case pacman
+	case pacman-mirrors
+		if test "$argv[2]" = "--help"
+			printf 'list: pacman mirrors\n'
+			print_dim 'preview: none'
+			print_dim 'action: none'
+			return
+		end
+
+		cat /etc/pacman.d/mirrorlist | rg '^Server' | _fzf
+
+	case pacman-packages
 		if test "$argv[2]" = "--help"
 			printf 'list: packages and their version\n'
 			printf 'preview: package details\n'
@@ -1144,7 +1154,8 @@ function fz --description 'entry point for all the fuzziness glory'
 			music-playlists \
 			network-ports \
 			npm-scripts \
-			pacman \
+			pacman-mirrors \
+			pacman-packages \
 			pastel-colors \
 			podman-pods \
 			processes \
