@@ -289,15 +289,28 @@ function fz --description 'entry point for all the fuzziness glory'
 			printf 'list: browser tabs\n'
 			print_dim 'preview: none'
 			printf 'action: activate browser tab\n'
+			printf 'action: alt-d delete browser tab\n'
 			return
 		end
 
-		set --local tab_id (firefoxctl tab list \
+		set --local action (firefoxctl tab list \
 			| jq --raw-output '.[] | "\(.id) \(.lastAccessed)\t\(.title) \u001b[38;2;98;114;164m\(.url)\u001b[m"' \
-			| _fzf \
+			| _fzf --multi --expect alt-d \
 			| awk '{print $1}')
-		if test -n "$tab_id"
-			firefoxctl tab activate "$tab_id"
+
+		if test -n "$action"
+			set --local verb_ids (string split ' ' "$action")
+			set --local verb "$verb_ids[1]"
+			set --local ids "$verb_ids[2..]"
+
+			switch "$verb"
+
+			case 'alt-d'
+				firefoxctl tab delete $ids
+
+			case '*'
+				firefoxctl tab activate "$ids[1]"
+			end
 		end
 
 	case deno-tasks
