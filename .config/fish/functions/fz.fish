@@ -15,8 +15,8 @@ function fz --description 'entry point for all the fuzziness glory'
 	alias _fzf="$cmd"
 
 	set --local bat_json 'bat \
-		--plain
-		--language json
+		--plain \
+		--language json \
 		--color always'
 
 	function print_error
@@ -83,13 +83,19 @@ function fz --description 'entry point for all the fuzziness glory'
 			return
 		end
 
+		# prompt
+		set --local account (az account show | jq --raw-output '"\(.user.name) at \(.name)"')
+		set --local rg (az config get defaults.rg 2> /dev/null | jq --raw-output .value)
+
 		set --local acr (az acr list \
 			| jq --raw-output '.[] | "\(.name) \(.loginServer)\u001f\(.location)\u001f\(.id)"' \
 			| awk -F \u001f '{printf "%s %s \x1b[38;2;98;114;164m%s\x1b[m\n", $1, $2, $3, $4}' \
-			| _fzf --preview "az acr show --name {1} | $bat_json" \
+			| _fzf \
+				--prompt "$argv[1] ($account/$rg) ❯ " \
+				--preview "az acr show --name {1} | $bat_json" \
 			| awk '{print $2}')
 		if test -n "$acr"
-			az config set defaults.acr="$acr"
+			az config set defaults.acr="$acr" 2> /dev/null
 			fz azure-container-registry-repositories
 		end
 
@@ -106,8 +112,10 @@ function fz --description 'entry point for all the fuzziness glory'
 			return
 		end
 
-		set --local registry (az config get defaults.acr | jq --raw-output .value)
-		set --local repository (az config get defaults.acrepo | jq --raw-output .value)
+		# prompt
+		set --local registry (az config get defaults.acr 2> /dev/null | jq --raw-output .value)
+		set --local repository (az config get defaults.acrepo 2> /dev/null | jq --raw-output .value)
+
 		set --local manifest (az acr manifest list-metadata "$registry/$repository" 2> /dev/null \
 			| jq --raw-output '.[] | .digest' \
 			| _fzf --query '' \
@@ -130,7 +138,9 @@ function fz --description 'entry point for all the fuzziness glory'
 			return
 		end
 
-		set --local registry (az config get defaults.acr | jq --raw-output .value)
+		# prompt
+		set --local registry (az config get defaults.acr 2> /dev/null | jq --raw-output .value)
+
 		set --local repository (az acr repository list 2> /dev/null \
 			| jq --raw-output '.[]' \
 			| _fzf --query '' \
@@ -138,7 +148,7 @@ function fz --description 'entry point for all the fuzziness glory'
 				--preview "az acr repository show --repository {1} 2> /dev/null | $bat_json" \
 			| awk '{print $1}')
 		if test -n "$repository"
-			az config set defaults.acrepo="$repository"
+			az config set defaults.acrepo="$repository" 2> /dev/null
 			fz azure-container-registry-manifests
 		end
 
@@ -155,13 +165,18 @@ function fz --description 'entry point for all the fuzziness glory'
 			return
 		end
 
+		# prompt
+		set --local account (az account show | jq --raw-output '"\(.user.name) at \(.name)"')
+
 		set --local rg (az group list \
 			| jq --raw-output '.[] | "\(.name)\u001f\(.location)\u001f\(.id)"' \
 			| awk -F \u001f '{printf "%s %s \x1b[38;2;98;114;164m%s\x1b[m\n", $1, $2, $3}' \
-			| _fzf --preview 'az resource list --resource-group {1} | jq --raw-output ".[] | .name"' \
+			| _fzf \
+				--prompt "$argv[1] ($account) ❯ " \
+				--preview 'az resource list --resource-group {1} | jq --raw-output ".[] | .name"' \
 			| awk '{print $1}')
 		if test -n "$rg"
-			az config set defaults.rg="$rg"
+			az config set defaults.rg="$rg" 2> /dev/null
 			fz azure-resources "'$rg'"
 		end
 
@@ -178,10 +193,29 @@ function fz --description 'entry point for all the fuzziness glory'
 			return
 		end
 
+		# prompt
+		set --local account (az account show | jq --raw-output '"\(.user.name) at \(.name)"')
+
 		set --local resource (az resource list \
 			| jq --raw-output '.[] | "\(.name)\u001f\(.type)\u001f\(.resourceGroup)"' \
 			| awk -F \u001f '{printf "%s \x1b[38;2;98;114;164m%s %s\x1b[m\n", $1, $2, $3}' \
-			| _fzf --preview "az resource show --name {1} --resource-type {-2} --resource-group {-1} | $bat_json")
+			| _fzf \
+				--prompt "$argv[1] ($account) ❯ " \
+				--preview "az resource show --name {1} --resource-type {-2} --resource-group {-1} | $bat_json")
+		if test -n "$resource"
+			set --local resource (string split ' ' "$resource")
+
+			switch "$resource[2]"
+			case "Microsoft.ContainerRegistry/registries"
+				az config set defaults.acr="$resource[1]" 2> /dev/null
+				fz azure-container-registry-repositories
+
+			case "Microsoft.Storage/storageAccounts"
+				az config set defaults.storageaccount="$resource[1]" 2> /dev/null
+				fz azure-storage-containers
+
+			end
+		end
 
 	case azure-storage-accounts
 		if not command -q az
@@ -196,14 +230,19 @@ function fz --description 'entry point for all the fuzziness glory'
 			return
 		end
 
-		set --local account (az storage account list \
+		# prompt
+		set --local account (az account show | jq --raw-output '"\(.user.name) at \(.name)"')
+
+		set --local storageaccount (az storage account list \
 			| jq --raw-output '.[] | "\(.name)\u001f\(.location)\u001f\(.id)"' \
 			| awk -F \u001f '{printf "%s %s \x1b[38;2;98;114;164m%s\x1b[m\n", $1, $2, $3}' \
-			| _fzf --preview "az storage account show --name {1} | $bat_json" \
+			| _fzf \
+				--prompt "$argv[1] ($account) ❯ " \
+				--preview "az storage account show --name {1} | $bat_json" \
 			| awk '{print $1}')
-		if test -n "$account"
-			az config set defaults.storageaccount="$account"
-			fz azure-storage-containers "'$account'"
+		if test -n "$storageaccount"
+			az config set defaults.storageaccount="$storageaccount" 2> /dev/null
+			fz azure-storage-containers "'$storageaccount'"
 		end
 
 	case azure-storage-blobs
@@ -219,12 +258,15 @@ function fz --description 'entry point for all the fuzziness glory'
 			return
 		end
 
-		set --local account (az config get defaults.storageaccount | jq --raw-output .value)
-		set --local container (az config get defaults.storagecontainer | jq --raw-output .value)
-		set --local blob (az storage blob list --account-name "$account" --container-name "$container" 2> /dev/null \
+		# prompt
+		set --local storageaccount (az config get defaults.storageaccount 2> /dev/null | jq --raw-output .value)
+		set --local container (az config get defaults.storagecontainer 2> /dev/null | jq --raw-output .value)
+
+		set --local blob (az storage blob list --account-name "$storageaccount" --container-name "$container" 2> /dev/null \
 			| jq --raw-output '.[] | "\(.name)"' \
-			| _fzf --query '' --prompt "$argv[1] ($account/$container) ❯ " \
-				--preview "az storage blob show --account-name="$account" --container-name="$container" --name {1} 2> /dev/null | $bat_json" \
+			| _fzf --query '' \
+				--prompt "$argv[1] ($storageaccount/$container) ❯ " \
+				--preview "az storage blob show --account-name="$storageaccount" --container-name="$container" --name {1} 2> /dev/null | $bat_json" \
 			| awk '{print $1}')
 		if test -n "$blob"
 		end
@@ -242,15 +284,18 @@ function fz --description 'entry point for all the fuzziness glory'
 			return
 		end
 
-		set --local account (az config get defaults.storageaccount | jq --raw-output .value)
-		set --local container (az storage container list --auth-mode login --account-name "$account" 2> /dev/null \
+		# prompt
+		set --local storageaccount (az config get defaults.storageaccount 2> /dev/null | jq --raw-output .value)
+
+		set --local container (az storage container list --auth-mode login --account-name "$storageaccount" 2> /dev/null \
 			| jq --raw-output '.[] | "\(.name)"' \
 			| awk -F \u001f '{printf "%s\n", $1}' \
-			| _fzf --query '' --prompt "$argv[1] ($account) ❯ " \
-				--preview "az storage container show --account-name="$account" --name {1} 2> /dev/null | $bat_json" \
+			| _fzf --query '' \
+				--prompt "$argv[1] ($storageaccount) ❯ " \
+				--preview "az storage container show --account-name="$storageaccount" --name {1} 2> /dev/null | $bat_json" \
 			| awk '{print $1}')
 		if test -n "$container"
-			az config set defaults.storagecontainer="$container"
+			az config set defaults.storagecontainer="$container" 2> /dev/null
 			fz azure-storage-blobs "'$container'"
 		end
 
