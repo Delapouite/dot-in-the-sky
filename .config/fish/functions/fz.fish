@@ -56,7 +56,7 @@ function fz --description 'entry point for all the fuzziness glory'
 		if test "$argv[2]" = "--help"
 			printf 'list: azure accounts using az\n'
 			printf 'preview: azure account details\n'
-			printf 'action: set default account and display resource groups\n'
+			printf 'action: set default account and display its resource groups\n'
 			return
 		end
 
@@ -161,23 +161,33 @@ function fz --description 'entry point for all the fuzziness glory'
 		if test "$argv[2]" = "--help"
 			printf 'list: azure resource groups using az\n'
 			printf 'preview: azure resources in this rg\n'
-			printf 'action: set default resource group and display resources\n'
+			printf 'action: ret - set default resource group and display its resources\n'
+			printf 'action: ^ - fz azure-accounts\n'
 			return
 		end
 
-		# prompt
-		set --local account (az account show | jq --raw-output '"\(.user.name) at \(.name)"')
-
-		set --local rg (az group list \
+		set --local action (az group list \
 			| jq --raw-output '.[] | "\(.name)\u001f\(.location)\u001f\(.id)"' \
 			| awk -F \u001f '{printf "%s %s \x1b[38;2;98;114;164m%s\x1b[m\n", $1, $2, $3}' \
 			| _fzf \
-				--prompt "$argv[1] ($account) ❯ " \
-				--preview 'az resource list --resource-group {1} | jq --raw-output ".[] | .name"' \
-			| awk '{print $1}')
-		if test -n "$rg"
-			az config set defaults.rg="$rg" 2> /dev/null
-			fz azure-resources "'$rg'"
+				--header (az account show | jq --raw-output '"\(.user.name) at \(.name)"') \
+				--expect ^ \
+				--preview 'az resource list --resource-group {1} | jq --raw-output ".[] | .name"')
+
+		if test -n "$action"
+			set --local verb_ids (string split ' ' "$action")
+			set --local rg $verb_ids[2]
+
+			switch $verb_ids[1]
+
+			case '^'
+				fz azure-accounts
+
+			case '*'
+				az config set defaults.rg="$rg" 2> /dev/null
+				fz azure-resources "'$rg'"
+
+			end
 		end
 
 	case azure-resources
@@ -189,31 +199,40 @@ function fz --description 'entry point for all the fuzziness glory'
 		if test "$argv[2]" = "--help"
 			printf 'list: azure resources using az\n'
 			printf 'preview: azure resource\n'
-			print_dim 'action: none'
+			printf 'action: ret - depends on resource type\n'
+			printf 'action: ^ - fz azure-resource-groups\n'
 			return
 		end
 
-		# prompt
-		set --local account (az account show | jq --raw-output '"\(.user.name) at \(.name)"')
-
-		set --local resource (az resource list \
+		set --local action (az resource list \
 			| jq --raw-output '.[] | "\(.name)\u001f\(.type)\u001f\(.resourceGroup)"' \
 			| awk -F \u001f '{printf "%s \x1b[38;2;98;114;164m%s %s\x1b[m\n", $1, $2, $3}' \
 			| _fzf \
-				--prompt "$argv[1] ($account) ❯ " \
+				--header (az account show | jq --raw-output '"\(.user.name) at \(.name)"') \
+				--expect ^ \
 				--preview "az resource show --name {1} --resource-type {-2} --resource-group {-1} | $bat_json")
-		if test -n "$resource"
-			set --local resource (string split ' ' "$resource")
 
-			switch "$resource[2]"
-			case "Microsoft.ContainerRegistry/registries"
-				az config set defaults.acr="$resource[1]" 2> /dev/null
-				fz azure-container-registry-repositories
+		if test -n "$action"
+			set --local verb_ids (string split ' ' "$action")
+			set --local resource $verb_ids[2..]
 
-			case "Microsoft.Storage/storageAccounts"
-				az config set defaults.storageaccount="$resource[1]" 2> /dev/null
-				fz azure-storage-containers
+			switch $verb_ids[1]
 
+			case '^'
+				fz azure-resource-groups "$resource[3]"
+
+			case '*'
+				switch "$resource[2]"
+
+				case "Microsoft.ContainerRegistry/registries"
+					az config set defaults.acr="$resource[1]" 2> /dev/null
+					fz azure-container-registry-repositories
+
+				case "Microsoft.Storage/storageAccounts"
+					az config set defaults.storageaccount="$resource[1]" 2> /dev/null
+					fz azure-storage-containers
+
+				end
 			end
 		end
 
@@ -226,23 +245,32 @@ function fz --description 'entry point for all the fuzziness glory'
 		if test "$argv[2]" = "--help"
 			printf 'list: azure storage accounts using az\n'
 			printf 'preview: azure storage account details\n'
-			printf 'action: set default azure storage account and display containers\n'
+			printf 'action: ret - set default azure storage account and display its containers\n'
+			printf 'action: ^ - fz azure-resources\n'
 			return
 		end
 
-		# prompt
-		set --local account (az account show | jq --raw-output '"\(.user.name) at \(.name)"')
-
-		set --local storageaccount (az storage account list \
+		set --local action (az storage account list \
 			| jq --raw-output '.[] | "\(.name)\u001f\(.location)\u001f\(.id)"' \
 			| awk -F \u001f '{printf "%s %s \x1b[38;2;98;114;164m%s\x1b[m\n", $1, $2, $3}' \
 			| _fzf \
-				--prompt "$argv[1] ($account) ❯ " \
-				--preview "az storage account show --name {1} | $bat_json" \
-			| awk '{print $1}')
-		if test -n "$storageaccount"
-			az config set defaults.storageaccount="$storageaccount" 2> /dev/null
-			fz azure-storage-containers "'$storageaccount'"
+				--header (az account show | jq --raw-output '"\(.user.name) at \(.name)"') \
+				--expect ^ \
+				--preview "az storage account show --name {1} | $bat_json")
+		if test -n "$action"
+			set --local verb_ids (string split ' ' "$action")
+			set --local storageaccount $verb_ids[2]
+
+			switch $verb_ids[1]
+
+			case '^'
+				fz azure-resources
+
+			case '*'
+				az config set defaults.storageaccount="$storageaccount" 2> /dev/null
+				fz azure-storage-containers "'$storageaccount'"
+
+			end
 		end
 
 	case azure-storage-blobs
@@ -254,21 +282,31 @@ function fz --description 'entry point for all the fuzziness glory'
 		if test "$argv[2]" = "--help"
 			printf 'list: azure storage blobs using az\n'
 			printf 'preview: blob details\n'
-			print_dim 'action: none'
+			printf 'action: ^ - fz azure-storage-containers\n'
 			return
 		end
 
-		# prompt
+		# header
 		set --local storageaccount (az config get defaults.storageaccount 2> /dev/null | jq --raw-output .value)
 		set --local container (az config get defaults.storagecontainer 2> /dev/null | jq --raw-output .value)
 
-		set --local blob (az storage blob list --account-name "$storageaccount" --container-name "$container" 2> /dev/null \
+		set --local action (az storage blob list --account-name "$storageaccount" --container-name "$container" 2> /dev/null \
 			| jq --raw-output '.[] | "\(.name)"' \
 			| _fzf --query '' \
-				--prompt "$argv[1] ($storageaccount/$container) ❯ " \
-				--preview "az storage blob show --account-name="$storageaccount" --container-name="$container" --name {1} 2> /dev/null | $bat_json" \
-			| awk '{print $1}')
-		if test -n "$blob"
+				--header "$storageaccount/$container" \
+				--expect ^ \
+				--preview "az storage blob show --account-name="$storageaccount" --container-name='$container' --name {1} 2> /dev/null | $bat_json")
+		if test -n "$action"
+			set --local verb_ids (string split ' ' "$action")
+
+			switch $verb_ids[1]
+
+			case '^'
+				fz azure-storage-containers
+
+			case '*'
+
+			end
 		end
 
 	case azure-storage-containers
@@ -280,23 +318,35 @@ function fz --description 'entry point for all the fuzziness glory'
 		if test "$argv[2]" = "--help"
 			printf 'list: azure storage containers using az\n'
 			printf 'preview: azure storage container details\n'
-			printf 'action: set default azure storage container and display its blobs\n'
+			printf 'action: ret - set default azure storage container and display its blobs\n'
+			printf 'action: ^ - fz azure-storage-accounts\n'
 			return
 		end
 
-		# prompt
+		# header
 		set --local storageaccount (az config get defaults.storageaccount 2> /dev/null | jq --raw-output .value)
 
-		set --local container (az storage container list --auth-mode login --account-name "$storageaccount" 2> /dev/null \
+		set --local action (az storage container list --auth-mode login --account-name "$storageaccount" 2> /dev/null \
 			| jq --raw-output '.[] | "\(.name)"' \
 			| awk -F \u001f '{printf "%s\n", $1}' \
 			| _fzf --query '' \
-				--prompt "$argv[1] ($storageaccount) ❯ " \
-				--preview "az storage container show --account-name="$storageaccount" --name {1} 2> /dev/null | $bat_json" \
-			| awk '{print $1}')
-		if test -n "$container"
-			az config set defaults.storagecontainer="$container" 2> /dev/null
-			fz azure-storage-blobs "'$container'"
+				--header "$storageaccount" \
+				--expect ^ \
+				--preview "az storage container show --account-name="$storageaccount" --name {1} 2> /dev/null | $bat_json")
+		if test -n "$action"
+			set --local verb_ids (string split ' ' "$action")
+			set --local container $verb_ids[2]
+
+			switch $verb_ids[1]
+
+			case '^'
+				fz azure-storage-accounts
+
+			case '*'
+				az config set defaults.storagecontainer="$container" 2> /dev/null
+				fz azure-storage-blobs "'$container'"
+
+			end
 		end
 
 	case bins
@@ -333,22 +383,23 @@ function fz --description 'entry point for all the fuzziness glory'
 		if test "$argv[2]" = "--help"
 			printf 'list: browser tabs\n'
 			print_dim 'preview: none'
-			printf 'action: activate browser tab\n'
-			printf 'action: alt-d delete browser tab\n'
+			printf 'action: ret - activate browser tab\n'
+			printf 'action: alt-d - delete browser tab\n'
 			return
 		end
 
 		set --local action (firefoxctl tab list \
 			| jq --raw-output '.[] | "\(.id) \(.lastAccessed)\t\(.title) \u001b[38;2;98;114;164m\(.url)\u001b[m"' \
-			| _fzf --multi --expect alt-d \
+			| _fzf \
+				--multi \
+				--expect alt-d \
 			| awk '{print $1}')
 
 		if test -n "$action"
 			set --local verb_ids (string split ' ' "$action")
-			set --local verb "$verb_ids[1]"
 			set --local ids "$verb_ids[2..]"
 
-			switch "$verb"
+			switch $verb_ids[1]
 
 			case 'alt-d'
 				firefoxctl tab delete $ids
@@ -356,6 +407,7 @@ function fz --description 'entry point for all the fuzziness glory'
 			case '*'
 				firefoxctl tab activate "$ids[1]"
 			end
+
 		end
 
 	case deno-tasks
