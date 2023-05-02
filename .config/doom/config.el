@@ -522,3 +522,8 @@ properties in `org-dateprop-properties'."
          (t
           (rename-file filename new-name t)
           (set-visited-file-name new-name t t)))))))
+
+(use-package! olivetti
+  :config
+  (setq olivetti-minimum-body-width 120)
+  :hook (org-mode . olivetti-mode))

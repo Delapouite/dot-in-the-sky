@@ -53,3 +53,4 @@
 (package! org-download)
 (package! vulpea)
 (package! fish-mode)
+(package! olivetti)
