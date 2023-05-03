@@ -38,20 +38,41 @@
 ;; `load-theme' function. This is the default:
 (setq doom-theme 'doom-dracula)
 ;; ~/.config/emacs/.local/straight/repos/themes
+(setq
+  dracula-background "#282a36"
+  dracula-current-line "#44475a"
+  dracula-comment "#6272a4"
+  dracula-foreground "#f8f8f2"
+
+  dracula-cyan "#8be9fd"
+  dracula-green "#50fa7b"
+  dracula-orange "#ffb86c"
+  dracula-pink "#ff79c6"
+  dracula-purple "#bd93f9"
+  dracula-red "#ff5555"
+  dracula-yellow "#f1fa8c"
+
+  dracula-grey "#adb2cb")
+
 (custom-set-faces!
-  '(bold :weight bold :foreground "#8be9fd")
+  `(bold :weight bold :foreground ,dracula-orange)
   ;; yellow titles: in regular buffer and sidebar
-  '(org-document-title :height 2.0 :foreground "#f1fa8c")
-  '(org-roam-header-line :weight bold :height 2.0 :foreground "#f1fa8c")
-  ;; blue Links / Backlinks titles in sidebar
-  '(magit-section-heading :height 1.4 :foreground "#8be9fd")
+  `(org-document-title :height 2.0 :foreground ,dracula-yellow)
+  `(org-roam-header-line :weight bold :height 2.0 :foreground ,dracula-yellow)
+  ;; cyan Links / Backlinks titles in sidebar
+  `(magit-section-heading :height 1.4 :foreground ,dracula-cyan)
   ;; outline in sidebar
-  '(org-roam-olp :foreground "#6272a4")
+  `(org-roam-olp :foreground ,dracula-comment)
   ;; nodes titles in sidebar
-  '(org-roam-title :weight bold :height 1.4)
-  '(outline-1 :height 1.4)
-  '(outline-2 :height 0.8)
-  '(org-quote :slant italic :foreground "#f8f8f2"))
+  `(org-roam-title :weight bold :height 1.4)
+  `(org-meta-line :foreground ,dracula-comment)
+  `(org-document-info-keyword :foreground ,dracula-comment)
+  `(org-special-keyword :foreground ,dracula-comment)
+  `(org-property-value :foreground ,dracula-grey)
+  `(org-quote :slant italic :foreground ,dracula-foreground)
+  `(org-link :foreground ,dracula-cyan)
+  `(outline-1 :height 1.4)
+  `(outline-2 :height 0.8))
 
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
