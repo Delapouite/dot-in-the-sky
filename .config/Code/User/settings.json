@@ -1,10 +1,4 @@
 {
-  "files.exclude": {
-    "**/.classpath": true,
-    "**/.project": true,
-    "**/.settings": true,
-    "**/.factorypath": true
-  },
   "diffEditor.ignoreTrimWhitespace": false,
   "editor.cursorStyle": "block",
   "editor.cursorSurroundingLines": 10,
@@ -30,13 +24,21 @@
   "explorer.fileNesting.patterns": {
     ".env": ".envrc,.env.example,.env.template",
     ".eslintrc.json": ".eslintcache",
-    ".prettierrc": ".prettierignore",
+    ".prettierrc": ".prettierignore,.editorconfig",
     "jest.config.js": "jest.*.js,jest.*.ts",
     "package.json": "package-lock.json,yarn.lock,pnpm-lock.yaml,.yarnrc.yml",
+    "tsconfig.json": "tsconfig.*.json",
+    "tsconfig.base.json": "tsconfig.*.json",
     "GemFile": "Gemfile.lock"
   },
   "problems.showCurrentInStatus": true,
   "references.preferredLocation": "view",
+  "files.exclude": {
+    "**/.classpath": true,
+    "**/.project": true,
+    "**/.settings": true,
+    "**/.factorypath": true
+  },
   "search.exclude": {
     ".yarn": true,
     "yarn.lock": true
