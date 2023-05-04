@@ -5,6 +5,7 @@
 ;; sync' after modifying this file!
 
 (load! "private.el")
+(load! "property-drawer.el")
 (load! "fetcher.el")
 
 ;; Some functionality uses this to identify you, e.g. GPG configuration, email
@@ -177,7 +178,7 @@
   (org-roam-directory "~/Sync/org/roam")
   (org-roam-capture-templates
    '(("d" "default" plain "%?"
-      :target (file+head "${slug}.org" "#+title: ${title}\n")
+      :target (file+head "${slug}.org" "#+title: ${title}\n#+filetags:")
       :unnarrowed t)
      ("l" "album" plain "%?"
       :target (file+head "${slug}.org" "#+title: ${title}\n#+filetags: Album\n\n* Wiki\n* Tracks")
@@ -194,7 +195,6 @@
 
   :config
   (add-hook 'org-mode-hook `doom-modeline-set-delapouite-modeline)
-  (add-hook 'org-capture-before-finalize-hook 'my/created-at)
 
   (setq org-roam-node-display-template "${title:*} ${my-level} | ${mtime} | ${tags:50}")
   (setq org-tags-exclude-from-inheritance '("Album" "Artist" "Debut" "Top"))
@@ -338,7 +338,17 @@
                           :where (= dest $s1)
                           :and (= type "id")]
                          (org-roam-node-id node)))))
-      (format "[%d]" count))))
+      (format "[%d]" count)))
+
+  (advice-add 'org-insert-property-drawer :override #'my/org-insert-property-drawer)
+
+  (defun my/org-capture-before-finalize ()
+    (org-delete-property "ID")
+    (setq org-property-format "%s %s")
+    (org-set-property "id" (org-get-title))
+    (my/created-at))
+
+  (add-hook 'org-capture-before-finalize-hook 'my/org-capture-before-finalize))
 
 (setq company-selection-wrap-around t)
 (setq completion-ignore-case t)
@@ -423,94 +433,6 @@
   (add-hook 'before-save-hook #'vulpea-agenda-update-tag)
 
   (advice-add 'org-agenda :before #'vulpea-agenda-files-update))
-
-; relative dates in drawers
-
-(require 'cl-lib)
-
-(defcustom org+-dateprop-reltime-number-of-items 3
-  "Number of time items shown for relative time."
-  :type 'number
-  :group 'org)
-
-(defcustom org+-dateprop-properties '("created-at" "updated-at" "last-commit-at" "fetched-at" "asked-at" "built-at" "closed-at" "merged-at" "contributed-at")
-  "Names of properties with dates."
-  :type 'org+-dateprop-properties-widget
-  :group 'org)
-
-(defun org+-next-property-drawer (&optional limit)
-  "Search for the next property drawer.
-When a property drawer is found position point behind :PROPERTIES:
-and return the property-drawer as org-element.
-Otherwise position point at the end of the buffer and return nil."
-  (let (found drawer)
-    (while (and (setq found (re-search-forward org-drawer-regexp limit 1)
-              found (match-string-no-properties 1))
-        (or (and (setq drawer (org-element-context))
-             (null (eq (org-element-type drawer) 'property-drawer)))
-            (string-match found "END"))))
-    (and found drawer)))
-
-(defun org+-time-since-string (date)
-  "Return a string representing the time since DATE."
-  (let* ((time-diff (nreverse (seq-subseq (decode-time (time-subtract (current-time) (encode-time date))) 0 6)))
-     (cnt 0))
-    (setf (car time-diff) (- (car time-diff) 1970))
-    (mapconcat
-     #'identity
-     (cl-loop
-      for cnt from 1 upto org+-dateprop-reltime-number-of-items
-      for val in time-diff
-      for time-str in '("year" "month" "day" "hour" "minute" "second")
-      unless (= val 0)
-      collect (format "%d %s%s" val time-str (if (> val 1) "s" ""))
-      )
-     " ")))
-
-(defvar-local org+-dateprop--overlays nil
-  "List of overlays used for custom properties.")
-
-(defun org+-dateprop-properties-re (properties)
-  "Return regular expression corresponding to `org+-dateprop-properties'."
-  (org-re-property (regexp-opt properties) t))
-
-(defvar org+-dateprop--properties-re (org+-dateprop-properties-re org+-dateprop-properties)
-  "Regular expression matching the properties listed in `org+-dateprop-properties'.
-You should not set this regexp diretly but through customization of `org+-dateprop-properties'.")
-
-(defun my/org-dateprop (&optional absolute)
-  "Toggle display of ABSOLUTE or relative time of
-properties in `org-dateprop-properties'."
-  (interactive "P")
-  (if org+-dateprop--overlays
-      (progn (mapc #'delete-overlay org+-dateprop--overlays)
-         (setq org+-dateprop--overlays nil))
-    (unless absolute
-      (org-with-wide-buffer
-       (goto-char (point-min))
-       (let (drawer-el)
-     (while (setq drawer-el (org+-next-property-drawer))
-       (let ((drawer-end (org-element-property :contents-end drawer-el)))
-         (while (re-search-forward org+-dateprop--properties-re drawer-end t)
-           ;; See `org-property-re' for the regexp-groups.
-           ;; Group 3 is PROPVAL without surrounding whitespace.
-           (let* ((val-begin (match-beginning 3))
-              (val-end (match-end 3))
-              (time (org-parse-time-string (replace-regexp-in-string "[[:alpha:]]" " " (match-string 3))))
-              (time-diff-string (format "%s ago" (org+-time-since-string time)))
-              (o (make-overlay val-begin val-end)))
-         (overlay-put o 'display time-diff-string)
-         (overlay-put o 'org+-dateprop t)
-         (push o org+-dateprop--overlays))
-           ))))))))
-
-(define-widget 'org+-dateprop-properties-widget
-  'repeat
-  "Like widget '(repeat string) but also updates `org+-dateprop-properties'."
-  :value-to-external
-  (lambda (_ value)
-    (setq org+-dateprop--properties-re (org+-dateprop-properties-re value)) value)
-  :args '(string))
 
 (defun my/search-cwd (prefix)
   (defun my/search-cwd-internal () (insert prefix))

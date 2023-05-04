@@ -5,59 +5,11 @@
 (require 'json)
 (require 'xml)
 
-(defun my/kill-drawer ()
-  (interactive)
-  (let ((element (org-element-context)))
-    (unless (eq (car element) 'drawer)
-      (setq element (org-element-property :parent element)))
-    (kill-region (org-element-property :begin element)
-                 (org-element-property :end element))))
-
-(defun my/empty-property-drawer ()
-  (let ((element (org-get-property-block)))
-    (when element
-      (kill-region (car element) (cdr element)))))
-
-(defun my/org-set-prop (prop key alist)
-  (org-set-property prop (assoc-default key alist)))
-
-(defun my/org-set-number-prop (prop key alist)
-  (org-set-property prop (number-to-string (assoc-default key alist))))
-
-(defun my/org-set-boolean-prop (prop key alist)
-  (unless (eq :json-false (assoc-default key alist))
-    (org-set-property prop "true")))
-
 (defun my/fetch (url success)
   '(message (concat "fetching " url))
   (request url :parser 'json-read :success success :error
     (cl-function (lambda (&rest args &key error-thrown &allow-other-keys)
                    (message "Got error: %s %S" url error-thrown)))))
-
-(defun my/fetched-at ()
-  (org-set-property "fetched-at" (iso8601-format))
-  (setq org-property-format "%-10s %s"))
-
-(defun my/created-at ()
-  "Set drawer property created-at to now in ISO8601"
-  (interactive)
- (org-set-property "created-at" (iso8601-format)))
-
-(defun my/infer-created-at ()
-  "Set drawer property created-at to date in buffer name"
-  (interactive)
-  (let ((y (substring (buffer-name) 0 4))
-        (M (substring (buffer-name) 4 6))
-        (d (substring (buffer-name) 6 8))
-        (h (substring (buffer-name) 8 10))
-        (m (substring (buffer-name) 10 12))
-        (s (substring (buffer-name) 12 14)))
-    (org-set-property "created-at" (concat y "-" M "-" d "T" h ":" m ":" s "+0200"))))
-
-(defun my/upgraded-at ()
-  "Set drawer property upgrated-at to now in ISO8601"
-  (interactive)
-  (org-set-property "upgraded-at" (iso8601-format)))
 
 (defun my/get-current-line-content ()
   (buffer-substring-no-properties (line-beginning-position) (line-end-position)))
