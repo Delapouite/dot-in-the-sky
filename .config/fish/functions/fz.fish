@@ -283,6 +283,7 @@ function fz --description 'entry point for all the fuzziness glory'
 			printf 'list: azure storage blobs using az\n'
 			printf 'preview: blob details\n'
 			printf 'action: ^ - fz azure-storage-containers\n'
+			printf 'action: enter - download blob in /tmp\n'
 			return
 		end
 
@@ -295,6 +296,7 @@ function fz --description 'entry point for all the fuzziness glory'
 			| _fzf --query '' \
 				--header "$storageaccount/$container" \
 				--expect ^ \
+				--expect enter \
 				--preview "az storage blob show --account-name="$storageaccount" --container-name='$container' --name {1} 2> /dev/null | $bat_json")
 		if test -n "$action"
 			set --local verb_ids (string split ' ' "$action")
@@ -303,6 +305,15 @@ function fz --description 'entry point for all the fuzziness glory'
 
 			case '^'
 				fz azure-storage-containers
+
+			case 'enter'
+				set --local download_dir "/tmp/fz/azure-storage-blobs/$storageaccount/$container/"(dirname "$verb_ids[2]")
+				mkdir --parents "$download_dir"
+				az storage blob download \
+					--account-name="$storageaccount" \
+					--container-name="$container" \
+					--name "$verb_ids[2]" \
+					--file "$download_dir/"(basename "$verb_ids[2]")
 
 			case '*'
 
