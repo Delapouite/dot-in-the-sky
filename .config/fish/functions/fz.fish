@@ -152,6 +152,65 @@ function fz --description 'entry point for all the fuzziness glory'
 			fz azure-container-registry-manifests
 		end
 
+	case azure-extensions
+		if not command -q az
+			print_error 'az command not found'
+			return 1
+		end
+
+		if test "$argv[2]" = "--help"
+			printf 'list: az extensions\n'
+			printf 'preview: az extension detail\n'
+			print_dim 'action: none'
+			return
+		end
+
+		set --local action (az extension list-available \
+			| jq --raw-output '.[] | "\(.name)\u001f\(.installed)\u001f\(.version)"' \
+			| awk -F \u001f '{printf "%s %s \x1b[38;2;98;114;164m%s\x1b[m\n", $1, $2, $3}' \
+			| _fzf \
+				--header (az account show | jq --raw-output '"\(.user.name) at \(.name)"') \
+				--expect ^ \
+				--preview "az extension show --name {1} | $bat_json")
+		if test -n "$action"
+			set --local verb_ids (string split ' ' "$action")
+		end
+
+	case azure-iot-hubs
+		if not command -q az
+			print_error 'az command not found'
+			return 1
+		end
+
+		if test "$argv[2]" = "--help"
+			printf 'list: azure iot-hubs using az\n'
+			printf 'preview: azure iot-hub details\n'
+			printf 'action: ^ - fz azure-resources\n'
+			return
+		end
+
+		set --local action (az iot hub list \
+			| jq --raw-output '.[] | "\(.name)\u001f\(.location)\u001f\(.id)"' \
+			| awk -F \u001f '{printf "%s %s \x1b[38;2;98;114;164m%s\x1b[m\n", $1, $2, $3}' \
+			| _fzf \
+				--header (az account show | jq --raw-output '"\(.user.name) at \(.name)"') \
+				--expect ^ \
+				--preview "az iot hub show --name {1} | $bat_json")
+		if test -n "$action"
+			set --local verb_ids (string split ' ' "$action")
+			set --local iot_hub $verb_ids[2]
+
+			switch $verb_ids[1]
+
+			case '^'
+				fz azure-resources
+
+			case '*'
+				az config set defaults.iothub="$iot_hub" 2> /dev/null
+
+			end
+		end
+
 	case azure-resource-groups
 		if not command -q az
 			print_error 'az command not found'
@@ -1235,6 +1294,8 @@ function fz --description 'entry point for all the fuzziness glory'
 			azure-container-registries \
 			azure-container-registry-repositories \
 			azure-container-registry-manifests \
+			azure-extensions \
+			azure-iot-hubs \
 			azure-resource-groups \
 			azure-resources \
 			azure-storage-accounts \
