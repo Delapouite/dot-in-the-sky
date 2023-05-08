@@ -3,6 +3,7 @@
 ;; Related to help map
 
 (map! :leader :desc "Describe alias" "d a" #'describe-alias
+      :leader :desc "Describe abbrev" "d A" #'list-abbrevs
       :leader :desc "Describe binding" "d b" #'describe-binding
       :leader :desc "Describe char" "d c" #'describe-char
       :leader :desc "Describe function" "d f" #'describe-function
@@ -10,7 +11,8 @@
       :leader :desc "Describe key" "d k" #'describe-key
       :leader :desc "Describe mode" "d m" #'describe-mode
       :leader :desc "Describe package" "d p" #'describe-package
-      :leader :desc "Describe theme" "d t" #'describe-theme
+      :leader :desc "Describe text-properties" "d t" #'describe-text-properties
+      :leader :desc "Describe theme" "d T" #'describe-theme
       :leader :desc "Describe variable" "d v" #'describe-variable
       :leader :desc "Describe widget" "d w" #'describe-widget
       :leader :desc "Describe command" "d x" #'describe-command
