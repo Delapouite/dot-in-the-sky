@@ -47,375 +47,340 @@ function fz --description 'entry point for all the fuzziness glory'
 		if test -n "$device"
 		end
 
-	case azure-accounts
+	case 'azure-*'
 		if not command -q az
 			print_error 'az command not found'
 			return 1
 		end
 
-		if test "$argv[2]" = "--help"
-			printf 'list: azure accounts using az\n'
-			printf 'preview: azure account details\n'
-			printf 'action: set default account and display its resource groups\n'
-			return
-		end
-
-		set --local account (az account list \
-			| jq --raw-output '.[] | "\(.name)\u001f\(.user.name)\u001f(default:\(.isDefault))\u001f\(.id)"' \
-			| awk -F \u001f '{printf "%s %s %s \x1b[38;2;98;114;164m%s\x1b[m\n", $1, $2, $3, $4}' \
-			| _fzf --preview "az account show --subscription {-1} | $bat_json" \
-			| awk '{print $NF}')
-		if test -n "$account"
-			az account set --subscription "$account"
-			fz azure-resource-groups
-		end
-
-	case azure-container-registries
-		if not command -q az
-			print_error 'az command not found'
-			return 1
-		end
-
-		if test "$argv[2]" = "--help"
-			printf 'list: azure container registries using az\n'
-			printf 'preview: azure container registry details\n'
-			printf 'action: set default container registry and display container registry repositories\n'
-			return
-		end
-
-		# prompt
+		# header or prompt
 		set --local account (az account show | jq --raw-output '"\(.user.name) at \(.name)"')
-		set --local rg (az config get defaults.rg 2> /dev/null | jq --raw-output .value)
 
-		set --local acr (az acr list \
-			| jq --raw-output '.[] | "\(.name) \(.loginServer)\u001f\(.location)\u001f\(.id)"' \
-			| awk -F \u001f '{printf "%s %s \x1b[38;2;98;114;164m%s\x1b[m\n", $1, $2, $3, $4}' \
-			| _fzf \
-				--prompt "$argv[1] ($account/$rg) ❯ " \
-				--preview "az acr show --name {1} | $bat_json" \
-			| awk '{print $2}')
-		if test -n "$acr"
-			az config set defaults.acr="$acr" 2> /dev/null
-			fz azure-container-registry-repositories
-		end
+		switch $argv[1]
 
-	case azure-container-registry-manifests
-		if not command -q az
-			print_error 'az command not found'
-			return 1
-		end
-
-		if test "$argv[2]" = "--help"
-			printf 'list: azure container registry manifests using az\n'
-			printf 'preview: container registry manifest metadata\n'
-			print_dim 'action: none'
-			return
-		end
-
-		# prompt
-		set --local registry (az config get defaults.acr 2> /dev/null | jq --raw-output .value)
-		set --local repository (az config get defaults.acrepo 2> /dev/null | jq --raw-output .value)
-
-		set --local manifest (az acr manifest list-metadata "$registry/$repository" 2> /dev/null \
-			| jq --raw-output '.[] | .digest' \
-			| _fzf --query '' \
-				--prompt "$argv[1] ($registry/$repository) ❯ " \
-				--preview "az acr manifest show-metadata $registry/$repository@{1} 2> /dev/null | $bat_json" \
-			| awk '{print $1}')
-		if test -n "$manifest"
-		end
-
-	case azure-container-registry-repositories
-		if not command -q az
-			print_error 'az command not found'
-			return 1
-		end
-
-		if test "$argv[2]" = "--help"
-			printf 'list: azure container registry repositories using az\n'
-			printf 'preview: azure container registry repository\n'
-			printf 'action: set default container registry repository and display container registry manifests\n'
-			return
-		end
-
-		# prompt
-		set --local registry (az config get defaults.acr 2> /dev/null | jq --raw-output .value)
-
-		set --local repository (az acr repository list 2> /dev/null \
-			| jq --raw-output '.[]' \
-			| _fzf --query '' \
-				--prompt "$argv[1] ($registry) ❯ " \
-				--preview "az acr repository show --repository {1} 2> /dev/null | $bat_json" \
-			| awk '{print $1}')
-		if test -n "$repository"
-			az config set defaults.acrepo="$repository" 2> /dev/null
-			fz azure-container-registry-manifests
-		end
-
-	case azure-extensions
-		if not command -q az
-			print_error 'az command not found'
-			return 1
-		end
-
-		if test "$argv[2]" = "--help"
-			printf 'list: az extensions\n'
-			printf 'preview: az extension detail\n'
-			print_dim 'action: none'
-			return
-		end
-
-		set --local action (az extension list-available \
-			| jq --raw-output '.[] | "\(.name)\u001f\(.installed)\u001f\(.version)"' \
-			| awk -F \u001f '{printf "%s %s \x1b[38;2;98;114;164m%s\x1b[m\n", $1, $2, $3}' \
-			| _fzf \
-				--header (az account show | jq --raw-output '"\(.user.name) at \(.name)"') \
-				--expect ^ \
-				--preview "az extension show --name {1} | $bat_json")
-		if test -n "$action"
-			set --local verb_ids (string split ' ' "$action")
-		end
-
-	case azure-iot-hubs
-		if not command -q az
-			print_error 'az command not found'
-			return 1
-		end
-
-		if test "$argv[2]" = "--help"
-			printf 'list: azure iot-hubs using az\n'
-			printf 'preview: azure iot-hub details\n'
-			printf 'action: ^ - fz azure-resources\n'
-			return
-		end
-
-		set --local action (az iot hub list \
-			| jq --raw-output '.[] | "\(.name)\u001f\(.location)\u001f\(.id)"' \
-			| awk -F \u001f '{printf "%s %s \x1b[38;2;98;114;164m%s\x1b[m\n", $1, $2, $3}' \
-			| _fzf \
-				--header (az account show | jq --raw-output '"\(.user.name) at \(.name)"') \
-				--expect ^ \
-				--preview "az iot hub show --name {1} | $bat_json")
-		if test -n "$action"
-			set --local verb_ids (string split ' ' "$action")
-			set --local iot_hub $verb_ids[2]
-
-			switch $verb_ids[1]
-
-			case '^'
-				fz azure-resources
-
-			case '*'
-				az config set defaults.iothub="$iot_hub" 2> /dev/null
-
+		case azure-accounts
+			if test "$argv[2]" = "--help"
+				printf 'list: azure accounts using az\n'
+				printf 'preview: azure account details\n'
+				printf 'action: set default account and display its resource groups\n'
+				return
 			end
-		end
 
-	case azure-resource-groups
-		if not command -q az
-			print_error 'az command not found'
-			return 1
-		end
+			set --local account (az account list \
+				| jq --raw-output '.[] | "\(.name)\u001f\(.user.name)\u001f(default:\(.isDefault))\u001f\(.id)"' \
+				| awk -F \u001f '{printf "%s %s %s \x1b[38;2;98;114;164m%s\x1b[m\n", $1, $2, $3, $4}' \
+				| _fzf --preview "az account show --subscription {-1} | $bat_json" \
+				| awk '{print $NF}')
 
-		if test "$argv[2]" = "--help"
-			printf 'list: azure resource groups using az\n'
-			printf 'preview: azure resources in this rg\n'
-			printf 'action: ret - set default resource group and display its resources\n'
-			printf 'action: ^ - fz azure-accounts\n'
-			return
-		end
-
-		set --local action (az group list \
-			| jq --raw-output '.[] | "\(.name)\u001f\(.location)\u001f\(.id)"' \
-			| awk -F \u001f '{printf "%s %s \x1b[38;2;98;114;164m%s\x1b[m\n", $1, $2, $3}' \
-			| _fzf \
-				--header (az account show | jq --raw-output '"\(.user.name) at \(.name)"') \
-				--expect ^ \
-				--preview 'az resource list --resource-group {1} | jq --raw-output ".[] | .name"')
-
-		if test -n "$action"
-			set --local verb_ids (string split ' ' "$action")
-			set --local rg $verb_ids[2]
-
-			switch $verb_ids[1]
-
-			case '^'
-				fz azure-accounts
-
-			case '*'
-				az config set defaults.rg="$rg" 2> /dev/null
-				fz azure-resources "'$rg'"
-
+			if test -n "$account"
+				az account set --subscription "$account"
+				fz azure-resource-groups
 			end
-		end
 
-	case azure-resources
-		if not command -q az
-			print_error 'az command not found'
-			return 1
-		end
+		case azure-container-registries
+			if test "$argv[2]" = "--help"
+				printf 'list: azure container registries using az\n'
+				printf 'preview: azure container registry details\n'
+				printf 'action: set default container registry and display container registry repositories\n'
+				return
+			end
 
-		if test "$argv[2]" = "--help"
-			printf 'list: azure resources using az\n'
-			printf 'preview: azure resource\n'
-			printf 'action: ret - depends on resource type\n'
-			printf 'action: ^ - fz azure-resource-groups\n'
-			return
-		end
+			# prompt
+			set --local rg (az config get defaults.rg 2> /dev/null | jq --raw-output .value)
 
-		set --local action (az resource list \
-			| jq --raw-output '.[] | "\(.name)\u001f\(.type)\u001f\(.resourceGroup)"' \
-			| awk -F \u001f '{printf "%s \x1b[38;2;98;114;164m%s %s\x1b[m\n", $1, $2, $3}' \
-			| _fzf \
-				--header (az account show | jq --raw-output '"\(.user.name) at \(.name)"') \
-				--expect ^ \
-				--preview "az resource show --name {1} --resource-type {-2} --resource-group {-1} | $bat_json")
+			set --local acr (az acr list \
+				| jq --raw-output '.[] | "\(.name) \(.loginServer)\u001f\(.location)\u001f\(.id)"' \
+				| awk -F \u001f '{printf "%s %s \x1b[38;2;98;114;164m%s\x1b[m\n", $1, $2, $3, $4}' \
+				| _fzf \
+					--prompt "$argv[1] ($account/$rg) ❯ " \
+					--preview "az acr show --name {1} | $bat_json" \
+				| awk '{print $2}')
 
-		if test -n "$action"
-			set --local verb_ids (string split ' ' "$action")
-			set --local resource $verb_ids[2..]
+			if test -n "$acr"
+				az config set defaults.acr="$acr" 2> /dev/null
+				fz azure-container-registry-repositories
+			end
 
-			switch $verb_ids[1]
+		case azure-container-registry-manifests
+			if test "$argv[2]" = "--help"
+				printf 'list: azure container registry manifests using az\n'
+				printf 'preview: container registry manifest metadata\n'
+				print_dim 'action: none'
+				return
+			end
 
-			case '^'
-				fz azure-resource-groups "$resource[3]"
+			# prompt
+			set --local registry (az config get defaults.acr 2> /dev/null | jq --raw-output .value)
+			set --local repository (az config get defaults.acrepo 2> /dev/null | jq --raw-output .value)
 
-			case '*'
-				switch "$resource[2]"
+			set --local manifest (az acr manifest list-metadata "$registry/$repository" 2> /dev/null \
+				| jq --raw-output '.[] | .digest' \
+				| _fzf --query '' \
+					--prompt "$argv[1] ($registry/$repository) ❯ " \
+					--preview "az acr manifest show-metadata $registry/$repository@{1} 2> /dev/null | $bat_json" \
+				| awk '{print $1}')
 
-				case "Microsoft.ContainerRegistry/registries"
-					az config set defaults.acr="$resource[1]" 2> /dev/null
-					fz azure-container-registry-repositories
+			if test -n "$manifest"
+			end
 
-				case "Microsoft.Storage/storageAccounts"
-					az config set defaults.storageaccount="$resource[1]" 2> /dev/null
-					fz azure-storage-containers
+		case azure-container-registry-repositories
+			if test "$argv[2]" = "--help"
+				printf 'list: azure container registry repositories using az\n'
+				printf 'preview: azure container registry repository\n'
+				printf 'action: set default container registry repository and display container registry manifests\n'
+				return
+			end
+
+			# prompt
+			set --local registry (az config get defaults.acr 2> /dev/null | jq --raw-output .value)
+
+			set --local repository (az acr repository list 2> /dev/null \
+				| jq --raw-output '.[]' \
+				| _fzf --query '' \
+					--prompt "$argv[1] ($registry) ❯ " \
+					--preview "az acr repository show --repository {1} 2> /dev/null | $bat_json" \
+				| awk '{print $1}')
+
+			if test -n "$repository"
+				az config set defaults.acrepo="$repository" 2> /dev/null
+				fz azure-container-registry-manifests
+			end
+
+		case azure-extensions
+			if test "$argv[2]" = "--help"
+				printf 'list: az extensions\n'
+				printf 'preview: az extension detail\n'
+				print_dim 'action: none'
+				return
+			end
+
+			set --local action (az extension list-available \
+				| jq --raw-output '.[] | "\(.name)\u001f\(.installed)\u001f\(.version)"' \
+				| awk -F \u001f '{printf "%s %s \x1b[38;2;98;114;164m%s\x1b[m\n", $1, $2, $3}' \
+				| _fzf \
+					--header "$account" \
+					--expect ^ \
+					--preview "az extension show --name {1} | $bat_json")
+
+			if test -n "$action"
+				set --local verb_ids (string split ' ' "$action")
+			end
+
+		case azure-iot-hubs
+			if test "$argv[2]" = "--help"
+				printf 'list: azure iot-hubs using az\n'
+				printf 'preview: azure iot-hub details\n'
+				printf 'action: ^ - fz azure-resources\n'
+				return
+			end
+
+			set --local action (az iot hub list \
+				| jq --raw-output '.[] | "\(.name)\u001f\(.location)\u001f\(.id)"' \
+				| awk -F \u001f '{printf "%s %s \x1b[38;2;98;114;164m%s\x1b[m\n", $1, $2, $3}' \
+				| _fzf \
+					--header "$account" \
+					--expect ^ \
+					--preview "az iot hub show --name {1} | $bat_json")
+
+			if test -n "$action"
+				set --local verb_ids (string split ' ' "$action")
+				set --local iot_hub $verb_ids[2]
+
+				switch $verb_ids[1]
+
+				case '^'
+					fz azure-resources
+
+				case '*'
+					az config set defaults.iothub="$iot_hub" 2> /dev/null
 
 				end
 			end
-		end
 
-	case azure-storage-accounts
-		if not command -q az
-			print_error 'az command not found'
-			return 1
-		end
-
-		if test "$argv[2]" = "--help"
-			printf 'list: azure storage accounts using az\n'
-			printf 'preview: azure storage account details\n'
-			printf 'action: ret - set default azure storage account and display its containers\n'
-			printf 'action: ^ - fz azure-resources\n'
-			return
-		end
-
-		set --local action (az storage account list \
-			| jq --raw-output '.[] | "\(.name)\u001f\(.location)\u001f\(.id)"' \
-			| awk -F \u001f '{printf "%s %s \x1b[38;2;98;114;164m%s\x1b[m\n", $1, $2, $3}' \
-			| _fzf \
-				--header (az account show | jq --raw-output '"\(.user.name) at \(.name)"') \
-				--expect ^ \
-				--preview "az storage account show --name {1} | $bat_json")
-		if test -n "$action"
-			set --local verb_ids (string split ' ' "$action")
-			set --local storageaccount $verb_ids[2]
-
-			switch $verb_ids[1]
-
-			case '^'
-				fz azure-resources
-
-			case '*'
-				az config set defaults.storageaccount="$storageaccount" 2> /dev/null
-				fz azure-storage-containers "'$storageaccount'"
-
+		case azure-resource-groups
+			if test "$argv[2]" = "--help"
+				printf 'list: azure resource groups using az\n'
+				printf 'preview: azure resources in this rg\n'
+				printf 'action: ret - set default resource group and display its resources\n'
+				printf 'action: ^ - fz azure-accounts\n'
+				return
 			end
-		end
 
-	case azure-storage-blobs
-		if not command -q az
-			print_error 'az command not found'
-			return 1
-		end
+			set --local action (az group list \
+				| jq --raw-output '.[] | "\(.name)\u001f\(.location)\u001f\(.id)"' \
+				| awk -F \u001f '{printf "%s %s \x1b[38;2;98;114;164m%s\x1b[m\n", $1, $2, $3}' \
+				| _fzf \
+					--header "$account" \
+					--expect ^ \
+					--preview 'az resource list --resource-group {1} | jq --raw-output ".[] | .name"')
 
-		if test "$argv[2]" = "--help"
-			printf 'list: azure storage blobs using az\n'
-			printf 'preview: blob details\n'
-			printf 'action: ^ - fz azure-storage-containers\n'
-			printf 'action: enter - download blob in /tmp\n'
-			return
-		end
+			if test -n "$action"
+				set --local verb_ids (string split ' ' "$action")
+				set --local rg $verb_ids[2]
 
-		# header
-		set --local storageaccount (az config get defaults.storageaccount 2> /dev/null | jq --raw-output .value)
-		set --local container (az config get defaults.storagecontainer 2> /dev/null | jq --raw-output .value)
+				switch $verb_ids[1]
 
-		set --local action (az storage blob list --account-name "$storageaccount" --container-name "$container" 2> /dev/null \
-			| jq --raw-output '.[] | "\(.name)"' \
-			| _fzf --query '' \
-				--header "$storageaccount/$container" \
-				--expect ^ \
-				--expect enter \
-				--preview "az storage blob show --account-name="$storageaccount" --container-name='$container' --name {1} 2> /dev/null | $bat_json")
-		if test -n "$action"
-			set --local verb_ids (string split ' ' "$action")
+				case '^'
+					fz azure-accounts
 
-			switch $verb_ids[1]
+				case '*'
+					az config set defaults.rg="$rg" 2> /dev/null
+					fz azure-resources "'$rg'"
 
-			case '^'
-				fz azure-storage-containers
-
-			case 'enter'
-				set --local download_dir "/tmp/fz/azure-storage-blobs/$storageaccount/$container/"(dirname "$verb_ids[2]")
-				mkdir --parents "$download_dir"
-				az storage blob download \
-					--account-name="$storageaccount" \
-					--container-name="$container" \
-					--name "$verb_ids[2]" \
-					--file "$download_dir/"(basename "$verb_ids[2]")
-
-			case '*'
-
+				end
 			end
-		end
 
-	case azure-storage-containers
-		if not command -q az
-			print_error 'az command not found'
-			return 1
-		end
+		case azure-resources
+			if test "$argv[2]" = "--help"
+				printf 'list: azure resources using az\n'
+				printf 'preview: azure resource\n'
+				printf 'action: ret - depends on resource type\n'
+				printf 'action: ^ - fz azure-resource-groups\n'
+				return
+			end
 
-		if test "$argv[2]" = "--help"
-			printf 'list: azure storage containers using az\n'
-			printf 'preview: azure storage container details\n'
-			printf 'action: ret - set default azure storage container and display its blobs\n'
-			printf 'action: ^ - fz azure-storage-accounts\n'
-			return
-		end
+			set --local action (az resource list \
+				| jq --raw-output '.[] | "\(.name)\u001f\(.type)\u001f\(.resourceGroup)"' \
+				| awk -F \u001f '{printf "%s \x1b[38;2;98;114;164m%s %s\x1b[m\n", $1, $2, $3}' \
+				| _fzf \
+					--header "$account" \
+					--expect ^ \
+					--preview "az resource show --name {1} --resource-type {-2} --resource-group {-1} | $bat_json")
 
-		# header
-		set --local storageaccount (az config get defaults.storageaccount 2> /dev/null | jq --raw-output .value)
+			if test -n "$action"
+				set --local verb_ids (string split ' ' "$action")
+				set --local resource $verb_ids[2..]
 
-		set --local action (az storage container list --auth-mode login --account-name "$storageaccount" 2> /dev/null \
-			| jq --raw-output '.[] | "\(.name)"' \
-			| awk -F \u001f '{printf "%s\n", $1}' \
-			| _fzf --query '' \
-				--header "$storageaccount" \
-				--expect ^ \
-				--preview "az storage container show --account-name="$storageaccount" --name {1} 2> /dev/null | $bat_json")
-		if test -n "$action"
-			set --local verb_ids (string split ' ' "$action")
-			set --local container $verb_ids[2]
+				switch $verb_ids[1]
 
-			switch $verb_ids[1]
+				case '^'
+					fz azure-resource-groups "$resource[3]"
 
-			case '^'
-				fz azure-storage-accounts
+				case '*'
+					switch "$resource[2]"
 
-			case '*'
-				az config set defaults.storagecontainer="$container" 2> /dev/null
-				fz azure-storage-blobs "'$container'"
+					case "Microsoft.ContainerRegistry/registries"
+						az config set defaults.acr="$resource[1]" 2> /dev/null
+						fz azure-container-registry-repositories
 
+					case "Microsoft.Storage/storageAccounts"
+						az config set defaults.storageaccount="$resource[1]" 2> /dev/null
+						fz azure-storage-containers
+
+					end
+				end
+			end
+
+		case azure-storage-accounts
+			if test "$argv[2]" = "--help"
+				printf 'list: azure storage accounts using az\n'
+				printf 'preview: azure storage account details\n'
+				printf 'action: ret - set default azure storage account and display its containers\n'
+				printf 'action: ^ - fz azure-resources\n'
+				return
+			end
+
+			set --local action (az storage account list \
+				| jq --raw-output '.[] | "\(.name)\u001f\(.location)\u001f\(.id)"' \
+				| awk -F \u001f '{printf "%s %s \x1b[38;2;98;114;164m%s\x1b[m\n", $1, $2, $3}' \
+				| _fzf \
+					--header "$account" \
+					--expect ^ \
+					--preview "az storage account show --name {1} | $bat_json")
+
+			if test -n "$action"
+				set --local verb_ids (string split ' ' "$action")
+				set --local storageaccount $verb_ids[2]
+
+				switch $verb_ids[1]
+
+				case '^'
+					fz azure-resources
+
+				case '*'
+					az config set defaults.storageaccount="$storageaccount" 2> /dev/null
+					fz azure-storage-containers "'$storageaccount'"
+
+				end
+			end
+
+		case azure-storage-blobs
+			if test "$argv[2]" = "--help"
+				printf 'list: azure storage blobs using az\n'
+				printf 'preview: blob details\n'
+				printf 'action: ^ - fz azure-storage-containers\n'
+				printf 'action: enter - download blob in /tmp\n'
+				return
+			end
+
+			# header
+			set --local storageaccount (az config get defaults.storageaccount 2> /dev/null | jq --raw-output .value)
+			set --local container (az config get defaults.storagecontainer 2> /dev/null | jq --raw-output .value)
+
+			set --local action (az storage blob list --account-name "$storageaccount" --container-name "$container" 2> /dev/null \
+				| jq --raw-output '.[] | "\(.name)"' \
+				| _fzf --query '' \
+					--header "$storageaccount/$container" \
+					--expect ^ \
+					--expect enter \
+					--preview "az storage blob show --account-name="$storageaccount" --container-name='$container' --name {1} 2> /dev/null | $bat_json")
+
+			if test -n "$action"
+				set --local verb_ids (string split ' ' "$action")
+
+				switch $verb_ids[1]
+
+				case '^'
+					fz azure-storage-containers
+
+				case 'enter'
+					set --local download_dir "/tmp/fz/azure-storage-blobs/$storageaccount/$container/"(dirname "$verb_ids[2]")
+					mkdir --parents "$download_dir"
+					az storage blob download \
+						--account-name="$storageaccount" \
+						--container-name="$container" \
+						--name "$verb_ids[2]" \
+						--file "$download_dir/"(basename "$verb_ids[2]")
+
+				case '*'
+
+				end
+			end
+
+		case azure-storage-containers
+			if test "$argv[2]" = "--help"
+				printf 'list: azure storage containers using az\n'
+				printf 'preview: azure storage container details\n'
+				printf 'action: ret - set default azure storage container and display its blobs\n'
+				printf 'action: ^ - fz azure-storage-accounts\n'
+				return
+			end
+
+			# header
+			set --local storageaccount (az config get defaults.storageaccount 2> /dev/null | jq --raw-output .value)
+
+			set --local action (az storage container list --auth-mode login --account-name "$storageaccount" 2> /dev/null \
+				| jq --raw-output '.[] | "\(.name)"' \
+				| awk -F \u001f '{printf "%s\n", $1}' \
+				| _fzf --query '' \
+					--header "$storageaccount" \
+					--expect ^ \
+					--preview "az storage container show --account-name="$storageaccount" --name {1} 2> /dev/null | $bat_json")
+
+			if test -n "$action"
+				set --local verb_ids (string split ' ' "$action")
+				set --local container $verb_ids[2]
+
+				switch $verb_ids[1]
+
+				case '^'
+					fz azure-storage-accounts
+
+				case '*'
+					az config set defaults.storagecontainer="$container" 2> /dev/null
+					fz azure-storage-blobs "'$container'"
+
+				end
 			end
 		end
 
