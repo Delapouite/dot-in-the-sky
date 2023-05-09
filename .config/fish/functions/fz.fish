@@ -786,6 +786,19 @@ function fz --description 'entry point for all the fuzziness glory'
 			| _fzf \
 				--preview 'ip address show {2}'
 
+	case json-schemas
+		if test "$argv[2]" = "--help"
+			printf 'list: JSON schemas fetched from schemastore.org\n'
+			print_dim 'preview: none'
+			print_dim 'action: none'
+			return
+		end
+
+		curl --silent 'https://www.schemastore.org/api/json/catalog.json' \
+			| jq --raw-output '.schemas | .[] | "\(.name)\u001f\(.fileMatch)"' \
+			| awk -F \u001f '{printf "%s \x1b[38;2;98;114;164m%s\x1b[m\n", $1, $2}' \
+			| _fzf
+
 	case kakoune-sessions
 		if not command -q kak
 			print_error 'kak command not found'
@@ -1324,6 +1337,7 @@ function fz --description 'entry point for all the fuzziness glory'
 			i3-windows \
 			i3-workspaces \
 			ip-addresses \
+			json-schemas \
 			kakoune-sessions \
 			linux-kernel-modules \
 			linux-namespaces \
