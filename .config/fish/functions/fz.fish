@@ -467,111 +467,96 @@ function fz --description 'entry point for all the fuzziness glory'
 			deno task "$task"
 		end
 
-	case docker-accounts
-		if test "$argv[2]" = "--help"
-			printf 'list: docker accounts\n'
-			print_dim 'preview: none'
-			print_dim 'action: none'
-			return
-		end
-
-		jq .auths ~/.docker/config.json \
-			| gron \
-			| rg '.auth =' \
-			| sed --expression 's/json\["\(.*\)"\].auth = "\(.*\)";/\1 \2/' \
-			| teip -sf 2 -- base64 -d \
-			| cut --delimiter ':' --fields 1 \
-			| _fzf
-
-	case docker-containers
+	case 'docker-*'
 		if not systemctl is-active docker > /dev/null
 			print_error 'docker daemon is not active'
 			return 1
 		end
 
-		if test "$argv[2]" = "--help"
-			printf 'list: docker containers\n'
-			printf 'preview: docker container details\n'
-			print_dim 'action: none'
-			return
+		switch $argv[1]
+
+		case docker-accounts
+			if test "$argv[2]" = "--help"
+				printf 'list: docker accounts\n'
+				print_dim 'preview: none'
+				print_dim 'action: none'
+				return
+			end
+
+			jq .auths ~/.docker/config.json \
+				| gron \
+				| rg '.auth =' \
+				| sed --expression 's/json\["\(.*\)"\].auth = "\(.*\)";/\1 \2/' \
+				| teip -sf 2 -- base64 -d \
+				| cut --delimiter ':' --fields 1 \
+				| _fzf
+
+		case docker-containers
+			if test "$argv[2]" = "--help"
+				printf 'list: docker containers\n'
+				printf 'preview: docker container details\n'
+				print_dim 'action: none'
+				return
+			end
+
+			set --local container (docker container ls -a \
+				| _fzf \
+					--header-lines=1 \
+					--preview "docker container inspect {1} | jq .[0] | $bat_json")
+
+		case docker-images
+			if test "$argv[2]" = "--help"
+				printf 'list: docker images\n'
+				printf 'preview: docker image details\n'
+				print_dim 'action: none'
+				return
+			end
+
+			set --local image (docker image ls \
+				| _fzf \
+					--header-lines=1 \
+					--preview "docker image inspect {3} | jq .[0] | $bat_json")
+
+		case docker-images-dangling
+			if test "$argv[2]" = "--help"
+				printf 'list: docker dangling images\n'
+				printf 'preview: docker image details\n'
+				print_dim 'action: none'
+				return
+			end
+
+			set --local image (docker image ls --filter 'dangling=true' \
+				| _fzf \
+					--header-lines=1 \
+					--preview "docker image inspect {3} | jq .[0] | $bat_json")
+
+		case docker-networks
+			if test "$argv[2]" = "--help"
+				printf 'list: docker networks\n'
+				printf 'preview: docker network details\n'
+				print_dim 'action: none'
+				return
+			end
+
+			set --local network (docker network ls \
+				| _fzf \
+					--header-lines=1 \
+					--preview "docker network inspect {1} | jq .[0] | $bat_json")
+
+		case docker-volumes
+			if test "$argv[2]" = "--help"
+				printf 'list: docker volumes\n'
+				printf 'preview: docker volume details\n'
+				print_dim 'action: none'
+				return
+			end
+
+			set --local volume (docker volume ls \
+				| _fzf \
+					--header-lines=1 \
+					--preview "docker volume inspect {2} | jq .[0] | $bat_json")
+
 		end
-
-		set --local container (docker container ls -a \
-			| _fzf \
-				--header-lines=1 \
-				--preview "docker container inspect {1} | jq .[0] | $bat_json")
-
-	case docker-images
-		if not systemctl is-active docker > /dev/null
-			print_error 'docker daemon is not active'
-			return 1
-		end
-
-		if test "$argv[2]" = "--help"
-			printf 'list: docker images\n'
-			printf 'preview: docker image details\n'
-			print_dim 'action: none'
-			return
-		end
-
-		set --local image (docker image ls \
-			| _fzf \
-				--header-lines=1 \
-				--preview "docker image inspect {3} | jq .[0] | $bat_json")
-
-	case docker-images-dangling
-		if not systemctl is-active docker > /dev/null
-			print_error 'docker daemon is not active'
-			return 1
-		end
-
-		if test "$argv[2]" = "--help"
-			printf 'list: docker dangling images\n'
-			printf 'preview: docker image details\n'
-			print_dim 'action: none'
-			return
-		end
-
-		set --local image (docker image ls --filter 'dangling=true' \
-			| _fzf \
-				--header-lines=1 \
-				--preview "docker image inspect {3} | jq .[0] | $bat_json")
-
-	case docker-networks
-		if not systemctl is-active docker > /dev/null
-			print_error 'docker daemon is not active'
-			return 1
-		end
-
-		if test "$argv[2]" = "--help"
-			printf 'list: docker networks\n'
-			printf 'preview: docker network details\n'
-			print_dim 'action: none'
-			return
-		end
-
-		set --local network (docker network ls \
-			| _fzf \
-				--header-lines=1 \
-				--preview "docker network inspect {1} | jq .[0] | $bat_json")
-
-	case docker-volumes
-		if not systemctl is-active docker > /dev/null
-			print_error 'docker daemon is not active'
-			return 1
-		end
-
-		if test "$argv[2]" = "--help"
-			printf 'list: docker volumes\n'
-			printf 'preview: docker volume details\n'
-			print_dim 'action: none'
-			return
-		end
-
-		set --local volume (docker volume ls \
-			| _fzf \
-				--header-lines=1 \
-				--preview "docker volume inspect {2} | jq .[0] | $bat_json")
 
 	case environment-variables
 		if test "$argv[2]" = "--help"
