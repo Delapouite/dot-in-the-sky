@@ -6,7 +6,6 @@
       :leader :desc "Describe abbrev" "d A" #'list-abbrevs
       :leader :desc "Describe binding" "d b" #'describe-binding
       :leader :desc "Describe char" "d c" #'describe-char
-      :leader :desc "Describe function" "d f" #'describe-function
       :leader :desc "Describe face" "d F" #'describe-face
       :leader :desc "Describe key" "d k" #'describe-key
       :leader :desc "Describe mode" "d m" #'describe-mode
@@ -15,10 +14,14 @@
       :leader :desc "Describe theme" "d T" #'describe-theme
       :leader :desc "Describe variable" "d v" #'describe-variable
       :leader :desc "Describe widget" "d w" #'describe-widget
-      :leader :desc "Describe command" "d x" #'describe-command
 
-      :leader :desc "Describe obsolete function" "d o f" #'describe-obsolete-function
-      :leader :desc "Describe obsolete command" "d o x" #'describe-obsolete-command)
+      :leader :desc "Describe function" "d f f" #'describe-function
+      :leader :desc "Describe builtin function" "d f b" #'describe-builtin-function
+      :leader :desc "Describe obsolete function" "d f o" #'describe-obsolete-function
+
+      :leader :desc "Describe command" "d x x" #'describe-command
+      :leader :desc "Describe builtin command" "d x b" #'describe-builtin-command
+      :leader :desc "Describe obsolete command" "d x o" #'describe-obsolete-command)
 
 (defun obsolete-p (symbol)
   "Return non nil if SYMBOL is obsolete"
@@ -84,6 +87,24 @@ When called from Lisp, FUNCTION may also be a function object."
 When called from Lisp, COMMAND may also be a function object."
   (interactive (my/describe-command-prompt
                 (lambda (f)
-                  (and (obsoletep f)
+                  (and (obsolete-p f)
+                       (commandp f)))))
+  (describe-command command))
+
+(defun describe-builtin-function (fun)
+  "Display the full documentation of builtin FUNCTION (a symbol).
+When called from Lisp, FUNCTION may also be a function object."
+  (interactive (my/describe-function-prompt
+                (lambda (f)
+                  (and (subrp (symbol-function f))
+                       (or (fboundp f) (get f 'function-documentation))))))
+  (describe-function fun))
+
+(defun describe-builtin-command (command)
+  "Display the full documentation of builtin COMMAND (a symbol).
+When called from Lisp, COMMAND may also be a function object."
+  (interactive (my/describe-command-prompt
+                (lambda (f)
+                  (and (subrp (symbol-function f))
                        (commandp f)))))
   (describe-command command))
