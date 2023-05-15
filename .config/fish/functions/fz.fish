@@ -1008,46 +1008,62 @@ function fz --description 'entry point for all the fuzziness glory'
 
 		_fzf_search_processes
 
-	case pulseaudio-sinks
+	case 'pulseaudio-*'
 		if not command -q pactl
 			print_error 'pactl command not found'
 			return 1
 		end
 
-		if test "$argv[2]" = "--help"
-			printf 'list: pulseaudio sinks\n'
-			print_dim 'preview: none'
-			print_dim 'action: none'
-			return
-		end
+		switch $argv[1]
 
-		set --local sink (pactl -f json list sinks \
-			| _jq '.[] | "\(.description)\u001f\(.active_port)"' \
-			| _awk "$awk_dim2" \
-			| _fzf \
-			| awk '{print $1}')
-		if test -n "$sink"
-		end
+		case pulseaudio-modules
+			if test "$argv[2]" = "--help"
+				printf 'list: pulseaudio modules\n'
+				print_dim 'preview: none'
+				print_dim 'action: none'
+				return
+			end
 
-	case pulseaudio-sources
-		if not command -q pactl
-			print_error 'pactl command not found'
-			return 1
-		end
+			set --local module (pactl -f json list modules\
+				| _jq '.[] | "\(.properties["module.description"])\u001f\(.name)"' \
+				| _awk "$awk_dim2" \
+				| _fzf \
+				| awk '{print $1}')
+			if test -n "$module"
+			end
 
-		if test "$argv[2]" = "--help"
-			printf 'list: pulseaudio sources\n'
-			print_dim 'preview: none'
-			print_dim 'action: none'
-			return
-		end
+		case pulseaudio-sinks
+			if test "$argv[2]" = "--help"
+				printf 'list: pulseaudio sinks\n'
+				print_dim 'preview: none'
+				print_dim 'action: none'
+				return
+			end
 
-		set --local src (pactl -f json list sources \
-			| _jq '.[] | "\(.description)\u001f\(.active_port)"' \
-			| _awk "$awk_dim2" \
-			| _fzf \
-			| awk '{print $1}')
-		if test -n "$src"
+			set --local sink (pactl -f json list sinks \
+				| _jq '.[] | "\(.description)\u001f\(.active_port)"' \
+				| _awk "$awk_dim2" \
+				| _fzf \
+				| awk '{print $1}')
+			if test -n "$sink"
+			end
+
+		case pulseaudio-sources
+			if test "$argv[2]" = "--help"
+				printf 'list: pulseaudio sources\n'
+				print_dim 'preview: none'
+				print_dim 'action: none'
+				return
+			end
+
+			set --local src (pactl -f json list sources \
+				| _jq '.[] | "\(.description)\u001f\(.active_port)"' \
+				| _awk "$awk_dim2" \
+				| _fzf \
+				| awk '{print $1}')
+			if test -n "$src"
+			end
+
 		end
 
 	case shell-abbreviations
@@ -1337,6 +1353,7 @@ function fz --description 'entry point for all the fuzziness glory'
 			pastel-colors \
 			podman-pods \
 			processes \
+			pulseaudio-modules \
 			pulseaudio-sinks \
 			pulseaudio-sources \
 			shell-abbreviations \
