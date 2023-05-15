@@ -864,65 +864,55 @@ function fz --description 'entry point for all the fuzziness glory'
 
 		xrandr --listmonitors | _fzf --header-lines=1
 
-	case music-albums
+	case 'music-*'
 		if not command -q mpc
 			print_error 'mpc command not found'
 			return 1
 		end
 
-		if test "$argv[2]" = "--help"
-			printf 'list: music albums using mpc\n'
-			printf 'preview: music album tracks\n'
-			print_dim 'action: none'
-			return
+		switch $argv[1]
+
+		case music-albums
+			if test "$argv[2]" = "--help"
+				printf 'list: music albums using mpc\n'
+				printf 'preview: music album tracks\n'
+				print_dim 'action: none'
+				return
+			end
+
+			mpc list album | _fzf --preview 'mpc search album {}'
+
+		case music-artists
+			if test "$argv[2]" = "--help"
+				printf 'list: music artists using mpc\n'
+				printf 'preview: music artist tracks\n'
+				print_dim 'action: none'
+				return
+			end
+
+			mpc list artist | _fzf --preview 'mpc search artist {}'
+
+		case music-dates
+			if test "$argv[2]" = "--help"
+				printf 'list: music dates using mpc\n'
+				printf 'preview: music dates tracks\n'
+				print_dim 'action: none'
+				return
+			end
+
+			mpc list date | _fzf --preview 'mpc search date {}'
+
+		case music-playlists
+			if test "$argv[2]" = "--help"
+				printf 'list: music playlists using mpc\n'
+				printf 'preview: music playlist tracks\n'
+				print_dim 'action: none'
+				return
+			end
+
+			mpc lsplaylist | _fzf --preview 'mpc playlist {}'
+
 		end
-
-		mpc list album | _fzf --preview 'mpc search album {}'
-
-	case music-artists
-		if not command -q mpc
-			print_error 'mpc command not found'
-			return 1
-		end
-
-		if test "$argv[2]" = "--help"
-			printf 'list: music artists using mpc\n'
-			printf 'preview: music artist tracks\n'
-			print_dim 'action: none'
-			return
-		end
-
-		mpc list artist | _fzf --preview 'mpc search artist {}'
-
-	case music-dates
-		if not command -q mpc
-			print_error 'mpc command not found'
-			return 1
-		end
-
-		if test "$argv[2]" = "--help"
-			printf 'list: music dates using mpc\n'
-			printf 'preview: music dates tracks\n'
-			print_dim 'action: none'
-			return
-		end
-
-		mpc list date | _fzf --preview 'mpc search date {}'
-
-	case music-playlists
-		if not command -q mpc
-			print_error 'mpc command not found'
-			return 1
-		end
-
-		if test "$argv[2]" = "--help"
-			printf 'list: music playlists using mpc\n'
-			printf 'preview: music playlist tracks\n'
-			print_dim 'action: none'
-			return
-		end
-
-		mpc lsplaylist | _fzf --preview 'mpc playlist {}'
 
 	case network-ports
 		if test "$argv[2]" = "--help"
