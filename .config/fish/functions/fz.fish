@@ -1,5 +1,5 @@
 function fz --description 'entry point for all the fuzziness glory'
-	set --local cmd "fzf \
+	set --local fzf_cmd "fzf \
 		--ansi \
 		--cycle \
 		--reverse \
@@ -9,15 +9,26 @@ function fz --description 'entry point for all the fuzziness glory'
 		--prompt '$argv[1] ❯ '"
 
 	if test -n "$argv[2]"
-		set cmd "$cmd --query $argv[2]"
+		set fzf_cmd "$fzf_cmd --query $argv[2]"
 	end
 
-	alias _fzf="$cmd"
+	alias _fzf="$fzf_cmd"
+	alias _awk="awk --field-separator \u001f"
+	alias _jq="jq --raw-output"
 
 	set --local bat_json 'bat \
 		--plain \
 		--language json \
 		--color always'
+
+	# colors
+
+	set --local awk_dim2 \
+		'{printf "%s \x1b[38;2;98;114;164m%s\x1b[m\n", $1, $2}'
+	set --local awk_dim3 \
+		'{printf "%s \x1b[38;2;173;178;203m%s\x1b[m \x1b[38;2;98;114;164m%s\x1b[m\n", $1, $2, $3}'
+	set --local awk_dim4 \
+		'{printf "%s %s \x1b[38;2;173;178;203m%s\x1b[m \x1b[38;2;98;114;164m%s\x1b[m\n", $1, $2, $3, $4}'
 
 	function print_error
 		set_color red; printf "$argv[1]\n"; set_color normal;
@@ -54,7 +65,7 @@ function fz --description 'entry point for all the fuzziness glory'
 		end
 
 		# header or prompt
-		set --local account (az account show | jq --raw-output '"\(.user.name) at \(.name)"')
+		set --local account (az account show | _jq '"\(.user.name) at \(.name)"')
 
 		switch $argv[1]
 
@@ -67,8 +78,8 @@ function fz --description 'entry point for all the fuzziness glory'
 			end
 
 			set --local account (az account list \
-				| jq --raw-output '.[] | "\(.name)\u001f\(.user.name)\u001f(default:\(.isDefault))\u001f\(.id)"' \
-				| awk -F \u001f '{printf "%s %s %s \x1b[38;2;98;114;164m%s\x1b[m\n", $1, $2, $3, $4}' \
+				| _jq '.[] | "\(.name)\u001f\(.user.name)\u001f(default:\(.isDefault))\u001f\(.id)"' \
+				| _awk "$awk_dim4" \
 				| _fzf --preview "az account show --subscription {-1} | $bat_json" \
 				| awk '{print $NF}')
 
@@ -86,11 +97,11 @@ function fz --description 'entry point for all the fuzziness glory'
 			end
 
 			# prompt
-			set --local rg (az config get defaults.rg 2> /dev/null | jq --raw-output .value)
+			set --local rg (az config get defaults.rg 2> /dev/null | _jq .value)
 
 			set --local acr (az acr list \
-				| jq --raw-output '.[] | "\(.name) \(.loginServer)\u001f\(.location)\u001f\(.id)"' \
-				| awk -F \u001f '{printf "%s %s \x1b[38;2;98;114;164m%s\x1b[m\n", $1, $2, $3, $4}' \
+				| _jq '.[] | "\(.name) \(.loginServer)\u001f\(.location)\u001f\(.id)"' \
+				| _awk "$awk_dim3" \
 				| _fzf \
 					--prompt "$argv[1] ($account/$rg) ❯ " \
 					--preview "az acr show --name {1} | $bat_json" \
@@ -110,11 +121,11 @@ function fz --description 'entry point for all the fuzziness glory'
 			end
 
 			# prompt
-			set --local registry (az config get defaults.acr 2> /dev/null | jq --raw-output .value)
-			set --local repository (az config get defaults.acrepo 2> /dev/null | jq --raw-output .value)
+			set --local registry (az config get defaults.acr 2> /dev/null | _jq .value)
+			set --local repository (az config get defaults.acrepo 2> /dev/null | _jq .value)
 
 			set --local manifest (az acr manifest list-metadata "$registry/$repository" 2> /dev/null \
-				| jq --raw-output '.[] | .digest' \
+				| _jq '.[] | .digest' \
 				| _fzf --query '' \
 					--prompt "$argv[1] ($registry/$repository) ❯ " \
 					--preview "az acr manifest show-metadata $registry/$repository@{1} 2> /dev/null | $bat_json" \
@@ -132,10 +143,10 @@ function fz --description 'entry point for all the fuzziness glory'
 			end
 
 			# prompt
-			set --local registry (az config get defaults.acr 2> /dev/null | jq --raw-output .value)
+			set --local registry (az config get defaults.acr 2> /dev/null | _jq .value)
 
 			set --local repository (az acr repository list 2> /dev/null \
-				| jq --raw-output '.[]' \
+				| _jq '.[]' \
 				| _fzf --query '' \
 					--prompt "$argv[1] ($registry) ❯ " \
 					--preview "az acr repository show --repository {1} 2> /dev/null | $bat_json" \
@@ -155,8 +166,8 @@ function fz --description 'entry point for all the fuzziness glory'
 			end
 
 			set --local action (az extension list-available \
-				| jq --raw-output '.[] | "\(.name)\u001f\(.installed)\u001f\(.version)"' \
-				| awk -F \u001f '{printf "%s %s \x1b[38;2;98;114;164m%s\x1b[m\n", $1, $2, $3}' \
+				| _jq '.[] | "\(.name)\u001f\(.installed)\u001f\(.version)"' \
+				| _awk "$awk_dim3" \
 				| _fzf \
 					--header "$account" \
 					--expect ^ \
@@ -175,8 +186,8 @@ function fz --description 'entry point for all the fuzziness glory'
 			end
 
 			set --local action (az iot hub list \
-				| jq --raw-output '.[] | "\(.name)\u001f\(.location)\u001f\(.id)"' \
-				| awk -F \u001f '{printf "%s %s \x1b[38;2;98;114;164m%s\x1b[m\n", $1, $2, $3}' \
+				| _jq '.[] | "\(.name)\u001f\(.location)\u001f\(.id)"' \
+				| _awk "$awk_dim3" \
 				| _fzf \
 					--header "$account" \
 					--expect ^ \
@@ -207,8 +218,8 @@ function fz --description 'entry point for all the fuzziness glory'
 			end
 
 			set --local action (az group list \
-				| jq --raw-output '.[] | "\(.name)\u001f\(.location)\u001f\(.id)"' \
-				| awk -F \u001f '{printf "%s %s \x1b[38;2;98;114;164m%s\x1b[m\n", $1, $2, $3}' \
+				| _jq '.[] | "\(.name)\u001f\(.location)\u001f\(.id)"' \
+				| _awk "$awk_dim3" \
 				| _fzf \
 					--header "$account" \
 					--expect ^ \
@@ -240,8 +251,8 @@ function fz --description 'entry point for all the fuzziness glory'
 			end
 
 			set --local action (az resource list \
-				| jq --raw-output '.[] | "\(.name)\u001f\(.type)\u001f\(.resourceGroup)"' \
-				| awk -F \u001f '{printf "%s \x1b[38;2;98;114;164m%s %s\x1b[m\n", $1, $2, $3}' \
+				| _jq '.[] | "\(.name)\u001f\(.type)\u001f\(.resourceGroup)"' \
+				| _awk '{printf "%s \x1b[38;2;98;114;164m%s %s\x1b[m\n", $1, $2, $3}' \
 				| _fzf \
 					--header "$account" \
 					--expect ^ \
@@ -281,8 +292,8 @@ function fz --description 'entry point for all the fuzziness glory'
 			end
 
 			set --local action (az storage account list \
-				| jq --raw-output '.[] | "\(.name)\u001f\(.location)\u001f\(.id)"' \
-				| awk -F \u001f '{printf "%s %s \x1b[38;2;98;114;164m%s\x1b[m\n", $1, $2, $3}' \
+				| _jq '.[] | "\(.name)\u001f\(.location)\u001f\(.id)"' \
+				| _awk "$awk_dim3" \
 				| _fzf \
 					--header "$account" \
 					--expect ^ \
@@ -314,11 +325,11 @@ function fz --description 'entry point for all the fuzziness glory'
 			end
 
 			# header
-			set --local storageaccount (az config get defaults.storageaccount 2> /dev/null | jq --raw-output .value)
-			set --local container (az config get defaults.storagecontainer 2> /dev/null | jq --raw-output .value)
+			set --local storageaccount (az config get defaults.storageaccount 2> /dev/null | _jq .value)
+			set --local container (az config get defaults.storagecontainer 2> /dev/null | _jq .value)
 
 			set --local action (az storage blob list --account-name "$storageaccount" --container-name "$container" 2> /dev/null \
-				| jq --raw-output '.[] | "\(.name)"' \
+				| _jq '.[] | "\(.name)"' \
 				| _fzf --query '' \
 					--header "$storageaccount/$container" \
 					--expect ^ \
@@ -357,11 +368,11 @@ function fz --description 'entry point for all the fuzziness glory'
 			end
 
 			# header
-			set --local storageaccount (az config get defaults.storageaccount 2> /dev/null | jq --raw-output .value)
+			set --local storageaccount (az config get defaults.storageaccount 2> /dev/null | _jq .value)
 
 			set --local action (az storage container list --auth-mode login --account-name "$storageaccount" 2> /dev/null \
-				| jq --raw-output '.[] | "\(.name)"' \
-				| awk -F \u001f '{printf "%s\n", $1}' \
+				| _jq '.[] | "\(.name)"' \
+				| _awk '{printf "%s\n", $1}' \
 				| _fzf --query '' \
 					--header "$storageaccount" \
 					--expect ^ \
@@ -409,7 +420,7 @@ function fz --description 'entry point for all the fuzziness glory'
 
 		cat ~/.local/share/browser-bookmarks/*.bookmarks \
 			| rg -v '^#' | rg -v '^$' \
-			| awk -F \u001f '{printf "%-12s \x1b[36m%s\x1b[m %s\n", $1, $2, $3}' \
+			| _awk '{printf "%-12s \x1b[36m%s\x1b[m %s\n", $1, $2, $3}' \
 			| _fzf \
 			| sed 's#.*\(https*://\)#\1#' \
 			| xargs xdg-open
@@ -424,7 +435,7 @@ function fz --description 'entry point for all the fuzziness glory'
 		end
 
 		set --local action (firefoxctl tab list \
-			| jq --raw-output '.[] | "\(.id) \(.lastAccessed)\t\(.title) \u001b[38;2;98;114;164m\(.url)\u001b[m"' \
+			| _jq '.[] | "\(.id) \(.lastAccessed)\t\(.title) \u001b[38;2;98;114;164m\(.url)\u001b[m"' \
 			| _fzf \
 				--multi \
 				--expect alt-d \
@@ -458,9 +469,8 @@ function fz --description 'entry point for all the fuzziness glory'
 			return
 		end
 
-		set --local task (jq --raw-output \
-			'.tasks | to_entries | .[] | "\(.key)\u001f\(.value)"' deno.jsonc \
-			| awk -F \u001f '{printf "%s \x1b[38;2;98;114;164m%s\x1b[m\n", $1, $NF}' \
+		set --local task (_jq '.tasks | to_entries | .[] | "\(.key)\u001f\(.value)"' deno.jsonc \
+			| _awk '{printf "%s \x1b[38;2;98;114;164m%s\x1b[m\n", $1, $NF}' \
 			| _fzf \
 			| awk '{print $1}')
 		if test -n "$task"
@@ -696,7 +706,7 @@ function fz --description 'entry point for all the fuzziness glory'
 
 		set --local jq_filter '.. | objects | select(.window_type == "normal") | "\(.id) \(.window_properties.class): \(.name)"'
 		set --local con_id (i3-msg -t get_tree \
-			| jq --raw-output "$jq_filter" \
+			| _jq "$jq_filter" \
 			| awk '{printf "%s \x1b[36m%s\x1b[m %s\n", $1, $2, $3}' \
 			| _fzf --with-nth=2.. \
 			| awk '{print $1}')
@@ -718,7 +728,7 @@ function fz --description 'entry point for all the fuzziness glory'
 		end
 
 		set --local workspace_id (i3-msg -t get_workspaces \
-			| jq --raw-output '.[] .name' \
+			| _jq '.[] .name' \
 			| _fzf)
 		if test -n "$workspace_id"
 			i3-msg --quiet "workspace $workspace_id"
@@ -745,8 +755,8 @@ function fz --description 'entry point for all the fuzziness glory'
 		end
 
 		curl --silent 'https://www.schemastore.org/api/json/catalog.json' \
-			| jq --raw-output '.schemas | .[] | "\(.name)\u001f\(.fileMatch)"' \
-			| awk -F \u001f '{printf "%s \x1b[38;2;98;114;164m%s\x1b[m\n", $1, $2}' \
+			| _jq '.schemas | .[] | "\(.name)\u001f\(.fileMatch)"' \
+			| _awk "$awk_dim2" \
 			| _fzf
 
 	case kakoune-sessions
@@ -905,9 +915,8 @@ function fz --description 'entry point for all the fuzziness glory'
 			return
 		end
 
-		set --local script (jq --raw-output \
-			'.scripts | to_entries | .[] | "\(.key)\u001f\(.value)"' package.json \
-			| awk -F \u001f '{printf "%s \x1b[38;2;98;114;164m%s\x1b[m\n", $1, $NF}' \
+		set --local script (_jq '.scripts | to_entries | .[] | "\(.key)\u001f\(.value)"' package.json \
+			| _awk '{printf "%s \x1b[38;2;98;114;164m%s\x1b[m\n", $1, $NF}' \
 			| _fzf \
 			| awk '{print $1}')
 		if test -n "$script"
@@ -933,7 +942,7 @@ function fz --description 'entry point for all the fuzziness glory'
 		end
 
 		pacman --query \
-			| awk '{printf "%s \x1b[38;2;98;114;164m%s\x1b[m\n", $1, $2}' \
+			| awk "$awk_dim2" \
 			| _fzf \
 				--preview 'pacman --query --info --list {1}'
 
@@ -991,8 +1000,8 @@ function fz --description 'entry point for all the fuzziness glory'
 		end
 
 		set --local sink (pactl -f json list sinks \
-			| jq --raw-output '.[] | "\(.description)\u001f\(.active_port)"' \
-			| awk -F \u001f '{printf "%s \x1b[38;2;98;114;164m%s\x1b[m\n", $1, $2}' \
+			| _jq '.[] | "\(.description)\u001f\(.active_port)"' \
+			| _awk "$awk_dim2" \
 			| _fzf \
 			| awk '{print $1}')
 		if test -n "$sink"
@@ -1012,8 +1021,8 @@ function fz --description 'entry point for all the fuzziness glory'
 		end
 
 		set --local src (pactl -f json list sources \
-			| jq --raw-output '.[] | "\(.description)\u001f\(.active_port)"' \
-			| awk -F \u001f '{printf "%s \x1b[38;2;98;114;164m%s\x1b[m\n", $1, $2}' \
+			| _jq '.[] | "\(.description)\u001f\(.active_port)"' \
+			| _awk "$awk_dim2" \
 			| _fzf \
 			| awk '{print $1}')
 		if test -n "$src"
