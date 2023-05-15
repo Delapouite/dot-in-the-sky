@@ -208,6 +208,38 @@ function fz --description 'entry point for all the fuzziness glory'
 				end
 			end
 
+		case azure-iot-hub-endpoints
+			if test "$argv[2]" = "--help"
+				printf 'list: azure iot-hub endpoints az\n'
+				printf 'preview: azure iot-hub endpoint\n'
+				printf 'action: ^ - fz azure-iot-hubs\n'
+				return
+			end
+
+			set --local iothub (az config get defaults.iothub 2> /dev/null | _jq .value)
+
+			set --local action (az iot hub message-endpoint list --hub-name "$iothub" \
+				| _jq '.eventHubs' \
+				| _awk "$awk_dim3" \
+				| _fzf \
+					--prompt "$argv[1] ($iothub) ❯ " \
+					--header "$account" \
+					--expect ^ \
+					--preview "az iot hub message-endpoint show --name {1} | $bat_json")
+
+			if test -n "$action"
+				set --local verb_ids (string split ' ' "$action")
+				set --local iot_hub $verb_ids[2]
+
+				switch $verb_ids[1]
+
+				case '^'
+					fz azure-iot-hubs
+
+				case '*'
+				end
+			end
+
 		case azure-resource-groups
 			if test "$argv[2]" = "--help"
 				printf 'list: azure resource groups using az\n'
@@ -1268,6 +1300,7 @@ function fz --description 'entry point for all the fuzziness glory'
 			azure-container-registry-manifests \
 			azure-extensions \
 			azure-iot-hubs \
+			azure-iot-hub-endpoints \
 			azure-resource-groups \
 			azure-resources \
 			azure-storage-accounts \
