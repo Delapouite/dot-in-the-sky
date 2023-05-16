@@ -29,6 +29,8 @@ function fz --description 'entry point for all the fuzziness glory'
 		'{printf "%s \x1b[38;2;173;178;203m%s\x1b[m \x1b[38;2;98;114;164m%s\x1b[m\n", $1, $2, $3}'
 	set --local awk_dim4 \
 		'{printf "%s %s \x1b[38;2;173;178;203m%s\x1b[m \x1b[38;2;98;114;164m%s\x1b[m\n", $1, $2, $3, $4}'
+	set --local awk_dim5 \
+		'{printf "%s %s \x1b[38;2;173;178;203m%s\x1b[m \x1b[38;2;98;114;164m%s %s\x1b[m\n", $1, $2, $3, $4, $5}'
 
 	function print_error
 		set_color red; printf "$argv[1]\n"; set_color normal;
@@ -87,6 +89,57 @@ function fz --description 'entry point for all the fuzziness glory'
 				az account set --subscription "$account"
 				fz azure-resource-groups
 			end
+
+		case azure-appservice-functionapps
+			if test "$argv[2]" = "--help"
+				printf 'list: azure app service functionapp using az\n'
+				printf 'preview: azure app service functionapp details\n'
+				print_dim 'action: none'
+				return
+			end
+
+			set --local functionapp (az functionapp list \
+				| _jq '.[] | "\(.name)\u001f\(.resourceGroup)\u001f\(.location)\u001f\(.kind)\u001f\(.id)"' \
+				| _awk "$awk_dim5" \
+				| _fzf \
+					--header "$account" \
+					--preview "az functionapp show --name {1} --resource-group {2} | $bat_json" \
+				| awk '{print $1}')
+
+			if test -n "$functionapp"
+				az config set defaults.functionapp="$functionapp" 2> /dev/null
+				fz azure-functions
+			end
+
+		case azure-appservice-plans
+			if test "$argv[2]" = "--help"
+				printf 'list: azure app service plans using az\n'
+				printf 'preview: azure app service plan details\n'
+				print_dim 'action: none'
+				return
+			end
+
+			set --local asp (az appservice plan list \
+				| _jq '.[] | "\(.name)\u001f\(.resourceGroup)\u001f\(.location)\u001f\(.kind)\u001f\(.id)"' \
+				| _awk "$awk_dim5" \
+				| _fzf \
+					--header "$account" \
+					--preview "az appservice plan show --name {1} --resource-group {2} | $bat_json")
+
+		case azure-appservice-webapps
+			if test "$argv[2]" = "--help"
+				printf 'list: azure app service webapps using az\n'
+				printf 'preview: azure app service webapp  details\n'
+				print_dim 'action: none'
+				return
+			end
+
+			set --local webapp (az webapp list \
+				| _jq '.[] | "\(.name)\u001f\(.resourceGroup)\u001f\(.location)\u001f\(.kind)\u001f\(.id)"' \
+				| _awk "$awk_dim5" \
+				| _fzf \
+					--header "$account" \
+					--preview "az webapp show --name {1} --resource-group {2} | $bat_json")
 
 		case azure-container-registries
 			if test "$argv[2]" = "--help"
@@ -176,6 +229,24 @@ function fz --description 'entry point for all the fuzziness glory'
 			if test -n "$action"
 				set --local verb_ids (string split ' ' "$action")
 			end
+
+		case azure-functions
+			if test "$argv[2]" = "--help"
+				printf 'list: azure functions using az\n'
+				print_dim 'preview: none'
+				print_dim 'action: none'
+				return
+			end
+
+			set --local functionapp (az config get defaults.functionapp 2> /dev/null | _jq .value)
+			set --local rg (az config get defaults.rg 2> /dev/null | _jq .value)
+
+			set --local function (az functionapp function list --name "$functionapp" --resource-group "$rg" \
+				| _jq '.[] | "\(.name)\u001f\(.resourceGroup)\u001f\(.location)\u001f\(.kind)\u001f\(.id)"' \
+				| _awk "$awk_dim5" \
+				| _fzf \
+					--prompt "$argv[1] ($functionapp) ❯ " \
+					--header "$account")
 
 		case azure-iot-hubs
 			if test "$argv[2]" = "--help"
@@ -1301,10 +1372,14 @@ function fz --description 'entry point for all the fuzziness glory'
 		set --local commands \
 			acpi-devices \
 			azure-accounts \
+			azure-appservice-functionapps \
+			azure-appservice-plans \
+			azure-appservice-webapps \
 			azure-container-registries \
 			azure-container-registry-repositories \
 			azure-container-registry-manifests \
 			azure-extensions \
+			azure-functions \
 			azure-iot-hubs \
 			azure-iot-hub-endpoints \
 			azure-resource-groups \
