@@ -55,7 +55,8 @@
         (h (substring (buffer-name) 8 10))
         (m (substring (buffer-name) 10 12))
         (s (substring (buffer-name) 12 14)))
-    (org-set-property "created-at" (concat y "-" M "-" d "T" h ":" m ":" s "+0200"))))
+    (org-with-point-at 1
+      (org-set-property "created-at" (concat y "-" M "-" d "T" h ":" m ":" s "+0200")))))
 
 ;; overriden lowercase version
 (defun my/org-insert-property-drawer ()
