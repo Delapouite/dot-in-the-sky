@@ -614,7 +614,7 @@ function fz --description 'entry point for all the fuzziness glory'
 
 		case docker-accounts
 			if test "$argv[2]" = "--help"
-				printf 'list: docker accounts\n'
+				printf 'list: docker accounts if not handled by Secret Service\n'
 				print_dim 'preview: none'
 				print_dim 'action: none'
 				return
@@ -679,6 +679,17 @@ function fz --description 'entry point for all the fuzziness glory'
 				| _fzf \
 					--header-lines=1 \
 					--preview "docker network inspect {1} | jq .[0] | $bat_json")
+
+		case docker-registries
+			if test "$argv[2]" = "--help"
+				printf 'list: docker registries\n'
+				print_dim 'preview: none'
+				print_dim 'action: none'
+				return
+			end
+
+			jq --raw-output '.auths | keys | .[]' ~/.docker/config.json \
+				| _fzf
 
 		case docker-volumes
 			if test "$argv[2]" = "--help"
@@ -1430,6 +1441,7 @@ function fz --description 'entry point for all the fuzziness glory'
 			docker-images \
 			docker-images-dangling \
 			docker-networks \
+			docker-registries \
 			docker-volumes \
 			environment-variables \
 			files \
