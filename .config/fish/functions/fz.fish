@@ -32,6 +32,10 @@ function fz --description 'entry point for all the fuzziness glory'
 	set --local awk_dim5 \
 		'{printf "%s %s \x1b[38;2;173;178;203m%s\x1b[m \x1b[38;2;98;114;164m%s %s\x1b[m\n", $1, $2, $3, $4, $5}'
 
+	function print_info
+		set_color cyan; printf "$argv[1]\n"; set_color normal;
+	end
+
 	function print_error
 		set_color red; printf "$argv[1]\n"; set_color normal;
 	end
@@ -77,6 +81,7 @@ function fz --description 'entry point for all the fuzziness glory'
 
 		case azure-accounts
 			if test "$argv[2]" = "--help"
+				print_info "identity: $account"
 				printf 'list: azure accounts using az\n'
 				printf 'preview: azure account details\n'
 				printf 'action: set default account and display its resource groups\n'
@@ -96,6 +101,7 @@ function fz --description 'entry point for all the fuzziness glory'
 
 		case azure-appservice-functionapps
 			if test "$argv[2]" = "--help"
+				print_info "identity: $account"
 				printf 'list: azure app service functionapp using az\n'
 				printf 'preview: azure app service functionapp details\n'
 				print_dim 'action: none'
@@ -117,6 +123,7 @@ function fz --description 'entry point for all the fuzziness glory'
 
 		case azure-appservice-plans
 			if test "$argv[2]" = "--help"
+				print_info "identity: $account"
 				printf 'list: azure app service plans using az\n'
 				printf 'preview: azure app service plan details\n'
 				print_dim 'action: none'
@@ -132,6 +139,7 @@ function fz --description 'entry point for all the fuzziness glory'
 
 		case azure-appservice-webapps
 			if test "$argv[2]" = "--help"
+				print_info "identity: $account"
 				printf 'list: azure app service webapps using az\n'
 				printf 'preview: azure app service webapp details\n'
 				print_dim 'action: none'
@@ -147,6 +155,7 @@ function fz --description 'entry point for all the fuzziness glory'
 
 		case azure-container-registries
 			if test "$argv[2]" = "--help"
+				print_info "identity: $account"
 				printf 'list: azure container registries using az\n'
 				printf 'preview: azure container registry details\n'
 				printf 'action: set default container registry and display container registry repositories\n'
@@ -171,6 +180,7 @@ function fz --description 'entry point for all the fuzziness glory'
 
 		case azure-container-registry-manifests
 			if test "$argv[2]" = "--help"
+				print_info "identity: $account"
 				printf 'list: azure container registry manifests using az\n'
 				printf 'preview: container registry manifest metadata\n'
 				print_dim 'action: none'
@@ -193,6 +203,7 @@ function fz --description 'entry point for all the fuzziness glory'
 
 		case azure-container-registry-repositories
 			if test "$argv[2]" = "--help"
+				print_info "identity: $account"
 				printf 'list: azure container registry repositories using az\n'
 				printf 'preview: azure container registry repository\n'
 				printf 'action: set default container registry repository and display container registry manifests\n'
@@ -216,6 +227,7 @@ function fz --description 'entry point for all the fuzziness glory'
 
 		case azure-extensions
 			if test "$argv[2]" = "--help"
+				print_info "identity: $account"
 				printf 'list: az extensions\n'
 				printf 'preview: az extension detail\n'
 				print_dim 'action: none'
@@ -236,6 +248,7 @@ function fz --description 'entry point for all the fuzziness glory'
 
 		case azure-functions
 			if test "$argv[2]" = "--help"
+				print_info "identity: $account"
 				printf 'list: azure functions using az\n'
 				print_dim 'preview: none'
 				print_dim 'action: none'
@@ -254,6 +267,7 @@ function fz --description 'entry point for all the fuzziness glory'
 
 		case azure-iot-hubs
 			if test "$argv[2]" = "--help"
+				print_info "identity: $account"
 				printf 'list: azure iot-hubs using az\n'
 				printf 'preview: azure iot-hub details\n'
 				printf 'action: ^ - fz azure-resources\n'
@@ -285,6 +299,7 @@ function fz --description 'entry point for all the fuzziness glory'
 
 		case azure-iot-hub-endpoints
 			if test "$argv[2]" = "--help"
+				print_info "identity: $account"
 				printf 'list: azure iot-hub endpoints az\n'
 				printf 'preview: azure iot-hub endpoint\n'
 				printf 'action: ^ - fz azure-iot-hubs\n'
@@ -317,6 +332,7 @@ function fz --description 'entry point for all the fuzziness glory'
 
 		case azure-resource-groups
 			if test "$argv[2]" = "--help"
+				print_info "identity: $account"
 				printf 'list: azure resource groups using az\n'
 				printf 'preview: azure resources in this rg\n'
 				printf 'action: ret - set default resource group and display its resources\n'
@@ -350,6 +366,7 @@ function fz --description 'entry point for all the fuzziness glory'
 
 		case azure-resources
 			if test "$argv[2]" = "--help"
+				print_info "identity: $account"
 				printf 'list: azure resources using az\n'
 				printf 'preview: azure resource\n'
 				printf 'action: ret - depends on resource type\n'
@@ -391,6 +408,7 @@ function fz --description 'entry point for all the fuzziness glory'
 
 		case azure-storage-accounts
 			if test "$argv[2]" = "--help"
+				print_info "identity: $account"
 				printf 'list: azure storage accounts using az\n'
 				printf 'preview: azure storage account details\n'
 				printf 'action: ret - set default azure storage account and display its containers\n'
@@ -424,6 +442,7 @@ function fz --description 'entry point for all the fuzziness glory'
 
 		case azure-storage-blobs
 			if test "$argv[2]" = "--help"
+				print_info "identity: $account"
 				printf 'list: azure storage blobs using az\n'
 				printf 'preview: blob details\n'
 				printf 'action: ^ - fz azure-storage-containers\n'
@@ -467,6 +486,7 @@ function fz --description 'entry point for all the fuzziness glory'
 
 		case azure-storage-containers
 			if test "$argv[2]" = "--help"
+				print_info "identity: $account"
 				printf 'list: azure storage containers using az\n'
 				printf 'preview: azure storage container details\n'
 				printf 'action: ret - set default azure storage container and display its blobs\n'
@@ -836,7 +856,8 @@ function fz --description 'entry point for all the fuzziness glory'
 
 		case i3-workspaces
 			if test "$argv[2]" = "--help"
-				printf 'list: i3 workspaces\n'
+				set --local count (i3-msg -t get_workspaces | jq 'length')
+				printf "list: i3 workspaces ($count)\n"
 				print_dim 'preview: none'
 				printf 'action: focus workspace\n'
 				return
