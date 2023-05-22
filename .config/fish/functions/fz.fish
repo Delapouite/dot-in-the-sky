@@ -40,6 +40,10 @@ function fz --description 'entry point for all the fuzziness glory'
 		set_color brblack; printf "$argv[1]\n"; set_color normal;
 	end
 
+	function print_disabled
+		set_color brblack; printf "$argv[1]"; set_color normal;
+	end
+
 	# commands starting with _fzf are from https://github.com/PatrickF1/fzf.fish
 	switch $argv[1]
 
@@ -129,7 +133,7 @@ function fz --description 'entry point for all the fuzziness glory'
 		case azure-appservice-webapps
 			if test "$argv[2]" = "--help"
 				printf 'list: azure app service webapps using az\n'
-				printf 'preview: azure app service webapp  details\n'
+				printf 'preview: azure app service webapp details\n'
 				print_dim 'action: none'
 				return
 			end
@@ -716,45 +720,55 @@ function fz --description 'entry point for all the fuzziness glory'
 
 		fontpreview
 
-	case git-branches
-		if test "$argv[2]" = "--help"
-			printf 'list: git branches\n'
-			printf 'preview: git branch details\n'
-			print_dim 'action: none'
-			return
+		case 'git-*'
+			if not git status &> /dev/null
+				print_error 'not in a git repository'
+				return 1
+			end
+
+		switch $argv[1]
+
+		case git-branches
+			if test "$argv[2]" = "--help"
+				printf 'list: git branches\n'
+				printf 'preview: git branch details\n'
+				print_dim 'action: none'
+				return
+			end
+
+			git branches --color=always | _fzf --preview 'git show {2} --color=always'
+
+		case git-log
+			if test "$argv[2]" = "--help"
+				printf 'list: git log\n'
+				printf 'preview: git commit details\n'
+				print_dim 'action: none'
+				return
+			end
+
+			_fzf_search_git_log
+
+		case git-status
+			if test "$argv[2]" = "--help"
+				printf 'list: git status\n'
+				print_dim 'preview: none'
+				print_dim 'action: none'
+				return
+			end
+
+			_fzf_search_git_status
+
+		case git-tags
+			if test "$argv[2]" = "--help"
+				printf 'list: git tags\n'
+				printf 'preview: tagged commit details\n'
+				print_dim 'action: none'
+				return
+			end
+
+			git tags | _fzf --preview 'git show {1} --color=always'
+
 		end
-
-		git branches --color=always | _fzf --preview 'git show {2} --color=always'
-
-	case git-log
-		if test "$argv[2]" = "--help"
-			printf 'list: git log\n'
-			printf 'preview: git commit details\n'
-			print_dim 'action: none'
-			return
-		end
-
-		_fzf_search_git_log
-
-	case git-status
-		if test "$argv[2]" = "--help"
-			printf 'list: git status\n'
-			print_dim 'preview: none'
-			print_dim 'action: none'
-			return
-		end
-
-		_fzf_search_git_status
-
-	case git-tags
-		if test "$argv[2]" = "--help"
-			printf 'list: git tags\n'
-			printf 'preview: tagged commit details\n'
-			print_dim 'action: none'
-			return
-		end
-
-		git tags | _fzf --preview 'git show {1} --color=always'
 
 	case github-repositories
 		if not command -q gh
@@ -794,47 +808,47 @@ function fz --description 'entry point for all the fuzziness glory'
 			| awk -F ':' '{ print $8 " " $10 }' \
 			| _fzf
 
-	case i3-windows
+	case 'i3-*'
 		if not command -q i3-msg
 			print_error 'i3-msg command not found'
 			return 1
 		end
 
-		if test "$argv[2]" = "--help"
-			printf 'list: i3 windows\n'
-			print_dim 'preview: none'
-			printf 'action: focus window\n'
-			return
-		end
+		switch $argv[1]
 
-		set --local jq_filter '.. | objects | select(.window_type == "normal") | "\(.id) \(.window_properties.class): \(.name)"'
-		set --local con_id (i3-msg -t get_tree \
-			| _jq "$jq_filter" \
-			| awk '{printf "%s \x1b[36m%s\x1b[m %s\n", $1, $2, $3}' \
-			| _fzf --with-nth=2.. \
-			| awk '{print $1}')
-		if test -n "$con_id"
-			i3-msg --quiet "[con_id=$con_id] focus"
-		end
+		case i3-windows
+			if test "$argv[2]" = "--help"
+				printf 'list: i3 windows\n'
+				print_dim 'preview: none'
+				printf 'action: focus window\n'
+				return
+			end
 
-	case i3-workspaces
-		if not command -q i3-msg
-			print_error 'i3-msg command not found'
-			return 1
-		end
+			set --local jq_filter '.. | objects | select(.window_type == "normal") | "\(.id) \(.window_properties.class): \(.name)"'
+			set --local con_id (i3-msg -t get_tree \
+				| _jq "$jq_filter" \
+				| awk '{printf "%s \x1b[36m%s\x1b[m %s\n", $1, $2, $3}' \
+				| _fzf --with-nth=2.. \
+				| awk '{print $1}')
+			if test -n "$con_id"
+				i3-msg --quiet "[con_id=$con_id] focus"
+			end
 
-		if test "$argv[2]" = "--help"
-			printf 'list: i3 workspaces\n'
-			print_dim 'preview: none'
-			printf 'action: focus workspace\n'
-			return
-		end
+		case i3-workspaces
+			if test "$argv[2]" = "--help"
+				printf 'list: i3 workspaces\n'
+				print_dim 'preview: none'
+				printf 'action: focus workspace\n'
+				return
+			end
 
-		set --local workspace_id (i3-msg -t get_workspaces \
-			| _jq '.[] .name' \
-			| _fzf)
-		if test -n "$workspace_id"
-			i3-msg --quiet "workspace $workspace_id"
+			set --local workspace_id (i3-msg -t get_workspaces \
+				| _jq '.[] .name' \
+				| _fzf)
+			if test -n "$workspace_id"
+				i3-msg --quiet "workspace $workspace_id"
+			end
+
 		end
 
 	case ip-addresses
@@ -1242,35 +1256,34 @@ function fz --description 'entry point for all the fuzziness glory'
 
 		ssh-add -l | _fzf --preview 'ssh-add -L | rg {3}' --preview-window wrap
 
-	case starship-modules
+	case 'starship-*'
 		if not command -q starship
 			print_error 'starship command not found'
 			return 1
 		end
 
-		if test "$argv[2]" = "--help"
-			printf 'list: starship modules\n'
-			print_dim 'preview: none'
-			print_dim 'action: none'
-			return
+		switch $argv[1]
+
+		case starship-modules
+			if test "$argv[2]" = "--help"
+				printf 'list: starship modules\n'
+				print_dim 'preview: none'
+				print_dim 'action: none'
+				return
+			end
+
+			starship module --list | tail --lines +3 | _fzf
+
+		case starship-presets
+			if test "$argv[2]" = "--help"
+				printf 'list: starship presets\n'
+				print_dim 'preview: none'
+				print_dim 'action: none'
+				return
+			end
+
+			starship preset --list | _fzf
 		end
-
-		starship module --list | tail --lines +3 | _fzf
-
-	case starship-presets
-		if not command -q starship
-			print_error 'starship command not found'
-			return 1
-		end
-
-		if test "$argv[2]" = "--help"
-			printf 'list: starship presets\n'
-			print_dim 'preview: none'
-			print_dim 'action: none'
-			return
-		end
-
-		starship preset --list | _fzf
 
 	case systemd
 		if not command -q sysz
@@ -1449,7 +1462,80 @@ function fz --description 'entry point for all the fuzziness glory'
 			vscode-workspaces \
 			xinput-devices
 
-		set --local selected_command (printf '%s\n' $commands | _fzf --prompt 'fz ❯ ' --preview 'fz {} --help')
+		set --local enabled_commands
+		for command in $commands
+			set --local enabled 0
+
+			switch $command
+			case 'acpi-devices'
+				command -q acpi
+
+			case 'azure-*'
+				command -q az
+
+			case 'deno-*'
+				test -e './deno.jsonc'
+
+			case 'docker-*'
+				systemctl is-active docker > /dev/null
+
+			case fonts
+				command -q fontpreview
+
+			case 'git-*'
+				git status &> /dev/null
+
+			case 'gpg-*'
+				command -q gpg
+
+			case 'i3-*'
+				command -q i3-msg
+
+			case 'kakoune-*'
+				command -q kak
+
+			case monitors
+				command -q xrandr
+
+			case 'music-*'
+				command -q mpc
+
+			case 'npm-*'
+				test -e './package.json'
+
+			case pastel-colors
+				command -q pastel
+
+			case 'podman-*'
+				command -q podman
+
+			case 'pulseaudio-*'
+				command -q pactl
+
+			case 'starship-*'
+				command -q starship
+
+			case 'usb-*'
+				command -q lsusb
+
+			case 'vscode-*'
+				command -q code
+
+			case xinput-devices
+				command -q xinput
+
+			case '*'
+				true
+			end
+
+			if test "$status" = 0
+				set enabled_commands $enabled_commands $command
+			else
+				set enabled_commands $enabled_commands (print_disabled $command)
+			end
+		end
+
+		set --local selected_command (printf '%s\n' $enabled_commands | _fzf --prompt 'fz ❯ ' --preview 'fz {} --help')
 		if test -n "$selected_command"
 			fz $selected_command
 		end
