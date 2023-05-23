@@ -231,6 +231,71 @@ function fz --description 'entry point for all the fuzziness glory'
 				fz azure-container-registry-manifests
 			end
 
+		case azure-event-hub-namespaces
+			if test "$argv[2]" = "--help"
+				print_azure_help
+				printf 'list: azure event-hub namespaces using az\n'
+				printf 'preview: azure event-hub namespace details\n'
+				printf 'action: ^ - fz azure-resources\n'
+				return
+			end
+
+			set --local choice (az eventhubs namespace list --resource-group "$rg" \
+				| _jq '.[] | "\(.name)\u001f\(.location)\u001f\(.id)"' \
+				| _awk "$awk_dim3" \
+				| _fzf \
+					--header "$account" \
+					--expect ^ \
+					--preview "az eventhubs namespace show --name {1} | $bat_json")
+
+			if test -n "$choice"
+				set --local verb_ids (string split ' ' "$choice")
+				set --local eventhubns $verb_ids[2]
+
+				switch $verb_ids[1]
+
+				case '^'
+					fz azure-resources
+
+				case '*'
+					az config set defaults.eventhubns="$eventhubns" 2> /dev/null
+
+				end
+			end
+
+		case azure-event-hubs
+			set --local eventhubns (az config get defaults.eventhubns 2> /dev/null | _jq .value)
+
+			if test "$argv[2]" = "--help"
+				print_azure_help
+				print_info "event-hub namespace" "$eventhubns"
+				printf 'list: azure event-hubs az\n'
+				printf 'preview: azure event-hub details\n'
+				printf 'action: ^ - fz azure-event-hub-namespaces\n'
+				return
+			end
+
+			set --local choice (az eventhubs eventhub list --resource-group "$rg" --namespace-name "$iothub" \
+				| _jq '.[] | "\(.name)\u001f\(.location)\u001f\(.id)"' \
+				| _awk "$awk_dim3" \
+				| _fzf \
+					--prompt "$argv[1] ($eventhubns) ❯ " \
+					--header "$account" \
+					--expect ^ \
+					--preview "az eventhubs eventhub show --name {1} | $bat_json")
+
+			if test -n "$choice"
+				set --local verb_ids (string split ' ' "$choice")
+
+				switch $verb_ids[1]
+
+				case '^'
+					fz azure-event-hub-namespaces
+
+				case '*'
+				end
+			end
+
 		case azure-extensions
 			if test "$argv[2]" = "--help"
 				print_azure_help
@@ -286,7 +351,7 @@ function fz --description 'entry point for all the fuzziness glory'
 
 			if test -n "$choice"
 				set --local verb_ids (string split ' ' "$choice")
-				set --local iot_hub $verb_ids[2]
+				set --local iothub $verb_ids[2]
 
 				switch $verb_ids[1]
 
@@ -294,7 +359,7 @@ function fz --description 'entry point for all the fuzziness glory'
 					fz azure-resources
 
 				case '*'
-					az config set defaults.iothub="$iot_hub" 2> /dev/null
+					az config set defaults.iothub="$iothub" 2> /dev/null
 
 				end
 			end
@@ -310,7 +375,6 @@ function fz --description 'entry point for all the fuzziness glory'
 				printf 'action: ^ - fz azure-iot-hubs\n'
 				return
 			end
-
 
 			set --local choice (az iot hub message-endpoint list --hub-name "$iothub" \
 				| _jq '.eventHubs' \
@@ -1430,6 +1494,8 @@ function fz --description 'entry point for all the fuzziness glory'
 			azure-container-registries \
 			azure-container-registry-repositories \
 			azure-container-registry-manifests \
+			azure-event-hub-namespaces \
+			azure-event-hubs \
 			azure-extensions \
 			azure-functions \
 			azure-iot-hubs \
