@@ -33,7 +33,8 @@ function fz --description 'entry point for all the fuzziness glory'
 		'{printf "%s %s \x1b[38;2;173;178;203m%s\x1b[m \x1b[38;2;98;114;164m%s %s\x1b[m\n", $1, $2, $3, $4, $5}'
 
 	function print_info
-		set_color cyan; printf "$argv[1]\n"; set_color normal;
+		printf "$argv[1]: "
+		set_color cyan; printf "$argv[2]\n"; set_color normal;
 	end
 
 	function print_error
@@ -76,39 +77,47 @@ function fz --description 'entry point for all the fuzziness glory'
 
 		# header or prompt
 		set --local account (az account show | _jq '"\(.user.name) at \(.name)"')
+		set --local rg (az config get defaults.rg 2> /dev/null | _jq .value)
+
+		function print_azure_help
+			set --local account (az account show | _jq '"\(.user.name) at \(.name)"')
+			set --local rg (az config get defaults.rg 2> /dev/null | _jq .value)
+			print_info identity "$account"
+			print_info resource-group "$rg"
+		end
 
 		switch $argv[1]
 
 		case azure-accounts
 			if test "$argv[2]" = "--help"
-				print_info "identity: $account"
+				print_azure_help
 				printf 'list: azure accounts using az\n'
 				printf 'preview: azure account details\n'
 				printf 'action: set default account and display its resource groups\n'
 				return
 			end
 
-			set --local account (az account list \
+			set --local choice (az account list \
 				| _jq '.[] | "\(.name)\u001f\(.user.name)\u001f(default:\(.isDefault))\u001f\(.id)"' \
 				| _awk "$awk_dim4" \
 				| _fzf --preview "az account show --subscription {-1} | $bat_json" \
 				| awk '{print $NF}')
 
-			if test -n "$account"
-				az account set --subscription "$account"
+			if test -n "$choice"
+				az account set --subscription "$choice"
 				fz azure-resource-groups
 			end
 
 		case azure-appservice-functionapps
 			if test "$argv[2]" = "--help"
-				print_info "identity: $account"
+				print_azure_help
 				printf 'list: azure app service functionapp using az\n'
 				printf 'preview: azure app service functionapp details\n'
 				print_dim 'action: none'
 				return
 			end
 
-			set --local functionapp (az functionapp list \
+			set --local choice (az functionapp list \
 				| _jq '.[] | "\(.name)\u001f\(.resourceGroup)\u001f\(.location)\u001f\(.kind)\u001f\(.id)"' \
 				| _awk "$awk_dim5" \
 				| _fzf \
@@ -116,21 +125,21 @@ function fz --description 'entry point for all the fuzziness glory'
 					--preview "az functionapp show --name {1} --resource-group {2} | $bat_json" \
 				| awk '{print $1}')
 
-			if test -n "$functionapp"
-				az config set defaults.functionapp="$functionapp" 2> /dev/null
+			if test -n "$choice"
+				az config set defaults.functionapp="$choice" 2> /dev/null
 				fz azure-functions
 			end
 
 		case azure-appservice-plans
 			if test "$argv[2]" = "--help"
-				print_info "identity: $account"
+				print_azure_help
 				printf 'list: azure app service plans using az\n'
 				printf 'preview: azure app service plan details\n'
 				print_dim 'action: none'
 				return
 			end
 
-			set --local asp (az appservice plan list \
+			set --local choice (az appservice plan list \
 				| _jq '.[] | "\(.name)\u001f\(.resourceGroup)\u001f\(.location)\u001f\(.kind)\u001f\(.id)"' \
 				| _awk "$awk_dim5" \
 				| _fzf \
@@ -139,14 +148,14 @@ function fz --description 'entry point for all the fuzziness glory'
 
 		case azure-appservice-webapps
 			if test "$argv[2]" = "--help"
-				print_info "identity: $account"
+				print_azure_help
 				printf 'list: azure app service webapps using az\n'
 				printf 'preview: azure app service webapp details\n'
 				print_dim 'action: none'
 				return
 			end
 
-			set --local webapp (az webapp list \
+			set --local choice (az webapp list \
 				| _jq '.[] | "\(.name)\u001f\(.resourceGroup)\u001f\(.location)\u001f\(.kind)\u001f\(.id)"' \
 				| _awk "$awk_dim5" \
 				| _fzf \
@@ -155,17 +164,14 @@ function fz --description 'entry point for all the fuzziness glory'
 
 		case azure-container-registries
 			if test "$argv[2]" = "--help"
-				print_info "identity: $account"
+				print_azure_help
 				printf 'list: azure container registries using az\n'
 				printf 'preview: azure container registry details\n'
 				printf 'action: set default container registry and display container registry repositories\n'
 				return
 			end
 
-			# prompt
-			set --local rg (az config get defaults.rg 2> /dev/null | _jq .value)
-
-			set --local acr (az acr list \
+			set --local choice (az acr list \
 				| _jq '.[] | "\(.name) \(.loginServer)\u001f\(.location)\u001f\(.id)"' \
 				| _awk "$awk_dim3" \
 				| _fzf \
@@ -173,68 +179,68 @@ function fz --description 'entry point for all the fuzziness glory'
 					--preview "az acr show --name {1} | $bat_json" \
 				| awk '{print $2}')
 
-			if test -n "$acr"
-				az config set defaults.acr="$acr" 2> /dev/null
+			if test -n "$choice"
+				az config set defaults.acr="$choice" 2> /dev/null
 				fz azure-container-registry-repositories
 			end
 
 		case azure-container-registry-manifests
+			# prompt
+			set --local registry (az config get defaults.acr 2> /dev/null | _jq .value)
+			set --local repository (az config get defaults.acrepo 2> /dev/null | _jq .value)
+
 			if test "$argv[2]" = "--help"
-				print_info "identity: $account"
+				print_azure_help
+				print_info registry "$registry"
+				print_info repository "$repository"
 				printf 'list: azure container registry manifests using az\n'
 				printf 'preview: container registry manifest metadata\n'
 				print_dim 'action: none'
 				return
 			end
 
-			# prompt
-			set --local registry (az config get defaults.acr 2> /dev/null | _jq .value)
-			set --local repository (az config get defaults.acrepo 2> /dev/null | _jq .value)
-
-			set --local manifest (az acr manifest list-metadata "$registry/$repository" 2> /dev/null \
+			set --local choice (az acr manifest list-metadata "$registry/$repository" 2> /dev/null \
 				| _jq '.[] | .digest' \
 				| _fzf --query '' \
 					--prompt "$argv[1] ($registry/$repository) ❯ " \
 					--preview "az acr manifest show-metadata $registry/$repository@{1} 2> /dev/null | $bat_json" \
 				| awk '{print $1}')
 
-			if test -n "$manifest"
-			end
-
 		case azure-container-registry-repositories
+			# prompt
+			set --local registry (az config get defaults.acr 2> /dev/null | _jq .value)
+
 			if test "$argv[2]" = "--help"
-				print_info "identity: $account"
+				print_azure_help
+				print_info registry "$registry"
 				printf 'list: azure container registry repositories using az\n'
 				printf 'preview: azure container registry repository\n'
 				printf 'action: set default container registry repository and display container registry manifests\n'
 				return
 			end
 
-			# prompt
-			set --local registry (az config get defaults.acr 2> /dev/null | _jq .value)
-
-			set --local repository (az acr repository list 2> /dev/null \
+			set --local choice (az acr repository list 2> /dev/null \
 				| _jq '.[]' \
 				| _fzf --query '' \
 					--prompt "$argv[1] ($registry) ❯ " \
 					--preview "az acr repository show --repository {1} 2> /dev/null | $bat_json" \
 				| awk '{print $1}')
 
-			if test -n "$repository"
-				az config set defaults.acrepo="$repository" 2> /dev/null
+			if test -n "$choice"
+				az config set defaults.acrepo="$choice" 2> /dev/null
 				fz azure-container-registry-manifests
 			end
 
 		case azure-extensions
 			if test "$argv[2]" = "--help"
-				print_info "identity: $account"
+				print_azure_help
 				printf 'list: az extensions\n'
 				printf 'preview: az extension detail\n'
 				print_dim 'action: none'
 				return
 			end
 
-			set --local action (az extension list-available \
+			set --local choice (az extension list-available \
 				| _jq '.[] | "\(.name)\u001f\(.installed)\u001f\(.version)"' \
 				| _awk "$awk_dim3" \
 				| _fzf \
@@ -242,23 +248,19 @@ function fz --description 'entry point for all the fuzziness glory'
 					--expect ^ \
 					--preview "az extension show --name {1} | $bat_json")
 
-			if test -n "$action"
-				set --local verb_ids (string split ' ' "$action")
-			end
-
 		case azure-functions
+			set --local functionapp (az config get defaults.functionapp 2> /dev/null | _jq .value)
+
 			if test "$argv[2]" = "--help"
-				print_info "identity: $account"
+				print_azure_help
+				print_info functionapp "$functionapp"
 				printf 'list: azure functions using az\n'
 				print_dim 'preview: none'
 				print_dim 'action: none'
 				return
 			end
 
-			set --local functionapp (az config get defaults.functionapp 2> /dev/null | _jq .value)
-			set --local rg (az config get defaults.rg 2> /dev/null | _jq .value)
-
-			set --local function (az functionapp function list --name "$functionapp" --resource-group "$rg" \
+			set --local choice (az functionapp function list --name "$functionapp" --resource-group "$rg" \
 				| _jq '.[] | "\(.name)\u001f\(.resourceGroup)\u001f\(.location)\u001f\(.kind)\u001f\(.id)"' \
 				| _awk "$awk_dim5" \
 				| _fzf \
@@ -267,14 +269,14 @@ function fz --description 'entry point for all the fuzziness glory'
 
 		case azure-iot-hubs
 			if test "$argv[2]" = "--help"
-				print_info "identity: $account"
+				print_azure_help
 				printf 'list: azure iot-hubs using az\n'
 				printf 'preview: azure iot-hub details\n'
 				printf 'action: ^ - fz azure-resources\n'
 				return
 			end
 
-			set --local action (az iot hub list \
+			set --local choice (az iot hub list \
 				| _jq '.[] | "\(.name)\u001f\(.location)\u001f\(.id)"' \
 				| _awk "$awk_dim3" \
 				| _fzf \
@@ -282,8 +284,8 @@ function fz --description 'entry point for all the fuzziness glory'
 					--expect ^ \
 					--preview "az iot hub show --name {1} | $bat_json")
 
-			if test -n "$action"
-				set --local verb_ids (string split ' ' "$action")
+			if test -n "$choice"
+				set --local verb_ids (string split ' ' "$choice")
 				set --local iot_hub $verb_ids[2]
 
 				switch $verb_ids[1]
@@ -298,17 +300,19 @@ function fz --description 'entry point for all the fuzziness glory'
 			end
 
 		case azure-iot-hub-endpoints
+			set --local iothub (az config get defaults.iothub 2> /dev/null | _jq .value)
+
 			if test "$argv[2]" = "--help"
-				print_info "identity: $account"
+				print_azure_help
+				print_info iothub "$iothub"
 				printf 'list: azure iot-hub endpoints az\n'
 				printf 'preview: azure iot-hub endpoint\n'
 				printf 'action: ^ - fz azure-iot-hubs\n'
 				return
 			end
 
-			set --local iothub (az config get defaults.iothub 2> /dev/null | _jq .value)
 
-			set --local action (az iot hub message-endpoint list --hub-name "$iothub" \
+			set --local choice (az iot hub message-endpoint list --hub-name "$iothub" \
 				| _jq '.eventHubs' \
 				| _awk "$awk_dim3" \
 				| _fzf \
@@ -317,9 +321,9 @@ function fz --description 'entry point for all the fuzziness glory'
 					--expect ^ \
 					--preview "az iot hub message-endpoint show --name {1} | $bat_json")
 
-			if test -n "$action"
-				set --local verb_ids (string split ' ' "$action")
-				set --local iot_hub $verb_ids[2]
+			if test -n "$choice"
+				set --local verb_ids (string split ' ' "$choice")
+				set --local iothub $verb_ids[2]
 
 				switch $verb_ids[1]
 
@@ -332,7 +336,7 @@ function fz --description 'entry point for all the fuzziness glory'
 
 		case azure-resource-groups
 			if test "$argv[2]" = "--help"
-				print_info "identity: $account"
+				print_azure_help
 				printf 'list: azure resource groups using az\n'
 				printf 'preview: azure resources in this rg\n'
 				printf 'action: ret - set default resource group and display its resources\n'
@@ -340,7 +344,7 @@ function fz --description 'entry point for all the fuzziness glory'
 				return
 			end
 
-			set --local action (az group list \
+			set --local choice (az group list \
 				| _jq '.[] | "\(.name)\u001f\(.location)\u001f\(.id)"' \
 				| _awk "$awk_dim3" \
 				| _fzf \
@@ -348,8 +352,8 @@ function fz --description 'entry point for all the fuzziness glory'
 					--expect ^ \
 					--preview 'az resource list --resource-group {1} | jq --raw-output ".[] | .name"')
 
-			if test -n "$action"
-				set --local verb_ids (string split ' ' "$action")
+			if test -n "$choice"
+				set --local verb_ids (string split ' ' "$choice")
 				set --local rg $verb_ids[2]
 
 				switch $verb_ids[1]
@@ -366,7 +370,7 @@ function fz --description 'entry point for all the fuzziness glory'
 
 		case azure-resources
 			if test "$argv[2]" = "--help"
-				print_info "identity: $account"
+				print_azure_help
 				printf 'list: azure resources using az\n'
 				printf 'preview: azure resource\n'
 				printf 'action: ret - depends on resource type\n'
@@ -374,7 +378,7 @@ function fz --description 'entry point for all the fuzziness glory'
 				return
 			end
 
-			set --local action (az resource list \
+			set --local choice (az resource list \
 				| _jq '.[] | "\(.name)\u001f\(.type)\u001f\(.resourceGroup)"' \
 				| _awk '{printf "%s \x1b[38;2;98;114;164m%s %s\x1b[m\n", $1, $2, $3}' \
 				| _fzf \
@@ -382,8 +386,8 @@ function fz --description 'entry point for all the fuzziness glory'
 					--expect ^ \
 					--preview "az resource show --name {1} --resource-type {-2} --resource-group {-1} | $bat_json")
 
-			if test -n "$action"
-				set --local verb_ids (string split ' ' "$action")
+			if test -n "$choice"
+				set --local verb_ids (string split ' ' "$choice")
 				set --local resource $verb_ids[2..]
 
 				switch $verb_ids[1]
@@ -408,7 +412,7 @@ function fz --description 'entry point for all the fuzziness glory'
 
 		case azure-storage-accounts
 			if test "$argv[2]" = "--help"
-				print_info "identity: $account"
+				print_azure_help
 				printf 'list: azure storage accounts using az\n'
 				printf 'preview: azure storage account details\n'
 				printf 'action: ret - set default azure storage account and display its containers\n'
@@ -416,7 +420,7 @@ function fz --description 'entry point for all the fuzziness glory'
 				return
 			end
 
-			set --local action (az storage account list \
+			set --local choice (az storage account list \
 				| _jq '.[] | "\(.name)\u001f\(.location)\u001f\(.id)"' \
 				| _awk "$awk_dim3" \
 				| _fzf \
@@ -424,8 +428,8 @@ function fz --description 'entry point for all the fuzziness glory'
 					--expect ^ \
 					--preview "az storage account show --name {1} | $bat_json")
 
-			if test -n "$action"
-				set --local verb_ids (string split ' ' "$action")
+			if test -n "$choice"
+				set --local verb_ids (string split ' ' "$choice")
 				set --local storageaccount $verb_ids[2]
 
 				switch $verb_ids[1]
@@ -441,8 +445,14 @@ function fz --description 'entry point for all the fuzziness glory'
 			end
 
 		case azure-storage-blobs
+			# header
+			set --local storageaccount (az config get defaults.storageaccount 2> /dev/null | _jq .value)
+			set --local container (az config get defaults.storagecontainer 2> /dev/null | _jq .value)
+
 			if test "$argv[2]" = "--help"
-				print_info "identity: $account"
+				print_azure_help
+				print_info "storage account" "$storageaccount"
+				print_info "storage container" "$container"
 				printf 'list: azure storage blobs using az\n'
 				printf 'preview: blob details\n'
 				printf 'action: ^ - fz azure-storage-containers\n'
@@ -450,11 +460,7 @@ function fz --description 'entry point for all the fuzziness glory'
 				return
 			end
 
-			# header
-			set --local storageaccount (az config get defaults.storageaccount 2> /dev/null | _jq .value)
-			set --local container (az config get defaults.storagecontainer 2> /dev/null | _jq .value)
-
-			set --local action (az storage blob list --account-name "$storageaccount" --container-name "$container" 2> /dev/null \
+			set --local choice (az storage blob list --account-name "$storageaccount" --container-name "$container" 2> /dev/null \
 				| _jq '.[] | "\(.name)"' \
 				| _fzf --query '' \
 					--header "$storageaccount/$container" \
@@ -462,8 +468,8 @@ function fz --description 'entry point for all the fuzziness glory'
 					--expect enter \
 					--preview "az storage blob show --account-name="$storageaccount" --container-name='$container' --name {1} 2> /dev/null | $bat_json")
 
-			if test -n "$action"
-				set --local verb_ids (string split ' ' "$action")
+			if test -n "$choice"
+				set --local verb_ids (string split ' ' "$choice")
 
 				switch $verb_ids[1]
 
@@ -485,8 +491,12 @@ function fz --description 'entry point for all the fuzziness glory'
 			end
 
 		case azure-storage-containers
+			# header
+			set --local storageaccount (az config get defaults.storageaccount 2> /dev/null | _jq .value)
+
 			if test "$argv[2]" = "--help"
-				print_info "identity: $account"
+				print_azure_help
+				print_info "storage account" "$storageaccount"
 				printf 'list: azure storage containers using az\n'
 				printf 'preview: azure storage container details\n'
 				printf 'action: ret - set default azure storage container and display its blobs\n'
@@ -494,10 +504,7 @@ function fz --description 'entry point for all the fuzziness glory'
 				return
 			end
 
-			# header
-			set --local storageaccount (az config get defaults.storageaccount 2> /dev/null | _jq .value)
-
-			set --local action (az storage container list --auth-mode login --account-name "$storageaccount" 2> /dev/null \
+			set --local choice (az storage container list --auth-mode login --account-name "$storageaccount" 2> /dev/null \
 				| _jq '.[] | "\(.name)"' \
 				| _awk '{printf "%s\n", $1}' \
 				| _fzf --query '' \
@@ -505,8 +512,8 @@ function fz --description 'entry point for all the fuzziness glory'
 					--expect ^ \
 					--preview "az storage container show --account-name="$storageaccount" --name {1} 2> /dev/null | $bat_json")
 
-			if test -n "$action"
-				set --local verb_ids (string split ' ' "$action")
+			if test -n "$choice"
+				set --local verb_ids (string split ' ' "$choice")
 				set --local container $verb_ids[2]
 
 				switch $verb_ids[1]
@@ -530,11 +537,12 @@ function fz --description 'entry point for all the fuzziness glory'
 			return
 		end
 
-		set --local bin (complete -C '' \
+		set --local choice (complete -C '' \
 			| awk '{print $1}' \
 			| _fzf --preview 'which {1}')
-		if test -n "$bin"
-			i3-msg --quiet "exec --no-startup-id $bin"
+
+		if test -n "$choice"
+			i3-msg --quiet "exec --no-startup-id $choice"
 		end
 
 	case browser-bookmarks
@@ -561,15 +569,15 @@ function fz --description 'entry point for all the fuzziness glory'
 			return
 		end
 
-		set --local action (firefoxctl tab list \
+		set --local choice (firefoxctl tab list \
 			| _jq '.[] | "\(.id) \(.lastAccessed)\t\(.title) \u001b[38;2;98;114;164m\(.url)\u001b[m"' \
 			| _fzf \
 				--multi \
 				--expect alt-d \
 			| awk '{print $1}')
 
-		if test -n "$action"
-			set --local verb_ids (string split ' ' "$action")
+		if test -n "$choice"
+			set --local verb_ids (string split ' ' "$choice")
 			set --local ids "$verb_ids[2..]"
 
 			switch $verb_ids[1]
@@ -596,12 +604,13 @@ function fz --description 'entry point for all the fuzziness glory'
 			return
 		end
 
-		set --local task (_jq '.tasks | to_entries | .[] | "\(.key)\u001f\(.value)"' deno.jsonc \
+		set --local choice (_jq '.tasks | to_entries | .[] | "\(.key)\u001f\(.value)"' deno.jsonc \
 			| _awk '{printf "%s \x1b[38;2;98;114;164m%s\x1b[m\n", $1, $NF}' \
 			| _fzf \
 			| awk '{print $1}')
-		if test -n "$task"
-			deno task "$task"
+
+		if test -n "$choice"
+			deno task "$choice"
 		end
 
 	case 'docker-*'
@@ -636,7 +645,7 @@ function fz --description 'entry point for all the fuzziness glory'
 				return
 			end
 
-			set --local container (docker container ls -a \
+			set --local choice (docker container ls -a \
 				| _fzf \
 					--header-lines=1 \
 					--preview "docker container inspect {1} | jq .[0] | $bat_json")
@@ -649,7 +658,7 @@ function fz --description 'entry point for all the fuzziness glory'
 				return
 			end
 
-			set --local image (docker image ls \
+			set --local choice (docker image ls \
 				| _fzf \
 					--header-lines=1 \
 					--preview "docker image inspect {3} | jq .[0] | $bat_json")
@@ -662,7 +671,7 @@ function fz --description 'entry point for all the fuzziness glory'
 				return
 			end
 
-			set --local image (docker image ls --filter 'dangling=true' \
+			set --local choice (docker image ls --filter 'dangling=true' \
 				| _fzf \
 					--header-lines=1 \
 					--preview "docker image inspect {3} | jq .[0] | $bat_json")
@@ -675,7 +684,7 @@ function fz --description 'entry point for all the fuzziness glory'
 				return
 			end
 
-			set --local network (docker network ls \
+			set --local choice (docker network ls \
 				| _fzf \
 					--header-lines=1 \
 					--preview "docker network inspect {1} | jq .[0] | $bat_json")
@@ -699,7 +708,7 @@ function fz --description 'entry point for all the fuzziness glory'
 				return
 			end
 
-			set --local volume (docker volume ls \
+			set --local choice (docker volume ls \
 				| _fzf \
 					--header-lines=1 \
 					--preview "docker volume inspect {2} | jq .[0] | $bat_json")
@@ -814,11 +823,12 @@ function fz --description 'entry point for all the fuzziness glory'
 			return
 		end
 
-		set --local repo (gh repo list \
+		set --local choice (gh repo list \
 			| _fzf \
 				--preview 'gh repo view {1}' | awk '{print $1}')
-		if test -n "$repo"
-			gh repo view --web "$repo"
+
+		if test -n "$choice"
+			gh repo view --web "$choice"
 		end
 
 	case gpg-keys
@@ -856,13 +866,14 @@ function fz --description 'entry point for all the fuzziness glory'
 			end
 
 			set --local jq_filter '.. | objects | select(.window_type == "normal") | "\(.id) \(.window_properties.class): \(.name)"'
-			set --local con_id (i3-msg -t get_tree \
+			set --local choice (i3-msg -t get_tree \
 				| _jq "$jq_filter" \
 				| awk '{printf "%s \x1b[36m%s\x1b[m %s\n", $1, $2, $3}' \
 				| _fzf --with-nth=2.. \
 				| awk '{print $1}')
-			if test -n "$con_id"
-				i3-msg --quiet "[con_id=$con_id] focus"
+
+			if test -n "$choice"
+				i3-msg --quiet "[con_id=$choice] focus"
 			end
 
 		case i3-workspaces
@@ -874,11 +885,12 @@ function fz --description 'entry point for all the fuzziness glory'
 				return
 			end
 
-			set --local workspace_id (i3-msg -t get_workspaces \
+			set --local choice (i3-msg -t get_workspaces \
 				| _jq '.[] .name' \
 				| _fzf)
-			if test -n "$workspace_id"
-				i3-msg --quiet "workspace $workspace_id"
+
+			if test -n "$choice"
+				i3-msg --quiet "workspace $choice"
 			end
 
 		end
@@ -1054,12 +1066,13 @@ function fz --description 'entry point for all the fuzziness glory'
 			return
 		end
 
-		set --local script (_jq '.scripts | to_entries | .[] | "\(.key)\u001f\(.value)"' package.json \
+		set --local choice (_jq '.scripts | to_entries | .[] | "\(.key)\u001f\(.value)"' package.json \
 			| _awk '{printf "%s \x1b[38;2;98;114;164m%s\x1b[m\n", $1, $NF}' \
 			| _fzf \
 			| awk '{print $1}')
-		if test -n "$script"
-			npm run "$script"
+
+		if test -n "$choice"
+			npm run "$choice"
 		end
 
 	case pacman-mirrors
@@ -1141,13 +1154,11 @@ function fz --description 'entry point for all the fuzziness glory'
 				return
 			end
 
-			set --local module (pactl -f json list modules\
+			set --local choice (pactl -f json list modules\
 				| _jq '.[] | "\(.properties["module.description"])\u001f\(.name)"' \
 				| _awk "$awk_dim2" \
 				| _fzf \
 				| awk '{print $1}')
-			if test -n "$module"
-			end
 
 		case pulseaudio-sinks
 			if test "$argv[2]" = "--help"
@@ -1157,13 +1168,11 @@ function fz --description 'entry point for all the fuzziness glory'
 				return
 			end
 
-			set --local sink (pactl -f json list sinks \
+			set --local choice (pactl -f json list sinks \
 				| _jq '.[] | "\(.description)\u001f\(.active_port)"' \
 				| _awk "$awk_dim2" \
 				| _fzf \
 				| awk '{print $1}')
-			if test -n "$sink"
-			end
 
 		case pulseaudio-sources
 			if test "$argv[2]" = "--help"
@@ -1173,13 +1182,11 @@ function fz --description 'entry point for all the fuzziness glory'
 				return
 			end
 
-			set --local src (pactl -f json list sources \
+			set --local choice (pactl -f json list sources \
 				| _jq '.[] | "\(.description)\u001f\(.active_port)"' \
 				| _awk "$awk_dim2" \
 				| _fzf \
 				| awk '{print $1}')
-			if test -n "$src"
-			end
 
 		end
 
@@ -1268,9 +1275,10 @@ function fz --description 'entry point for all the fuzziness glory'
 		end
 
 		set --local configs (fd config ~/.ssh/)
-		set --local host (cat $configs | rg 'Host ' | _fzf | awk '{print $2}')
-		if test -n "$host"
-			ssh "$host"
+		set --local choice (cat $configs | rg 'Host ' | _fzf | awk '{print $2}')
+
+		if test -n "$choice"
+			ssh "$choice"
 		end
 
 	case ssh-keys
@@ -1356,7 +1364,7 @@ function fz --description 'entry point for all the fuzziness glory'
 			return
 		end
 
-		set --local device (lsusb | _fzf --preview 'lsusb --verbose -d {6} 2> /dev/null')
+		set --local choice (lsusb | _fzf --preview 'lsusb --verbose -d {6} 2> /dev/null')
 
 	case vscode-extensions
 		if not command -q code
@@ -1371,9 +1379,7 @@ function fz --description 'entry point for all the fuzziness glory'
 			return
 		end
 
-		set --local extension (code --list-extensions --show-versions 2> /dev/null | _fzf)
-		if test -n "$extension"
-		end
+		set --local choice (code --list-extensions --show-versions 2> /dev/null | _fzf)
 
 	case vscode-workspaces
 		if not command -q code
@@ -1389,10 +1395,11 @@ function fz --description 'entry point for all the fuzziness glory'
 		end
 
 		set --local dir "$HOME/projects/vscode-workspaces/"
-		set --local workspace (fd .code-workspace "$dir" \
+		set --local choice  (fd .code-workspace "$dir" \
 			| _fzf --preview 'bat {} --plain --language json --color always')
-		if test -n "$workspace"
-			code "$workspace"
+
+		if test -n "$choice"
+			code "$choice"
 		end
 
 	case xinput-devices
