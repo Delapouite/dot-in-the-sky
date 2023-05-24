@@ -6,6 +6,7 @@
 
 (load! "private.el")
 (load! "describe.el")
+(load! "org.el")
 (load! "property-drawer.el")
 (load! "fetcher.el")
 
@@ -79,9 +80,6 @@
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
 (setq org-directory "~/Sync/org/")
-;; The following settings just make Emacs hang :(
-;; See the vulpea functions at the end for a dynamic list
-; (setq org-agenda-files '("~/Sync/org/roam/"))
 
 ;; This determines the style of line numbers in effect. If set to `nil', line
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
@@ -356,71 +354,6 @@
  '((lilypond . t)
    (plantuml . t)
    (emacs-lisp . nil)))
-
-;; To dynamically build org-agenda-files when a TODO is present
-
-(use-package! vulpea
-  :config
-  (defun vulpea-agenda-p ()
-    "Return non-nil if current buffer has any todo entry.
-
-    TODO entries marked as done are ignored, meaning that this
-    function returns nil if current buffer contains only completed tasks."
-    (seq-find
-     (lambda (type) (eq type 'todo))
-     (org-element-map
-         (org-element-parse-buffer 'headline)
-         'headline
-       (lambda (h)
-         (org-element-property :todo-type h)))))
-
-  (defun vulpea-agenda-update-tag ()
-    "Update AGENDA tag in the current buffer."
-    (when (and (not (active-minibuffer-window))
-               (vulpea-buffer-p))
-      (save-excursion
-        (goto-char (point-min))
-        (let* ((tags (vulpea-buffer-tags-get))
-               (original-tags tags))
-          (if (vulpea-agenda-p)
-              (setq tags (cons "Agenda" tags))
-            (setq tags (remove "Agenda" tags)))
-
-          ;; cleanup duplicates
-          (setq tags (seq-uniq tags))
-
-          ;; update tags if changed
-          (when (or (seq-difference tags original-tags)
-                    (seq-difference original-tags tags))
-            (apply #'vulpea-buffer-tags-set tags))))))
-
-  (defun vulpea-buffer-p ()
-    "Return non-nil if the currently visited buffer is a note."
-    (and buffer-file-name
-         (string-prefix-p
-          (expand-file-name (file-name-as-directory org-roam-directory))
-          (file-name-directory buffer-file-name))))
-
-  (defun vulpea-agenda-files ()
-    "Return a list of note files containing 'Agenda' tag." ;
-    (seq-uniq
-     (seq-map
-      #'car
-      (org-roam-db-query
-       [:select [nodes:file]
-        :from tags
-        :left-join nodes
-        :on (= tags:node-id nodes:id)
-        :where (like tag (quote "%\"Agenda\"%"))]))))
-
-  (defun vulpea-agenda-files-update (&rest _)
-    "Update the value of `org-agenda-files'."
-    (setq org-agenda-files (vulpea-agenda-files)))
-
-  ; (add-hook 'find-file-hook #'vulpea-agenda-update-tag)
-  (add-hook 'before-save-hook #'vulpea-agenda-update-tag)
-
-  (advice-add 'org-agenda :before #'vulpea-agenda-files-update))
 
 (defun my/search-cwd (prefix)
   (defun my/search-cwd-internal () (insert prefix))
