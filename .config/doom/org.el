@@ -1,5 +1,34 @@
 ;;; org.el -*- lexical-binding: t; -*-
 
+(defun my/org-link-description-region (link)
+  "Return description's region of LINK at point"
+  (list (org-element-property :contents-begin link)
+        (org-element-property :contents-end link)))
+
+(defun my/org-link-description (link)
+  "Return description of LINK at point"
+  (let ((region (my/org-link-description-region link)))
+    (buffer-substring (nth 0 region) (nth 1 region))))
+
+(defun my/org-link-description-replace (link description)
+  "Replace LINK's description by DESCRIPTION"
+  (let ((region (my/org-link-description-region link)))
+    (goto-char (nth 0 region))
+    (delete-region (nth 0 region) (nth 1 region))
+    (insert description)))
+
+(defun my/org-link-description-downcase ()
+  "Downcase description of link at point"
+  (interactive)
+  (let ((link (org-element-context)))
+    (my/org-link-description-replace link (downcase (my/org-link-description link)))))
+
+(defun my/org-link-description-pluralize ()
+  "Pluralize description of link at point"
+  (interactive)
+  (let ((link (org-element-context)))
+    (my/org-link-description-replace link (concat (my/org-link-description link) "s"))))
+
 ;; To dynamically build org-agenda-files when a TODO is present
 (defun my/org-get-filetags ()
   (interactive)
