@@ -65,9 +65,7 @@ function fz --description 'entry point for all the fuzziness glory'
 			return
 		end
 
-		set --local device (acpi --everything | _fzf)
-		if test -n "$device"
-		end
+		set --local choice (acpi --everything | _fzf)
 
 	case 'azure-*'
 		if not command -q az
@@ -120,7 +118,7 @@ function fz --description 'entry point for all the fuzziness glory'
 			set --local choice (az functionapp list \
 				| _jq '.[] | "\(.name)\u001f\(.resourceGroup)\u001f\(.location)\u001f\(.kind)\u001f\(.id)"' \
 				| _awk "$awk_dim5" \
-				| _fzf \
+				| _fzfa \
 					--header "$account" \
 					--preview "az functionapp show --name {1} --resource-group {2} | $bat_json" \
 				| awk '{print $1}')
@@ -175,7 +173,7 @@ function fz --description 'entry point for all the fuzziness glory'
 				| _jq '.[] | "\(.name) \(.loginServer)\u001f\(.location)\u001f\(.id)"' \
 				| _awk "$awk_dim3" \
 				| _fzf \
-					--prompt "$argv[1] ($account/$rg) ❯ " \
+					--header "$account" \
 					--preview "az acr show --name {1} | $bat_json" \
 				| awk '{print $2}')
 
@@ -203,6 +201,7 @@ function fz --description 'entry point for all the fuzziness glory'
 				| _jq '.[] | .digest' \
 				| _fzf --query '' \
 					--prompt "$argv[1] ($registry/$repository) ❯ " \
+					--header "$account" \
 					--preview "az acr manifest show-metadata $registry/$repository@{1} 2> /dev/null | $bat_json" \
 				| awk '{print $1}')
 
@@ -223,6 +222,7 @@ function fz --description 'entry point for all the fuzziness glory'
 				| _jq '.[]' \
 				| _fzf --query '' \
 					--prompt "$argv[1] ($registry) ❯ " \
+					--header "$account" \
 					--preview "az acr repository show --repository {1} 2> /dev/null | $bat_json" \
 				| awk '{print $1}')
 
@@ -788,6 +788,18 @@ function fz --description 'entry point for all the fuzziness glory'
 		end
 
 		_fzf_search_variables (set --show | psub) (set --names | psub)
+
+	case eslint-rules
+		if test "$argv[2]" = "--help"
+			printf 'list: eslint rules\n'
+			print_dim 'preview: none'
+			print_dim 'action: none'
+			return
+		end
+
+		cat ~/.local/share/eslint/rules.json \
+			| _jq '.[] | "\(.id) \(.type) \(.recommended) \(.fixable) \(.description)"' \
+			| _fzf
 
 	case files
 		if test "$argv[2]" = "--help"
@@ -1517,6 +1529,7 @@ function fz --description 'entry point for all the fuzziness glory'
 			docker-registries \
 			docker-volumes \
 			environment-variables \
+			eslint-rules \
 			files \
 			file-descriptors \
 			fonts \
