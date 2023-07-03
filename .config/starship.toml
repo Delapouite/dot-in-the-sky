@@ -1,4 +1,7 @@
 # https://starship.rs/config/
+
+"$schema" = 'https://starship.rs/config-schema.json'
+
 format = """
 $time\
 $username\
@@ -24,7 +27,6 @@ $memory_usage\
 $aws\
 $env_var\
 ${custom.docker}\
-$vagrant\
 $azure\
 $cmd_duration\
 
@@ -40,13 +42,14 @@ ${custom.files_hidden}\
 ${custom.sudo}\
 $shell\
 $character\
+$status\
 """
 
 [time]
 disabled = false
-style = ""
 time_format = "%T"
 format = "[$time]($style) "
+style = ""
 
 [shell]
 disabled = true
@@ -59,7 +62,7 @@ disabled = false
 truncation_length = 4
 truncate_to_repo = false
 repo_root_style = "bold"
-style = "bold yellow"
+style = "yellow"
 
 [git_commit]
 disabled = false
@@ -74,7 +77,7 @@ deleted = '✘$count'
 modified = '!$count'
 renamed = '»$count'
 staged = '+$count'
-untracked= '?$count'
+untracked = '?$count'
 style = "blue"
 
 [package]
@@ -88,11 +91,25 @@ disabled = true
 disabled = false
 error_symbol = "[✖](bold red)"
 
+[status]
+disabled = false
+symbol = ""
+format = '[$symbol$common_meaning$signal_name$maybe_int]($style) '
+map_symbol = false
+style = "bold red"
+
 [azure]
 disabled = true
-format = "on [$symbol($subscription)]($style) "
-symbol = "ﴃ "
-style = "blue"
+format = "on [$symbol($subscription) ($username)]($style) "
+symbol = "Azure ☁️ "
+style = "cyan"
+
+[env_var]
+disabled = true
+
+[env_var.AZURE_STORAGE_ACCOUNT]
+default = 'unknown AZURE_STORAGE_ACCOUNT'
+style = "cyan"
 
 [custom.git]
 disabled = false
