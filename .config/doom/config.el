@@ -148,7 +148,7 @@
     (let ((mtime (get-buffer-file-mtime)))
       (propertize mtime 'face (if (or
                                    (string-prefix-p " 2021" mtime)
-                                   (string-prefix-p " 2022-0" mtime))
+                                   (string-prefix-p " 2022" mtime))
                                   'compilation-error 'mode-line))))
 
   (doom-modeline-def-modeline 'delapouite
