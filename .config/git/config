@@ -21,6 +21,7 @@
 	# plurals
 	aliases = !git config --list | grep alias | cut --characters 7-
 	branches = branch --all --sort=-committerdate --format='%(committerdate:short) %(color:magenta)%(objectname:short) %(refname:short)%(color:reset) - %(contents:subject) - %(color:cyan)%(authorname)%(color:reset)'
+	files = ls-files
 	hooks = !fd . .git/hooks --exclude '*.sample'
 	remotes = remote --verbose
 	stashes = stash list
