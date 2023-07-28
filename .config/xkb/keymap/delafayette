@@ -40,11 +40,11 @@ xkb_keymap {
     key.type[group2] = "TWO_LEVEL";
 
     // Digits
-    key <AE01> {[ 1               , exclam          , U201E           , exclamdown      ],[ exclam          , onesuperior     ]}; // 1 ! „ ¡ ! ¹
+    key <AE01> {[ 1               , exclam          , U201E           , exclamdown      ],[ acute           , onesuperior     ]}; // 1 ! „ ¡ ´ ¹
     key <AE02> {[ 2               , at              , U201C           , U2018           ],[ parenleft       , twosuperior     ]}; // 2 @ “ ‘ ( ²
     key <AE03> {[ 3               , numbersign      , U201D           , U2019           ],[ parenright      , threesuperior   ]}; // 3 # ” ’ ) ³
-    key <AE04> {[ 4               , dollar          , sterling        , cent            ],[ apostrophe      , foursuperior    ]}; // 4 $ £ ¢ ' ⁴
-    key <AE05> {[ 5               , percent         , EuroSign        , U2030           ],[ quotedbl        , fivesuperior    ]}; // 5 % € ‰ " ⁵
+    key <AE04> {[ 4               , dollar          , sterling        , cent            ],[ grave           , foursuperior    ]}; // 4 $ £ ¢ ` ⁴
+    key <AE05> {[ 5               , percent         , EuroSign        , U2030           ],[ VoidSymbol      , fivesuperior    ]}; // 5 % € ‰   ⁵
     key <AE06> {[ 6               , asciicircum     , dead_currency   , VoidSymbol      ],[ VoidSymbol      , sixsuperior     ]}; // 6 ^ ฿     ⁶
     key <AE07> {[ 7               , ampersand       , bar             , brokenbar       ],[ VoidSymbol      , sevensuperior   ]}; // 7 & | ¦   ⁷
     key <AE08> {[ 8               , asterisk        , infinity        , U2605           ],[ VoidSymbol      , eightsuperior   ]}; // 8 * ∞ ★   ⁸
@@ -87,15 +87,17 @@ xkb_keymap {
     key <AB09> {[ period          , colon           , ellipsis        , notsign         ],[ period          , VoidSymbol      ]}; // . : … ¬ .
     key <AB10> {[ slash           , question        , backslash       , questiondown    ],[ U061F           , VoidSymbol      ]}; // / ? \ ¿ ؟
 
-    // Pinky keys
-    key <TLDE> {[ grave           , asciitilde      , VoidSymbol      , VoidSymbol      ],[ dead_grave      , dead_tilde      ]}; // ` ~     ` ~
+    // Left Pinky keys
+    key <TLDE> {[ asciitilde      , dead_tilde      , VoidSymbol      , VoidSymbol      ],[ VoidSymbol      , VoidSymbol      ]}; // ~ ◌̃
+    key <LSGT> {[ less            , greater         , lessthanequal   , greaterthanequal],[ VoidSymbol      , VoidSymbol      ]}; // < > ≤ ≥
+
+    // Right Pinky keys
     key <AE11> {[ minus           , underscore      , emdash          , endash          ],[ VoidSymbol      , VoidSymbol      ]}; // - _ — –
     key <AE12> {[ equal           , plus            , notequal        , plusminus       ],[ VoidSymbol      , VoidSymbol      ]}; // = + ≠ ±
-    key <AD11> {[ dead_circumflex , dead_acute      , dead_caron      , VoidSymbol      ],[ VoidSymbol      , VoidSymbol      ]}; // ^ ´
-    key <AD12> {[ dead_diaeresis  , dead_grave      , dead_breve      , VoidSymbol      ],[ VoidSymbol      , VoidSymbol      ]}; // ¨ `
-    key <AC11> {[ apostrophe      , quotedbl        , VoidSymbol      , VoidSymbol      ],[ dead_acute      , dead_diaeresis  ]}; // ' "     ´ ¨
-    key <BKSL> {[ backslash       , bar             , brokenbar       , VoidSymbol      ],[ VoidSymbol      , VoidSymbol      ]}; // \ | ¦
-    key <LSGT> {[ less            , greater         , lessthanequal   , greaterthanequal],[ asciitilde      , VoidSymbol      ]}; // < > ≤ ≥ ~
+    key <AD11> {[ dead_circumflex , dead_acute      , dead_caron      , VoidSymbol      ],[ VoidSymbol      , VoidSymbol      ]}; // ◌̂ ◌́ ◌̌
+    key <AD12> {[ dead_diaeresis  , dead_grave      , dead_breve      , VoidSymbol      ],[ VoidSymbol      , VoidSymbol      ]}; // ◌̈ ◌̀ ◌̆
+    key <AC11> {[ apostrophe      , quotedbl        , VoidSymbol      , VoidSymbol      ],[ VoidSymbol      , VoidSymbol      ]}; // ' "
+    key <AC12> {[ backslash       , bar             , brokenbar       , VoidSymbol      ],[ VoidSymbol      , VoidSymbol      ]}; // \ | ¦
 
     // Space bar
     key <SPCE> {[ space           , space           , VoidSymbol      , VoidSymbol      ],[ Escape          , nobreakspace    ]};
