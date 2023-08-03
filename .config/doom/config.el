@@ -268,37 +268,43 @@
 
   ;; random predicate natively implemented in https://github.com/org-roam/org-roam/pull/2050
 
-  (defun org-roam-node-random-tag (search &optional other-window)
-    (let ((random-row (seq-random-elt (org-roam-db-query [:select [id file pos]
-                                                          :from [nodes tags]
-                                                          :where (and (= node_id id) (= tag $s1))] search))))
-      (org-roam-node-visit (org-roam-node-create :id (nth 0 random-row)
-                                                 :file (nth 1 random-row)
-                                                 :point (nth 2 random-row))
-                           other-window)))
+  (defun org-roam-node-random-person (&optional other-window)
+    "Find and open a random Org-roam person node.
+     With prefix argument OTHER-WINDOW, visit the node in another window instead."
+    (interactive current-prefix-arg)
+    (org-roam-node-random other-window
+                          (lambda (node) (member "Person" (org-roam-node-tags node)))))
 
   (defun org-roam-node-random-tool (&optional other-window)
     "Find and open a random Org-roam tool node.
-        With prefix argument OTHER-WINDOW, visit the node in another window instead."
+     With prefix argument OTHER-WINDOW, visit the node in another window instead."
     (interactive current-prefix-arg)
-    (org-roam-node-random-tag "Tool" other-window))
+    (org-roam-node-random other-window
+                          (lambda (node) (member "Tool" (org-roam-node-tags node)))))
 
   (defun org-roam-node-random-artist (&optional other-window)
     "Find and open a random Org-roam artist node.
-        With prefix argument OTHER-WINDOW, visit the node in another window instead."
+     With prefix argument OTHER-WINDOW, visit the node in another window instead."
     (interactive current-prefix-arg)
-    (org-roam-node-random-tag "Artist" other-window))
+    (org-roam-node-random other-window
+                          (lambda (node) (member "Artist" (org-roam-node-tags node)))))
 
   (defun org-roam-node-random-album (&optional other-window)
     "Find and open a random Org-roam album node.
-        With prefix argument OTHER-WINDOW, visit the node in another window instead."
+     With prefix argument OTHER-WINDOW, visit the node in another window instead."
     (interactive current-prefix-arg)
-    (org-roam-node-random-tag "Album" other-window))
+    (org-roam-node-random other-window
+                          (lambda (node) (member "Album" (org-roam-node-tags node)))))
 
   (defun org-roam-node-random-2021 ()
     (interactive)
     (org-roam-node-random nil (lambda (node)
                                 (string-prefix-p "2021" (org-roam-node-mtime node)))))
+
+  (defun org-roam-node-random-2022 ()
+    (interactive)
+    (org-roam-node-random nil (lambda (node)
+                                (string-prefix-p "2022" (org-roam-node-mtime node)))))
 
   (defun my/print-nodes-list (&rest search)
     "Print a org-roam nodes list having SEARCH tag(s)"
