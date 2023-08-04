@@ -29,7 +29,8 @@
     "package.json": "package-lock.json,yarn.lock,pnpm-lock.yaml,.yarnrc.yml",
     "tsconfig.json": "tsconfig.*.json",
     "tsconfig.base.json": "tsconfig.*.json",
-    "GemFile": "Gemfile.lock"
+    "GemFile": "Gemfile.lock",
+    "*.ts": "${capture}.js,${capture}.spec.ts"
   },
   "problems.showCurrentInStatus": true,
   "references.preferredLocation": "view",
@@ -77,11 +78,13 @@
   "atlascode.bitbucket.pipelines.explorerEnabled": true,
   "atlascode.jira.enabled": false,
   "azureFunctions.showProjectWarning": false,
+  "azurite.location": ".azurite",
   "cosmosDB.showSavePrompt": false,
   "docker.containers.groupBy": "State",
   "docker.containers.description": ["ContainerName", "State", "Status"],
   "eslint.alwaysShowStatus": true,
   "eslint.debug": true,
+  "stylelint.validate": ["css", "scss"],
   "gitlens.blame.ignoreWhitespace": true,
   "gitlens.codeLens.enabled": false,
   "gitlens.sortBranchesBy": "date:desc",
@@ -122,6 +125,7 @@
       "url": "https://json.schemastore.org/webextension.json"
     }
   ],
+  "xml.server.preferBinary": true,
   // point to this specific version fixing the "condition" keys
   "yaml.schemas": {
     "https://bitbucket.org/atlassianlabs/atlascode/raw/f61ec5b742d3df75932b3c65d78e3c7e1cb67854/resources/schemas/pipelines-schema.json": "bitbucket-pipelines.yml"
@@ -131,10 +135,8 @@
   "nxConsole.enableTelemetry": false,
   "partialDiff.enableTelemetry": false,
   "redhat.telemetry.enabled": false,
-  "stylelint.validate": ["css", "scss"],
   "dance.modes": {
     "normal": {
-      "lineNumbers": "relative",
       "cursorStyle": "block",
       "selectionBehavior": "character",
       "decorations": {
