@@ -12,6 +12,9 @@ alias builtins='builtin --names'
 # curl
 abbr --add --position anywhere -- --jwt '--header "Authorization: Bearer $JWT"'
 
+# docker / podman
+abbr --add --position anywhere -- --transient '--rm --interactive --tty'
+
 # ← arrow
 bind \e\[1\;3D backward-kill-word
 bind \e\[1\;4D backward-kill-bigword
