@@ -1342,6 +1342,31 @@ function fz --description 'entry point for all the fuzziness glory'
 
 		fish_config theme list | _fzf --preview 'fish_config theme show {}'
 
+	case ssh-agent-keys
+		if not command -q ssh-add
+			print_error 'ssh-add command not found'
+			return 1
+		end
+
+		if test "$argv[2]" = "--help"
+			printf 'list: ssh-agent keys SHA256 fingerprints\n'
+			printf 'preview: full public key\n'
+			print_dim 'action: none'
+			return
+		end
+
+		ssh-add -l | _fzf --preview 'ssh-add -L | rg {3}' --preview-window wrap
+
+	case ssh-authorized-keys
+		if test "$argv[2]" = "--help"
+			printf 'list: keys in ~/.ssh/authorized_keys\n'
+			print_dim 'preview: none'
+			print_dim 'action: none'
+			return
+		end
+
+		cat ~/.ssh/authorized_keys | _fzf
+
 	case ssh-hosts
 		if test "$argv[2]" = "--help"
 			printf 'list: ssh hosts in ~/.ssh configs\n'
@@ -1356,21 +1381,6 @@ function fz --description 'entry point for all the fuzziness glory'
 		if test -n "$choice"
 			ssh "$choice"
 		end
-
-	case ssh-keys
-		if not command -q ssh-add
-			print_error 'ssh-add command not found'
-			return 1
-		end
-
-		if test "$argv[2]" = "--help"
-			printf 'list: ssh keys SHA256 fingerprints\n'
-			printf 'preview: full public key\n'
-			print_dim 'action: none'
-			return
-		end
-
-		ssh-add -l | _fzf --preview 'ssh-add -L | rg {3}' --preview-window wrap
 
 	case 'starship-*'
 		if not command -q starship
@@ -1570,8 +1580,9 @@ function fz --description 'entry point for all the fuzziness glory'
 			shell-key-bindings \
 			shell-prompts \
 			shell-themes \
+			ssh-agent-keys \
+			ssh-authorized-keys \
 			ssh-hosts \
-			ssh-keys \
 			starship-modules \
 			starship-presets \
 			systemd \
