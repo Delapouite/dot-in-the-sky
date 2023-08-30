@@ -74,3 +74,7 @@ bind generic ca !?@git commit --amend --no-edit
 
 bind generic K view-help
 bind generic <C-w><C-w> view-next
+
+color cursor      default default reverse bold
+color title-focus magenta default reverse bold
+color title-blur  white purple
