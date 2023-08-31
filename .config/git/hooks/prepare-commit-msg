@@ -1,13 +1,24 @@
 #!/bin/sh
 
+# https://git-scm.com/docs/githooks#_prepare_commit_msg
+
 ORIG_MSG_FILE="$1"
+# message, template, merge, squash, commit or empty
+COMMIT_SOURCE="$2"
+
+# only enrich the commit message in simple scenarii (when empty)
+if test -n "$COMMIT_SOURCE"; then
+  exit 0;
+fi;
+
 TEMP="$(mktemp /tmp/git-XXXXX)"
 
 USER_NAME="$(git config --get user.name)"
 USER_EMAIL="$(git config --get user.email)"
 
-(echo -e "\n# User: $USER_NAME ($USER_EMAIL)\n"; \
+(printf "\n# User: %s (%s)\n\n" "$USER_NAME" "$USER_EMAIL"; \
 git log --oneline | head -n 5 | sed 's/^/# /'; \
 cat "$ORIG_MSG_FILE") > "$TEMP"
 
 cat "$TEMP" > "$ORIG_MSG_FILE"
+rm "$TEMP"
