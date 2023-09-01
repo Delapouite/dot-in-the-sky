@@ -1,5 +1,4 @@
 {
-  "diffEditor.ignoreTrimWhitespace": false,
   "editor.cursorStyle": "block",
   "editor.cursorSurroundingLines": 10,
   "editor.fontSize": 12,
@@ -8,6 +7,7 @@
     "comments": true,
     "strings": true
   },
+  "editor.minimap.enabled": false,
   "editor.renderLineHighlight": "all",
   "editor.renderWhitespace": "all",
   "editor.scrollbar.verticalScrollbarSize": 32,
@@ -48,12 +48,13 @@
   "terminal.integrated.fontFamily": "iosevka term",
   "terminal.integrated.fontSize": 13,
   "terminal.integrated.scrollback": 10000,
+  "terminal.integrated.smoothScrolling": true,
   "update.mode": "none",
   "window.menuBarVisibility": "toggle",
   "workbench.colorTheme": "Dracula",
   "workbench.colorCustomizations": {
     "tab.activeBorderTop": "#50fa7b",
-    "tab.activeBackground": "#444754",
+    "tab.activeBackground": "#444754"
   },
   "workbench.editor.highlightModifiedTabs": true,
   "workbench.startupEditor": "newUntitledFile",
@@ -76,8 +77,9 @@
   "atlascode.bitbucket.enabled": true,
   "atlascode.bitbucket.explorer.relatedJiraIssues.enabled": true,
   "atlascode.bitbucket.pipelines.explorerEnabled": true,
-  "atlascode.jira.enabled": false,
+  "atlascode.jira.enabled": true,
   "azureFunctions.showProjectWarning": false,
+  "azureResourceGroups.groupBy": "resourceType",
   "azurite.location": ".azurite",
   "cosmosDB.showSavePrompt": false,
   "docker.containers.groupBy": "State",
@@ -99,7 +101,7 @@
   // format
   "prettier.semi": false,
   "prettier.trailingComma": "all",
-  "[html][javascript][json][jsonc][scss][typescript][typescriptreact][yaml]": {
+  "[css][html][javascript][json][jsonc][scss][typescript][typescriptreact][yaml]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   "[terraform][terraform-vars]": {
@@ -204,7 +206,7 @@
         "c": {
           "text": "config",
           "command": "workbench.action.openSettingsJson"
-        },
+        }
       }
     }
   ],
