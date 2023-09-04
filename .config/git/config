@@ -26,6 +26,7 @@
 	remotes = remote --verbose
 	stashes = stash list
 	tags = tag -n
+	worktrees = worktree list
 
 	# synonyms
 	# remember to use .mailmap to merge authors
