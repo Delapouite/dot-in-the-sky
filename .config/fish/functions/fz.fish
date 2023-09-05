@@ -67,6 +67,21 @@ function fz --description 'entry point for all the fuzziness glory'
 
 		set --local choice (acpi --everything | _fzf)
 
+	case asdf-plugins
+		if not command -q asdf
+			print_error 'asdf command not found'
+			return 1
+		end
+
+		if test "$argv[2]" = "--help"
+			printf 'list: asdf plugins\n'
+			print_dim 'preview: none'
+			print_dim 'action: none'
+			return
+		end
+
+		set --local choice (asdf plugin list | _fzf)
+
 	case 'azure-*'
 		if not command -q az
 			print_error 'az command not found'
@@ -1509,6 +1524,7 @@ function fz --description 'entry point for all the fuzziness glory'
 	case '*'
 		set --local commands \
 			acpi-devices \
+			asdf-plugins \
 			azure-accounts \
 			azure-appservice-functionapps \
 			azure-appservice-plans \
@@ -1599,6 +1615,9 @@ function fz --description 'entry point for all the fuzziness glory'
 			switch $command
 			case 'acpi-devices'
 				command -q acpi
+
+			case 'asdf-*'
+				command -q asdf
 
 			case 'azure-*'
 				command -q az
