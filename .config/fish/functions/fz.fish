@@ -1426,6 +1426,21 @@ function fz --description 'entry point for all the fuzziness glory'
 			starship preset --list | _fzf
 		end
 
+	case sysctl-values
+		if not command -q sysctl
+			print_error 'sysctl command not found'
+			return 1
+		end
+
+		if test "$argv[2]" = "--help"
+			printf 'list: sysctl values\n'
+			print_dim 'preview: none'
+			print_dim 'action: none'
+			return
+		end
+
+		set --local choice (sysctl --all | _fzf)
+
 	case systemd
 		if not command -q sysz
 			print_error 'sysz command not found'
@@ -1601,6 +1616,7 @@ function fz --description 'entry point for all the fuzziness glory'
 			ssh-hosts \
 			starship-modules \
 			starship-presets \
+			sysctl-values \
 			systemd \
 			top-level-domains \
 			usb-devices \
