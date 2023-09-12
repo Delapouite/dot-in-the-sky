@@ -11,6 +11,7 @@
   "editor.renderLineHighlight": "all",
   "editor.renderWhitespace": "all",
   "editor.scrollbar.verticalScrollbarSize": 32,
+  "editor.semanticHighlighting.enabled": true,
   "editor.stickyScroll.enabled": true,
   "editor.suggestSelection": "first",
   "editor.tabSize": 2,
@@ -78,6 +79,9 @@
   "atlascode.bitbucket.explorer.relatedJiraIssues.enabled": true,
   "atlascode.bitbucket.pipelines.explorerEnabled": true,
   "atlascode.jira.enabled": true,
+  "atlascode.jira.explorer.enabled": true,
+  "atlascode.jira.statusbar.enabled": false,
+  /// azure
   "azureFunctions.showProjectWarning": false,
   "azureResourceGroups.groupBy": "resourceType",
   "azurite.location": ".azurite",
@@ -137,6 +141,7 @@
   "nxConsole.enableTelemetry": false,
   "partialDiff.enableTelemetry": false,
   "redhat.telemetry.enabled": false,
+  // kakoune
   "dance.modes": {
     "normal": {
       "cursorStyle": "block",
