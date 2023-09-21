@@ -182,7 +182,7 @@
   :config
   (add-hook 'org-mode-hook `doom-modeline-set-delapouite-modeline)
 
-  (setq org-roam-node-display-template "${title:*} ${my-level} | ${mtime} | ${tags:50}")
+  (setq org-roam-node-display-template "${title:*} @${my-level} | ↑${upgraded-at} | m${mtime} | ${tags:50}")
   (setq org-tags-exclude-from-inheritance '("Album" "Artist" "Debut" "Top"))
 
   ; Sections in sidebar
@@ -320,8 +320,10 @@
 
   (cl-defmethod org-roam-node-my-level ((node org-roam-node))
     (number-to-string (org-roam-node-level node)))
+
   (cl-defmethod org-roam-node-mtime ((node org-roam-node))
-    (format-time-string "%Y-%m-%d %H:%M:%S" (org-roam-node-file-mtime node)))
+    (format-time-string "%Y-%m-%d" (org-roam-node-file-mtime node)))
+
   ;; not used because too slow :(
   (cl-defmethod org-roam-node-backlinkscount ((node org-roam-node))
     (let* ((count (caar (org-roam-db-query
@@ -331,6 +333,11 @@
                           :and (= type "id")]
                          (org-roam-node-id node)))))
       (format "[%d]" count)))
+
+  (cl-defmethod org-roam-node-upgraded-at ((node org-roam-node))
+    (let* ((upgraded-at (or (cdr (assoc "UPGRADED-AT" (org-roam-node-properties node)))
+                            "          ")))
+      (substring upgraded-at 0 10)))
 
   (advice-add 'org-insert-property-drawer :override #'my/org-insert-property-drawer)
 
