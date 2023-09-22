@@ -1357,6 +1357,18 @@ function fz --description 'entry point for all the fuzziness glory'
 
 		fish_config theme list | _fzf --preview 'fish_config theme show {}'
 
+	case sockets
+		if test "$argv[2]" = "--help"
+			printf 'list: sockets using ss\n'
+			print_dim 'preview: none'
+			print_dim 'action: none'
+			return
+		end
+
+		set --local choice (ss --all \
+			| _fzf \
+				--header-lines=1)
+
 	case ssh-agent-keys
 		if not command -q ssh-add
 			print_error 'ssh-add command not found'
@@ -1614,6 +1626,7 @@ function fz --description 'entry point for all the fuzziness glory'
 			ssh-agent-keys \
 			ssh-authorized-keys \
 			ssh-hosts \
+			sockets \
 			starship-modules \
 			starship-presets \
 			sysctl-values \
@@ -1676,6 +1689,9 @@ function fz --description 'entry point for all the fuzziness glory'
 
 			case 'pulseaudio-*'
 				command -q pactl
+
+			case 'sockets'
+				command -q ss
 
 			case 'starship-*'
 				command -q starship
