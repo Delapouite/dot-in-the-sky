@@ -1084,6 +1084,16 @@ function fz --description 'entry point for all the fuzziness glory'
 
 		xrandr --listmonitors | _fzf --header-lines=1
 
+	case mounts
+		if test "$argv[2]" = "--help"
+			printf 'list: mounts with labels\n'
+			print_dim 'preview: none'
+			print_dim 'action: none'
+			return
+		end
+
+		mount --show-label | _fzf
+
 	case 'music-*'
 		if not command -q mpc
 			print_error 'mpc command not found'
@@ -1602,6 +1612,7 @@ function fz --description 'entry point for all the fuzziness glory'
 			man-pages \
 			media-types \
 			monitors \
+			mounts \
 			music-albums \
 			music-artists \
 			music-dates \
