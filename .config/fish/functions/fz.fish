@@ -284,7 +284,7 @@ function fz --description 'entry point for all the fuzziness glory'
 			if test "$argv[2]" = "--help"
 				print_azure_help
 				print_info "event-hub namespace" "$eventhubns"
-				printf 'list: azure event-hubs az\n'
+				printf 'list: azure event-hubs using az\n'
 				printf 'preview: azure event-hub details\n'
 				printf 'action: ^ - fz azure-event-hub-namespaces\n'
 				return
@@ -353,6 +353,8 @@ function fz --description 'entry point for all the fuzziness glory'
 				printf 'list: azure iot-hubs using az\n'
 				printf 'preview: azure iot-hub details\n'
 				printf 'action: ^ - fz azure-resources\n'
+				printf 'action: ctrl-alt-e - fz azure-iot-hub-endpoints\n'
+				printf 'action: ctrl-alt-r - fz azure-iot-hub-routes\n'
 				return
 			end
 
@@ -362,6 +364,8 @@ function fz --description 'entry point for all the fuzziness glory'
 				| _fzf \
 					--header "$account" \
 					--expect ^ \
+					--expect ctrl-alt-e \
+					--expect ctrl-alt-r \
 					--preview "az iot hub show --name {1} | $bat_json")
 
 			if test -n "$choice"
@@ -372,6 +376,14 @@ function fz --description 'entry point for all the fuzziness glory'
 
 				case '^'
 					fz azure-resources
+
+				case 'ctrl-alt-e'
+					az config set defaults.iothub="$iothub" 2> /dev/null
+					fz azure-iot-hub-endpoints
+
+				case 'ctrl-alt-r'
+					az config set defaults.iothub="$iothub" 2> /dev/null
+					fz azure-iot-hub-routes
 
 				case '*'
 					az config set defaults.iothub="$iothub" 2> /dev/null
@@ -385,29 +397,73 @@ function fz --description 'entry point for all the fuzziness glory'
 			if test "$argv[2]" = "--help"
 				print_azure_help
 				print_info iothub "$iothub"
-				printf 'list: azure iot-hub endpoints az\n'
+				printf 'list: azure iot-hub endpoints using az\n'
 				printf 'preview: azure iot-hub endpoint\n'
 				printf 'action: ^ - fz azure-iot-hubs\n'
+				printf 'action: ctrl-alt-r - fz azure-iot-hub-routes\n'
 				return
 			end
 
 			set --local choice (az iot hub message-endpoint list --hub-name "$iothub" \
-				| _jq '.eventHubs' \
+				| _jq '.eventHubs | .[].name' \
 				| _awk "$awk_dim3" \
 				| _fzf \
 					--prompt "$argv[1] ($iothub) ❯ " \
 					--header "$account" \
 					--expect ^ \
-					--preview "az iot hub message-endpoint show --name {1} | $bat_json")
+					--expect ctrl-alt-r \
+					--preview "az iot hub message-endpoint show --hub-name $iothub --endpoint-name {1} | $bat_json")
 
 			if test -n "$choice"
 				set --local verb_ids (string split ' ' "$choice")
-				set --local iothub $verb_ids[2]
 
 				switch $verb_ids[1]
 
 				case '^'
 					fz azure-iot-hubs
+
+				case 'ctrl-alt-r'
+					az config set defaults.iothub="$iothub" 2> /dev/null
+					fz azure-iot-hub-routes
+
+				case '*'
+				end
+			end
+
+		case azure-iot-hub-routes
+			set --local iothub (az config get defaults.iothub 2> /dev/null | _jq .value)
+
+			if test "$argv[2]" = "--help"
+				print_azure_help
+				print_info iothub "$iothub"
+				printf 'list: azure iot-hub routes using az\n'
+				printf 'preview: azure iot-hub route\n'
+				printf 'action: ^ - fz azure-iot-hubs\n'
+				printf 'action: ctrl-alt-e - fz azure-iot-hub-endpoints\n'
+				return
+			end
+
+			set --local choice (az iot hub message-route list --hub-name "$iothub" \
+				| _jq '.[] | "\(.name)\u001f\(.source)\u001f\(.isEnabled)"' \
+				| _awk "$awk_dim3" \
+				| _fzf \
+					--prompt "$argv[1] ($iothub) ❯ " \
+					--header "$account" \
+					--expect ^ \
+					--expect ctrl-alt-e \
+					--preview "az iot hub message-route show --hub-name $iothub --route-name {1} | $bat_json")
+
+			if test -n "$choice"
+				set --local verb_ids (string split ' ' "$choice")
+
+				switch $verb_ids[1]
+
+				case '^'
+					fz azure-iot-hubs
+
+				case 'ctrl-alt-e'
+					az config set defaults.iothub="$iothub" 2> /dev/null
+					fz azure-iot-hub-endpoints
 
 				case '*'
 				end
@@ -1575,6 +1631,7 @@ function fz --description 'entry point for all the fuzziness glory'
 			azure-functions \
 			azure-iot-hubs \
 			azure-iot-hub-endpoints \
+			azure-iot-hub-routes \
 			azure-resource-groups \
 			azure-resources \
 			azure-storage-accounts \
