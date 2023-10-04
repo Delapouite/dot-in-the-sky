@@ -43,9 +43,9 @@ xkb_keymap {
     key <AE01> {[ 1               , exclam          , U201E           , exclamdown      ],[ acute           , onesuperior     ]}; // 1 ! „ ¡ ´ ¹
     key <AE02> {[ 2               , at              , U201C           , U2018           ],[ parenleft       , twosuperior     ]}; // 2 @ “ ‘ ( ²
     key <AE03> {[ 3               , numbersign      , U201D           , U2019           ],[ parenright      , threesuperior   ]}; // 3 # ” ’ ) ³
-    key <AE04> {[ 4               , dollar          , sterling        , cent            ],[ grave           , foursuperior    ]}; // 4 $ £ ¢ ` ⁴
-    key <AE05> {[ 5               , percent         , EuroSign        , U2030           ],[ VoidSymbol      , fivesuperior    ]}; // 5 % € ‰   ⁵
-    key <AE06> {[ 6               , asciicircum     , dead_currency   , VoidSymbol      ],[ VoidSymbol      , sixsuperior     ]}; // 6 ^ ฿     ⁶
+    key <AE04> {[ 4               , dollar          , VoidSymbol      , VoidSymbol      ],[ grave           , foursuperior    ]}; // 4 $     ` ⁴
+    key <AE05> {[ 5               , percent         , U2030           , VoidSymbol      ],[ VoidSymbol      , fivesuperior    ]}; // 5 % ‰     ⁵
+    key <AE06> {[ 6               , asciicircum     , VoidSymbol      , VoidSymbol      ],[ VoidSymbol      , sixsuperior     ]}; // 6 ^       ⁶
     key <AE07> {[ 7               , ampersand       , bar             , brokenbar       ],[ VoidSymbol      , sevensuperior   ]}; // 7 & | ¦   ⁷
     key <AE08> {[ 8               , asterisk        , infinity        , U2605           ],[ VoidSymbol      , eightsuperior   ]}; // 8 * ∞ ★   ⁸
     key <AE09> {[ 9               , parenleft       , VoidSymbol      , U2606           ],[ VoidSymbol      , ninesuperior    ]}; // 9 (   ☆   ⁹
@@ -57,7 +57,7 @@ xkb_keymap {
     key <AD03> {[ e               , E               , egrave          , Egrave          ],[ greater         , greaterthanequal]}; // e E è È > ≥
     key <AD04> {[ r               , R               , registered      , trademark       ],[ guillemotright  , U203A           ]}; // r R ® ™ » ›
     key <AD05> {[ t               , T               , thorn           , Thorn           ],[ VoidSymbol      , VoidSymbol      ]}; // t T þ Þ
-    key <AD06> {[ y               , Y               , yen             , currency        ],[ VoidSymbol      , VoidSymbol      ]}; // y Y ¥ ¤
+    key <AD06> {[ y               , Y               , dead_currency   , VoidSymbol      ],[ VoidSymbol      , VoidSymbol      ]}; // y Y ¤
     key <AD07> {[ u               , U               , ugrave          , Ugrave          ],[ VoidSymbol      , VoidSymbol      ]}; // u U ù Ù
     key <AD08> {[ i               , I               , U0133           , U0132           ],[ VoidSymbol      , VoidSymbol      ]}; // i I ĳ Ĳ
     key <AD09> {[ o               , O               , oe              , OE              ],[ VoidSymbol      , VoidSymbol      ]}; // o O œ Œ
@@ -67,8 +67,8 @@ xkb_keymap {
     key <AC01> {[ a               , A               , agrave          , Agrave          ],[ braceleft       , VoidSymbol      ]}; // a A à À {
     key <AC02> {[ s               , S               , ssharp          , U1E9E           ],[ bracketleft     , VoidSymbol      ]}; // s S ß ẞ [
     key <AC03> {[ d               , D               , eth             , Eth             ],[ bracketright    , VoidSymbol      ]}; // d D ð Ð ]
-    key <AC04> {[ f               , F               , U017F           , ordfeminine     ],[ braceright      , VoidSymbol      ]}; // f F ſ ª }
-    key <AC05> {[ g               , G               , copyright       , VoidSymbol      ],[ dead_greek      , VoidSymbol      ]}; // g G © Ω
+    key <AC04> {[ f               , F               , ordfeminine     , VoidSymbol      ],[ braceright      , VoidSymbol      ]}; // f F ª   }
+    key <AC05> {[ g               , G               , dead_greek      , VoidSymbol      ],[ copyright       , VoidSymbol      ]}; // g G Ω   ©
     key <AC06> {[ h               , H               , leftarrow       , U21D0           ],[ VoidSymbol      , VoidSymbol      ]}; // h H ← ⇐
     key <AC07> {[ j               , J               , downarrow       , U21D3           ],[ VoidSymbol      , VoidSymbol      ]}; // j J ↓ ⇓
     key <AC08> {[ k               , K               , uparrow         , U21D1           ],[ VoidSymbol      , VoidSymbol      ]}; // k K ↑ ⇑
@@ -77,12 +77,12 @@ xkb_keymap {
 
     // Letters, third row
     key <AB01> {[ z               , Z               , VoidSymbol      , VoidSymbol      ],[ underscore      , VoidSymbol      ]}; // z Z     _
-    key <AB02> {[ x               , X               , multiply        , VoidSymbol      ],[ plus            , VoidSymbol      ]}; // x X ×   +
+    key <AB02> {[ x               , X               , multiply        , U2716           ],[ plus            , VoidSymbol      ]}; // x X × ✖ +
     key <AB03> {[ c               , C               , ccedilla        , Ccedilla        ],[ asciicircum     , VoidSymbol      ]}; // c C ç Ç ^
     key <AB04> {[ v               , V               , U2713           , U2714           ],[ dollar          , VoidSymbol      ]}; // v V ✓ ✔ $
     key <AB05> {[ b               , B               , dagger          , doubledagger    ],[ ampersand       , VoidSymbol      ]}; // b B † ‡ &
     key <AB06> {[ n               , N               , ntilde          , Ntilde          ],[ VoidSymbol      , VoidSymbol      ]}; // n N ñ Ñ
-    key <AB07> {[ m               , M               , mu              , masculine       ],[ VoidSymbol      , VoidSymbol      ]}; // m M µ º
+    key <AB07> {[ m               , M               , masculine       , VoidSymbol      ],[ VoidSymbol      , VoidSymbol      ]}; // m M º
     key <AB08> {[ comma           , semicolon       , periodcentered  , U2022           ],[ comma           , VoidSymbol      ]}; // , ; · • ,
     key <AB09> {[ period          , colon           , ellipsis        , notsign         ],[ period          , VoidSymbol      ]}; // . : … ¬ .
     key <AB10> {[ slash           , question        , backslash       , questiondown    ],[ U061F           , VoidSymbol      ]}; // / ? \ ¿ ؟
@@ -103,6 +103,7 @@ xkb_keymap {
     key <SPCE> {[ space           , space           , VoidSymbol      , VoidSymbol      ],[ Escape          , nobreakspace    ]};
 
     // Arrows - AltGr + Arrow is hard to type :(
+    // left and right triangles are problematic because they are rendered as Emojis in certain apps and there's no way to apply VS15
     key <LEFT> {[ NoSymbol        , Home            , U25C0           , U25C1           ],[ Home      ]};
     key <DOWN> {[ NoSymbol        , Page_Down       , U25BC           , U25BD           ],[ Page_Down ]};
     key <UP>   {[ NoSymbol        , Page_Up         , U25B2           , U25B3           ],[ Page_Up   ]};
