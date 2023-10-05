@@ -185,6 +185,11 @@
   (setq org-roam-node-display-template "${title:*} @${my-level} | ↑${upgraded-at} | m${mtime} | ${tags:50}")
   (setq org-tags-exclude-from-inheritance '("Album" "Artist" "Debut" "Top"))
 
+  ; The gain in performance is quite significant, from 3 seconds to instant
+  (setq org-roam-node-default-sort nil)
+  (require 'memoize)
+  (memoize 'org-roam-node-read--completions "10 minute")
+
   ; Sections in sidebar
 
   (defun my/org-roam-links-section (node)

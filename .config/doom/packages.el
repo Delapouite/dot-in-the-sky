@@ -53,3 +53,4 @@
 (package! org-download)
 (package! fish-mode)
 (package! olivetti)
+(package! memoize)
