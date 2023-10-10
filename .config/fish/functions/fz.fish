@@ -850,6 +850,17 @@ function fz --description 'entry point for all the fuzziness glory'
 
 		end
 
+	case efi-variables
+		if test "$argv[2]" = "--help"
+			printf 'list: efi variables\n'
+			printf 'preview: efi variable attributes and value\n'
+			print_dim 'action: none'
+			return
+		end
+
+		set --local choice (efivar --list \
+			| _fzf --preview "efivar --name {}")
+
 	case environment-variables
 		if test "$argv[2]" = "--help"
 			printf 'list: environment variables\n'
@@ -1648,6 +1659,7 @@ function fz --description 'entry point for all the fuzziness glory'
 			docker-networks \
 			docker-registries \
 			docker-volumes \
+			efi-variables \
 			environment-variables \
 			eslint-rules \
 			files \
