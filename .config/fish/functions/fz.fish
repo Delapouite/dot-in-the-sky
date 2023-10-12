@@ -674,7 +674,7 @@ function fz --description 'entry point for all the fuzziness glory'
 
 		set --local choice (complete -C '' \
 			| awk '{print $1}' \
-			| _fzf --preview 'which {1}')
+			| _fzf --preview 'pacman --query --owns {1}; type {1};')
 
 		if test -n "$choice"
 			i3-msg --quiet "exec --no-startup-id $choice"
