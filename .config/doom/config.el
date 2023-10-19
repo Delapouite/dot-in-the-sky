@@ -182,7 +182,7 @@
   :config
   (add-hook 'org-mode-hook `doom-modeline-set-delapouite-modeline)
 
-  (setq org-roam-node-display-template "${title:*} @${my-level} | ↑${upgraded-at} | m${mtime} | ${tags:50}")
+  (setq org-roam-node-display-template "${title:*} @${my-level} | f${file:50} | ★${interest} | ↑${upgraded-at} | m${mtime} | ${tags:50}")
   (setq org-tags-exclude-from-inheritance '("Album" "Artist" "Debut" "Top"))
 
   ; The gain in performance is quite significant, from 3 seconds to instant
@@ -344,6 +344,9 @@
                             "          ")))
       (substring upgraded-at 0 10)))
 
+  (cl-defmethod org-roam-node-interest ((node org-roam-node))
+    (or (cdr (assoc "INTEREST" (org-roam-node-properties node))) "  "))
+
   (advice-add 'org-insert-property-drawer :override #'my/org-insert-property-drawer)
 
   (defun my/org-capture-before-finalize ()
@@ -376,17 +379,6 @@
 (defun my/search-cwd (prefix)
   (defun my/search-cwd-internal () (insert prefix))
   (minibuffer-with-setup-hook #'my/search-cwd-internal (call-interactively #'+default/search-cwd)))
-
-(define-advice elisp-get-fnsym-args-string (:around (orig-fun sym &rest r) docstring)
-  "If SYM is a function, append its docstring."
-  (concat
-   (apply orig-fun sym r)
-   (let* ((doc (and (fboundp sym) (documentation sym 'raw)))
-          (oneline (and doc (substring doc 0 (string-match "\n" doc)))))
-     (and oneline
-          (stringp oneline)
-          (not (string= "" oneline))
-          (concat " | " (propertize oneline 'face 'italic))))))
 
 (require 'ol-man)
 
