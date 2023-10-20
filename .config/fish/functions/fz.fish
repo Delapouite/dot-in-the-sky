@@ -49,6 +49,8 @@ function fz --description 'entry point for all the fuzziness glory'
 		set_color brblack; printf "$argv[1]"; set_color normal;
 	end
 
+	set --local tmpdir "/tmp/fz/$argv[1]"
+
 	# commands starting with _fzf are from https://github.com/PatrickF1/fzf.fish
 	switch $argv[1]
 
@@ -1066,17 +1068,39 @@ function fz --description 'entry point for all the fuzziness glory'
 				--preview 'ip address show {2}'
 
 	case json-schemas
+		set --local actions \
+			"download schema to $tmpdir" \
+			'open git repository'
+
 		if test "$argv[2]" = "--help"
-			printf 'list: JSON schemas fetched from schemastore.org\n'
-			print_dim 'preview: none'
-			print_dim 'action: none'
+			printf 'list: JSON schemas fetched from https://schemastore.org\n'
+			printf 'preview: JSON schema details\n'
+			printf 'actions:\n'
+			printf '- %s\n' $actions
 			return
 		end
 
-		curl --silent 'https://www.schemastore.org/api/json/catalog.json' \
-			| _jq '.schemas | .[] | "\(.name)\u001f\(.fileMatch)"' \
-			| _awk "$awk_dim2" \
-			| _fzf
+		set --local candidate (curl --silent 'https://www.schemastore.org/api/json/catalog.json' \
+			| _jq '.schemas | .[] | "\(.name)\u001f\(.fileMatch)\u001f\(.url)"' \
+			| _awk "$awk_dim3" \
+			| _fzf --preview "curl --silent {-1} | jq --color-output .")
+
+		set --local action (printf '%s\n' $actions \
+			| _fzf --prompt 'actions ❯ ' --header $candidate)
+
+		set --local url (printf $candidate | awk '{print $NF}')
+
+		switch $action
+
+		case $actions[1]
+			mkdir -p "$tmpdir"
+			curl --silent "$url" --output-dir "$tmpdir" --remote-name
+			printf "downloaded to $tmpdir\n"
+
+		case $actions[2]
+			print_error "not implemented yet"
+
+		end
 
 	case kakoune-sessions
 		if not command -q kak
