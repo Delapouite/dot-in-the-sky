@@ -1595,6 +1595,16 @@ function fz --description 'entry point for all the fuzziness glory'
 
 		set --local choice (lsusb | _fzf --preview 'lsusb --verbose -d {6} 2> /dev/null')
 
+	case user-groups
+		if test "$argv[2]" = "--help"
+			printf 'list: groups in /etc/group\n'
+			print_dim 'preview: none'
+			print_dim 'action: none'
+			return
+		end
+
+		set --local candidate (cat /etc/group | _fzf)
+
 	case vscode-extensions
 		if not command -q code
 			print_error 'code command not found'
@@ -1737,6 +1747,7 @@ function fz --description 'entry point for all the fuzziness glory'
 			systemd \
 			top-level-domains \
 			usb-devices \
+			user-groups \
 			vscode-extensions \
 			vscode-workspaces \
 			xinput-devices
