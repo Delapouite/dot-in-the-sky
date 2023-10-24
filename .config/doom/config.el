@@ -147,8 +147,8 @@
     "Define buffer-mtime modeline segment"
     (let ((mtime (get-buffer-file-mtime)))
       (propertize mtime 'face (if (or
-                                   (string-prefix-p " 2021" mtime)
-                                   (string-prefix-p " 2022" mtime))
+                                   (string-prefix-p " 2022" mtime)
+                                   (string-prefix-p " 2023-01" mtime))
                                   'compilation-error 'mode-line))))
 
   (doom-modeline-def-modeline 'delapouite
@@ -184,6 +184,9 @@
 
   (setq org-roam-node-display-template "${title:*} @${my-level} | f${file:50} | ★${interest} | ↑${upgraded-at} | m${mtime} | ${tags:50}")
   (setq org-tags-exclude-from-inheritance '("Album" "Artist" "Debut" "Top"))
+
+  (setq org-image-max-width 100)
+  (setq org-startup-with-inline-images t)
 
   ; The gain in performance is quite significant, from 3 seconds to instant
   (setq org-roam-node-default-sort nil)
