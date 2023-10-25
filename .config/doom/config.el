@@ -166,17 +166,20 @@
    '(("d" "default" plain "%?"
       :target (file+head "${slug}.org" "#+title: ${title}\n#+filetags:")
       :unnarrowed t)
+     ("b" "book" plain "%?"
+      :target (file+head "${slug}.org" "#+title: ${title}\n#+filetags: :Book:\n\n* Wiki")
+      :unnarrowed t)
      ("l" "album" plain "%?"
-      :target (file+head "${slug}.org" "#+title: ${title}\n#+filetags: Album\n\n* Wiki\n* Tracks")
+      :target (file+head "${slug}.org" "#+title: ${title}\n#+filetags: :Album:\n\n* Wiki\n* Tracks")
       :unnarrowed t)
      ("p" "person" plain "%?"
-      :target (file+head "${slug}.org" "#+title: ${title}\n#+filetags: Person\n")
+      :target (file+head "${slug}.org" "#+title: ${title}\n#+filetags: :Person:\n")
       :unnarrowed t)
      ("r" "artist" plain "%?"
-      :target (file+head "${slug}.org" "#+title: ${title}\n#+filetags: Artist\n\n* Wiki\n* Albums")
+      :target (file+head "${slug}.org" "#+title: ${title}\n#+filetags: :Artist:\n\n* Wiki\n* Albums")
       :unnarrowed t)
      ("t" "tool" plain "%?"
-      :target (file+head "${slug}.org" "#+title: ${title}\n#+filetags: Tool\n\n* Wiki\n* Doc\n\* Repo\n* Usage")
+      :target (file+head "${slug}.org" "#+title: ${title}\n#+filetags: :Tool:\n\n* Wiki\n* Doc\n\* Repo\n* Usage")
       :unnarrowed t)))
 
   :config
