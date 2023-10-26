@@ -83,12 +83,6 @@ git clone --bare https://github.com/Delapouite/dot-in-the-sky $HOME/.dot-in-the-
 git --git-dir=$HOME/.dot-in-the-sky --work-tree=$HOME checkout
 ```
 
-## /etc
-
-### /etc/pacman.conf
-
-- `VerbosePkgLists`
-
 ## drab
 
 https://www.youtube.com/watch?v=HALKkedJUqM
