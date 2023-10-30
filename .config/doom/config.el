@@ -185,7 +185,7 @@
   :config
   (add-hook 'org-mode-hook `doom-modeline-set-delapouite-modeline)
 
-  (setq org-roam-node-display-template "${title:*} @${my-level} | f${file:50} | ★${interest} | ↑${upgraded-at} | m${mtime} | ${tags:50}")
+  (setq org-roam-node-display-template "${my-title:*} | @${my-level} | f${file:50} | ★${interest} | ↑${upgraded-at} | m${mtime} | ${tags:50}")
   (setq org-tags-exclude-from-inheritance '("Album" "Artist" "Debut" "Top"))
 
   (setq org-image-max-width 100)
@@ -352,6 +352,14 @@
 
   (cl-defmethod org-roam-node-interest ((node org-roam-node))
     (or (cdr (assoc "INTEREST" (org-roam-node-properties node))) "  "))
+
+  (cl-defmethod org-roam-node-acronym ((node org-roam-node))
+    (or (cdr (assoc "ACRONYM" (org-roam-node-properties node))) ""))
+
+  (cl-defmethod org-roam-node-my-title ((node org-roam-node))
+    (let* ((acronym (cdr (assoc "ACRONYM" (org-roam-node-properties node))))
+           (title (org-roam-node-title node)))
+      (if (and acronym (not (string-equal acronym title))) (concat title " ‹" acronym "›") title)))
 
   (advice-add 'org-insert-property-drawer :override #'my/org-insert-property-drawer)
 
