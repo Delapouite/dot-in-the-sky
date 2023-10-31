@@ -8,7 +8,7 @@
   {
     "key": "Ctrl+f",
     "command": "workbench.action.findInFiles",
-    "when": "vim.mode != 'Insert'"
+    "when": "editorTextFocus && vim.mode != 'Insert'"
   },
   // palette
   {
@@ -142,5 +142,5 @@
     "key": "Ctrl+n",
     "command": "workbench.action.quickOpenSelectNext",
     "when": "inQuickOpen"
-  },
+  }
 ]
