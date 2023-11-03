@@ -1117,6 +1117,17 @@ function fz --description 'entry point for all the fuzziness glory'
 
 		kak -l | _fzf
 
+	case key-compositions
+		if test "$argv[2]" = "--help"
+			printf 'list: key compositions\n'
+			print_dim 'preview: none'
+			print_dim 'action: none'
+			return
+		end
+
+		cat /usr/share/X11/locale/en_US.UTF-8/Compose \
+			| rg --invert-match '^#' | _fzf
+
 	case linux-kernel-modules
 		if test "$argv[2]" = "--help"
 			printf 'list: linux kernel modules using lsmod\n'
@@ -1710,6 +1721,7 @@ function fz --description 'entry point for all the fuzziness glory'
 			ip-addresses \
 			json-schemas \
 			kakoune-sessions \
+			key-compositions \
 			linux-kernel-modules \
 			linux-namespaces \
 			man-pages \
