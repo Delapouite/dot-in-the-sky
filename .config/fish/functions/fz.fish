@@ -682,6 +682,26 @@ function fz --description 'entry point for all the fuzziness glory'
 			i3-msg --quiet "exec --no-startup-id $choice"
 		end
 
+	case bluetooth-controllers
+		if test "$argv[2]" = "--help"
+			printf 'list: bluetooth controllers\n'
+			print_dim 'preview: none'
+			print_dim 'action: none'
+			return
+		end
+
+		set --local candidate (bluetoothctl list | _fzf)
+
+	case bluetooth-devices
+		if test "$argv[2]" = "--help"
+			printf 'list: bluetooth devices\n'
+			print_dim 'preview: none'
+			print_dim 'action: none'
+			return
+		end
+
+		set --local candidate (bluetoothctl devices | _fzf)
+
 	case browser-bookmarks
 		if test "$argv[2]" = "--help"
 			printf 'list: browser bookmarks\n'
@@ -1694,6 +1714,8 @@ function fz --description 'entry point for all the fuzziness glory'
 			azure-storage-blobs \
 			azure-storage-containers \
 			bins \
+			bluetooth-controllers \
+			bluetooth-devices \
 			browser-bookmarks \
 			browser-tabs \
 			deno-tasks \
@@ -1777,6 +1799,9 @@ function fz --description 'entry point for all the fuzziness glory'
 
 			case 'azure-*'
 				command -q az
+
+			case 'bluetooth-*'
+				command -q bluetoothctl
 
 			case 'deno-*'
 				test -e './deno.jsonc'
