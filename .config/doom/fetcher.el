@@ -143,6 +143,25 @@
                  (org-set-property "merged-at" (or (assoc-default 'merged_at data) "null"))
                  (my/fetched-at))))))
 
+(defvar my/github-user-re ".*?https://github.com/\\([a-zA-Z0-9-_\.]*\\).*")
+(defun my/fetch-github-user-stats ()
+  "Fetch GitHub REST API for user and add the returned values in a PROPERTIES drawer"
+  (interactive)
+  (seq-let (username) (my/parse-url my/github-user-re)
+    (my/fetch (concat "https://api.github.com/users/" username)
+              (cl-function
+               (lambda (&key data &allow-other-keys)
+                 (setq org-property-format "%-12s %s")
+                 (my/empty-property-drawer)
+                 (org-set-property "company" (or (assoc-default 'company data) "null"))
+                 (org-set-property "location" (or (assoc-default 'location data) "null"))
+                 (org-set-property "bio" (or (assoc-default 'bio data) "null"))
+                 (my/org-set-number-prop "followers" 'followers data)
+                 (my/org-set-number-prop "following" 'following data)
+                 (my/org-set-prop "created-at" 'created_at data)
+                 (my/org-set-prop "updated-at" 'updated_at data)
+                 (my/fetched-at))))))
+
 (defun my/visit-gitlab () (interactive) (my/visit-url "gitlab.com"))
 (defvar my/gitlab-re ".*?https://gitlab.com/\\([a-zA-Z0-9-_\.]*\\)/\\([a-zA-Z0-9-_\.]*\\).*")
 
