@@ -65,8 +65,8 @@
       (let* ((tags (my/org-get-filetags))
              (original-tags tags))
         (if (my/org-todos-p)
-            (setq tags (cons "Agenda" tags))
-          (setq tags (remove "Agenda" tags)))
+            (setq tags (cons "agenda" tags))
+          (setq tags (remove "agenda" tags)))
 
         ;; cleanup duplicates
         (setq tags (seq-uniq tags))
@@ -77,7 +77,7 @@
           (my/org-set-filetags tags))))))
 
 (defun my/org-agenda-files ()
-  "Return a list of note files containing 'Agenda' tag." ;
+  "Return a list of note files containing 'agenda' tag." ;
   (seq-uniq
    (seq-map
     #'car
@@ -86,7 +86,7 @@
       :from tags
       :left-join nodes
       :on (= tags:node-id nodes:id)
-      :where (like tag (quote "%\"Agenda\"%"))]))))
+      :where (like tag (quote "%\"agenda\"%"))]))))
 
 (defun my/org-agenda-files-update (&rest _)
   "Update the value of `org-agenda-files'."

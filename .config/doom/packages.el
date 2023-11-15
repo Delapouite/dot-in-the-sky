@@ -54,3 +54,4 @@
 (package! fish-mode)
 (package! olivetti)
 (package! memoize)
+(package! org-roam-ql)

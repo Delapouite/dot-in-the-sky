@@ -85,6 +85,8 @@ drawer is immediately hidden."
        (when (or (eobp) (= begin (point-min))) (insert "\n"))
        (org-indent-region begin (point))))))
 
+(advice-add 'org-insert-property-drawer :override #'my/org-insert-property-drawer)
+
 (defun my/org-keywords-to-lowercase ()
   "Lower case Org keywords and block identifiers.
 
