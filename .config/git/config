@@ -56,6 +56,9 @@
 	s = status --short --branch
 	ui = !gitui
 
+[log]
+	date = iso
+
 [push]
 	default = simple
 
