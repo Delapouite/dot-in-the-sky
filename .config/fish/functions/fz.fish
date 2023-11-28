@@ -716,6 +716,7 @@ function fz --description 'entry point for all the fuzziness glory'
 			| _fzf \
 			| sed 's#.*\(https*://\)#\1#' \
 			| xargs xdg-open
+		sleep 0.2
 
 	case browser-tabs
 		if test "$argv[2]" = "--help"
@@ -747,6 +748,30 @@ function fz --description 'entry point for all the fuzziness glory'
 			end
 
 		end
+
+	case dbus-system-peers
+		if test "$argv[2]" = "--help"
+			printf 'list: dbus system peers\n'
+			print_dim 'preview: none'
+			print_dim 'action: none'
+			return
+		end
+
+		set --local candidate (busctl list --system \
+			| _fzf \
+				--header-lines=1)
+
+	case dbus-user-peers
+		if test "$argv[2]" = "--help"
+			printf 'list: dbus user peers\n'
+			print_dim 'preview: none'
+			print_dim 'action: none'
+			return
+		end
+
+		set --local candidate (busctl list --user \
+			| _fzf \
+				--header-lines=1)
 
 	case deno-tasks
 		if not test -e './deno.jsonc'
@@ -1718,6 +1743,8 @@ function fz --description 'entry point for all the fuzziness glory'
 			bluetooth-devices \
 			browser-bookmarks \
 			browser-tabs \
+			dbus-system-peers \
+			dbus-user-peers \
 			deno-tasks \
 			docker-accounts \
 			docker-containers \
