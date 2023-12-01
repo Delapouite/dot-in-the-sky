@@ -145,6 +145,7 @@
   "dance.modes": {
     "normal": {
       "cursorStyle": "block",
+      "lineNumbers": "inherit",
       "selectionBehavior": "character",
       "decorations": {
         "applyTo": "main",
