@@ -73,6 +73,7 @@
   `(org-document-info-keyword :foreground ,dracula-comment)
   `(org-special-keyword :foreground ,dracula-comment)
   `(org-property-value :foreground ,dracula-grey)
+  `(org-document-info :foreground ,dracula-grey)
   `(org-quote :slant italic :foreground ,dracula-foreground)
   `(org-link :foreground ,dracula-cyan)
   `(outline-1 :height 1.4)
