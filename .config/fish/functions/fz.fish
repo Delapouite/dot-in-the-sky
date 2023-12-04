@@ -993,6 +993,16 @@ function fz --description 'entry point for all the fuzziness glory'
 
 			_fzf_search_git_log
 
+		case git-remotes
+			if test "$argv[2]" = "--help"
+				printf 'list: git remotes\n'
+				print_dim 'preview: none'
+				print_dim 'action: none'
+				return
+			end
+
+			git remotes | _fzf
+
 		case git-status
 			if test "$argv[2]" = "--help"
 				printf 'list: git status\n'
@@ -1761,6 +1771,7 @@ function fz --description 'entry point for all the fuzziness glory'
 			fonts \
 			git-branches \
 			git-log \
+			git-remotes \
 			git-status \
 			git-tags \
 			github-repositories \
