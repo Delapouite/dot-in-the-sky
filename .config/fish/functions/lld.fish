@@ -1,4 +1,4 @@
-function ll --description 'list files verbosely'
+function lld --description 'list directories verbosely'
 	eza \
 		--classify \
 		--color-scale all \
@@ -7,6 +7,7 @@ function ll --description 'list files verbosely'
 		--links \
 		--long \
 		--octal-permissions \
+		--only-dirs \
 		$argv
 end
 

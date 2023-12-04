@@ -1,5 +1,15 @@
 function lh --description 'list only hidden files'
-	exa --long --git --links --classify --octal-permissions --all --list-dirs .*
+	eza \
+		--all \
+		--classify \
+		--color-scale all \
+		--color-scale-mode fixed \
+		--git \
+		--links \
+		--list-dirs \
+		--long \
+		--octal-permissions \
+		.*
 end
 
 # see also ll and llh

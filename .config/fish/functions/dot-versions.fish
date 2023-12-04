@@ -5,7 +5,7 @@ function dot-versions --description 'list commom tools versions'
 	type -q chars && chars --version || begin; set_color red; echo 'chars'; set_color normal; end;
 	type -q dog && echo "dog $(dog --version | head -n 2 | tail -n 1)" || begin; set_color red; echo 'dog'; set_color normal; end;
 	type -q entr && echo "entr $(entr 2>&1 | head -n 1 | awk '{ print $2 }')" || begin; set_color red; echo 'entr'; set_color normal; end;
-	type -q exa && echo "exa $(exa --version | head -n 2 | tail -n 1 | awk '{ print $1 }')" || begin; set_color red; echo 'exa'; set_color normal; end;
+	type -q eza && echo "eza $(eza --version | head -n 2 | tail -n 1 | awk '{ print $1 }')" || begin; set_color red; echo 'eza'; set_color normal; end;
 	type -q fd && fd --version || begin; set_color red; echo 'fd'; set_color normal; end;
 	type -q fish && echo "fish $(fish --version | awk '{ print $3 }')" || begin; set_color red; echo 'fish'; set_color normal; end;
 	type -q flameshot && echo "flameshot $(flameshot --version | head -n 1 | awk '{ print $2 }')" || begin; set_color red; echo 'flameshot'; set_color normal; end;
