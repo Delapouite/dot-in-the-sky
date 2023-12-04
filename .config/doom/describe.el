@@ -4,7 +4,7 @@
 
 (map! :leader :desc "Describe alias" "d a" #'describe-alias
       :leader :desc "Describe abbrev" "d A" #'list-abbrevs
-      :leader :desc "Describe binding" "d b" #'describe-binding
+      :leader :desc "Describe binding" "d b" #'describe-bindings
       :leader :desc "Describe char" "d c" #'describe-char
       :leader :desc "Describe face" "d F" #'describe-face
       :leader :desc "Describe key" "d k" #'describe-key
@@ -17,10 +17,12 @@
 
       :leader :desc "Describe function" "d f f" #'describe-function
       :leader :desc "Describe builtin function" "d f b" #'describe-builtin-function
+      :leader :desc "Describe non-obsolete function" "d f n" #'describe-non-obsolete-function
       :leader :desc "Describe obsolete function" "d f o" #'describe-obsolete-function
 
       :leader :desc "Describe command" "d x x" #'describe-command
       :leader :desc "Describe builtin command" "d x b" #'describe-builtin-command
+      :leader :desc "Describe non-obsolete command" "d x n" #'describe-non-obsolete-command
       :leader :desc "Describe obsolete command" "d x o" #'describe-obsolete-command)
 
 (defun obsolete-p (symbol)
@@ -82,12 +84,30 @@ When called from Lisp, FUNCTION may also be a function object."
                        (or (fboundp f) (get f 'function-documentation))))))
   (describe-function fun))
 
+(defun describe-non-obsolete-function (fun)
+  "Display the full documentation of obsolete FUNCTION (a symbol).
+When called from Lisp, FUNCTION may also be a function object."
+  (interactive (my/describe-function-prompt
+                (lambda (f)
+                  (and (not (obsolete-p f))
+                       (or (fboundp f) (get f 'function-documentation))))))
+  (describe-function fun))
+
 (defun describe-obsolete-command (command)
   "Display the full documentation of obsolete COMMAND (a symbol).
 When called from Lisp, COMMAND may also be a function object."
   (interactive (my/describe-command-prompt
                 (lambda (f)
                   (and (obsolete-p f)
+                       (commandp f)))))
+  (describe-command command))
+
+(defun describe-non-obsolete-command (command)
+  "Display the full documentation of obsolete COMMAND (a symbol).
+When called from Lisp, COMMAND may also be a function object."
+  (interactive (my/describe-command-prompt
+                (lambda (f)
+                  (and (not (obsolete-p f))
                        (commandp f)))))
   (describe-command command))
 
