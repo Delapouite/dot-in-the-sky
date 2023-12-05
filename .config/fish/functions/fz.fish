@@ -1724,6 +1724,24 @@ function fz --description 'entry point for all the fuzziness glory'
 			| _fzf \
 				--preview 'xinput --list {}'
 
+	case yarn-workspaces
+		if not test -e './package.json'
+			print_error 'no package.json in current directory'
+			return 1
+		end
+
+		if test "$argv[2]" = "--help"
+			printf 'list: yarn workspaces\n'
+			print_dim 'preview: none'
+			print_dim 'action: none'
+			return
+		end
+
+		yarn workspaces list --json \
+			| _jq '"\(.name)\u001f\(.location)"' \
+			| _awk "$awk_dim2" \
+			| _fzf
+
 	# by default let the user discover and choose the input source
 	case '*'
 		set --local commands \
@@ -1822,7 +1840,8 @@ function fz --description 'entry point for all the fuzziness glory'
 			user-groups \
 			vscode-extensions \
 			vscode-workspaces \
-			xinput-devices
+			xinput-devices \
+			yarn-workspaces
 
 		set --local enabled_commands
 		for command in $commands
@@ -1894,6 +1913,9 @@ function fz --description 'entry point for all the fuzziness glory'
 
 			case xinput-devices
 				command -q xinput
+
+			case 'yarn-*'
+				test -e './package.json'
 
 			case '*'
 				true
