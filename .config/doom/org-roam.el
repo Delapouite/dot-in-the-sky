@@ -8,20 +8,20 @@
    '(("d" "default" plain "%?"
       :target (file+head "${slug}.org" "#+title: ${title}\n#+filetags:")
       :unnarrowed t)
+     ("b" "book" plain "%?"
+      :target (file+head "${slug}.org" "#+title: ${title}\n#+filetags: :book:\n\n* Wiki")
+      :unnarrowed t)
      ("c" "concept" plain "%?"
       :target (file+head "${slug}.org" "#+title: ${title}\n#+filetags: :concept:\n\n* Wiki")
       :unnarrowed t)
-     ("b" "book" plain "%?"
-      :target (file+head "${slug}.org" "#+title: ${title}\n#+filetags: :book:\n\n* Wiki")
+     ("i" "artist" plain "%?"
+      :target (file+head "${slug}.org" "#+title: ${title}\n#+filetags: :artist:\n\n* Wiki\n* Albums")
       :unnarrowed t)
      ("l" "album" plain "%?"
       :target (file+head "${slug}.org" "#+title: ${title}\n#+filetags: :album:\n\n* Wiki\n* Tracks")
       :unnarrowed t)
      ("p" "person" plain "%?"
       :target (file+head "${slug}.org" "#+title: ${title}\n#+filetags: :person:\n")
-      :unnarrowed t)
-     ("r" "artist" plain "%?"
-      :target (file+head "${slug}.org" "#+title: ${title}\n#+filetags: :artist:\n\n* Wiki\n* Albums")
       :unnarrowed t)
      ("t" "tool" plain "%?"
       :target (file+head "${slug}.org" "#+title: ${title}\n#+filetags: :tool:\n\n* Wiki\n* Doc\n\* Repo\n* Usage")
@@ -34,24 +34,54 @@
   (setq org-image-max-width 100)
   (setq org-startup-with-inline-images t)
 
-  (map! :leader
-        :desc "Find roam" "r" #'org-roam-node-find)
-
   ; modeline
 
   (add-hook 'org-mode-hook `doom-modeline-set-delapouite-modeline)
 
   ; minibuffer
 
-  (defun my/org-roam-template-default ()
+  (defun my/org-roam-node-find-album ()
     (interactive)
-    (my/force-update-org-roam-node-read-if-memoized)
-    (setq org-roam-node-display-template "${my-title:*} | @${my-level} | f${file:50} | ★${interest} | ↑${upgraded-at} | m${mtime} | ${tags:50}"))
+    (my/org-roam-template-default)
+    (org-roam-node-find nil "#album"))
+
+  (defun my/org-roam-node-find-book ()
+    (interactive)
+    (my/org-roam-template-default)
+    (org-roam-node-find nil "#book"))
+
+  (defun my/org-roam-node-find-artist ()
+    (interactive)
+    (my/org-roam-template-default)
+    (org-roam-node-find nil "#artist"))
+
+  (defun my/org-roam-node-find-concept ()
+    (interactive)
+    (my/org-roam-template-default)
+    (org-roam-node-find nil "#concept"))
+
+  (defun my/org-roam-node-find-person ()
+    (interactive)
+    (my/org-roam-template-person)
+    (org-roam-node-find nil "#person"))
+
+  (defun my/org-roam-node-find-tool ()
+    (interactive)
+    (my/org-roam-template-default)
+    (org-roam-node-find nil "#tool"))
+
+  (defun my/org-roam-node-find-default ()
+    (interactive)
+    (my/org-roam-template-default)
+    (org-roam-node-find))
 
   (defun my/org-roam-template-person ()
     (interactive)
-    (my/force-update-org-roam-node-read-if-memoized)
     (setq org-roam-node-display-template "${my-title:*} | ★${interest} | ↑${upgraded-at} | m${mtime} | ${born-at}/${died-at} | ${tags:50}"))
+
+  (defun my/org-roam-template-default ()
+    (interactive)
+    (setq org-roam-node-display-template "${my-title:*} | @${my-level} | f${file:50} | ★${interest} | ↑${upgraded-at} | m${mtime} | ${tags:50}"))
 
   (setq org-tags-exclude-from-inheritance '("album" "artist" "debut" "top"))
 
@@ -148,8 +178,6 @@
     (when-let (node (org-roam-node-from-title-or-alias (word-at-point t)))
       (org-roam-node-visit node)))
 
-  (map! :n "M-<return>" #'my/org-roam-visit-node-at-point)
-
   (defun my/visited-at ()
     (when (eq 'headline (car (org-element-at-point)))
       (when (string= "https" (org-element-property :type (org-element-context)))
@@ -229,7 +257,10 @@
   (cl-defmethod org-roam-node-my-title ((node org-roam-node))
     (let* ((acronym (cdr (assoc "ACRONYM" (org-roam-node-properties node))))
            (title (org-roam-node-title node)))
-      (if (and acronym (not (string-equal acronym title))) (concat title " ‹" acronym "›") title)))
+      (cond
+       ((and acronym (not (string-equal acronym title))) (concat title " ‹" acronym "›"))
+       ((and acronym (string-equal acronym title)) (concat "‹" acronym "›"))
+       (t title))))
 
   (cl-defmethod org-roam-node-born-at ((node org-roam-node))
     (or (cdr (assoc "BORN-AT" (org-roam-node-properties node))) "    "))
@@ -254,7 +285,19 @@
     (org-set-property "id" (org-get-title))
     (my/created-at))
 
-  (add-hook 'org-capture-before-finalize-hook 'my/org-capture-before-finalize))
+  (add-hook 'org-capture-before-finalize-hook 'my/org-capture-before-finalize)
+
+  ; keys
+
+  (map! :n "M-<return>" #'my/org-roam-visit-node-at-point)
+  (map! :leader
+        :desc "Find book" "r b" #'my/org-roam-node-find-book
+        :desc "Find concept" "r c" #'my/org-roam-node-find-concept
+        :desc "Find artist" "r i" #'my/org-roam-node-find-artist
+        :desc "Find album" "r l" #'my/org-roam-node-find-album
+        :desc "Find person" "r p" #'my/org-roam-node-find-person
+        :desc "Find tool" "r t" #'my/org-roam-node-find-tool
+        :desc "Find node" "r r" #'my/org-roam-node-find-default))
 
 (use-package! org-roam-ql
   :config
