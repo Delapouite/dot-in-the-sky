@@ -1646,6 +1646,16 @@ function fz --description 'entry point for all the fuzziness glory'
 		curl --silent 'https://data.iana.org/TLD/tlds-alpha-by-domain.txt' \
 			| _fzf --header-lines=1
 
+	case trust-policies
+		if test "$argv[2]" = "--help"
+			printf 'list: anchors, certificates and blocklists from trust policy store (PKCS#11)\n'
+			print_dim 'preview: none'
+			print_dim 'action: none'
+			return
+		end
+
+		trust list | rg label | _fzf
+
 	case usb-devices
 		if not command -q lsusb
 			print_error 'lsusb command not found'
@@ -1836,6 +1846,7 @@ function fz --description 'entry point for all the fuzziness glory'
 			sysctl-values \
 			systemd \
 			top-level-domains \
+			trust-policies \
 			usb-devices \
 			user-groups \
 			vscode-extensions \
