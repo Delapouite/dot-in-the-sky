@@ -7,9 +7,11 @@
 (load! "private.el")
 (load! "describe.el")
 (load! "org.el")
+(load! "org-agenda.el")
 (load! "org-roam.el")
-(load! "property-drawer.el")
+(load! "org-property-drawer.el")
 (load! "fetcher.el")
+(load! "marginalia.el")
 
 ;; Some functionality uses this to identify you, e.g. GPG configuration, email
 ;; clients, file templates and snippets. It is optional.
@@ -74,6 +76,8 @@
   `(org-special-keyword :foreground ,dracula-comment)
   `(org-property-value :foreground ,dracula-grey)
   `(org-document-info :foreground ,dracula-grey)
+  `(org-agenda-done :foreground ,dracula-grey)
+  `(org-headline-done :foreground ,dracula-grey)
   `(org-quote :slant italic :foreground ,dracula-foreground)
   `(org-link :foreground ,dracula-cyan)
   `(outline-1 :height 1.4)

@@ -1,5 +1,9 @@
 ;;; org.el -*- lexical-binding: t; -*-
 
+;; If you use `org' and don't want your org files in the default location below,
+;; change `org-directory'. It must be set before org loads!
+(setq org-directory "~/Sync/org/")
+
 (defun my/org-link-description-region (link)
   "Return description's region of LINK at point"
   (list (org-element-property :contents-begin link)

@@ -1,6 +1,6 @@
 ;;; property-drawer-dates.el -*- lexical-binding: t; -*-
 
-; relative dates in drawers
+; relative dates in property drawers
 ; currenly not used
 
 (defcustom org+-dateprop-reltime-number-of-items 3
