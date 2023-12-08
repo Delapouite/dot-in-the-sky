@@ -62,7 +62,7 @@
 
   (defun my/org-roam-node-find-person ()
     (interactive)
-    (my/org-roam-template-person)
+    (my/org-roam-template-default)
     (org-roam-node-find nil "#person"))
 
   (defun my/org-roam-node-find-tool ()
@@ -75,13 +75,9 @@
     (my/org-roam-template-default)
     (org-roam-node-find))
 
-  (defun my/org-roam-template-person ()
-    (interactive)
-    (setq org-roam-node-display-template "${my-title:*} | ★${interest} | ↑${upgraded-at} | m${mtime} | ${born-at}/${died-at} | ${tags:50}"))
-
   (defun my/org-roam-template-default ()
     (interactive)
-    (setq org-roam-node-display-template "${my-title:*} | @${my-level} | f${file:50} | ★${interest} | ↑${upgraded-at} | m${mtime} | ${tags:50}"))
+    (setq org-roam-node-display-template "${my-title:*} | @${my-level} | f${file:50} | ★${interest} | ↑${upgraded-at} | m${mtime} | ${my-tags:50}"))
 
   (setq org-tags-exclude-from-inheritance '("album" "artist" "debut" "top"))
 
@@ -262,12 +258,6 @@
        ((and acronym (string-equal acronym title)) (concat "‹" acronym "›"))
        (t title))))
 
-  (cl-defmethod org-roam-node-born-at ((node org-roam-node))
-    (or (cdr (assoc "BORN-AT" (org-roam-node-properties node))) "    "))
-
-  (cl-defmethod org-roam-node-died-at ((node org-roam-node))
-    (or (cdr (assoc "DIED-AT" (org-roam-node-properties node))) "    "))
-
   (cl-defmethod org-roam-node-released-at ((node org-roam-node))
     (or (cdr (assoc "RELEASED-AT" (org-roam-node-properties node))) "    "))
 
@@ -276,6 +266,22 @@
 
   (cl-defmethod org-roam-node-link ((node org-roam-node))
     (format "[[id:%s][%s]]" (org-roam-node-id node) (org-roam-node-title node)))
+
+  (cl-defmethod org-roam-node-description ((node org-roam-node))
+    (or (cdr (assoc "DESCRIPTION" (org-roam-node-properties node))) ""))
+
+  (cl-defmethod org-roam-node-country ((node org-roam-node))
+    (or (cdr (assoc "COUNTRY" (org-roam-node-properties node))) ""))
+
+  (cl-defmethod org-roam-node-my-tags ((node org-roam-node))
+    (let* ((country (cdr (assoc "COUNTRY" (org-roam-node-properties node))))
+           (country (if country (concat " ⚑" country) ""))
+           (born-at (cdr (assoc "BORN-AT" (org-roam-node-properties node))))
+           (born-at (if born-at (concat " ⧖" born-at) ""))
+           (died-at (cdr (assoc "DIED-AT" (org-roam-node-properties node))))
+           (died-at (if died-at (concat " ⧗" died-at) ""))
+           (tags (mapconcat (lambda (v) (concat "#" v)) (org-roam-node-tags node)  " ")))
+      (concat tags country born-at died-at)))
 
   ; capture
 
