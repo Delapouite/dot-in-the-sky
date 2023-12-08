@@ -47,8 +47,8 @@ xkb_keymap {
     key <AE05> {[ 5               , percent         , U2030           , VoidSymbol      ],[ VoidSymbol      , fivesuperior    ]}; // 5 % ‰     ⁵
     key <AE06> {[ 6               , asciicircum     , VoidSymbol      , VoidSymbol      ],[ VoidSymbol      , sixsuperior     ]}; // 6 ^       ⁶
     key <AE07> {[ 7               , ampersand       , bar             , brokenbar       ],[ VoidSymbol      , sevensuperior   ]}; // 7 & | ¦   ⁷
-    key <AE08> {[ 8               , asterisk        , infinity        , U2605           ],[ VoidSymbol      , eightsuperior   ]}; // 8 * ∞ ★   ⁸
-    key <AE09> {[ 9               , parenleft       , VoidSymbol      , U2606           ],[ VoidSymbol      , ninesuperior    ]}; // 9 (   ☆   ⁹
+    key <AE08> {[ 8               , asterisk        , infinity        , VoidSymbol      ],[ VoidSymbol      , eightsuperior   ]}; // 8 * ∞     ⁸
+    key <AE09> {[ 9               , parenleft       , VoidSymbol      , VoidSymbol      ],[ VoidSymbol      , ninesuperior    ]}; // 9 (       ⁹
     key <AE10> {[ 0               , parenright      , degree          , division        ],[ VoidSymbol      , zerosuperior    ]}; // 0 ) ° ÷   ⁰
 
     // Letters, first row
@@ -96,7 +96,7 @@ xkb_keymap {
     key <AE12> {[ equal           , plus            , notequal        , plusminus       ],[ VoidSymbol      , VoidSymbol      ]}; // = + ≠ ±
     key <AD11> {[ dead_circumflex , dead_acute      , dead_caron      , VoidSymbol      ],[ VoidSymbol      , VoidSymbol      ]}; // ◌̂ ◌́ ◌̌
     key <AD12> {[ dead_diaeresis  , dead_grave      , dead_breve      , VoidSymbol      ],[ VoidSymbol      , VoidSymbol      ]}; // ◌̈ ◌̀ ◌̆
-    key <AC11> {[ apostrophe      , quotedbl        , VoidSymbol      , VoidSymbol      ],[ VoidSymbol      , VoidSymbol      ]}; // ' "
+    key <AC11> {[ apostrophe      , quotedbl        , dead_schwa      , VoidSymbol      ],[ VoidSymbol      , VoidSymbol      ]}; // ' "
     key <AC12> {[ backslash       , bar             , brokenbar       , VoidSymbol      ],[ VoidSymbol      , VoidSymbol      ]}; // \ | ¦
 
     // Space bar

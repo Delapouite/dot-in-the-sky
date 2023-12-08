@@ -1,0 +1,13 @@
+# this file must be symlinked from $HOME or Emacs won't find it
+# ln -s .config/XCompose .XCompose
+
+# /usr/share/X11/locale/en_US.UTF-8/Compose
+include "%L"
+
+# <dead_schwa> is lafayette quote
+<dead_schwa> <f> : "⚑" U2691 # BLACK FLAG
+<dead_schwa> <F> : "⚐" U2690 # WHITE FLAG
+<dead_schwa> <h> : "⧗" U29D7 # BLACK HOURGLASS
+<dead_schwa> <H> : "⧖" U29D6 # WHITE HOURGLASS
+<dead_schwa> <s> : "★" U2605 # BLACK STAR
+<dead_schwa> <S> : "☆" U2606 # WHITE STAR
