@@ -23,14 +23,18 @@ function fz --description 'entry point for all the fuzziness glory'
 
 	# colors
 
+	set --local grey '\x1b[38;2;173;178;203m'
+	set --local comment '\x1b[38;2;98;114;164m'
+	set --local reset '\x1b[m'
+
 	set --local awk_dim2 \
-		'{printf "%s \x1b[38;2;98;114;164m%s\x1b[m\n", $1, $2}'
+		"{printf \"%s $comment%s$reset\n\", \$1, \$2}"
 	set --local awk_dim3 \
-		'{printf "%s \x1b[38;2;173;178;203m%s\x1b[m \x1b[38;2;98;114;164m%s\x1b[m\n", $1, $2, $3}'
+		"{printf \"%s $grey%s$reset $comment%s$reset\n\", \$1, \$2, \$3}"
 	set --local awk_dim4 \
-		'{printf "%s %s \x1b[38;2;173;178;203m%s\x1b[m \x1b[38;2;98;114;164m%s\x1b[m\n", $1, $2, $3, $4}'
+		"{printf \"%s %s $grey%s$reset $comment%s$reset\n\", \$1, \$2, \$3, \$4}"
 	set --local awk_dim5 \
-		'{printf "%s %s \x1b[38;2;173;178;203m%s\x1b[m \x1b[38;2;98;114;164m%s %s\x1b[m\n", $1, $2, $3, $4, $5}'
+		"{printf \"%s %s $grey%s$reset $comment%s %s$reset\n\", \$1, \$2, \$3, \$4, \$5}"
 
 	function print_info
 		printf "$argv[1]: "
@@ -787,7 +791,7 @@ function fz --description 'entry point for all the fuzziness glory'
 		end
 
 		set --local choice (_jq '.tasks | to_entries | .[] | "\(.key)\u001f\(.value)"' deno.jsonc \
-			| _awk '{printf "%s \x1b[38;2;98;114;164m%s\x1b[m\n", $1, $NF}' \
+			| _awk "{printf \"%s $comment%s$reset\n\", \$1, \$NF}" \
 			| _fzf \
 			| awk '{print $1}')
 
@@ -1325,7 +1329,7 @@ function fz --description 'entry point for all the fuzziness glory'
 		end
 
 		set --local choice (_jq '.scripts | to_entries | .[] | "\(.key)\u001f\(.value)"' package.json \
-			| _awk '{printf "%s \x1b[38;2;98;114;164m%s\x1b[m\n", $1, $NF}' \
+			| _awk "{printf \"%s $comment%s$reset\n\", \$1, \$NF}" \
 			| _fzf \
 			| awk '{print $1}')
 
