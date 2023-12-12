@@ -6,6 +6,7 @@
 
 (load! "private.el")
 (load! "describe.el")
+(load! "doom-modeline.el")
 (load! "org.el")
 (load! "org-agenda.el")
 (load! "org-roam.el")
@@ -138,30 +139,6 @@
   "Format time string with %FT%T%z TIME"
   (format-time-string "%FT%T%z" time))
 
-(use-package! doom-modeline
-  :config
-
-  (defun get-buffer-file-mtime ()
-    (let ((mtime (file-attribute-modification-time
-                  (file-attributes (buffer-file-name)))))
-      (when mtime
-        (concat " " (iso8601-format mtime)))))
-
-  (doom-modeline-def-segment buffer-mtime
-    "Define buffer-mtime modeline segment"
-    (let ((mtime (get-buffer-file-mtime)))
-      (propertize mtime 'face (if (or
-                                   (string-prefix-p " 2022" mtime)
-                                   (string-prefix-p " 2023-01" mtime))
-                                  'compilation-error 'mode-line))))
-
-  (doom-modeline-def-modeline 'delapouite
-    '(bar window-number modals matches buffer-info-simple buffer-mtime buffer-position word-count parrot selection-info)
-    '(objed-state misc-info debug lsp minor-modes input-method indent-info major-mode process checker))
-
-  (defun doom-modeline-set-delapouite-modeline ()
-    "Enable delapouite modeline"
-    (doom-modeline-set-modeline 'delapouite)))
 
 (setq company-selection-wrap-around t)
 (setq completion-ignore-case t)

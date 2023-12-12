@@ -34,10 +34,6 @@
   (setq org-image-max-width 100)
   (setq org-startup-with-inline-images t)
 
-  ; modeline
-
-  (add-hook 'org-mode-hook `doom-modeline-set-delapouite-modeline)
-
   ; minibuffer
 
   (defun my/org-roam-node-find-album ()
@@ -96,7 +92,7 @@
     (memoize-force-update 'org-roam-node-read--completions
                           (if timeout timeout memoize-default-timeout)))
 
-  (run-with-idle-timer 60 t #'my/force-update-org-roam-node-read-if-memoized)
+  (run-with-idle-timer 180 t #'my/force-update-org-roam-node-read-if-memoized)
 
   (my/org-roam-template-default)
 
@@ -224,14 +220,24 @@
       (dolist (hit hits) (princ (concat "[[id:" (car hit) "][" (cadr hit) "]]\n")))))
 
   ;; not used because too slow :(
-  (cl-defmethod org-roam-node-backlinkscount ((node org-roam-node))
+  (cl-defmethod org-roam-node-links-count ((node org-roam-node))
+    (let* ((count (caar (org-roam-db-query
+                         [:select (funcall count source)
+                          :from links
+                          :where (= source $s1)
+                          :and (= type "id")]
+                         (org-roam-node-id node)))))
+      (format "%d" count)))
+
+  ;; not used because too slow :(
+  (cl-defmethod org-roam-node-backlinks-count ((node org-roam-node))
     (let* ((count (caar (org-roam-db-query
                          [:select (funcall count source)
                           :from links
                           :where (= dest $s1)
                           :and (= type "id")]
                          (org-roam-node-id node)))))
-      (format "[%d]" count)))
+      (format "%d" count)))
 
   (cl-defmethod org-roam-node-my-level ((node org-roam-node))
     (number-to-string (org-roam-node-level node)))
