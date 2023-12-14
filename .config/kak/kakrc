@@ -38,7 +38,7 @@ hook global BufSetOption lsp_diagnostic_warning_count=.* update-status
 
 map global normal <c-i> '<tab>'
 
-# <a-k> equivalent is defined afer auto-percent is loaded
+# <a-k> equivalent is defined after auto-percent is loaded
 map global normal <a-j> ': extend-line-down %val{count}<ret>' -docstring 'extend line down'
 map global normal C '<a-j>'                                   -docstring 'join lines'
 map global normal <a-C> '<a-J>'                               -docstring 'join lines and select spaces'
