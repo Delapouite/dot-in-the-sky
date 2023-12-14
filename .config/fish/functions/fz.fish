@@ -969,11 +969,20 @@ function fz --description 'entry point for all the fuzziness glory'
 
 		fontpreview
 
-		case 'git-*'
-			if not git status &> /dev/null
-				print_error 'not in a git repository'
-				return 1
-			end
+	case 'git'
+		if not git status &> /dev/null
+			print_error 'not in a git repository'
+			return 1
+		end
+
+		set --local candidate (printf 'branches\nlog\nremotes\nstatus\ntags\n' | _fzf)
+		fz "git-$candidate"
+
+	case 'git-*'
+		if not git status &> /dev/null
+			print_error 'not in a git repository'
+			return 1
+		end
 
 		switch $argv[1]
 
@@ -1084,10 +1093,10 @@ function fz --description 'entry point for all the fuzziness glory'
 				return
 			end
 
-			set --local jq_filter '.. | objects | select(.window_type == "normal") | "\(.id) \(.window_properties.class): \(.name)"'
+			set --local jq_filter '.. | objects | select(.window_type == "normal") | "\(.id)\u001f\(.window_properties.class):\u001f\(.name)"'
 			set --local choice (i3-msg -t get_tree \
 				| _jq "$jq_filter" \
-				| awk '{printf "%s \x1b[36m%s\x1b[m %s\n", $1, $2, $3}' \
+				| _awk '{printf "%s \x1b[36m%s\x1b[m %s\n", $1, $2, $3}' \
 				| _fzf --with-nth=2.. \
 				| awk '{print $1}')
 
@@ -1801,6 +1810,7 @@ function fz --description 'entry point for all the fuzziness glory'
 			files \
 			file-descriptors \
 			fonts \
+			git \
 			git-branches \
 			git-log \
 			git-remotes \
@@ -1883,6 +1893,9 @@ function fz --description 'entry point for all the fuzziness glory'
 
 			case fonts
 				command -q fontpreview
+
+			case 'git'
+				git status &> /dev/null
 
 			case 'git-*'
 				git status &> /dev/null
