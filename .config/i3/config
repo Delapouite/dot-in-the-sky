@@ -120,7 +120,7 @@ bindsym $mod+Shift+0 move container to workspace 10
 bindsym $mod+o mode $openmode
 set $openmode "open: vs[c]ode [e]macs [f]irefox [g]imp [k]akoune [i]nkscape [l]f nc[m]pcpp [n]ode [s]creenshot"
 mode $openmode {
-  bindsym o exec kitty --single-instance --class floating-term fish -c 'fz bins' ; mode default
+  bindsym o exec kitty --single-instance --class floating-term fish -c 'fz bin-bookmarks' ; mode default
 
   bindsym c exec code ; mode default
   bindsym e exec emacs --background-color '#282a36'; mode default

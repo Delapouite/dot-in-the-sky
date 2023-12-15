@@ -686,6 +686,22 @@ function fz --description 'entry point for all the fuzziness glory'
 			i3-msg --quiet "exec --no-startup-id $choice"
 		end
 
+	case bin-bookmarks
+		if test "$argv[2]" = "--help"
+			printf 'list: bookmarked binaries\n'
+			printf 'preview: which binary\n'
+			printf 'action: launch binary\n'
+			return
+		end
+
+		set --local choice (cat ~/.local/share/bin-bookmarks/*.bookmarks \
+			| rg -v '^#' | rg -v '^$' \
+			| _fzf --preview 'pacman --query --owns {1}; type {1};')
+
+		if test -n "$choice"
+			i3-msg --quiet "exec --no-startup-id $choice"
+		end
+
 	case bluetooth-controllers
 		if test "$argv[2]" = "--help"
 			printf 'list: bluetooth controllers\n'
@@ -1790,6 +1806,7 @@ function fz --description 'entry point for all the fuzziness glory'
 			azure-storage-blobs \
 			azure-storage-containers \
 			bins \
+			bin-bookmarks \
 			bluetooth-controllers \
 			bluetooth-devices \
 			browser-bookmarks \
