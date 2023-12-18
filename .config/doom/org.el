@@ -232,6 +232,30 @@
 			       '(font-lock-fontified t face org-meta-line))
 	  t))))))
 
+;; https://github.com/rexim/org-cliplink
+(defun my/org-cliplink ()
+  "Takes a URL from the clipboard and inserts an org-mode link
+with the title of a page and the optional target found by the URL
+into the current buffer"
+  (interactive)
+  (org-cliplink-insert-transformed-title
+   (org-cliplink-clipboard-content) ;take the URL from the CLIPBOARD
+   (lambda (url title)
+     (let* ((parsed-url (url-generic-parse-url url))
+            (clean-title
+             (cond
+              ;; if the host is github.com, cleanup the title
+              ;;((string= (url-host parsed-url) "github.com")
+              ;;(replace-regexp-in-string "GitHub - .*: \\(.*\\)" "\\1" title))
+              ;; otherwise keep the original title
+              (t title)))
+            (target (url-target parsed-url))
+            (clean-title (if target (concat clean-title "#" target) clean-title)))
+       (message url)
+       (message clean-title)
+       ;; forward the title to the default org-cliplink transformer
+       (org-cliplink-org-mode-link-transformer url clean-title)))))
+
 ;; (add-hook 'find-file-hook #'my/org-update-agenda-tag)
 (add-hook 'before-save-hook #'my/org-update-agenda-tag)
 
