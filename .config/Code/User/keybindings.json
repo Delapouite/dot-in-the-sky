@@ -106,6 +106,13 @@
     "command": "dance.selections.clear.secondary"
   },
   {
+    "key": "Shift+3",
+    "when": "editorTextFocus && dance.mode == 'normal'",
+    "title": "Comment code",
+    "command": "editor.action.commentLine"
+  },
+  // text-objects
+  {
     "key": "Alt+O",
     "when": "editorTextFocus && dance.mode == 'normal'",
     "title": "Select whole object",
@@ -117,12 +124,14 @@
     "title": "Select whole object",
     "command": "dance.seek.askObject"
   },
+  // Spacemacs
   {
     "key": "Space",
     "when": "editorTextFocus && dance.mode == 'normal'",
     "title": "Show commands",
     "command": "workbench.action.showCommands"
   },
+  // previous / next
   {
     "key": "Ctrl+p",
     "command": "selectPrevSuggestion",
