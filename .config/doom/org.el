@@ -4,6 +4,10 @@
 ;; change `org-directory'. It must be set before org loads!
 (setq org-directory "~/Sync/org/")
 
+(defun my/org-link-path (link)
+  "Return path of LINK at point"
+  (org-element-property :path link))
+
 (defun my/org-link-description-region (link)
   "Return description's region of LINK at point"
   (list (org-element-property :contents-begin link)
@@ -32,6 +36,37 @@
   (interactive)
   (let ((link (org-element-context)))
     (my/org-link-description-replace link (concat (my/org-link-description link) "s"))))
+
+(defun my/org-link-to-acronym ()
+  "Turn the description of link into its acronym if it exists"
+  (interactive)
+  (let* ((link (org-element-context))
+         (path (my/org-link-path link))
+         (node (org-roam-node-from-id path))
+         (acronym (org-roam-node-acronym node)))
+    (when (not (string= "" acronym))
+      (my/org-link-description-replace link (concat "‹" acronym "›")))))
+
+(defun my/org-link-to-bathonym ()
+  "Turn the description of link into its bathonym if it exists"
+  (interactive)
+  (let* ((link (org-element-context))
+         (path (my/org-link-path link))
+         (node (org-roam-node-from-id path))
+         (title (org-roam-node-title node)))
+    (when (not (string= "" title))
+      (my/org-link-description-replace link title))))
+
+(defun my/org-link-to-bathonym-acronym ()
+  "Turn the description of link into its bathonym ‹acronym› if it exists"
+  (interactive)
+  (let* ((link (org-element-context))
+         (path (my/org-link-path link))
+         (node (org-roam-node-from-id path))
+         (title (org-roam-node-title node))
+         (acronym (org-roam-node-acronym node)))
+    (when (not (string= "" acronym))
+      (my/org-link-description-replace link (concat title " ‹" acronym "›")))))
 
 ;; To dynamically build org-agenda-files when a TODO is present
 (defun my/org-get-filetags ()
