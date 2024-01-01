@@ -279,15 +279,22 @@
   (cl-defmethod org-roam-node-country ((node org-roam-node))
     (or (cdr (assoc "COUNTRY" (org-roam-node-properties node))) ""))
 
+  (cl-defmethod org-roam-node-population ((node org-roam-node))
+    (or (cdr (assoc "POPULATION" (org-roam-node-properties node))) ""))
+
   (cl-defmethod org-roam-node-my-tags ((node org-roam-node))
     (let* ((country (cdr (assoc "COUNTRY" (org-roam-node-properties node))))
            (country (if country (concat " ⚑" country) ""))
+           (population (cdr (assoc "POPULATION" (org-roam-node-properties node))))
+           (population (if population (concat " 🯅" population) ""))
            (born-at (cdr (assoc "BORN-AT" (org-roam-node-properties node))))
            (born-at (if born-at (concat " ⧖" born-at) ""))
            (died-at (cdr (assoc "DIED-AT" (org-roam-node-properties node))))
            (died-at (if died-at (concat " ⧗" died-at) ""))
+           (released-at (cdr (assoc "RELEASED-AT" (org-roam-node-properties node))))
+           (released-at (if released-at (concat " ⧗" released-at) ""))
            (tags (mapconcat (lambda (v) (concat "#" v)) (org-roam-node-tags node)  " ")))
-      (concat tags country born-at died-at)))
+      (concat tags country population born-at died-at released-at)))
 
   ; capture
 
