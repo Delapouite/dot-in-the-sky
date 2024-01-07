@@ -10,6 +10,7 @@
 (load! "org.el")
 (load! "org-agenda.el")
 (load! "org-roam.el")
+(load! "org-roam-ql.el")
 (load! "org-property-drawer.el")
 (load! "fetcher.el")
 (load! "marginalia.el")
