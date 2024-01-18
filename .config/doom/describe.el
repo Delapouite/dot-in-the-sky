@@ -8,6 +8,7 @@
       :leader :desc "Describe char" "d c" #'describe-char
       :leader :desc "Describe face" "d F" #'describe-face
       :leader :desc "Describe key" "d k" #'describe-key
+      :leader :desc "Describe keymap" "d K" #'describe-keymap
       :leader :desc "Describe mode" "d m" #'describe-mode
       :leader :desc "Describe package" "d p" #'describe-package
       :leader :desc "Describe text-properties" "d t" #'describe-text-properties
