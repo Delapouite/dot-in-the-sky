@@ -256,12 +256,17 @@
   (cl-defmethod org-roam-node-acronym ((node org-roam-node))
     (or (cdr (assoc "ACRONYM" (org-roam-node-properties node))) ""))
 
+  (cl-defmethod org-roam-node-description ((node org-roam-node))
+    (or (cdr (assoc "DESCRIPTION" (org-roam-node-properties node))) ""))
+
   (cl-defmethod org-roam-node-my-title ((node org-roam-node))
     (let* ((acronym (cdr (assoc "ACRONYM" (org-roam-node-properties node))))
+           (description (cdr (assoc "DESCRIPTION" (org-roam-node-properties node))))
            (title (org-roam-node-title node)))
       (cond
        ((and acronym (not (string-equal acronym title))) (concat title " ‹" acronym "›"))
        ((and acronym (string-equal acronym title)) (concat "‹" acronym "›"))
+       ((and description) (concat title " «" description "»"))
        (t title))))
 
   (cl-defmethod org-roam-node-released-at ((node org-roam-node))

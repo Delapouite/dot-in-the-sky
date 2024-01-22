@@ -68,6 +68,17 @@
     (when (not (string= "" acronym))
       (my/org-link-description-replace link (concat title " ‹" acronym "›")))))
 
+(defun my/org-link-to-rfc-description ()
+  "Turn the description of link into its RFC «description» if it exists"
+  (interactive)
+  (let* ((link (org-element-context))
+         (path (my/org-link-path link))
+         (node (org-roam-node-from-id path))
+         (title (org-roam-node-title node))
+         (description (org-roam-node-description node)))
+    (when (not (string= "" description))
+      (my/org-link-description-replace link (concat title " «" description "»")))))
+
 ;; To dynamically build org-agenda-files when a TODO is present
 (defun my/org-get-filetags ()
   (interactive)
