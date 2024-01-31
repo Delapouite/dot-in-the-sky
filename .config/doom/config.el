@@ -70,8 +70,8 @@
       :n "b n" #'next-buffer
       :n "b p" #'previous-buffer
       :n "b s" #'save-buffer)
-(map! :leader
-      :desc "Fetch stats" "j" #'my/fetch-stats)
+(map! :leader :desc "Fetch stats" "j" #'my/fetch-stats
+      :leader :desc "Toggle org-link-display" "t k" #'org-toggle-link-display)
 
 (defun iso8601-format (&optional time)
   "Format time string with %FT%T%z TIME"
