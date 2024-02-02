@@ -11,13 +11,14 @@
   (defun get-buffer-file-mtime ()
     (let ((mtime (file-attribute-modification-time
                   (file-attributes (buffer-file-name)))))
-      (when mtime
-        (concat (doom-modeline-wspc) (iso8601-format mtime)))))
+      (when mtime (iso8601-format mtime))))
 
   (doom-modeline-def-segment buffer-mtime
     "Define buffer-mtime modeline segment"
-    (let ((mtime (get-buffer-file-mtime)))
-      (propertize mtime 'face (if (string-prefix-p " 2023-0" mtime) 'compilation-error 'mode-line))))
+    (let* ((mtime (get-buffer-file-mtime))
+          (days (iso8601-diff-days mtime)))
+      (concat (doom-modeline-wspc)
+              (propertize (concat mtime " " (number-to-string days) "d") 'face (if (> days 180) 'error 'mode-line)))))
 
   (doom-modeline-def-segment org-roam-node-segment
     "Define org-roam modeline segment"
@@ -26,11 +27,11 @@
              (backlinks (if node (org-roam-node-backlinks-count node) ""))
              (interest (if node (org-roam-node-interest node) ""))
              (upgraded-at (if node (org-roam-node-upgraded-at node) ""))
-             (tags (if node (org-roam-node-my-tags node) "")))
+             (tags (if node (org-roam-node-template-tags node) "")))
       (concat (doom-modeline-wspc)
-              (propertize backlinks 'face (if (string-prefix-p "0" backlinks) 'compilation-error 'mode-line))
+              (propertize backlinks 'face (if (string-prefix-p "0" backlinks) 'error 'mode-line))
               "→ →"
-              (propertize links 'face (if (string-prefix-p "0" links) 'compilation-error 'mode-line))
+              (propertize links 'face (if (string-prefix-p "0" links) 'error 'mode-line))
               " ★"
               (propertize interest 'face 'mode-line)
               " ↑"

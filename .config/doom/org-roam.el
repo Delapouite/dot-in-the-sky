@@ -56,6 +56,11 @@
     (my/org-roam-template-default)
     (org-roam-node-find nil "#concept"))
 
+  (defun my/org-roam-node-find-interest ()
+    (interactive)
+    (my/org-roam-template-default)
+    (org-roam-node-find nil "★+1"))
+
   (defun my/org-roam-node-find-person ()
     (interactive)
     (my/org-roam-template-default)
@@ -73,7 +78,7 @@
 
   (defun my/org-roam-template-default ()
     (interactive)
-    (setq org-roam-node-display-template "${my-title:*} | @${my-level} | f${file:50} | ★${interest} | ↑${upgraded-at} | m${mtime} | ${my-tags:50}"))
+    (setq org-roam-node-display-template "${template-title:*} | @${template-level} | f${file:50} | ★${interest} | ↑${upgraded-at} | m${template-mtime} | ${template-tags:50}"))
 
   (setq org-tags-exclude-from-inheritance '("album" "artist" "debut" "top"))
 
@@ -89,6 +94,7 @@
 
   (defun my/force-update-org-roam-node-read-if-memoized (&optional timeout)
     (interactive)
+    (setq my/org-roam-ids (my/org-roam-ids))
     (memoize-force-update 'org-roam-node-read--completions
                           (if timeout timeout memoize-default-timeout)))
 
@@ -118,22 +124,49 @@
   ; org-link
 
   (defface org-link-id
-    '((t :foreground "#50fa7b"
-         :weight bold
+    `((t :foreground ,dracula-green
          :underline t))
     "Face for Org-Mode links starting with id:."
     :group 'org-faces)
-  (defface org-link-file
-    '((t :foreground "#ff5555"
+  (defface org-link-bidirectional
+    `((t :foreground ,dracula-green
          :weight bold
+         :underline t))
+    "Face for Org-Mode bidirectional links."
+    :group 'org-faces)
+  (defface org-link-file
+    `((t :foreground ,dracula-orange
          :underline t))
     "Face for Org-Mode links starting with file:."
     :group 'org-faces)
-  (org-link-set-parameters "id" :face 'org-link-id)
+
+  (org-link-set-parameters
+   "id"
+   :face (lambda (path)
+           ;; let's try with title (which is the same as id in our case), it seems more reliable with caching issues
+           (let* ((id (org-get-title)) ;(org-with-point-at 1 (org-id-get)))
+                  (ids (my/org-roam-incoming-ids id)))
+             (if (member path ids) 'org-link-bidirectional 'org-link-id))))
   (org-link-set-parameters "file" :face 'org-link-file)
   (org-link-set-parameters "env" :face 'org-formula)
   (org-link-set-parameters "flag" :face 'org-formula)
   (org-link-set-parameters "header" :face 'org-formula)
+
+  (defun my/org-roam-incoming-ids (id)
+    (interactive)
+    (seq-uniq
+     (seq-map
+      #'car
+      (org-roam-db-query [:select source
+                          :from links
+                          :where (= dest $s1)
+                          :and (= type "id")] id))))
+
+  (defun my/org-roam-ids ()
+    (interactive)
+    (seq-map
+     #'car
+     (org-roam-db-query [:select id :from nodes])))
 
   ; override to store more stuffs in the properties column for https links
 
@@ -239,7 +272,7 @@
                          (org-roam-node-id node)))))
       (format "%d" count)))
 
-  (cl-defmethod org-roam-node-my-level ((node org-roam-node))
+  (cl-defmethod org-roam-node-template-level ((node org-roam-node))
     (number-to-string (org-roam-node-level node)))
 
   (cl-defmethod org-roam-node-mtime ((node org-roam-node))
@@ -259,15 +292,22 @@
   (cl-defmethod org-roam-node-description ((node org-roam-node))
     (or (cdr (assoc "DESCRIPTION" (org-roam-node-properties node))) ""))
 
-  (cl-defmethod org-roam-node-my-title ((node org-roam-node))
+  (cl-defmethod org-roam-node-template-title ((node org-roam-node))
     (let* ((acronym (cdr (assoc "ACRONYM" (org-roam-node-properties node))))
+           (pacronym (propertize (concat "‹" acronym "›") 'face 'org-property-value))
            (description (cdr (assoc "DESCRIPTION" (org-roam-node-properties node))))
-           (title (org-roam-node-title node)))
+           (pdescription (propertize (concat "«" description "»") 'face 'org-property-value))
+           (aliases (org-roam-node-aliases node))
+           (title (org-roam-node-title node))
+           (parent (car (split-string title " > ")))
+           (child (cadr (split-string title " > ")))
+           (ptitle (if (member child my/org-roam-ids) (concat parent " > " (propertize child 'face 'org-code)) title)))
       (cond
-       ((and acronym (not (string-equal acronym title))) (concat title " ‹" acronym "›"))
-       ((and acronym (string-equal acronym title)) (concat "‹" acronym "›"))
-       ((and description) (concat title " «" description "»"))
-       (t title))))
+       ((and acronym (not (string-equal acronym title))) (concat ptitle " " pacronym))
+       ((and acronym (string-equal acronym title)) pacronym)
+       ((and description) (concat ptitle " " pdescription))
+       ((and aliases) (concat ptitle "*"))
+       (t ptitle))))
 
   (cl-defmethod org-roam-node-released-at ((node org-roam-node))
     (or (cdr (assoc "RELEASED-AT" (org-roam-node-properties node))) "    "))
@@ -287,7 +327,11 @@
   (cl-defmethod org-roam-node-population ((node org-roam-node))
     (or (cdr (assoc "POPULATION" (org-roam-node-properties node))) ""))
 
-  (cl-defmethod org-roam-node-my-tags ((node org-roam-node))
+  (cl-defmethod org-roam-node-template-mtime ((node org-roam-node))
+    (let ((mtime (org-roam-node-mtime node)))
+      (propertize mtime 'face (if (> (iso8601-diff-days mtime) 180) 'error 'mode-line))))
+
+  (cl-defmethod org-roam-node-template-tags ((node org-roam-node))
     (let* ((country (cdr (assoc "COUNTRY" (org-roam-node-properties node))))
            (country (if country (concat " ⚑" country) ""))
            (population (cdr (assoc "POPULATION" (org-roam-node-properties node))))
@@ -321,7 +365,8 @@
         :desc "Find album" "r l" #'my/org-roam-node-find-album
         :desc "Find person" "r p" #'my/org-roam-node-find-person
         :desc "Find tool" "r t" #'my/org-roam-node-find-tool
-        :desc "Find node" "r r" #'my/org-roam-node-find-default))
+        :desc "Find node" "r r" #'my/org-roam-node-find-default
+        :desc "Find ★1" "r 1" #'my/org-roam-node-find-interest))
 
 (use-package! org-roam-ql
   :config
