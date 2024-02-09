@@ -64,7 +64,18 @@ function browser-search --description 'browser search with various engines'
 		$browser "https://devdocs.io/?q=$query"
 
 	case duckduckgo ddg
-		$browser "https://duckduckgo.com/?q=$query"
+		# https://duckduckgo.com/settings
+		# https://duckduckgo.com/duckduckgo-help-pages/settings/params/
+		# - kav infinite scroll
+		# - kp safe search
+		# - kaj metric system
+		# - kak, kax install ddg
+		# - kaq, kap newsletter
+		# - kao privacy tips
+		# - kau help improve
+		# - km center
+		# - kae theme
+		$browser "https://duckduckgo.com/?kav=1&kp=-2&kaj=m&kak=-1&kax=-1&kaq=-1&kap=-1&kao=-1&kau=-1&km=m&kae=d&q=$query"
 
 	case github gh
 		$browser "https://github.com/search?q=$query"
