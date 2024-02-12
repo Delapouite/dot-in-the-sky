@@ -1030,7 +1030,7 @@ function fz --description 'entry point for all the fuzziness glory'
 				return
 			end
 
-			git remotes | _fzf
+			git remotes | _fzf --preview 'git remote show {1}'
 
 		case git-status
 			if test "$argv[2]" = "--help"
