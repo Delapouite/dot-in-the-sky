@@ -37,6 +37,14 @@
   (let ((link (org-element-context)))
     (my/org-link-description-replace link (concat (my/org-link-description link) "s"))))
 
+(defun my/org-link-description-switch-synergy ()
+  "Switch the two parts of a synergy (+) in the description of link"
+  (interactive)
+  (let* ((link (org-element-context))
+         (description (my/org-link-description link))
+         (parts (split-string description "\+" t " ")))
+      (my/org-link-description-replace link (concat (nth 1 parts) " + " (nth 0 parts)))))
+
 (defun my/org-link-to-acronym ()
   "Turn the description of link into its acronym if it exists"
   (interactive)
