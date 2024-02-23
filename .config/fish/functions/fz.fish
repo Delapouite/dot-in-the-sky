@@ -1075,23 +1075,24 @@ function fz --description 'entry point for all the fuzziness glory'
 			gh repo view --web "$choice"
 		end
 
-	case gpg-keys
+	case gpg-public-keys
 		if not command -q gpg
 			print_error 'gpg command not found'
 			return 1
 		end
 
 		if test "$argv[2]" = "--help"
-			printf 'list: git gpg keys\n'
-			print_dim 'preview: none'
+			printf 'list: gpg public keys\n'
+			printf 'preview: gpg public key info\n'
 			print_dim 'action: none'
 			return
 		end
 
-		gpg --list-keys --with-colons \
+		gpg --list-public-keys --with-colons \
 			| rg uid \
-			| awk -F ':' '{ print $8 " " $10 }' \
-			| _fzf
+			| awk -F ':' '{ print $10 }' \
+			| _fzf \
+				--preview 'gpg --list-public-keys {1..}'
 
 	case 'i3-*'
 		if not command -q i3-msg
@@ -1834,7 +1835,7 @@ function fz --description 'entry point for all the fuzziness glory'
 			git-status \
 			git-tags \
 			github-repositories \
-			gpg-keys \
+			gpg-public-keys \
 			i3-windows \
 			i3-workspaces \
 			ip-addresses \
