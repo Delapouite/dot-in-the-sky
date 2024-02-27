@@ -687,8 +687,9 @@ function fz --description 'entry point for all the fuzziness glory'
 		end
 
 	case bin-bookmarks
+		set --local data_source '~/.local/share/bin-bookmarks/*.bookmarks'
 		if test "$argv[2]" = "--help"
-			printf 'list: bookmarked binaries\n'
+			printf "list: bookmarked binaries from $data_source\n"
 			printf 'preview: which binary\n'
 			printf 'action: launch binary\n'
 			return
@@ -696,7 +697,9 @@ function fz --description 'entry point for all the fuzziness glory'
 
 		set --local choice (cat ~/.local/share/bin-bookmarks/*.bookmarks \
 			| rg -v '^#' | rg -v '^$' \
-			| _fzf --preview 'pacman --query --owns {1}; type {1};')
+			| _fzf \
+				--header "$data_source" \
+				--preview 'pacman --query --owns {1}; type {1};')
 
 		if test -n "$choice"
 			i3-msg --quiet "exec --no-startup-id $choice"
@@ -723,8 +726,9 @@ function fz --description 'entry point for all the fuzziness glory'
 		set --local candidate (bluetoothctl devices | _fzf)
 
 	case browser-bookmarks
+		set --local data_source '~/.local/share/browser-bookmarks/*.bookmarks'
 		if test "$argv[2]" = "--help"
-			printf 'list: browser bookmarks\n'
+			printf "list: browser bookmarks from $data_source\n"
 			print_dim 'preview: none'
 			printf 'action: open bookmark in default browser\n'
 			return
@@ -734,6 +738,7 @@ function fz --description 'entry point for all the fuzziness glory'
 			| rg -v '^#' | rg -v '^$' \
 			| _awk '{printf "%-12s \x1b[36m%s\x1b[m %s\n", $1, $2, $3}' \
 			| _fzf \
+				--header "$data_source" \
 			| sed 's#.*\(https*://\)#\1#' \
 			| xargs xdg-open
 		sleep 0.2
@@ -939,8 +944,9 @@ function fz --description 'entry point for all the fuzziness glory'
 		_fzf_search_variables (set --show | psub) (set --names | psub)
 
 	case eslint-rules
+		set --local data_source '~/.local/share/eslint/rules.json'
 		if test "$argv[2]" = "--help"
-			printf 'list: eslint rules\n'
+			printf "list: eslint rules from $data_source\n"
 			print_dim 'preview: none'
 			print_dim 'action: none'
 			return
@@ -948,7 +954,8 @@ function fz --description 'entry point for all the fuzziness glory'
 
 		cat ~/.local/share/eslint/rules.json \
 			| _jq '.[] | "\(.id) \(.type) \(.recommended) \(.fixable) \(.description)"' \
-			| _fzf
+			| _fzf \
+				--header "$data_source"
 
 	case files
 		if test "$argv[2]" = "--help"
