@@ -1349,14 +1349,39 @@ function fz --description 'entry point for all the fuzziness glory'
 
 		cat /etc/services | tail --lines +3 | _fzf
 
-	case npm-scripts
-		if not test -e './package.json'
+	case npm-dependencies
+		set --local data_source "$PWD/package.json"
+		if not test -e "$data_source"
 			print_error 'no package.json in current directory'
 			return 1
 		end
 
 		if test "$argv[2]" = "--help"
-			printf 'list: npm scripts\n'
+			printf "list: npm dependencies from $data_source\n"
+			print_dim 'preview: none'
+			printf 'action: visit npm dependency registry page\n'
+			return
+		end
+
+		set --local choice (_jq '.dependencies | to_entries | .[] | "\(.key)\u001f\(.value)"' package.json \
+			| _awk "{printf \"%s $comment%s$reset\n\", \$1, \$NF}" \
+			| _fzf \
+				--header "$data_source" \
+			| awk '{print $1}')
+
+		if test -n "$choice"
+			firefox-developer-edition "https://www.npmjs.com/package/$choice"
+		end
+
+	case npm-scripts
+		set --local data_source "$PWD/package.json"
+		if not test -e "$data_source"
+			print_error 'no package.json in current directory'
+			return 1
+		end
+
+		if test "$argv[2]" = "--help"
+			printf "list: npm scripts from $data_source\n"
 			print_dim 'preview: none'
 			printf 'action: run npm script\n'
 			return
@@ -1365,6 +1390,7 @@ function fz --description 'entry point for all the fuzziness glory'
 		set --local choice (_jq '.scripts | to_entries | .[] | "\(.key)\u001f\(.value)"' package.json \
 			| _awk "{printf \"%s $comment%s$reset\n\", \$1, \$NF}" \
 			| _fzf \
+				--header "$data_source" \
 			| awk '{print $1}')
 
 		if test -n "$choice"
@@ -1861,6 +1887,7 @@ function fz --description 'entry point for all the fuzziness glory'
 			music-dates \
 			music-playlists \
 			network-ports \
+			npm-dependencies \
 			npm-scripts \
 			pacman-mirrors \
 			pacman-packages \
