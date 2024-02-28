@@ -1218,6 +1218,7 @@ function fz --description 'entry point for all the fuzziness glory'
 		end
 
 		cat /usr/share/X11/locale/en_US.UTF-8/Compose \
+			~/.config/XCompose \
 			| rg --invert-match '^#' | _fzf
 
 	case linux-kernel-modules
