@@ -1,6 +1,7 @@
 # Linux
 
 .envrc
+.envrc.d
 
 # macOS
 
