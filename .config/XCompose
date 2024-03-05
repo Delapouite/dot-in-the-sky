@@ -4,6 +4,10 @@
 # /usr/share/X11/locale/en_US.UTF-8/Compose
 include "%L"
 
+<Multi_key> <asterisk> <asterisk> : "⁑" U2051 # TWO ASTERISKS ALIGNED VERTICALLY
+<Multi_key> <asterisk> <2> : "⁑" U2051 # TWO ASTERISKS ALIGNED VERTICALLY
+<Multi_key> <asterisk> <3> : "⁂" U2042 # ASTERISM
+
 # <dead_schwa> is lafayette quote
 <dead_schwa> <f> : "⚑" U2691 # BLACK FLAG
 <dead_schwa> <F> : "⚐" U2690 # WHITE FLAG
