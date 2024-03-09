@@ -7,6 +7,7 @@ include "%L"
 <Multi_key> <asterisk> <asterisk> : "⁑" U2051 # TWO ASTERISKS ALIGNED VERTICALLY
 <Multi_key> <asterisk> <2> : "⁑" U2051 # TWO ASTERISKS ALIGNED VERTICALLY
 <Multi_key> <asterisk> <3> : "⁂" U2042 # ASTERISM
+<Multi_key> <minus> <plus> : "∓" U2213 # MINOR-OR-PLUS SIGN
 
 # <dead_schwa> is lafayette quote
 <dead_schwa> <f> : "⚑" U2691 # BLACK FLAG
