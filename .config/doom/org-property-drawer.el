@@ -46,6 +46,11 @@
   (interactive)
   (org-set-property "created-at" (iso8601-format)))
 
+(defun my/played-at ()
+  "Set drawer property played-at to now in ISO8601"
+  (interactive)
+  (org-set-property "played-at" (iso8601-format)))
+
 (defun my/infer-created-at ()
   "Set drawer property created-at to date in buffer name"
   (interactive)
