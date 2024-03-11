@@ -411,8 +411,8 @@
                  (my/fetched-at))))))
 
 (defun my/visit-docker-hub () (interactive) (my/visit-url "hub.docker.com"))
-(defvar my/docker-hub-re "*.?https://hub.docker.com/r/\\([a-zA-Z0-9-_]*\\)/\\([a-zA-Z0-9-_]*\\).*")
-(defvar my/docker-hub-official-re "*.?https://hub.docker.com/_/\\([a-zA-Z0-9-_]*\\).*")
+(defvar my/docker-hub-re ".*?https://hub.docker.com/r/\\([a-zA-Z0-9-_]*\\)/\\([a-zA-Z0-9-_]*\\).*")
+(defvar my/docker-hub-official-re ".*?https://hub.docker.com/_/\\([a-zA-Z0-9-_]*\\).*")
 
 (defun my/fetch-docker-hub ()
   "Try to fetch a pseudo Dockerfile"
@@ -431,7 +431,7 @@
       (insert (concat "\n#+begin_src dockerfile\n" dockerfile "#+end_src")))))
 
 (defun my/visit-bundlephobia () (interactive) (my/visit-url "bundlephobia.com"))
-(defvar my/bundlephobia-re "*.?https://bundlephobia.com/package/\\([a-zA-Z0-9-_@.]*\\).*")
+(defvar my/bundlephobia-re ".*?https://bundlephobia.com/package/\\([a-zA-Z0-9-_@.]*\\).*")
 
 (defun my/fetch-bundlephobia-stats ()
   "Fetch Bundle Phobia REST API and add the returned values in a PROPERTIES drawer"
@@ -447,7 +447,7 @@
                  (my/fetched-at))))))
 
 (defun my/visit-vscode () (interactive) (my/visit-url "marketplace.visualstudio.com"))
-(defvar my/vscode-re "*.?https://marketplace.visualstudio.com/items\\?itemName=\\([a-zA-Z0-9-_@.]*\\).*")
+(defvar my/vscode-re ".*?https://marketplace.visualstudio.com/items\\?itemName=\\([a-zA-Z0-9-_@.]*\\).*")
 
 (defun my/fetch-vscode ()
   "Fetch VSCode Marketplace REST API and add the returned values in a PROPERTIES drawer"
@@ -486,7 +486,7 @@
                                    (my/fetched-at)))))))))))
 
 (defun my/visit-wikipedia () (interactive) (my/visit-url "wikipedia.org"))
-(defvar my/wikipedia-re "*.?https://\\(.*?\\).wikipedia.org/wiki/\\([a-zA-Z0-9-_@.%()]*\\).*")
+(defvar my/wikipedia-re ".*?https://\\(.*?\\).wikipedia.org/wiki/\\([a-zA-Z0-9-_@.%()]*\\).*")
 
 (defun my/fetch-wikipedia-stats ()
   "Fetch Wikipedia REST API and add the returned values in a PROPERTIES drawer"
@@ -505,7 +505,7 @@
                               (my/fetched-at)))))))))
 
 (defun my/visit-archlinux-wiki () (interactive) (my/visit-url "wiki.archlinux.org"))
-(defvar my/archlinux-wiki-re "*.?https://wiki.archlinux.org/title/\\([a-zA-Z0-9-_@.%]*\\).*")
+(defvar my/archlinux-wiki-re ".*?https://wiki.archlinux.org/title/\\([a-zA-Z0-9-_@.%]*\\).*")
 
 (defun my/fetch-archlinux-wiki-stats ()
   "Fetch Arch Wiki REST API and add the returned values in a PROPERTIES drawer"
