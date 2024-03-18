@@ -71,6 +71,7 @@
       :n "b p" #'previous-buffer
       :n "b s" #'save-buffer)
 (map! :leader :desc "Fetch stats" "j" #'my/fetch-stats
+      :leader :desc "Clip Link" "k" #'my/org-cliplink
       :leader :desc "Toggle org-link-display" "t k" #'org-toggle-link-display)
 
 (defun iso8601-format (&optional time)
