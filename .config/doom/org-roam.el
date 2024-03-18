@@ -309,14 +309,29 @@
        ((and aliases) (concat ptitle "*"))
        (t ptitle))))
 
+  (cl-defmethod org-roam-node-template-mtime ((node org-roam-node))
+    (let ((mtime (org-roam-node-mtime node)))
+      (propertize mtime 'face (if (> (iso8601-diff-days mtime) 180) 'error 'mode-line))))
+
   (cl-defmethod org-roam-node-released-at ((node org-roam-node))
     (or (cdr (assoc "RELEASED-AT" (org-roam-node-properties node))) "    "))
 
   (cl-defmethod org-roam-node-artist ((node org-roam-node))
     (or (cdr (assoc "ARTIST" (org-roam-node-properties node))) ""))
 
+  (cl-defmethod org-roam-node-author ((node org-roam-node))
+    (or (cdr (assoc "AUTHOR" (org-roam-node-properties node))) ""))
+
   (cl-defmethod org-roam-node-link ((node org-roam-node))
     (format "[[id:%s][%s]]" (org-roam-node-id node) (org-roam-node-title node)))
+
+  (cl-defmethod org-roam-node-album-link ((node org-roam-node))
+    (format "[[id:%s][%s]]"
+            (org-roam-node-id node)
+            (string-join (cdr (split-string (org-roam-node-title node) " - ")) " ")))
+
+  (cl-defmethod org-roam-node-debut ((node org-roam-node))
+    (or (cdr (assoc "DEBUT" (org-roam-node-properties node))) ""))
 
   (cl-defmethod org-roam-node-description ((node org-roam-node))
     (or (cdr (assoc "DESCRIPTION" (org-roam-node-properties node))) ""))
@@ -324,12 +339,32 @@
   (cl-defmethod org-roam-node-country ((node org-roam-node))
     (or (cdr (assoc "COUNTRY" (org-roam-node-properties node))) ""))
 
+  (cl-defmethod org-roam-node-prefecture ((node org-roam-node))
+    (or (cdr (assoc "PREFECTURE" (org-roam-node-properties node))) ""))
+
+  (cl-defmethod org-roam-node-role ((node org-roam-node))
+    (or (cdr (assoc "ROLE" (org-roam-node-properties node))) ""))
+
+  (cl-defmethod org-roam-node-live ((node org-roam-node))
+    (or (cdr (assoc "LIVE" (org-roam-node-properties node))) ""))
+
   (cl-defmethod org-roam-node-population ((node org-roam-node))
     (or (cdr (assoc "POPULATION" (org-roam-node-properties node))) ""))
 
-  (cl-defmethod org-roam-node-template-mtime ((node org-roam-node))
-    (let ((mtime (org-roam-node-mtime node)))
-      (propertize mtime 'face (if (> (iso8601-diff-days mtime) 180) 'error 'mode-line))))
+  (cl-defmethod org-roam-node-tier ((node org-roam-node))
+    (or (cdr (assoc "TIER" (org-roam-node-properties node))) ""))
+
+  (cl-defmethod org-roam-node-play-count ((node org-roam-node))
+    (or (cdr (assoc "PLAY-COUNT" (org-roam-node-properties node))) ""))
+
+  (cl-defmethod org-roam-node-played-at ((node org-roam-node))
+    (or (cdr (assoc "PLAYED-AT" (org-roam-node-properties node))) ""))
+
+  (cl-defmethod org-roam-node-born-at ((node org-roam-node))
+    (or (cdr (assoc "BORN-AT" (org-roam-node-properties node))) ""))
+
+  (cl-defmethod org-roam-node-died-at ((node org-roam-node))
+    (or (cdr (assoc "DIED-AT" (org-roam-node-properties node))) ""))
 
   (cl-defmethod org-roam-node-template-tags ((node org-roam-node))
     (let* ((country (cdr (assoc "COUNTRY" (org-roam-node-properties node))))
