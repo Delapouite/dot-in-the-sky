@@ -70,7 +70,8 @@
       :n "b n" #'next-buffer
       :n "b p" #'previous-buffer
       :n "b s" #'save-buffer)
-(map! :leader :desc "Fetch stats" "j" #'my/fetch-stats
+(map! :leader :desc "M-x" "SPC" #'execute-extended-command
+      :leader :desc "Fetch stats" "j" #'my/fetch-stats
       :leader :desc "Clip Link" "k" #'my/org-cliplink
       :leader :desc "Toggle org-link-display" "t k" #'org-toggle-link-display)
 
@@ -115,18 +116,32 @@
 
 (setq ispell-personal-dictionary "~/Sync/ispell.dictionary")
 
-(defun rename-file-and-buffer ()
+(defun my/rename-file-and-buffer (&optional new-name)
   "Rename the current buffer and file it is visiting."
   (interactive)
   (let ((filename (buffer-file-name)))
     (if (not (and filename (file-exists-p filename)))
         (message "Buffer is not visiting a file!")
-      (let ((new-name (read-file-name "New name: " filename)))
-        (cond
-         ((vc-backend filename) (vc-rename-file filename new-name))
-         (t
-          (rename-file filename new-name t)
-          (set-visited-file-name new-name t t)))))))
+      (unless new-name (setq new-name (read-file-name "New name: " filename)))
+      (cond
+       ((vc-backend filename) (vc-rename-file filename new-name))
+       (t
+        (rename-file filename new-name t)
+        (set-visited-file-name new-name t t))))))
+
+(defun my/rename-file-plus ()
+  (interactive)
+  (my/rename-file-and-buffer (s-replace "_" "·" (buffer-file-name)))
+  (setq org-property-format "%-4s %s")
+  (org-set-property "id" (s-replace " + " "·" (org-id-get)))
+  (org-roam-set-keyword "title" (s-replace " + " "·" (org-get-title))))
+
+(defun my/rename-file-vs ()
+  (interactive)
+  (my/rename-file-and-buffer (s-replace "_vs_" "·" (buffer-file-name)))
+  (setq org-property-format "%-4s %s")
+  (org-set-property "id" (s-replace " vs " "·" (org-id-get)))
+  (org-roam-set-keyword "title" (s-replace " vs " "·" (org-get-title))))
 
 (use-package! olivetti
   :config

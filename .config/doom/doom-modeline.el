@@ -21,7 +21,7 @@
               (propertize (concat mtime " " (number-to-string days) "d") 'face (if (> days 180) 'error 'mode-line)))))
 
   (doom-modeline-def-segment org-roam-node-segment
-    "Define org-roam modeline segment"
+    "Define org-roam modeline segment using node property accessors"
     (letrec ((node (org-roam-node-from-id (org-with-point-at 1 (org-id-get))))
              (links (if node (org-roam-node-links-count node) ""))
              (backlinks (if node (org-roam-node-backlinks-count node) ""))

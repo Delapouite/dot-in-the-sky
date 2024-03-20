@@ -3,89 +3,9 @@
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
 (setq org-directory "~/Sync/org/")
+(setq org-element-use-cache nil)
 
-(defun my/org-link-path (link)
-  "Return path of LINK at point"
-  (org-element-property :path link))
-
-(defun my/org-link-description-region (link)
-  "Return description's region of LINK at point"
-  (list (org-element-property :contents-begin link)
-        (org-element-property :contents-end link)))
-
-(defun my/org-link-description (link)
-  "Return description of LINK at point"
-  (let ((region (my/org-link-description-region link)))
-    (buffer-substring (nth 0 region) (nth 1 region))))
-
-(defun my/org-link-description-replace (link description)
-  "Replace LINK's description by DESCRIPTION"
-  (let ((region (my/org-link-description-region link)))
-    (goto-char (nth 0 region))
-    (delete-region (nth 0 region) (nth 1 region))
-    (insert description)))
-
-(defun my/org-link-description-downcase ()
-  "Downcase description of link at point"
-  (interactive)
-  (let ((link (org-element-context)))
-    (my/org-link-description-replace link (downcase (my/org-link-description link)))))
-
-(defun my/org-link-description-pluralize ()
-  "Pluralize description of link at point"
-  (interactive)
-  (let ((link (org-element-context)))
-    (my/org-link-description-replace link (concat (my/org-link-description link) "s"))))
-
-(defun my/org-link-description-switch-synergy ()
-  "Switch the two parts of a synergy (+) in the description of link"
-  (interactive)
-  (let* ((link (org-element-context))
-         (description (my/org-link-description link))
-         (parts (split-string description "\+" t " ")))
-      (my/org-link-description-replace link (concat (nth 1 parts) " + " (nth 0 parts)))))
-
-(defun my/org-link-to-acronym ()
-  "Turn the description of link into its acronym if it exists"
-  (interactive)
-  (let* ((link (org-element-context))
-         (path (my/org-link-path link))
-         (node (org-roam-node-from-id path))
-         (acronym (org-roam-node-acronym node)))
-    (when (not (string= "" acronym))
-      (my/org-link-description-replace link (concat "‹" acronym "›")))))
-
-(defun my/org-link-to-bathonym ()
-  "Turn the description of link into its bathonym if it exists"
-  (interactive)
-  (let* ((link (org-element-context))
-         (path (my/org-link-path link))
-         (node (org-roam-node-from-id path))
-         (title (org-roam-node-title node)))
-    (when (not (string= "" title))
-      (my/org-link-description-replace link title))))
-
-(defun my/org-link-to-bathonym-acronym ()
-  "Turn the description of link into its bathonym ‹acronym› if it exists"
-  (interactive)
-  (let* ((link (org-element-context))
-         (path (my/org-link-path link))
-         (node (org-roam-node-from-id path))
-         (title (org-roam-node-title node))
-         (acronym (org-roam-node-acronym node)))
-    (when (not (string= "" acronym))
-      (my/org-link-description-replace link (concat title " ‹" acronym "›")))))
-
-(defun my/org-link-to-rfc-description ()
-  "Turn the description of link into its RFC «description» if it exists"
-  (interactive)
-  (let* ((link (org-element-context))
-         (path (my/org-link-path link))
-         (node (org-roam-node-from-id path))
-         (title (org-roam-node-title node))
-         (description (org-roam-node-description node)))
-    (when (not (string= "" description))
-      (my/org-link-description-replace link (concat title " «" description "»")))))
+(load! "org-link.el")
 
 ;; To dynamically build org-agenda-files when a TODO is present
 (defun my/org-get-filetags ()
