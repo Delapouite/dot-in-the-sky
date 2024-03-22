@@ -1,0 +1,3750 @@
+[
+  {
+    "id": "accessor-pairs",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Enforce getter and setter pairs in objects and classes",
+    "recommended": false,
+    "deprecated": null
+  },
+  {
+    "id": "array-bracket-newline",
+    "type": "layout",
+    "fixable": "whitespace",
+    "description": "Enforce linebreaks after opening and before closing array brackets",
+    "recommended": false,
+    "deprecated": true
+  },
+  {
+    "id": "array-bracket-spacing",
+    "type": "layout",
+    "fixable": "whitespace",
+    "description": "Enforce consistent spacing inside array brackets",
+    "recommended": false,
+    "deprecated": true
+  },
+  {
+    "id": "array-callback-return",
+    "type": "problem",
+    "fixable": null,
+    "description": "Enforce `return` statements in callbacks of array methods",
+    "recommended": false,
+    "deprecated": null
+  },
+  {
+    "id": "array-element-newline",
+    "type": "layout",
+    "fixable": "whitespace",
+    "description": "Enforce line breaks after each array element",
+    "recommended": false,
+    "deprecated": true
+  },
+  {
+    "id": "arrow-body-style",
+    "type": "suggestion",
+    "fixable": "code",
+    "description": "Require braces around arrow function bodies",
+    "recommended": false,
+    "deprecated": null
+  },
+  {
+    "id": "arrow-parens",
+    "type": "layout",
+    "fixable": "code",
+    "description": "Require parentheses around arrow function arguments",
+    "recommended": false,
+    "deprecated": true
+  },
+  {
+    "id": "arrow-spacing",
+    "type": "layout",
+    "fixable": "whitespace",
+    "description": "Enforce consistent spacing before and after the arrow in arrow functions",
+    "recommended": false,
+    "deprecated": true
+  },
+  {
+    "id": "block-scoped-var",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Enforce the use of variables within the scope they are defined",
+    "recommended": false,
+    "deprecated": null
+  },
+  {
+    "id": "block-spacing",
+    "type": "layout",
+    "fixable": "whitespace",
+    "description": "Disallow or enforce spaces inside of blocks after opening block and before closing block",
+    "recommended": false,
+    "deprecated": true
+  },
+  {
+    "id": "brace-style",
+    "type": "layout",
+    "fixable": "whitespace",
+    "description": "Enforce consistent brace style for blocks",
+    "recommended": false,
+    "deprecated": true
+  },
+  {
+    "id": "callback-return",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Require `return` statements after callbacks",
+    "recommended": false,
+    "deprecated": true
+  },
+  {
+    "id": "camelcase",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Enforce camelcase naming convention",
+    "recommended": false,
+    "deprecated": null
+  },
+  {
+    "id": "capitalized-comments",
+    "type": "suggestion",
+    "fixable": "code",
+    "description": "Enforce or disallow capitalization of the first letter of a comment",
+    "recommended": false,
+    "deprecated": null
+  },
+  {
+    "id": "class-methods-use-this",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Enforce that class methods utilize `this`",
+    "recommended": false,
+    "deprecated": null
+  },
+  {
+    "id": "comma-dangle",
+    "type": "layout",
+    "fixable": "code",
+    "description": "Require or disallow trailing commas",
+    "recommended": false,
+    "deprecated": true
+  },
+  {
+    "id": "comma-spacing",
+    "type": "layout",
+    "fixable": "whitespace",
+    "description": "Enforce consistent spacing before and after commas",
+    "recommended": false,
+    "deprecated": true
+  },
+  {
+    "id": "comma-style",
+    "type": "layout",
+    "fixable": "code",
+    "description": "Enforce consistent comma style",
+    "recommended": false,
+    "deprecated": true
+  },
+  {
+    "id": "complexity",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Enforce a maximum cyclomatic complexity allowed in a program",
+    "recommended": false,
+    "deprecated": null
+  },
+  {
+    "id": "computed-property-spacing",
+    "type": "layout",
+    "fixable": "whitespace",
+    "description": "Enforce consistent spacing inside computed property brackets",
+    "recommended": false,
+    "deprecated": true
+  },
+  {
+    "id": "consistent-return",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Require `return` statements to either always or never specify values",
+    "recommended": false,
+    "deprecated": null
+  },
+  {
+    "id": "consistent-this",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Enforce consistent naming when capturing the current execution context",
+    "recommended": false,
+    "deprecated": null
+  },
+  {
+    "id": "constructor-super",
+    "type": "problem",
+    "fixable": null,
+    "description": "Require `super()` calls in constructors",
+    "recommended": true,
+    "deprecated": null
+  },
+  {
+    "id": "curly",
+    "type": "suggestion",
+    "fixable": "code",
+    "description": "Enforce consistent brace style for all control statements",
+    "recommended": false,
+    "deprecated": null
+  },
+  {
+    "id": "default-case",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Require `default` cases in `switch` statements",
+    "recommended": false,
+    "deprecated": null
+  },
+  {
+    "id": "default-case-last",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Enforce default clauses in switch statements to be last",
+    "recommended": false,
+    "deprecated": null
+  },
+  {
+    "id": "default-param-last",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Enforce default parameters to be last",
+    "recommended": false,
+    "deprecated": null
+  },
+  {
+    "id": "dot-location",
+    "type": "layout",
+    "fixable": "code",
+    "description": "Enforce consistent newlines before and after dots",
+    "recommended": false,
+    "deprecated": true
+  },
+  {
+    "id": "dot-notation",
+    "type": "suggestion",
+    "fixable": "code",
+    "description": "Enforce dot notation whenever possible",
+    "recommended": false,
+    "deprecated": null
+  },
+  {
+    "id": "eol-last",
+    "type": "layout",
+    "fixable": "whitespace",
+    "description": "Require or disallow newline at the end of files",
+    "recommended": false,
+    "deprecated": true
+  },
+  {
+    "id": "eqeqeq",
+    "type": "suggestion",
+    "fixable": "code",
+    "description": "Require the use of `===` and `!==`",
+    "recommended": false,
+    "deprecated": null
+  },
+  {
+    "id": "for-direction",
+    "type": "problem",
+    "fixable": null,
+    "description": "Enforce \"for\" loop update clause moving the counter in the right direction",
+    "recommended": true,
+    "deprecated": null
+  },
+  {
+    "id": "func-call-spacing",
+    "type": "layout",
+    "fixable": "whitespace",
+    "description": "Require or disallow spacing between function identifiers and their invocations",
+    "recommended": false,
+    "deprecated": true
+  },
+  {
+    "id": "func-name-matching",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Require function names to match the name of the variable or property to which they are assigned",
+    "recommended": false,
+    "deprecated": null
+  },
+  {
+    "id": "func-names",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Require or disallow named `function` expressions",
+    "recommended": false,
+    "deprecated": null
+  },
+  {
+    "id": "func-style",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Enforce the consistent use of either `function` declarations or expressions",
+    "recommended": false,
+    "deprecated": null
+  },
+  {
+    "id": "function-call-argument-newline",
+    "type": "layout",
+    "fixable": "whitespace",
+    "description": "Enforce line breaks between arguments of a function call",
+    "recommended": false,
+    "deprecated": true
+  },
+  {
+    "id": "function-paren-newline",
+    "type": "layout",
+    "fixable": "whitespace",
+    "description": "Enforce consistent line breaks inside function parentheses",
+    "recommended": false,
+    "deprecated": true
+  },
+  {
+    "id": "generator-star-spacing",
+    "type": "layout",
+    "fixable": "whitespace",
+    "description": "Enforce consistent spacing around `*` operators in generator functions",
+    "recommended": false,
+    "deprecated": true
+  },
+  {
+    "id": "getter-return",
+    "type": "problem",
+    "fixable": null,
+    "description": "Enforce `return` statements in getters",
+    "recommended": true,
+    "deprecated": null
+  },
+  {
+    "id": "global-require",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Require `require()` calls to be placed at top-level module scope",
+    "recommended": false,
+    "deprecated": true
+  },
+  {
+    "id": "grouped-accessor-pairs",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Require grouped accessor pairs in object literals and classes",
+    "recommended": false,
+    "deprecated": null
+  },
+  {
+    "id": "guard-for-in",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Require `for-in` loops to include an `if` statement",
+    "recommended": false,
+    "deprecated": null
+  },
+  {
+    "id": "handle-callback-err",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Require error handling in callbacks",
+    "recommended": false,
+    "deprecated": true
+  },
+  {
+    "id": "id-blacklist",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Disallow specified identifiers",
+    "recommended": false,
+    "deprecated": true
+  },
+  {
+    "id": "id-denylist",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Disallow specified identifiers",
+    "recommended": false,
+    "deprecated": null
+  },
+  {
+    "id": "id-length",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Enforce minimum and maximum identifier lengths",
+    "recommended": false,
+    "deprecated": null
+  },
+  {
+    "id": "id-match",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Require identifiers to match a specified regular expression",
+    "recommended": false,
+    "deprecated": null
+  },
+  {
+    "id": "implicit-arrow-linebreak",
+    "type": "layout",
+    "fixable": "whitespace",
+    "description": "Enforce the location of arrow function bodies",
+    "recommended": false,
+    "deprecated": true
+  },
+  {
+    "id": "indent",
+    "type": "layout",
+    "fixable": "whitespace",
+    "description": "Enforce consistent indentation",
+    "recommended": false,
+    "deprecated": true
+  },
+  {
+    "id": "indent-legacy",
+    "type": "layout",
+    "fixable": "whitespace",
+    "description": "Enforce consistent indentation",
+    "recommended": false,
+    "deprecated": true
+  },
+  {
+    "id": "init-declarations",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Require or disallow initialization in variable declarations",
+    "recommended": false,
+    "deprecated": null
+  },
+  {
+    "id": "jsx-quotes",
+    "type": "layout",
+    "fixable": "whitespace",
+    "description": "Enforce the consistent use of either double or single quotes in JSX attributes",
+    "recommended": false,
+    "deprecated": true
+  },
+  {
+    "id": "key-spacing",
+    "type": "layout",
+    "fixable": "whitespace",
+    "description": "Enforce consistent spacing between keys and values in object literal properties",
+    "recommended": false,
+    "deprecated": true
+  },
+  {
+    "id": "keyword-spacing",
+    "type": "layout",
+    "fixable": "whitespace",
+    "description": "Enforce consistent spacing before and after keywords",
+    "recommended": false,
+    "deprecated": true
+  },
+  {
+    "id": "line-comment-position",
+    "type": "layout",
+    "fixable": null,
+    "description": "Enforce position of line comments",
+    "recommended": false,
+    "deprecated": null
+  },
+  {
+    "id": "linebreak-style",
+    "type": "layout",
+    "fixable": "whitespace",
+    "description": "Enforce consistent linebreak style",
+    "recommended": false,
+    "deprecated": true
+  },
+  {
+    "id": "lines-around-comment",
+    "type": "layout",
+    "fixable": "whitespace",
+    "description": "Require empty lines around comments",
+    "recommended": false,
+    "deprecated": true
+  },
+  {
+    "id": "lines-around-directive",
+    "type": "layout",
+    "fixable": "whitespace",
+    "description": "Require or disallow newlines around directives",
+    "recommended": false,
+    "deprecated": true
+  },
+  {
+    "id": "lines-between-class-members",
+    "type": "layout",
+    "fixable": "whitespace",
+    "description": "Require or disallow an empty line between class members",
+    "recommended": false,
+    "deprecated": true
+  },
+  {
+    "id": "logical-assignment-operators",
+    "type": "suggestion",
+    "fixable": "code",
+    "description": "Require or disallow logical assignment operator shorthand",
+    "recommended": false,
+    "deprecated": null
+  },
+  {
+    "id": "max-classes-per-file",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Enforce a maximum number of classes per file",
+    "recommended": false,
+    "deprecated": null
+  },
+  {
+    "id": "max-depth",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Enforce a maximum depth that blocks can be nested",
+    "recommended": false,
+    "deprecated": null
+  },
+  {
+    "id": "max-len",
+    "type": "layout",
+    "fixable": null,
+    "description": "Enforce a maximum line length",
+    "recommended": false,
+    "deprecated": true
+  },
+  {
+    "id": "max-lines",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Enforce a maximum number of lines per file",
+    "recommended": false,
+    "deprecated": null
+  },
+  {
+    "id": "max-lines-per-function",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Enforce a maximum number of lines of code in a function",
+    "recommended": false,
+    "deprecated": null
+  },
+  {
+    "id": "max-nested-callbacks",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Enforce a maximum depth that callbacks can be nested",
+    "recommended": false,
+    "deprecated": null
+  },
+  {
+    "id": "max-params",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Enforce a maximum number of parameters in function definitions",
+    "recommended": false,
+    "deprecated": null
+  },
+  {
+    "id": "max-statements",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Enforce a maximum number of statements allowed in function blocks",
+    "recommended": false,
+    "deprecated": null
+  },
+  {
+    "id": "max-statements-per-line",
+    "type": "layout",
+    "fixable": null,
+    "description": "Enforce a maximum number of statements allowed per line",
+    "recommended": false,
+    "deprecated": true
+  },
+  {
+    "id": "multiline-comment-style",
+    "type": "suggestion",
+    "fixable": "whitespace",
+    "description": "Enforce a particular style for multiline comments",
+    "recommended": false,
+    "deprecated": null
+  },
+  {
+    "id": "multiline-ternary",
+    "type": "layout",
+    "fixable": "whitespace",
+    "description": "Enforce newlines between operands of ternary expressions",
+    "recommended": false,
+    "deprecated": true
+  },
+  {
+    "id": "new-cap",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Require constructor names to begin with a capital letter",
+    "recommended": false,
+    "deprecated": null
+  },
+  {
+    "id": "new-parens",
+    "type": "layout",
+    "fixable": "code",
+    "description": "Enforce or disallow parentheses when invoking a constructor with no arguments",
+    "recommended": false,
+    "deprecated": true
+  },
+  {
+    "id": "newline-after-var",
+    "type": "layout",
+    "fixable": "whitespace",
+    "description": "Require or disallow an empty line after variable declarations",
+    "recommended": false,
+    "deprecated": true
+  },
+  {
+    "id": "newline-before-return",
+    "type": "layout",
+    "fixable": "whitespace",
+    "description": "Require an empty line before `return` statements",
+    "recommended": false,
+    "deprecated": true
+  },
+  {
+    "id": "newline-per-chained-call",
+    "type": "layout",
+    "fixable": "whitespace",
+    "description": "Require a newline after each call in a method chain",
+    "recommended": false,
+    "deprecated": true
+  },
+  {
+    "id": "no-alert",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Disallow the use of `alert`, `confirm`, and `prompt`",
+    "recommended": false,
+    "deprecated": null
+  },
+  {
+    "id": "no-array-constructor",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Disallow `Array` constructors",
+    "recommended": false,
+    "deprecated": null
+  },
+  {
+    "id": "no-async-promise-executor",
+    "type": "problem",
+    "fixable": null,
+    "description": "Disallow using an async function as a Promise executor",
+    "recommended": true,
+    "deprecated": null
+  },
+  {
+    "id": "no-await-in-loop",
+    "type": "problem",
+    "fixable": null,
+    "description": "Disallow `await` inside of loops",
+    "recommended": false,
+    "deprecated": null
+  },
+  {
+    "id": "no-bitwise",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Disallow bitwise operators",
+    "recommended": false,
+    "deprecated": null
+  },
+  {
+    "id": "no-buffer-constructor",
+    "type": "problem",
+    "fixable": null,
+    "description": "Disallow use of the `Buffer()` constructor",
+    "recommended": false,
+    "deprecated": true
+  },
+  {
+    "id": "no-caller",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Disallow the use of `arguments.caller` or `arguments.callee`",
+    "recommended": false,
+    "deprecated": null
+  },
+  {
+    "id": "no-case-declarations",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Disallow lexical declarations in case clauses",
+    "recommended": true,
+    "deprecated": null
+  },
+  {
+    "id": "no-catch-shadow",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Disallow `catch` clause parameters from shadowing variables in the outer scope",
+    "recommended": false,
+    "deprecated": true
+  },
+  {
+    "id": "no-class-assign",
+    "type": "problem",
+    "fixable": null,
+    "description": "Disallow reassigning class members",
+    "recommended": true,
+    "deprecated": null
+  },
+  {
+    "id": "no-compare-neg-zero",
+    "type": "problem",
+    "fixable": null,
+    "description": "Disallow comparing against -0",
+    "recommended": true,
+    "deprecated": null
+  },
+  {
+    "id": "no-cond-assign",
+    "type": "problem",
+    "fixable": null,
+    "description": "Disallow assignment operators in conditional expressions",
+    "recommended": true,
+    "deprecated": null
+  },
+  {
+    "id": "no-confusing-arrow",
+    "type": "suggestion",
+    "fixable": "code",
+    "description": "Disallow arrow functions where they could be confused with comparisons",
+    "recommended": false,
+    "deprecated": true
+  },
+  {
+    "id": "no-console",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Disallow the use of `console`",
+    "recommended": false,
+    "deprecated": null
+  },
+  {
+    "id": "no-const-assign",
+    "type": "problem",
+    "fixable": null,
+    "description": "Disallow reassigning `const` variables",
+    "recommended": true,
+    "deprecated": null
+  },
+  {
+    "id": "no-constant-binary-expression",
+    "type": "problem",
+    "fixable": null,
+    "description": "Disallow expressions where the operation doesn't affect the value",
+    "recommended": false,
+    "deprecated": null
+  },
+  {
+    "id": "no-constant-condition",
+    "type": "problem",
+    "fixable": null,
+    "description": "Disallow constant expressions in conditions",
+    "recommended": true,
+    "deprecated": null
+  },
+  {
+    "id": "no-constructor-return",
+    "type": "problem",
+    "fixable": null,
+    "description": "Disallow returning value from constructor",
+    "recommended": false,
+    "deprecated": null
+  },
+  {
+    "id": "no-continue",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Disallow `continue` statements",
+    "recommended": false,
+    "deprecated": null
+  },
+  {
+    "id": "no-control-regex",
+    "type": "problem",
+    "fixable": null,
+    "description": "Disallow control characters in regular expressions",
+    "recommended": true,
+    "deprecated": null
+  },
+  {
+    "id": "no-debugger",
+    "type": "problem",
+    "fixable": null,
+    "description": "Disallow the use of `debugger`",
+    "recommended": true,
+    "deprecated": null
+  },
+  {
+    "id": "no-delete-var",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Disallow deleting variables",
+    "recommended": true,
+    "deprecated": null
+  },
+  {
+    "id": "no-div-regex",
+    "type": "suggestion",
+    "fixable": "code",
+    "description": "Disallow equal signs explicitly at the beginning of regular expressions",
+    "recommended": false,
+    "deprecated": null
+  },
+  {
+    "id": "no-dupe-args",
+    "type": "problem",
+    "fixable": null,
+    "description": "Disallow duplicate arguments in `function` definitions",
+    "recommended": true,
+    "deprecated": null
+  },
+  {
+    "id": "no-dupe-class-members",
+    "type": "problem",
+    "fixable": null,
+    "description": "Disallow duplicate class members",
+    "recommended": true,
+    "deprecated": null
+  },
+  {
+    "id": "no-dupe-else-if",
+    "type": "problem",
+    "fixable": null,
+    "description": "Disallow duplicate conditions in if-else-if chains",
+    "recommended": true,
+    "deprecated": null
+  },
+  {
+    "id": "no-dupe-keys",
+    "type": "problem",
+    "fixable": null,
+    "description": "Disallow duplicate keys in object literals",
+    "recommended": true,
+    "deprecated": null
+  },
+  {
+    "id": "no-duplicate-case",
+    "type": "problem",
+    "fixable": null,
+    "description": "Disallow duplicate case labels",
+    "recommended": true,
+    "deprecated": null
+  },
+  {
+    "id": "no-duplicate-imports",
+    "type": "problem",
+    "fixable": null,
+    "description": "Disallow duplicate module imports",
+    "recommended": false,
+    "deprecated": null
+  },
+  {
+    "id": "no-else-return",
+    "type": "suggestion",
+    "fixable": "code",
+    "description": "Disallow `else` blocks after `return` statements in `if` statements",
+    "recommended": false,
+    "deprecated": null
+  },
+  {
+    "id": "no-empty",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Disallow empty block statements",
+    "recommended": true,
+    "deprecated": null
+  },
+  {
+    "id": "no-empty-character-class",
+    "type": "problem",
+    "fixable": null,
+    "description": "Disallow empty character classes in regular expressions",
+    "recommended": true,
+    "deprecated": null
+  },
+  {
+    "id": "no-empty-function",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Disallow empty functions",
+    "recommended": false,
+    "deprecated": null
+  },
+  {
+    "id": "no-empty-pattern",
+    "type": "problem",
+    "fixable": null,
+    "description": "Disallow empty destructuring patterns",
+    "recommended": true,
+    "deprecated": null
+  },
+  {
+    "id": "no-empty-static-block",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Disallow empty static blocks",
+    "recommended": false,
+    "deprecated": null
+  },
+  {
+    "id": "no-eq-null",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Disallow `null` comparisons without type-checking operators",
+    "recommended": false,
+    "deprecated": null
+  },
+  {
+    "id": "no-eval",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Disallow the use of `eval()`",
+    "recommended": false,
+    "deprecated": null
+  },
+  {
+    "id": "no-ex-assign",
+    "type": "problem",
+    "fixable": null,
+    "description": "Disallow reassigning exceptions in `catch` clauses",
+    "recommended": true,
+    "deprecated": null
+  },
+  {
+    "id": "no-extend-native",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Disallow extending native types",
+    "recommended": false,
+    "deprecated": null
+  },
+  {
+    "id": "no-extra-bind",
+    "type": "suggestion",
+    "fixable": "code",
+    "description": "Disallow unnecessary calls to `.bind()`",
+    "recommended": false,
+    "deprecated": null
+  },
+  {
+    "id": "no-extra-boolean-cast",
+    "type": "suggestion",
+    "fixable": "code",
+    "description": "Disallow unnecessary boolean casts",
+    "recommended": true,
+    "deprecated": null
+  },
+  {
+    "id": "no-extra-label",
+    "type": "suggestion",
+    "fixable": "code",
+    "description": "Disallow unnecessary labels",
+    "recommended": false,
+    "deprecated": null
+  },
+  {
+    "id": "no-extra-parens",
+    "type": "layout",
+    "fixable": "code",
+    "description": "Disallow unnecessary parentheses",
+    "recommended": false,
+    "deprecated": true
+  },
+  {
+    "id": "no-extra-semi",
+    "type": "suggestion",
+    "fixable": "code",
+    "description": "Disallow unnecessary semicolons",
+    "recommended": true,
+    "deprecated": true
+  },
+  {
+    "id": "no-fallthrough",
+    "type": "problem",
+    "fixable": null,
+    "description": "Disallow fallthrough of `case` statements",
+    "recommended": true,
+    "deprecated": null
+  },
+  {
+    "id": "no-floating-decimal",
+    "type": "suggestion",
+    "fixable": "code",
+    "description": "Disallow leading or trailing decimal points in numeric literals",
+    "recommended": false,
+    "deprecated": true
+  },
+  {
+    "id": "no-func-assign",
+    "type": "problem",
+    "fixable": null,
+    "description": "Disallow reassigning `function` declarations",
+    "recommended": true,
+    "deprecated": null
+  },
+  {
+    "id": "no-global-assign",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Disallow assignments to native objects or read-only global variables",
+    "recommended": true,
+    "deprecated": null
+  },
+  {
+    "id": "no-implicit-coercion",
+    "type": "suggestion",
+    "fixable": "code",
+    "description": "Disallow shorthand type conversions",
+    "recommended": false,
+    "deprecated": null
+  },
+  {
+    "id": "no-implicit-globals",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Disallow declarations in the global scope",
+    "recommended": false,
+    "deprecated": null
+  },
+  {
+    "id": "no-implied-eval",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Disallow the use of `eval()`-like methods",
+    "recommended": false,
+    "deprecated": null
+  },
+  {
+    "id": "no-import-assign",
+    "type": "problem",
+    "fixable": null,
+    "description": "Disallow assigning to imported bindings",
+    "recommended": true,
+    "deprecated": null
+  },
+  {
+    "id": "no-inline-comments",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Disallow inline comments after code",
+    "recommended": false,
+    "deprecated": null
+  },
+  {
+    "id": "no-inner-declarations",
+    "type": "problem",
+    "fixable": null,
+    "description": "Disallow variable or `function` declarations in nested blocks",
+    "recommended": true,
+    "deprecated": null
+  },
+  {
+    "id": "no-invalid-regexp",
+    "type": "problem",
+    "fixable": null,
+    "description": "Disallow invalid regular expression strings in `RegExp` constructors",
+    "recommended": true,
+    "deprecated": null
+  },
+  {
+    "id": "no-invalid-this",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Disallow use of `this` in contexts where the value of `this` is `undefined`",
+    "recommended": false,
+    "deprecated": null
+  },
+  {
+    "id": "no-irregular-whitespace",
+    "type": "problem",
+    "fixable": null,
+    "description": "Disallow irregular whitespace",
+    "recommended": true,
+    "deprecated": null
+  },
+  {
+    "id": "no-iterator",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Disallow the use of the `__iterator__` property",
+    "recommended": false,
+    "deprecated": null
+  },
+  {
+    "id": "no-label-var",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Disallow labels that share a name with a variable",
+    "recommended": false,
+    "deprecated": null
+  },
+  {
+    "id": "no-labels",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Disallow labeled statements",
+    "recommended": false,
+    "deprecated": null
+  },
+  {
+    "id": "no-lone-blocks",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Disallow unnecessary nested blocks",
+    "recommended": false,
+    "deprecated": null
+  },
+  {
+    "id": "no-lonely-if",
+    "type": "suggestion",
+    "fixable": "code",
+    "description": "Disallow `if` statements as the only statement in `else` blocks",
+    "recommended": false,
+    "deprecated": null
+  },
+  {
+    "id": "no-loop-func",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Disallow function declarations that contain unsafe references inside loop statements",
+    "recommended": false,
+    "deprecated": null
+  },
+  {
+    "id": "no-loss-of-precision",
+    "type": "problem",
+    "fixable": null,
+    "description": "Disallow literal numbers that lose precision",
+    "recommended": true,
+    "deprecated": null
+  },
+  {
+    "id": "no-magic-numbers",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Disallow magic numbers",
+    "recommended": false,
+    "deprecated": null
+  },
+  {
+    "id": "no-misleading-character-class",
+    "type": "problem",
+    "fixable": null,
+    "description": "Disallow characters which are made with multiple code points in character class syntax",
+    "recommended": true,
+    "deprecated": null
+  },
+  {
+    "id": "no-mixed-operators",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Disallow mixed binary operators",
+    "recommended": false,
+    "deprecated": true
+  },
+  {
+    "id": "no-mixed-requires",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Disallow `require` calls to be mixed with regular variable declarations",
+    "recommended": false,
+    "deprecated": true
+  },
+  {
+    "id": "no-mixed-spaces-and-tabs",
+    "type": "layout",
+    "fixable": null,
+    "description": "Disallow mixed spaces and tabs for indentation",
+    "recommended": true,
+    "deprecated": true
+  },
+  {
+    "id": "no-multi-assign",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Disallow use of chained assignment expressions",
+    "recommended": false,
+    "deprecated": null
+  },
+  {
+    "id": "no-multi-spaces",
+    "type": "layout",
+    "fixable": "whitespace",
+    "description": "Disallow multiple spaces",
+    "recommended": false,
+    "deprecated": true
+  },
+  {
+    "id": "no-multi-str",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Disallow multiline strings",
+    "recommended": false,
+    "deprecated": null
+  },
+  {
+    "id": "no-multiple-empty-lines",
+    "type": "layout",
+    "fixable": "whitespace",
+    "description": "Disallow multiple empty lines",
+    "recommended": false,
+    "deprecated": true
+  },
+  {
+    "id": "no-native-reassign",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Disallow assignments to native objects or read-only global variables",
+    "recommended": false,
+    "deprecated": true
+  },
+  {
+    "id": "no-negated-condition",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Disallow negated conditions",
+    "recommended": false,
+    "deprecated": null
+  },
+  {
+    "id": "no-negated-in-lhs",
+    "type": "problem",
+    "fixable": null,
+    "description": "Disallow negating the left operand in `in` expressions",
+    "recommended": false,
+    "deprecated": true
+  },
+  {
+    "id": "no-nested-ternary",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Disallow nested ternary expressions",
+    "recommended": false,
+    "deprecated": null
+  },
+  {
+    "id": "no-new",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Disallow `new` operators outside of assignments or comparisons",
+    "recommended": false,
+    "deprecated": null
+  },
+  {
+    "id": "no-new-func",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Disallow `new` operators with the `Function` object",
+    "recommended": false,
+    "deprecated": null
+  },
+  {
+    "id": "no-new-native-nonconstructor",
+    "type": "problem",
+    "fixable": null,
+    "description": "Disallow `new` operators with global non-constructor functions",
+    "recommended": false,
+    "deprecated": null
+  },
+  {
+    "id": "no-new-object",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Disallow `Object` constructors",
+    "recommended": false,
+    "deprecated": true
+  },
+  {
+    "id": "no-new-require",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Disallow `new` operators with calls to `require`",
+    "recommended": false,
+    "deprecated": true
+  },
+  {
+    "id": "no-new-symbol",
+    "type": "problem",
+    "fixable": null,
+    "description": "Disallow `new` operators with the `Symbol` object",
+    "recommended": true,
+    "deprecated": null
+  },
+  {
+    "id": "no-new-wrappers",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Disallow `new` operators with the `String`, `Number`, and `Boolean` objects",
+    "recommended": false,
+    "deprecated": null
+  },
+  {
+    "id": "no-nonoctal-decimal-escape",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Disallow `\\8` and `\\9` escape sequences in string literals",
+    "recommended": true,
+    "deprecated": null
+  },
+  {
+    "id": "no-obj-calls",
+    "type": "problem",
+    "fixable": null,
+    "description": "Disallow calling global object properties as functions",
+    "recommended": true,
+    "deprecated": null
+  },
+  {
+    "id": "no-object-constructor",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Disallow calls to the `Object` constructor without an argument",
+    "recommended": false,
+    "deprecated": null
+  },
+  {
+    "id": "no-octal",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Disallow octal literals",
+    "recommended": true,
+    "deprecated": null
+  },
+  {
+    "id": "no-octal-escape",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Disallow octal escape sequences in string literals",
+    "recommended": false,
+    "deprecated": null
+  },
+  {
+    "id": "no-param-reassign",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Disallow reassigning `function` parameters",
+    "recommended": false,
+    "deprecated": null
+  },
+  {
+    "id": "no-path-concat",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Disallow string concatenation with `__dirname` and `__filename`",
+    "recommended": false,
+    "deprecated": true
+  },
+  {
+    "id": "no-plusplus",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Disallow the unary operators `++` and `--`",
+    "recommended": false,
+    "deprecated": null
+  },
+  {
+    "id": "no-process-env",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Disallow the use of `process.env`",
+    "recommended": false,
+    "deprecated": true
+  },
+  {
+    "id": "no-process-exit",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Disallow the use of `process.exit()`",
+    "recommended": false,
+    "deprecated": true
+  },
+  {
+    "id": "no-promise-executor-return",
+    "type": "problem",
+    "fixable": null,
+    "description": "Disallow returning values from Promise executor functions",
+    "recommended": false,
+    "deprecated": null
+  },
+  {
+    "id": "no-proto",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Disallow the use of the `__proto__` property",
+    "recommended": false,
+    "deprecated": null
+  },
+  {
+    "id": "no-prototype-builtins",
+    "type": "problem",
+    "fixable": null,
+    "description": "Disallow calling some `Object.prototype` methods directly on objects",
+    "recommended": true,
+    "deprecated": null
+  },
+  {
+    "id": "no-redeclare",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Disallow variable redeclaration",
+    "recommended": true,
+    "deprecated": null
+  },
+  {
+    "id": "no-regex-spaces",
+    "type": "suggestion",
+    "fixable": "code",
+    "description": "Disallow multiple spaces in regular expressions",
+    "recommended": true,
+    "deprecated": null
+  },
+  {
+    "id": "no-restricted-exports",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Disallow specified names in exports",
+    "recommended": false,
+    "deprecated": null
+  },
+  {
+    "id": "no-restricted-globals",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Disallow specified global variables",
+    "recommended": false,
+    "deprecated": null
+  },
+  {
+    "id": "no-restricted-imports",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Disallow specified modules when loaded by `import`",
+    "recommended": false,
+    "deprecated": null
+  },
+  {
+    "id": "no-restricted-modules",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Disallow specified modules when loaded by `require`",
+    "recommended": false,
+    "deprecated": true
+  },
+  {
+    "id": "no-restricted-properties",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Disallow certain properties on certain objects",
+    "recommended": false,
+    "deprecated": null
+  },
+  {
+    "id": "no-restricted-syntax",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Disallow specified syntax",
+    "recommended": false,
+    "deprecated": null
+  },
+  {
+    "id": "no-return-assign",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Disallow assignment operators in `return` statements",
+    "recommended": false,
+    "deprecated": null
+  },
+  {
+    "id": "no-return-await",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Disallow unnecessary `return await`",
+    "recommended": false,
+    "deprecated": true
+  },
+  {
+    "id": "no-script-url",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Disallow `javascript:` urls",
+    "recommended": false,
+    "deprecated": null
+  },
+  {
+    "id": "no-self-assign",
+    "type": "problem",
+    "fixable": null,
+    "description": "Disallow assignments where both sides are exactly the same",
+    "recommended": true,
+    "deprecated": null
+  },
+  {
+    "id": "no-self-compare",
+    "type": "problem",
+    "fixable": null,
+    "description": "Disallow comparisons where both sides are exactly the same",
+    "recommended": false,
+    "deprecated": null
+  },
+  {
+    "id": "no-sequences",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Disallow comma operators",
+    "recommended": false,
+    "deprecated": null
+  },
+  {
+    "id": "no-setter-return",
+    "type": "problem",
+    "fixable": null,
+    "description": "Disallow returning values from setters",
+    "recommended": true,
+    "deprecated": null
+  },
+  {
+    "id": "no-shadow",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Disallow variable declarations from shadowing variables declared in the outer scope",
+    "recommended": false,
+    "deprecated": null
+  },
+  {
+    "id": "no-shadow-restricted-names",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Disallow identifiers from shadowing restricted names",
+    "recommended": true,
+    "deprecated": null
+  },
+  {
+    "id": "no-spaced-func",
+    "type": "layout",
+    "fixable": "whitespace",
+    "description": "Disallow spacing between function identifiers and their applications (deprecated)",
+    "recommended": false,
+    "deprecated": true
+  },
+  {
+    "id": "no-sparse-arrays",
+    "type": "problem",
+    "fixable": null,
+    "description": "Disallow sparse arrays",
+    "recommended": true,
+    "deprecated": null
+  },
+  {
+    "id": "no-sync",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Disallow synchronous methods",
+    "recommended": false,
+    "deprecated": true
+  },
+  {
+    "id": "no-tabs",
+    "type": "layout",
+    "fixable": null,
+    "description": "Disallow all tabs",
+    "recommended": false,
+    "deprecated": true
+  },
+  {
+    "id": "no-template-curly-in-string",
+    "type": "problem",
+    "fixable": null,
+    "description": "Disallow template literal placeholder syntax in regular strings",
+    "recommended": false,
+    "deprecated": null
+  },
+  {
+    "id": "no-ternary",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Disallow ternary operators",
+    "recommended": false,
+    "deprecated": null
+  },
+  {
+    "id": "no-this-before-super",
+    "type": "problem",
+    "fixable": null,
+    "description": "Disallow `this`/`super` before calling `super()` in constructors",
+    "recommended": true,
+    "deprecated": null
+  },
+  {
+    "id": "no-throw-literal",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Disallow throwing literals as exceptions",
+    "recommended": false,
+    "deprecated": null
+  },
+  {
+    "id": "no-trailing-spaces",
+    "type": "layout",
+    "fixable": "whitespace",
+    "description": "Disallow trailing whitespace at the end of lines",
+    "recommended": false,
+    "deprecated": true
+  },
+  {
+    "id": "no-undef",
+    "type": "problem",
+    "fixable": null,
+    "description": "Disallow the use of undeclared variables unless mentioned in `/*global */` comments",
+    "recommended": true,
+    "deprecated": null
+  },
+  {
+    "id": "no-undef-init",
+    "type": "suggestion",
+    "fixable": "code",
+    "description": "Disallow initializing variables to `undefined`",
+    "recommended": false,
+    "deprecated": null
+  },
+  {
+    "id": "no-undefined",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Disallow the use of `undefined` as an identifier",
+    "recommended": false,
+    "deprecated": null
+  },
+  {
+    "id": "no-underscore-dangle",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Disallow dangling underscores in identifiers",
+    "recommended": false,
+    "deprecated": null
+  },
+  {
+    "id": "no-unexpected-multiline",
+    "type": "problem",
+    "fixable": null,
+    "description": "Disallow confusing multiline expressions",
+    "recommended": true,
+    "deprecated": null
+  },
+  {
+    "id": "no-unmodified-loop-condition",
+    "type": "problem",
+    "fixable": null,
+    "description": "Disallow unmodified loop conditions",
+    "recommended": false,
+    "deprecated": null
+  },
+  {
+    "id": "no-unneeded-ternary",
+    "type": "suggestion",
+    "fixable": "code",
+    "description": "Disallow ternary operators when simpler alternatives exist",
+    "recommended": false,
+    "deprecated": null
+  },
+  {
+    "id": "no-unreachable",
+    "type": "problem",
+    "fixable": null,
+    "description": "Disallow unreachable code after `return`, `throw`, `continue`, and `break` statements",
+    "recommended": true,
+    "deprecated": null
+  },
+  {
+    "id": "no-unreachable-loop",
+    "type": "problem",
+    "fixable": null,
+    "description": "Disallow loops with a body that allows only one iteration",
+    "recommended": false,
+    "deprecated": null
+  },
+  {
+    "id": "no-unsafe-finally",
+    "type": "problem",
+    "fixable": null,
+    "description": "Disallow control flow statements in `finally` blocks",
+    "recommended": true,
+    "deprecated": null
+  },
+  {
+    "id": "no-unsafe-negation",
+    "type": "problem",
+    "fixable": null,
+    "description": "Disallow negating the left operand of relational operators",
+    "recommended": true,
+    "deprecated": null
+  },
+  {
+    "id": "no-unsafe-optional-chaining",
+    "type": "problem",
+    "fixable": null,
+    "description": "Disallow use of optional chaining in contexts where the `undefined` value is not allowed",
+    "recommended": true,
+    "deprecated": null
+  },
+  {
+    "id": "no-unused-expressions",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Disallow unused expressions",
+    "recommended": false,
+    "deprecated": null
+  },
+  {
+    "id": "no-unused-labels",
+    "type": "suggestion",
+    "fixable": "code",
+    "description": "Disallow unused labels",
+    "recommended": true,
+    "deprecated": null
+  },
+  {
+    "id": "no-unused-private-class-members",
+    "type": "problem",
+    "fixable": null,
+    "description": "Disallow unused private class members",
+    "recommended": false,
+    "deprecated": null
+  },
+  {
+    "id": "no-unused-vars",
+    "type": "problem",
+    "fixable": null,
+    "description": "Disallow unused variables",
+    "recommended": true,
+    "deprecated": null
+  },
+  {
+    "id": "no-use-before-define",
+    "type": "problem",
+    "fixable": null,
+    "description": "Disallow the use of variables before they are defined",
+    "recommended": false,
+    "deprecated": null
+  },
+  {
+    "id": "no-useless-backreference",
+    "type": "problem",
+    "fixable": null,
+    "description": "Disallow useless backreferences in regular expressions",
+    "recommended": true,
+    "deprecated": null
+  },
+  {
+    "id": "no-useless-call",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Disallow unnecessary calls to `.call()` and `.apply()`",
+    "recommended": false,
+    "deprecated": null
+  },
+  {
+    "id": "no-useless-catch",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Disallow unnecessary `catch` clauses",
+    "recommended": true,
+    "deprecated": null
+  },
+  {
+    "id": "no-useless-computed-key",
+    "type": "suggestion",
+    "fixable": "code",
+    "description": "Disallow unnecessary computed property keys in objects and classes",
+    "recommended": false,
+    "deprecated": null
+  },
+  {
+    "id": "no-useless-concat",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Disallow unnecessary concatenation of literals or template literals",
+    "recommended": false,
+    "deprecated": null
+  },
+  {
+    "id": "no-useless-constructor",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Disallow unnecessary constructors",
+    "recommended": false,
+    "deprecated": null
+  },
+  {
+    "id": "no-useless-escape",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Disallow unnecessary escape characters",
+    "recommended": true,
+    "deprecated": null
+  },
+  {
+    "id": "no-useless-rename",
+    "type": "suggestion",
+    "fixable": "code",
+    "description": "Disallow renaming import, export, and destructured assignments to the same name",
+    "recommended": false,
+    "deprecated": null
+  },
+  {
+    "id": "no-useless-return",
+    "type": "suggestion",
+    "fixable": "code",
+    "description": "Disallow redundant return statements",
+    "recommended": false,
+    "deprecated": null
+  },
+  {
+    "id": "no-var",
+    "type": "suggestion",
+    "fixable": "code",
+    "description": "Require `let` or `const` instead of `var`",
+    "recommended": false,
+    "deprecated": null
+  },
+  {
+    "id": "no-void",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Disallow `void` operators",
+    "recommended": false,
+    "deprecated": null
+  },
+  {
+    "id": "no-warning-comments",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Disallow specified warning terms in comments",
+    "recommended": false,
+    "deprecated": null
+  },
+  {
+    "id": "no-whitespace-before-property",
+    "type": "layout",
+    "fixable": "whitespace",
+    "description": "Disallow whitespace before properties",
+    "recommended": false,
+    "deprecated": true
+  },
+  {
+    "id": "no-with",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Disallow `with` statements",
+    "recommended": true,
+    "deprecated": null
+  },
+  {
+    "id": "nonblock-statement-body-position",
+    "type": "layout",
+    "fixable": "whitespace",
+    "description": "Enforce the location of single-line statements",
+    "recommended": false,
+    "deprecated": true
+  },
+  {
+    "id": "object-curly-newline",
+    "type": "layout",
+    "fixable": "whitespace",
+    "description": "Enforce consistent line breaks after opening and before closing braces",
+    "recommended": false,
+    "deprecated": true
+  },
+  {
+    "id": "object-curly-spacing",
+    "type": "layout",
+    "fixable": "whitespace",
+    "description": "Enforce consistent spacing inside braces",
+    "recommended": false,
+    "deprecated": true
+  },
+  {
+    "id": "object-property-newline",
+    "type": "layout",
+    "fixable": "whitespace",
+    "description": "Enforce placing object properties on separate lines",
+    "recommended": false,
+    "deprecated": true
+  },
+  {
+    "id": "object-shorthand",
+    "type": "suggestion",
+    "fixable": "code",
+    "description": "Require or disallow method and property shorthand syntax for object literals",
+    "recommended": false,
+    "deprecated": null
+  },
+  {
+    "id": "one-var",
+    "type": "suggestion",
+    "fixable": "code",
+    "description": "Enforce variables to be declared either together or separately in functions",
+    "recommended": false,
+    "deprecated": null
+  },
+  {
+    "id": "one-var-declaration-per-line",
+    "type": "suggestion",
+    "fixable": "whitespace",
+    "description": "Require or disallow newlines around variable declarations",
+    "recommended": false,
+    "deprecated": true
+  },
+  {
+    "id": "operator-assignment",
+    "type": "suggestion",
+    "fixable": "code",
+    "description": "Require or disallow assignment operator shorthand where possible",
+    "recommended": false,
+    "deprecated": null
+  },
+  {
+    "id": "operator-linebreak",
+    "type": "layout",
+    "fixable": "code",
+    "description": "Enforce consistent linebreak style for operators",
+    "recommended": false,
+    "deprecated": true
+  },
+  {
+    "id": "padded-blocks",
+    "type": "layout",
+    "fixable": "whitespace",
+    "description": "Require or disallow padding within blocks",
+    "recommended": false,
+    "deprecated": true
+  },
+  {
+    "id": "padding-line-between-statements",
+    "type": "layout",
+    "fixable": "whitespace",
+    "description": "Require or disallow padding lines between statements",
+    "recommended": false,
+    "deprecated": true
+  },
+  {
+    "id": "prefer-arrow-callback",
+    "type": "suggestion",
+    "fixable": "code",
+    "description": "Require using arrow functions for callbacks",
+    "recommended": false,
+    "deprecated": null
+  },
+  {
+    "id": "prefer-const",
+    "type": "suggestion",
+    "fixable": "code",
+    "description": "Require `const` declarations for variables that are never reassigned after declared",
+    "recommended": false,
+    "deprecated": null
+  },
+  {
+    "id": "prefer-destructuring",
+    "type": "suggestion",
+    "fixable": "code",
+    "description": "Require destructuring from arrays and/or objects",
+    "recommended": false,
+    "deprecated": null
+  },
+  {
+    "id": "prefer-exponentiation-operator",
+    "type": "suggestion",
+    "fixable": "code",
+    "description": "Disallow the use of `Math.pow` in favor of the `**` operator",
+    "recommended": false,
+    "deprecated": null
+  },
+  {
+    "id": "prefer-named-capture-group",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Enforce using named capture group in regular expression",
+    "recommended": false,
+    "deprecated": null
+  },
+  {
+    "id": "prefer-numeric-literals",
+    "type": "suggestion",
+    "fixable": "code",
+    "description": "Disallow `parseInt()` and `Number.parseInt()` in favor of binary, octal, and hexadecimal literals",
+    "recommended": false,
+    "deprecated": null
+  },
+  {
+    "id": "prefer-object-has-own",
+    "type": "suggestion",
+    "fixable": "code",
+    "description": "Disallow use of `Object.prototype.hasOwnProperty.call()` and prefer use of `Object.hasOwn()`",
+    "recommended": false,
+    "deprecated": null
+  },
+  {
+    "id": "prefer-object-spread",
+    "type": "suggestion",
+    "fixable": "code",
+    "description": "Disallow using Object.assign with an object literal as the first argument and prefer the use of object spread instead",
+    "recommended": false,
+    "deprecated": null
+  },
+  {
+    "id": "prefer-promise-reject-errors",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Require using Error objects as Promise rejection reasons",
+    "recommended": false,
+    "deprecated": null
+  },
+  {
+    "id": "prefer-reflect",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Require `Reflect` methods where applicable",
+    "recommended": false,
+    "deprecated": true
+  },
+  {
+    "id": "prefer-regex-literals",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Disallow use of the `RegExp` constructor in favor of regular expression literals",
+    "recommended": false,
+    "deprecated": null
+  },
+  {
+    "id": "prefer-rest-params",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Require rest parameters instead of `arguments`",
+    "recommended": false,
+    "deprecated": null
+  },
+  {
+    "id": "prefer-spread",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Require spread operators instead of `.apply()`",
+    "recommended": false,
+    "deprecated": null
+  },
+  {
+    "id": "prefer-template",
+    "type": "suggestion",
+    "fixable": "code",
+    "description": "Require template literals instead of string concatenation",
+    "recommended": false,
+    "deprecated": null
+  },
+  {
+    "id": "quote-props",
+    "type": "suggestion",
+    "fixable": "code",
+    "description": "Require quotes around object literal property names",
+    "recommended": false,
+    "deprecated": true
+  },
+  {
+    "id": "quotes",
+    "type": "layout",
+    "fixable": "code",
+    "description": "Enforce the consistent use of either backticks, double, or single quotes",
+    "recommended": false,
+    "deprecated": true
+  },
+  {
+    "id": "radix",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Enforce the consistent use of the radix argument when using `parseInt()`",
+    "recommended": false,
+    "deprecated": null
+  },
+  {
+    "id": "require-atomic-updates",
+    "type": "problem",
+    "fixable": null,
+    "description": "Disallow assignments that can lead to race conditions due to usage of `await` or `yield`",
+    "recommended": false,
+    "deprecated": null
+  },
+  {
+    "id": "require-await",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Disallow async functions which have no `await` expression",
+    "recommended": false,
+    "deprecated": null
+  },
+  {
+    "id": "require-jsdoc",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Require JSDoc comments",
+    "recommended": false,
+    "deprecated": true
+  },
+  {
+    "id": "require-unicode-regexp",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Enforce the use of `u` or `v` flag on RegExp",
+    "recommended": false,
+    "deprecated": null
+  },
+  {
+    "id": "require-yield",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Require generator functions to contain `yield`",
+    "recommended": true,
+    "deprecated": null
+  },
+  {
+    "id": "rest-spread-spacing",
+    "type": "layout",
+    "fixable": "whitespace",
+    "description": "Enforce spacing between rest and spread operators and their expressions",
+    "recommended": false,
+    "deprecated": true
+  },
+  {
+    "id": "semi",
+    "type": "layout",
+    "fixable": "code",
+    "description": "Require or disallow semicolons instead of ASI",
+    "recommended": false,
+    "deprecated": true
+  },
+  {
+    "id": "semi-spacing",
+    "type": "layout",
+    "fixable": "whitespace",
+    "description": "Enforce consistent spacing before and after semicolons",
+    "recommended": false,
+    "deprecated": true
+  },
+  {
+    "id": "semi-style",
+    "type": "layout",
+    "fixable": "whitespace",
+    "description": "Enforce location of semicolons",
+    "recommended": false,
+    "deprecated": true
+  },
+  {
+    "id": "sort-imports",
+    "type": "suggestion",
+    "fixable": "code",
+    "description": "Enforce sorted import declarations within modules",
+    "recommended": false,
+    "deprecated": null
+  },
+  {
+    "id": "sort-keys",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Require object keys to be sorted",
+    "recommended": false,
+    "deprecated": null
+  },
+  {
+    "id": "sort-vars",
+    "type": "suggestion",
+    "fixable": "code",
+    "description": "Require variables within the same declaration block to be sorted",
+    "recommended": false,
+    "deprecated": null
+  },
+  {
+    "id": "space-before-blocks",
+    "type": "layout",
+    "fixable": "whitespace",
+    "description": "Enforce consistent spacing before blocks",
+    "recommended": false,
+    "deprecated": true
+  },
+  {
+    "id": "space-before-function-paren",
+    "type": "layout",
+    "fixable": "whitespace",
+    "description": "Enforce consistent spacing before `function` definition opening parenthesis",
+    "recommended": false,
+    "deprecated": true
+  },
+  {
+    "id": "space-in-parens",
+    "type": "layout",
+    "fixable": "whitespace",
+    "description": "Enforce consistent spacing inside parentheses",
+    "recommended": false,
+    "deprecated": true
+  },
+  {
+    "id": "space-infix-ops",
+    "type": "layout",
+    "fixable": "whitespace",
+    "description": "Require spacing around infix operators",
+    "recommended": false,
+    "deprecated": true
+  },
+  {
+    "id": "space-unary-ops",
+    "type": "layout",
+    "fixable": "whitespace",
+    "description": "Enforce consistent spacing before or after unary operators",
+    "recommended": false,
+    "deprecated": true
+  },
+  {
+    "id": "spaced-comment",
+    "type": "suggestion",
+    "fixable": "whitespace",
+    "description": "Enforce consistent spacing after the `//` or `/*` in a comment",
+    "recommended": false,
+    "deprecated": true
+  },
+  {
+    "id": "strict",
+    "type": "suggestion",
+    "fixable": "code",
+    "description": "Require or disallow strict mode directives",
+    "recommended": false,
+    "deprecated": null
+  },
+  {
+    "id": "switch-colon-spacing",
+    "type": "layout",
+    "fixable": "whitespace",
+    "description": "Enforce spacing around colons of switch statements",
+    "recommended": false,
+    "deprecated": true
+  },
+  {
+    "id": "symbol-description",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Require symbol descriptions",
+    "recommended": false,
+    "deprecated": null
+  },
+  {
+    "id": "template-curly-spacing",
+    "type": "layout",
+    "fixable": "whitespace",
+    "description": "Require or disallow spacing around embedded expressions of template strings",
+    "recommended": false,
+    "deprecated": true
+  },
+  {
+    "id": "template-tag-spacing",
+    "type": "layout",
+    "fixable": "whitespace",
+    "description": "Require or disallow spacing between template tags and their literals",
+    "recommended": false,
+    "deprecated": true
+  },
+  {
+    "id": "unicode-bom",
+    "type": "layout",
+    "fixable": "whitespace",
+    "description": "Require or disallow Unicode byte order mark (BOM)",
+    "recommended": false,
+    "deprecated": null
+  },
+  {
+    "id": "use-isnan",
+    "type": "problem",
+    "fixable": null,
+    "description": "Require calls to `isNaN()` when checking for `NaN`",
+    "recommended": true,
+    "deprecated": null
+  },
+  {
+    "id": "valid-jsdoc",
+    "type": "suggestion",
+    "fixable": "code",
+    "description": "Enforce valid JSDoc comments",
+    "recommended": false,
+    "deprecated": true
+  },
+  {
+    "id": "valid-typeof",
+    "type": "problem",
+    "fixable": null,
+    "description": "Enforce comparing `typeof` expressions against valid strings",
+    "recommended": true,
+    "deprecated": null
+  },
+  {
+    "id": "vars-on-top",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Require `var` declarations be placed at the top of their containing scope",
+    "recommended": false,
+    "deprecated": null
+  },
+  {
+    "id": "wrap-iife",
+    "type": "layout",
+    "fixable": "code",
+    "description": "Require parentheses around immediate `function` invocations",
+    "recommended": false,
+    "deprecated": true
+  },
+  {
+    "id": "wrap-regex",
+    "type": "layout",
+    "fixable": "code",
+    "description": "Require parenthesis around regex literals",
+    "recommended": false,
+    "deprecated": true
+  },
+  {
+    "id": "yield-star-spacing",
+    "type": "layout",
+    "fixable": "whitespace",
+    "description": "Require or disallow spacing around the `*` in `yield*` expressions",
+    "recommended": false,
+    "deprecated": true
+  },
+  {
+    "id": "yoda",
+    "type": "suggestion",
+    "fixable": "code",
+    "description": "Require or disallow \"Yoda\" conditions",
+    "recommended": false,
+    "deprecated": null
+  },
+  {
+    "id": "@typescript-eslint/adjacent-overload-signatures",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Require that function overload signatures be consecutive",
+    "recommended": "stylistic",
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "@typescript-eslint/array-type",
+    "type": "suggestion",
+    "fixable": "code",
+    "description": "Require consistently using either `T[]` or `Array<T>` for arrays",
+    "recommended": "stylistic",
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "@typescript-eslint/await-thenable",
+    "type": "problem",
+    "fixable": null,
+    "description": "Disallow awaiting a value that is not a Thenable",
+    "recommended": "recommended",
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": true
+  },
+  {
+    "id": "@typescript-eslint/ban-ts-comment",
+    "type": "problem",
+    "fixable": null,
+    "description": "Disallow `@ts-<directive>` comments or require descriptions after directives",
+    "recommended": true,
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "@typescript-eslint/ban-tslint-comment",
+    "type": "suggestion",
+    "fixable": "code",
+    "description": "Disallow `// tslint:<rule-flag>` comments",
+    "recommended": "stylistic",
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "@typescript-eslint/ban-types",
+    "type": "suggestion",
+    "fixable": "code",
+    "description": "Disallow certain types",
+    "recommended": "recommended",
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "@typescript-eslint/block-spacing",
+    "type": "layout",
+    "fixable": "whitespace",
+    "description": "Disallow or enforce spaces inside of blocks after opening block and before closing block",
+    "recommended": null,
+    "deprecated": true,
+    "extendsBaseRule": true,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "@typescript-eslint/brace-style",
+    "type": "layout",
+    "fixable": "whitespace",
+    "description": "Enforce consistent brace style for blocks",
+    "recommended": null,
+    "deprecated": true,
+    "extendsBaseRule": true,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "@typescript-eslint/class-literal-property-style",
+    "type": "problem",
+    "fixable": null,
+    "description": "Enforce that literals on classes are exposed in a consistent style",
+    "recommended": "stylistic",
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "@typescript-eslint/class-methods-use-this",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Enforce that class methods utilize `this`",
+    "recommended": null,
+    "deprecated": null,
+    "extendsBaseRule": true,
+    "requiresTypeChecking": false
+  },
+  {
+    "id": "@typescript-eslint/comma-dangle",
+    "type": "layout",
+    "fixable": "code",
+    "description": "Require or disallow trailing commas",
+    "recommended": null,
+    "deprecated": true,
+    "extendsBaseRule": true,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "@typescript-eslint/comma-spacing",
+    "type": "layout",
+    "fixable": "whitespace",
+    "description": "Enforce consistent spacing before and after commas",
+    "recommended": null,
+    "deprecated": true,
+    "extendsBaseRule": true,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "@typescript-eslint/consistent-generic-constructors",
+    "type": "suggestion",
+    "fixable": "code",
+    "description": "Enforce specifying generic type arguments on type annotation or constructor name of a constructor call",
+    "recommended": "stylistic",
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "@typescript-eslint/consistent-indexed-object-style",
+    "type": "suggestion",
+    "fixable": "code",
+    "description": "Require or disallow the `Record` type",
+    "recommended": "stylistic",
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "@typescript-eslint/consistent-return",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Require `return` statements to either always or never specify values",
+    "recommended": null,
+    "deprecated": null,
+    "extendsBaseRule": true,
+    "requiresTypeChecking": true
+  },
+  {
+    "id": "@typescript-eslint/consistent-type-assertions",
+    "type": "suggestion",
+    "fixable": "code",
+    "description": "Enforce consistent usage of type assertions",
+    "recommended": "stylistic",
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "@typescript-eslint/consistent-type-definitions",
+    "type": "suggestion",
+    "fixable": "code",
+    "description": "Enforce type definitions to consistently use either `interface` or `type`",
+    "recommended": "stylistic",
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "@typescript-eslint/consistent-type-exports",
+    "type": "suggestion",
+    "fixable": "code",
+    "description": "Enforce consistent usage of type exports",
+    "recommended": null,
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": true
+  },
+  {
+    "id": "@typescript-eslint/consistent-type-imports",
+    "type": "suggestion",
+    "fixable": "code",
+    "description": "Enforce consistent usage of type imports",
+    "recommended": null,
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "@typescript-eslint/default-param-last",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Enforce default parameters to be last",
+    "recommended": null,
+    "deprecated": null,
+    "extendsBaseRule": true,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "@typescript-eslint/dot-notation",
+    "type": "suggestion",
+    "fixable": "code",
+    "description": "Enforce dot notation whenever possible",
+    "recommended": "stylistic",
+    "deprecated": null,
+    "extendsBaseRule": true,
+    "requiresTypeChecking": true
+  },
+  {
+    "id": "@typescript-eslint/explicit-function-return-type",
+    "type": "problem",
+    "fixable": null,
+    "description": "Require explicit return types on functions and class methods",
+    "recommended": null,
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "@typescript-eslint/explicit-member-accessibility",
+    "type": "problem",
+    "fixable": "code",
+    "description": "Require explicit accessibility modifiers on class properties and methods",
+    "recommended": null,
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "@typescript-eslint/explicit-module-boundary-types",
+    "type": "problem",
+    "fixable": null,
+    "description": "Require explicit return and argument types on exported functions' and classes' public class methods",
+    "recommended": null,
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "@typescript-eslint/func-call-spacing",
+    "type": "layout",
+    "fixable": "whitespace",
+    "description": "Require or disallow spacing between function identifiers and their invocations",
+    "recommended": null,
+    "deprecated": true,
+    "extendsBaseRule": true,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "@typescript-eslint/indent",
+    "type": "layout",
+    "fixable": "whitespace",
+    "description": "Enforce consistent indentation",
+    "recommended": null,
+    "deprecated": true,
+    "extendsBaseRule": true,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "@typescript-eslint/init-declarations",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Require or disallow initialization in variable declarations",
+    "recommended": null,
+    "deprecated": null,
+    "extendsBaseRule": true,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "@typescript-eslint/key-spacing",
+    "type": "layout",
+    "fixable": "whitespace",
+    "description": "Enforce consistent spacing between property names and type annotations in types and interfaces",
+    "recommended": null,
+    "deprecated": true,
+    "extendsBaseRule": true,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "@typescript-eslint/keyword-spacing",
+    "type": "layout",
+    "fixable": "whitespace",
+    "description": "Enforce consistent spacing before and after keywords",
+    "recommended": null,
+    "deprecated": true,
+    "extendsBaseRule": true,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "@typescript-eslint/lines-around-comment",
+    "type": "layout",
+    "fixable": "whitespace",
+    "description": "Require empty lines around comments",
+    "recommended": null,
+    "deprecated": true,
+    "extendsBaseRule": true,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "@typescript-eslint/lines-between-class-members",
+    "type": "layout",
+    "fixable": "whitespace",
+    "description": "Require or disallow an empty line between class members",
+    "recommended": null,
+    "deprecated": true,
+    "extendsBaseRule": true,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "@typescript-eslint/max-params",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Enforce a maximum number of parameters in function definitions",
+    "recommended": null,
+    "deprecated": null,
+    "extendsBaseRule": true,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "@typescript-eslint/member-delimiter-style",
+    "type": "layout",
+    "fixable": "whitespace",
+    "description": "Require a specific member delimiter style for interfaces and type literals",
+    "recommended": null,
+    "deprecated": true,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "@typescript-eslint/member-ordering",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Require a consistent member declaration order",
+    "recommended": null,
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "@typescript-eslint/method-signature-style",
+    "type": "suggestion",
+    "fixable": "code",
+    "description": "Enforce using a particular method signature syntax",
+    "recommended": null,
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "@typescript-eslint/naming-convention",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Enforce naming conventions for everything across a codebase",
+    "recommended": null,
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": true
+  },
+  {
+    "id": "@typescript-eslint/no-array-constructor",
+    "type": "suggestion",
+    "fixable": "code",
+    "description": "Disallow generic `Array` constructors",
+    "recommended": "recommended",
+    "deprecated": null,
+    "extendsBaseRule": true,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "@typescript-eslint/no-array-delete",
+    "type": "problem",
+    "fixable": null,
+    "description": "Disallow using the `delete` operator on array values",
+    "recommended": "strict",
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": true
+  },
+  {
+    "id": "@typescript-eslint/no-base-to-string",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Require `.toString()` to only be called on objects which provide useful information when stringified",
+    "recommended": "recommended",
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": true
+  },
+  {
+    "id": "@typescript-eslint/no-confusing-non-null-assertion",
+    "type": "problem",
+    "fixable": null,
+    "description": "Disallow non-null assertion in locations that may be confusing",
+    "recommended": "stylistic",
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "@typescript-eslint/no-confusing-void-expression",
+    "type": "problem",
+    "fixable": "code",
+    "description": "Require expressions of type void to appear in statement position",
+    "recommended": "strict",
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": true
+  },
+  {
+    "id": "@typescript-eslint/no-dupe-class-members",
+    "type": "problem",
+    "fixable": null,
+    "description": "Disallow duplicate class members",
+    "recommended": null,
+    "deprecated": null,
+    "extendsBaseRule": true,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "@typescript-eslint/no-duplicate-enum-values",
+    "type": "problem",
+    "fixable": null,
+    "description": "Disallow duplicate enum member values",
+    "recommended": "recommended",
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "@typescript-eslint/no-duplicate-type-constituents",
+    "type": "suggestion",
+    "fixable": "code",
+    "description": "Disallow duplicate constituents of union or intersection types",
+    "recommended": "recommended",
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": true
+  },
+  {
+    "id": "@typescript-eslint/no-dynamic-delete",
+    "type": "suggestion",
+    "fixable": "code",
+    "description": "Disallow using the `delete` operator on computed key expressions",
+    "recommended": "strict",
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "@typescript-eslint/no-empty-function",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Disallow empty functions",
+    "recommended": "stylistic",
+    "deprecated": null,
+    "extendsBaseRule": true,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "@typescript-eslint/no-empty-interface",
+    "type": "suggestion",
+    "fixable": "code",
+    "description": "Disallow the declaration of empty interfaces",
+    "recommended": "stylistic",
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "@typescript-eslint/no-explicit-any",
+    "type": "suggestion",
+    "fixable": "code",
+    "description": "Disallow the `any` type",
+    "recommended": "recommended",
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "@typescript-eslint/no-extra-non-null-assertion",
+    "type": "problem",
+    "fixable": "code",
+    "description": "Disallow extra non-null assertions",
+    "recommended": "recommended",
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "@typescript-eslint/no-extra-parens",
+    "type": "layout",
+    "fixable": "code",
+    "description": "Disallow unnecessary parentheses",
+    "recommended": null,
+    "deprecated": true,
+    "extendsBaseRule": true,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "@typescript-eslint/no-extra-semi",
+    "type": "suggestion",
+    "fixable": "code",
+    "description": "Disallow unnecessary semicolons",
+    "recommended": null,
+    "deprecated": true,
+    "extendsBaseRule": true,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "@typescript-eslint/no-extraneous-class",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Disallow classes used as namespaces",
+    "recommended": "strict",
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "@typescript-eslint/no-floating-promises",
+    "type": "problem",
+    "fixable": null,
+    "description": "Require Promise-like statements to be handled appropriately",
+    "recommended": "recommended",
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": true
+  },
+  {
+    "id": "@typescript-eslint/no-for-in-array",
+    "type": "problem",
+    "fixable": null,
+    "description": "Disallow iterating over an array with a for-in loop",
+    "recommended": "recommended",
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": true
+  },
+  {
+    "id": "@typescript-eslint/no-implied-eval",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Disallow the use of `eval()`-like methods",
+    "recommended": "recommended",
+    "deprecated": null,
+    "extendsBaseRule": true,
+    "requiresTypeChecking": true
+  },
+  {
+    "id": "@typescript-eslint/no-import-type-side-effects",
+    "type": "problem",
+    "fixable": "code",
+    "description": "Enforce the use of top-level import type qualifier when an import only has specifiers with inline type qualifiers",
+    "recommended": null,
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "@typescript-eslint/no-inferrable-types",
+    "type": "suggestion",
+    "fixable": "code",
+    "description": "Disallow explicit type declarations for variables or parameters initialized to a number, string, or boolean",
+    "recommended": "stylistic",
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "@typescript-eslint/no-invalid-this",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Disallow `this` keywords outside of classes or class-like objects",
+    "recommended": null,
+    "deprecated": null,
+    "extendsBaseRule": true,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "@typescript-eslint/no-invalid-void-type",
+    "type": "problem",
+    "fixable": null,
+    "description": "Disallow `void` type outside of generic or return types",
+    "recommended": "strict",
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "@typescript-eslint/no-loop-func",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Disallow function declarations that contain unsafe references inside loop statements",
+    "recommended": null,
+    "deprecated": null,
+    "extendsBaseRule": true,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "@typescript-eslint/no-loss-of-precision",
+    "type": "problem",
+    "fixable": null,
+    "description": "Disallow literal numbers that lose precision",
+    "recommended": "recommended",
+    "deprecated": null,
+    "extendsBaseRule": true,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "@typescript-eslint/no-magic-numbers",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Disallow magic numbers",
+    "recommended": null,
+    "deprecated": null,
+    "extendsBaseRule": true,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "@typescript-eslint/no-meaningless-void-operator",
+    "type": "suggestion",
+    "fixable": "code",
+    "description": "Disallow the `void` operator except when used to discard a value",
+    "recommended": "strict",
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": true
+  },
+  {
+    "id": "@typescript-eslint/no-misused-new",
+    "type": "problem",
+    "fixable": null,
+    "description": "Enforce valid definition of `new` and `constructor`",
+    "recommended": "recommended",
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "@typescript-eslint/no-misused-promises",
+    "type": "problem",
+    "fixable": null,
+    "description": "Disallow Promises in places not designed to handle them",
+    "recommended": "recommended",
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": true
+  },
+  {
+    "id": "@typescript-eslint/no-mixed-enums",
+    "type": "problem",
+    "fixable": null,
+    "description": "Disallow enums from having both number and string members",
+    "recommended": "strict",
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": true
+  },
+  {
+    "id": "@typescript-eslint/no-namespace",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Disallow TypeScript namespaces",
+    "recommended": "recommended",
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "@typescript-eslint/no-non-null-asserted-nullish-coalescing",
+    "type": "problem",
+    "fixable": null,
+    "description": "Disallow non-null assertions in the left operand of a nullish coalescing operator",
+    "recommended": "strict",
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "@typescript-eslint/no-non-null-asserted-optional-chain",
+    "type": "problem",
+    "fixable": null,
+    "description": "Disallow non-null assertions after an optional chain expression",
+    "recommended": "recommended",
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "@typescript-eslint/no-non-null-assertion",
+    "type": "problem",
+    "fixable": null,
+    "description": "Disallow non-null assertions using the `!` postfix operator",
+    "recommended": "strict",
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "@typescript-eslint/no-redeclare",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Disallow variable redeclaration",
+    "recommended": null,
+    "deprecated": null,
+    "extendsBaseRule": true,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "@typescript-eslint/no-redundant-type-constituents",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Disallow members of unions and intersections that do nothing or override type information",
+    "recommended": "recommended",
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": true
+  },
+  {
+    "id": "@typescript-eslint/no-require-imports",
+    "type": "problem",
+    "fixable": null,
+    "description": "Disallow invocation of `require()`",
+    "recommended": null,
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "@typescript-eslint/no-restricted-imports",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Disallow specified modules when loaded by `import`",
+    "recommended": null,
+    "deprecated": null,
+    "extendsBaseRule": true,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "@typescript-eslint/no-shadow",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Disallow variable declarations from shadowing variables declared in the outer scope",
+    "recommended": null,
+    "deprecated": null,
+    "extendsBaseRule": true,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "@typescript-eslint/no-this-alias",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Disallow aliasing `this`",
+    "recommended": "recommended",
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "@typescript-eslint/no-throw-literal",
+    "type": "problem",
+    "fixable": null,
+    "description": "Disallow throwing literals as exceptions",
+    "recommended": "strict",
+    "deprecated": null,
+    "extendsBaseRule": true,
+    "requiresTypeChecking": true
+  },
+  {
+    "id": "@typescript-eslint/no-type-alias",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Disallow type aliases",
+    "recommended": null,
+    "deprecated": true,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "@typescript-eslint/no-unnecessary-boolean-literal-compare",
+    "type": "suggestion",
+    "fixable": "code",
+    "description": "Disallow unnecessary equality comparisons against boolean literals",
+    "recommended": "strict",
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": true
+  },
+  {
+    "id": "@typescript-eslint/no-unnecessary-condition",
+    "type": "suggestion",
+    "fixable": "code",
+    "description": "Disallow conditionals where the type is always truthy or always falsy",
+    "recommended": "strict",
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": true
+  },
+  {
+    "id": "@typescript-eslint/no-unnecessary-qualifier",
+    "type": "suggestion",
+    "fixable": "code",
+    "description": "Disallow unnecessary namespace qualifiers",
+    "recommended": null,
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": true
+  },
+  {
+    "id": "@typescript-eslint/no-unnecessary-type-arguments",
+    "type": "suggestion",
+    "fixable": "code",
+    "description": "Disallow type arguments that are equal to the default",
+    "recommended": "strict",
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": true
+  },
+  {
+    "id": "@typescript-eslint/no-unnecessary-type-assertion",
+    "type": "suggestion",
+    "fixable": "code",
+    "description": "Disallow type assertions that do not change the type of an expression",
+    "recommended": "recommended",
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": true
+  },
+  {
+    "id": "@typescript-eslint/no-unnecessary-type-constraint",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Disallow unnecessary constraints on generic types",
+    "recommended": "recommended",
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "@typescript-eslint/no-unsafe-argument",
+    "type": "problem",
+    "fixable": null,
+    "description": "Disallow calling a function with a value with type `any`",
+    "recommended": "recommended",
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": true
+  },
+  {
+    "id": "@typescript-eslint/no-unsafe-assignment",
+    "type": "problem",
+    "fixable": null,
+    "description": "Disallow assigning a value with type `any` to variables and properties",
+    "recommended": "recommended",
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": true
+  },
+  {
+    "id": "@typescript-eslint/no-unsafe-call",
+    "type": "problem",
+    "fixable": null,
+    "description": "Disallow calling a value with type `any`",
+    "recommended": "recommended",
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": true
+  },
+  {
+    "id": "@typescript-eslint/no-unsafe-declaration-merging",
+    "type": "problem",
+    "fixable": null,
+    "description": "Disallow unsafe declaration merging",
+    "recommended": "recommended",
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": false
+  },
+  {
+    "id": "@typescript-eslint/no-unsafe-enum-comparison",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Disallow comparing an enum value with a non-enum value",
+    "recommended": "recommended",
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": true
+  },
+  {
+    "id": "@typescript-eslint/no-unsafe-member-access",
+    "type": "problem",
+    "fixable": null,
+    "description": "Disallow member access on a value with type `any`",
+    "recommended": "recommended",
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": true
+  },
+  {
+    "id": "@typescript-eslint/no-unsafe-return",
+    "type": "problem",
+    "fixable": null,
+    "description": "Disallow returning a value with type `any` from a function",
+    "recommended": "recommended",
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": true
+  },
+  {
+    "id": "@typescript-eslint/no-unsafe-unary-minus",
+    "type": "problem",
+    "fixable": null,
+    "description": "Require unary negation to take a number",
+    "recommended": null,
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": true
+  },
+  {
+    "id": "@typescript-eslint/no-unused-expressions",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Disallow unused expressions",
+    "recommended": null,
+    "deprecated": null,
+    "extendsBaseRule": true,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "@typescript-eslint/no-unused-vars",
+    "type": "problem",
+    "fixable": null,
+    "description": "Disallow unused variables",
+    "recommended": "recommended",
+    "deprecated": null,
+    "extendsBaseRule": true,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "@typescript-eslint/no-use-before-define",
+    "type": "problem",
+    "fixable": null,
+    "description": "Disallow the use of variables before they are defined",
+    "recommended": null,
+    "deprecated": null,
+    "extendsBaseRule": true,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "@typescript-eslint/no-useless-constructor",
+    "type": "problem",
+    "fixable": null,
+    "description": "Disallow unnecessary constructors",
+    "recommended": "strict",
+    "deprecated": null,
+    "extendsBaseRule": true,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "@typescript-eslint/no-useless-empty-export",
+    "type": "suggestion",
+    "fixable": "code",
+    "description": "Disallow empty exports that don't change anything in a module file",
+    "recommended": null,
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "@typescript-eslint/no-useless-template-literals",
+    "type": "suggestion",
+    "fixable": "code",
+    "description": "Disallow unnecessary template literals",
+    "recommended": "strict",
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": true
+  },
+  {
+    "id": "@typescript-eslint/no-var-requires",
+    "type": "problem",
+    "fixable": null,
+    "description": "Disallow `require` statements except in import statements",
+    "recommended": "recommended",
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "@typescript-eslint/non-nullable-type-assertion-style",
+    "type": "suggestion",
+    "fixable": "code",
+    "description": "Enforce non-null assertions over explicit type casts",
+    "recommended": "stylistic",
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": true
+  },
+  {
+    "id": "@typescript-eslint/object-curly-spacing",
+    "type": "layout",
+    "fixable": "whitespace",
+    "description": "Enforce consistent spacing inside braces",
+    "recommended": null,
+    "deprecated": true,
+    "extendsBaseRule": true,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "@typescript-eslint/padding-line-between-statements",
+    "type": "layout",
+    "fixable": "whitespace",
+    "description": "Require or disallow padding lines between statements",
+    "recommended": null,
+    "deprecated": true,
+    "extendsBaseRule": true,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "@typescript-eslint/parameter-properties",
+    "type": "problem",
+    "fixable": null,
+    "description": "Require or disallow parameter properties in class constructors",
+    "recommended": null,
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "@typescript-eslint/prefer-as-const",
+    "type": "suggestion",
+    "fixable": "code",
+    "description": "Enforce the use of `as const` over literal type",
+    "recommended": "recommended",
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "@typescript-eslint/prefer-destructuring",
+    "type": "suggestion",
+    "fixable": "code",
+    "description": "Require destructuring from arrays and/or objects",
+    "recommended": null,
+    "deprecated": null,
+    "extendsBaseRule": true,
+    "requiresTypeChecking": true
+  },
+  {
+    "id": "@typescript-eslint/prefer-enum-initializers",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Require each enum member value to be explicitly initialized",
+    "recommended": null,
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "@typescript-eslint/prefer-find",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Enforce the use of Array.prototype.find() over Array.prototype.filter() followed by [0] when looking for a single result",
+    "recommended": null,
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": true
+  },
+  {
+    "id": "@typescript-eslint/prefer-for-of",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Enforce the use of `for-of` loop over the standard `for` loop where possible",
+    "recommended": "stylistic",
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "@typescript-eslint/prefer-function-type",
+    "type": "suggestion",
+    "fixable": "code",
+    "description": "Enforce using function types instead of interfaces with call signatures",
+    "recommended": "stylistic",
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "@typescript-eslint/prefer-includes",
+    "type": "suggestion",
+    "fixable": "code",
+    "description": "Enforce `includes` method over `indexOf` method",
+    "recommended": "strict",
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": true
+  },
+  {
+    "id": "@typescript-eslint/prefer-literal-enum-member",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Require all enum members to be literal values",
+    "recommended": "strict",
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": false
+  },
+  {
+    "id": "@typescript-eslint/prefer-namespace-keyword",
+    "type": "suggestion",
+    "fixable": "code",
+    "description": "Require using `namespace` keyword over `module` keyword to declare custom TypeScript modules",
+    "recommended": "stylistic",
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "@typescript-eslint/prefer-nullish-coalescing",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Enforce using the nullish coalescing operator instead of logical assignments or chaining",
+    "recommended": "stylistic",
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": true
+  },
+  {
+    "id": "@typescript-eslint/prefer-optional-chain",
+    "type": "suggestion",
+    "fixable": "code",
+    "description": "Enforce using concise optional chain expressions instead of chained logical ands, negated logical ors, or empty objects",
+    "recommended": "stylistic",
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": true
+  },
+  {
+    "id": "@typescript-eslint/prefer-promise-reject-errors",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Require using Error objects as Promise rejection reasons",
+    "recommended": "strict",
+    "deprecated": null,
+    "extendsBaseRule": true,
+    "requiresTypeChecking": true
+  },
+  {
+    "id": "@typescript-eslint/prefer-readonly",
+    "type": "suggestion",
+    "fixable": "code",
+    "description": "Require private members to be marked as `readonly` if they're never modified outside of the constructor",
+    "recommended": null,
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": true
+  },
+  {
+    "id": "@typescript-eslint/prefer-readonly-parameter-types",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Require function parameters to be typed as `readonly` to prevent accidental mutation of inputs",
+    "recommended": null,
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": true
+  },
+  {
+    "id": "@typescript-eslint/prefer-reduce-type-parameter",
+    "type": "problem",
+    "fixable": "code",
+    "description": "Enforce using type parameter when calling `Array#reduce` instead of casting",
+    "recommended": "strict",
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": true
+  },
+  {
+    "id": "@typescript-eslint/prefer-regexp-exec",
+    "type": "suggestion",
+    "fixable": "code",
+    "description": "Enforce `RegExp#exec` over `String#match` if no global flag is provided",
+    "recommended": null,
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": true
+  },
+  {
+    "id": "@typescript-eslint/prefer-return-this-type",
+    "type": "suggestion",
+    "fixable": "code",
+    "description": "Enforce that `this` is used when only `this` type is returned",
+    "recommended": "strict",
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": true
+  },
+  {
+    "id": "@typescript-eslint/prefer-string-starts-ends-with",
+    "type": "suggestion",
+    "fixable": "code",
+    "description": "Enforce using `String#startsWith` and `String#endsWith` over other equivalent methods of checking substrings",
+    "recommended": "stylistic",
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": true
+  },
+  {
+    "id": "@typescript-eslint/prefer-ts-expect-error",
+    "type": "problem",
+    "fixable": "code",
+    "description": "Enforce using `@ts-expect-error` over `@ts-ignore`",
+    "recommended": "strict",
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "@typescript-eslint/promise-function-async",
+    "type": "suggestion",
+    "fixable": "code",
+    "description": "Require any function or method that returns a Promise to be marked async",
+    "recommended": null,
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": true
+  },
+  {
+    "id": "@typescript-eslint/quotes",
+    "type": "layout",
+    "fixable": "code",
+    "description": "Enforce the consistent use of either backticks, double, or single quotes",
+    "recommended": null,
+    "deprecated": true,
+    "extendsBaseRule": true,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "@typescript-eslint/require-array-sort-compare",
+    "type": "problem",
+    "fixable": null,
+    "description": "Require `Array#sort` and `Array#toSorted` calls to always provide a `compareFunction`",
+    "recommended": null,
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": true
+  },
+  {
+    "id": "@typescript-eslint/require-await",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Disallow async functions which have no `await` expression",
+    "recommended": "recommended",
+    "deprecated": null,
+    "extendsBaseRule": true,
+    "requiresTypeChecking": true
+  },
+  {
+    "id": "@typescript-eslint/restrict-plus-operands",
+    "type": "problem",
+    "fixable": null,
+    "description": "Require both operands of addition to be the same type and be `bigint`, `number`, or `string`",
+    "recommended": true,
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": true
+  },
+  {
+    "id": "@typescript-eslint/restrict-template-expressions",
+    "type": "problem",
+    "fixable": null,
+    "description": "Enforce template literal expressions to be of `string` type",
+    "recommended": true,
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": true
+  },
+  {
+    "id": "@typescript-eslint/return-await",
+    "type": "problem",
+    "fixable": "code",
+    "description": "Enforce consistent returning of awaited values",
+    "recommended": null,
+    "deprecated": null,
+    "extendsBaseRule": "no-return-await",
+    "requiresTypeChecking": true
+  },
+  {
+    "id": "@typescript-eslint/semi",
+    "type": "layout",
+    "fixable": "code",
+    "description": "Require or disallow semicolons instead of ASI",
+    "recommended": null,
+    "deprecated": true,
+    "extendsBaseRule": true,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "@typescript-eslint/sort-type-constituents",
+    "type": "suggestion",
+    "fixable": "code",
+    "description": "Enforce constituents of a type union/intersection to be sorted alphabetically",
+    "recommended": null,
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "@typescript-eslint/space-before-blocks",
+    "type": "layout",
+    "fixable": "whitespace",
+    "description": "Enforce consistent spacing before blocks",
+    "recommended": null,
+    "deprecated": true,
+    "extendsBaseRule": true,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "@typescript-eslint/space-before-function-paren",
+    "type": "layout",
+    "fixable": "whitespace",
+    "description": "Enforce consistent spacing before function parenthesis",
+    "recommended": null,
+    "deprecated": true,
+    "extendsBaseRule": true,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "@typescript-eslint/space-infix-ops",
+    "type": "layout",
+    "fixable": "whitespace",
+    "description": "Require spacing around infix operators",
+    "recommended": null,
+    "deprecated": true,
+    "extendsBaseRule": true,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "@typescript-eslint/strict-boolean-expressions",
+    "type": "suggestion",
+    "fixable": "code",
+    "description": "Disallow certain types in boolean expressions",
+    "recommended": null,
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": true
+  },
+  {
+    "id": "@typescript-eslint/switch-exhaustiveness-check",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Require switch-case statements to be exhaustive",
+    "recommended": null,
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": true
+  },
+  {
+    "id": "@typescript-eslint/triple-slash-reference",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Disallow certain triple slash directives in favor of ES6-style import declarations",
+    "recommended": "recommended",
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "@typescript-eslint/type-annotation-spacing",
+    "type": "layout",
+    "fixable": "whitespace",
+    "description": "Require consistent spacing around type annotations",
+    "recommended": null,
+    "deprecated": true,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "@typescript-eslint/typedef",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Require type annotations in certain places",
+    "recommended": null,
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "@typescript-eslint/unbound-method",
+    "type": "problem",
+    "fixable": null,
+    "description": "Enforce unbound methods are called with their expected scope",
+    "recommended": "recommended",
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": true
+  },
+  {
+    "id": "@typescript-eslint/unified-signatures",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Disallow two overloads that could be unified into one with a union or an optional/rest parameter",
+    "recommended": "strict",
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "@typescript-eslint/use-unknown-in-catch-callback-variable",
+    "type": "suggestion",
+    "fixable": "code",
+    "description": "Enforce typing arguments in `.catch()` callbacks as `unknown`",
+    "recommended": "strict",
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": true
+  }
+]

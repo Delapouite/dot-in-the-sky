@@ -944,18 +944,30 @@ function fz --description 'entry point for all the fuzziness glory'
 		_fzf_search_variables (set --show | psub) (set --names | psub)
 
 	case eslint-rules
-		set --local data_source '~/.local/share/eslint/rules.json'
+		set --local data_source "$HOME/.local/share/eslint/rules.json"
 		if test "$argv[2]" = "--help"
 			printf "list: eslint rules from $data_source\n"
-			print_dim 'preview: none'
-			print_dim 'action: none'
+			printf "preview: rules details\n"
+			printf "action: visit rule documentation on eslint.org\n"
 			return
 		end
 
-		cat ~/.local/share/eslint/rules.json \
-			| _jq '.[] | "\(.id) \(.type) \(.recommended) \(.fixable) \(.description)"' \
+		set --local rule_id (cat "$data_source" \
+			| _jq '.[] | "\(.id)\u001f\(.type)\u001f\(.recommended)\u001f\(.fixable)\u001f\(.description)"' \
+			| _awk "$awk_dim5" \
 			| _fzf \
-				--header "$data_source"
+				--header "$data_source" \
+				--preview "jq --color-output '.[] | select(.id==\"{1}\")' '$data_source'" \
+			| awk '{print $1}')
+
+		if test -n "$rule_id"
+			if string match -r '@' "$rule_id"
+				set --local ts_rule_id (string sub --start 20 $rule_id)
+				firefox-developer-edition "https://typescript-eslint.io/rules/$ts_rule_id"
+			else
+				firefox-developer-edition "https://eslint.org/docs/rules/$rule_id"
+			end
+		end
 
 	case files
 		if test "$argv[2]" = "--help"
