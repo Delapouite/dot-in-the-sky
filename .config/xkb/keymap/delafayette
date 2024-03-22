@@ -1,11 +1,17 @@
 // To apply this keymap, use:
-//   xkbcomp $HOME/.config/xkb/keymap/delafayette $DISPLAY
+// xkbcomp $HOME/.config/xkb/keymap/delafayette $DISPLAY
+
 // Main config files can be found in arch at /usr/share/X11/xkb/
 // See also /usr/include/X11/keysymdef.h
 
 xkb_keymap {
+  // /usr/share/X11/xkb/keycodes/evdev
   xkb_keycodes { include "evdev" };
+
+  // /usr/share/X11/xkb/types/complete
   xkb_types { include "complete" };
+
+  // /usr/share/X11/xkb/compat/complete
   xkb_compatibility {
     include "complete"
     virtual_modifiers Shift;
@@ -16,9 +22,13 @@ xkb_keymap {
   };
 
   partial alphanumeric_keys modifier_keys
+
   xkb_symbols "delafayette" {
+    // /usr/share/X11/xkb/symbols/pc
     include "pc"
+    // /usr/share/X11/xkb/symbols/evdev
     include "inet(evdev)"
+    // /usr/share/X11/xkb/symbols/ctrl
     include "ctrl(nocaps)" // CAPS is another Control_L
 
     // Multi_key → compose (see https://cgit.freedesktop.org/xorg/lib/libX11/plain/nls/en_US.UTF-8/Compose.pre)
@@ -30,8 +40,7 @@ xkb_keymap {
 
     // The real AltGr key should be an ISO_Level5_Switch; however,
     // ISO_Level5_Switch does not work as expected when applying this layout
-    // with xkbcomp, so let’s use two groups instead and make the AltGr key a
-    // group selector.
+    // with xkbcomp, so let’s use two groups instead and make the AltGr key a group selector.
 
     name[group1] = "French (Qwerty-Delafayette)";
     name[group2] = "AltGr";
@@ -46,8 +55,8 @@ xkb_keymap {
     key <AE04> {[ 4               , dollar          , VoidSymbol      , VoidSymbol      ],[ grave           , foursuperior    ]}; // 4 $     ` ⁴
     key <AE05> {[ 5               , percent         , U2030           , VoidSymbol      ],[ VoidSymbol      , fivesuperior    ]}; // 5 % ‰     ⁵
     key <AE06> {[ 6               , asciicircum     , VoidSymbol      , VoidSymbol      ],[ VoidSymbol      , sixsuperior     ]}; // 6 ^       ⁶
-    key <AE07> {[ 7               , ampersand       , bar             , brokenbar       ],[ VoidSymbol      , sevensuperior   ]}; // 7 & | ¦   ⁷
-    key <AE08> {[ 8               , asterisk        , infinity        , VoidSymbol      ],[ VoidSymbol      , eightsuperior   ]}; // 8 * ∞     ⁸
+    key <AE07> {[ 7               , ampersand       , VoidSymbol      , VoidSymbol      ],[ U2228           , sevensuperior   ]}; // 7 & | ¦ ∨ ⁷
+    key <AE08> {[ 8               , asterisk        , infinity        , VoidSymbol      ],[ U2227           , eightsuperior   ]}; // 8 * ∞   ∧ ⁸
     key <AE09> {[ 9               , parenleft       , VoidSymbol      , VoidSymbol      ],[ VoidSymbol      , ninesuperior    ]}; // 9 (       ⁹
     key <AE10> {[ 0               , parenright      , degree          , division        ],[ VoidSymbol      , zerosuperior    ]}; // 0 ) ° ÷   ⁰
 
@@ -57,21 +66,21 @@ xkb_keymap {
     key <AD03> {[ e               , E               , egrave          , Egrave          ],[ greater         , greaterthanequal]}; // e E è È > ≥
     key <AD04> {[ r               , R               , registered      , trademark       ],[ guillemotright  , U203A           ]}; // r R ® ™ » ›
     key <AD05> {[ t               , T               , thorn           , Thorn           ],[ VoidSymbol      , VoidSymbol      ]}; // t T þ Þ
-    key <AD06> {[ y               , Y               , dead_currency   , VoidSymbol      ],[ VoidSymbol      , VoidSymbol      ]}; // y Y ¤
-    key <AD07> {[ u               , U               , ugrave          , Ugrave          ],[ VoidSymbol      , VoidSymbol      ]}; // u U ù Ù
-    key <AD08> {[ i               , I               , U0133           , U0132           ],[ VoidSymbol      , VoidSymbol      ]}; // i I ĳ Ĳ
-    key <AD09> {[ o               , O               , oe              , OE              ],[ VoidSymbol      , VoidSymbol      ]}; // o O œ Œ
+    key <AD06> {[ y               , Y               , dead_currency   , VoidSymbol      ],[ U2282           , VoidSymbol      ]}; // y Y ¤   ⊂
+    key <AD07> {[ u               , U               , ugrave          , Ugrave          ],[ U222A           , VoidSymbol      ]}; // u U ù Ù ∪
+    key <AD08> {[ i               , I               , U0133           , U0132           ],[ U2229           , VoidSymbol      ]}; // i I ĳ Ĳ ∩
+    key <AD09> {[ o               , O               , oe              , OE              ],[ U2283           , VoidSymbol      ]}; // o O œ Œ ⊃
     key <AD10> {[ p               , P               , section         , paragraph       ],[ VoidSymbol      , VoidSymbol      ]}; // p P § ¶
 
     // Letters, second row
-    key <AC01> {[ a               , A               , agrave          , Agrave          ],[ braceleft       , VoidSymbol      ]}; // a A à À {
-    key <AC02> {[ s               , S               , ssharp          , U1E9E           ],[ bracketleft     , VoidSymbol      ]}; // s S ß ẞ [
-    key <AC03> {[ d               , D               , eth             , Eth             ],[ bracketright    , VoidSymbol      ]}; // d D ð Ð ]
-    key <AC04> {[ f               , F               , ordfeminine     , VoidSymbol      ],[ braceright      , VoidSymbol      ]}; // f F ª   }
+    key <AC01> {[ a               , A               , agrave          , Agrave          ],[ braceleft       , U27EA           ]}; // a A à À { ⟪
+    key <AC02> {[ s               , S               , ssharp          , U1E9E           ],[ bracketleft     , U27E8           ]}; // s S ß ẞ [ ⟨
+    key <AC03> {[ d               , D               , eth             , Eth             ],[ bracketright    , U27E9           ]}; // d D ð Ð ] ⟩
+    key <AC04> {[ f               , F               , ordfeminine     , VoidSymbol      ],[ braceright      , U27EB           ]}; // f F ª   } ⟫
     key <AC05> {[ g               , G               , dead_greek      , VoidSymbol      ],[ copyright       , VoidSymbol      ]}; // g G Ω   ©
     key <AC06> {[ h               , H               , leftarrow       , U21D0           ],[ VoidSymbol      , VoidSymbol      ]}; // h H ← ⇐
-    key <AC07> {[ j               , J               , downarrow       , U21D3           ],[ VoidSymbol      , VoidSymbol      ]}; // j J ↓ ⇓
-    key <AC08> {[ k               , K               , uparrow         , U21D1           ],[ VoidSymbol      , VoidSymbol      ]}; // k K ↑ ⇑
+    key <AC07> {[ j               , J               , downarrow       , U21D3           ],[ slash           , VoidSymbol      ]}; // j J ↓ ⇓ /
+    key <AC08> {[ k               , K               , uparrow         , U21D1           ],[ backslash       , VoidSymbol      ]}; // k K ↑ ⇑ \
     key <AC09> {[ l               , L               , rightarrow      , U21D2           ],[ VoidSymbol      , VoidSymbol      ]}; // l L → ⇒
     key <AC10> {[ ISO_Level3_Latch, ISO_Level3_Latch, Multi_key       , Multi_key       ],[ VoidSymbol      , VoidSymbol      ]}; // magic
 
@@ -85,11 +94,11 @@ xkb_keymap {
     key <AB07> {[ m               , M               , masculine       , VoidSymbol      ],[ VoidSymbol      , VoidSymbol      ]}; // m M º
     key <AB08> {[ comma           , semicolon       , periodcentered  , U2022           ],[ comma           , VoidSymbol      ]}; // , ; · • ,
     key <AB09> {[ period          , colon           , ellipsis        , notsign         ],[ period          , VoidSymbol      ]}; // . : … ¬ .
-    key <AB10> {[ slash           , question        , backslash       , questiondown    ],[ U061F           , VoidSymbol      ]}; // / ? \ ¿ ؟
+    key <AB10> {[ question        , questiondown    , U061F           , VoidSymbol      ],[ VoidSymbol      , VoidSymbol      ]}; // ? ¿ ؟
 
     // Left Pinky keys
     key <TLDE> {[ asciitilde      , dead_tilde      , VoidSymbol      , VoidSymbol      ],[ VoidSymbol      , VoidSymbol      ]}; // ~ ◌̃
-    key <LSGT> {[ less            , greater         , lessthanequal   , greaterthanequal],[ VoidSymbol      , VoidSymbol      ]}; // < > ≤ ≥
+    key <LSGT> {[ Alt_L           , Alt_L          ], type = "TWO_LEVEL" };
 
     // Right Pinky keys
     key <AE11> {[ minus           , underscore      , emdash          , endash          ],[ VoidSymbol      , VoidSymbol      ]}; // - _ — –
@@ -97,7 +106,7 @@ xkb_keymap {
     key <AD11> {[ dead_circumflex , dead_acute      , dead_caron      , VoidSymbol      ],[ VoidSymbol      , VoidSymbol      ]}; // ◌̂ ◌́ ◌̌
     key <AD12> {[ dead_diaeresis  , dead_grave      , dead_breve      , VoidSymbol      ],[ VoidSymbol      , VoidSymbol      ]}; // ◌̈ ◌̀ ◌̆
     key <AC11> {[ apostrophe      , quotedbl        , dead_schwa      , VoidSymbol      ],[ VoidSymbol      , VoidSymbol      ]}; // ' "
-    key <AC12> {[ backslash       , bar             , brokenbar       , VoidSymbol      ],[ VoidSymbol      , VoidSymbol      ]}; // \ | ¦
+    key <AC12> {[ bar             , brokenbar       , VoidSymbol      , VoidSymbol      ],[ VoidSymbol      , VoidSymbol      ]}; // | ¦
 
     // Space bar
     key <SPCE> {[ space           , space           , VoidSymbol      , VoidSymbol      ],[ Escape          , nobreakspace    ]};
@@ -114,6 +123,11 @@ xkb_keymap {
     // AltGr
     // Note: the `ISO_Level5_Latch` here is meaningless but helps with Chromium (no idea why)
     key <RALT> {
+      type = "TWO_LEVEL",
+      symbols = [ ISO_Level5_Latch, ISO_Level5_Latch ],
+      actions = [ SetGroup(group=2), SetGroup(group=2) ]
+    };
+    key <LALT> {
       type = "TWO_LEVEL",
       symbols = [ ISO_Level5_Latch, ISO_Level5_Latch ],
       actions = [ SetGroup(group=2), SetGroup(group=2) ]
