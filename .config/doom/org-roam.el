@@ -36,71 +36,41 @@
 
   ; minibuffer
 
+  ;; finders
+
   (defun my/org-roam-node-find-album ()
     (interactive)
-    (my/org-roam-template-default)
     (org-roam-node-find nil "#album"))
 
   (defun my/org-roam-node-find-book ()
     (interactive)
-    (my/org-roam-template-default)
     (org-roam-node-find nil "#book"))
 
   (defun my/org-roam-node-find-artist ()
     (interactive)
-    (my/org-roam-template-default)
     (org-roam-node-find nil "#artist"))
 
   (defun my/org-roam-node-find-concept ()
     (interactive)
-    (my/org-roam-template-default)
     (org-roam-node-find nil "#concept"))
 
   (defun my/org-roam-node-find-interest ()
     (interactive)
-    (my/org-roam-template-default)
     (org-roam-node-find nil "★+1"))
 
   (defun my/org-roam-node-find-person ()
     (interactive)
-    (my/org-roam-template-default)
     (org-roam-node-find nil "#person"))
 
   (defun my/org-roam-node-find-tool ()
     (interactive)
-    (my/org-roam-template-default)
     (org-roam-node-find nil "#tool"))
 
   (defun my/org-roam-node-find-default ()
     (interactive)
-    (my/org-roam-template-default)
     (org-roam-node-find))
 
-  (defun my/org-roam-template-default ()
-    (interactive)
-    (setq org-roam-node-display-template "${template-title:*} | @${template-level} | f${file:50} | ★${interest} | ↑${upgraded-at} | m${template-mtime} | ${template-tags:50}"))
-
   (setq org-tags-exclude-from-inheritance '("album" "artist" "debut" "top"))
-
-  ; The gain in performance is quite significant, from 3 seconds to instant
-  (setq org-roam-node-default-sort nil)
-  (require 'memoize)
-  (memoize 'org-roam-node-read--completions "10 minute")
-
-  (defun memoize-force-update (func &optional timeout)
-    (when (get func :memoize-original-function)
-      (progn (memoize-restore func)
-             (memoize func timeout))))
-
-  (defun my/force-update-org-roam-node-read-if-memoized (&optional timeout)
-    (interactive)
-    (setq my/org-roam-ids (my/org-roam-ids))
-    (memoize-force-update 'org-roam-node-read--completions
-                          (if timeout timeout memoize-default-timeout)))
-
-  (run-with-idle-timer 180 t #'my/force-update-org-roam-node-read-if-memoized)
-
-  (my/org-roam-template-default)
 
   ; sections in sidebar
 
@@ -139,6 +109,11 @@
          :underline t))
     "Face for Org-Mode links starting with file:."
     :group 'org-faces)
+  (defface org-link-interpunct
+    `((t :foreground ,dracula-grey
+         :underline nil))
+    "Face for · in Org-Mode links"
+    :group 'org-faces)
 
   (org-link-set-parameters
    "id"
@@ -155,8 +130,7 @@
   (defun my/org-roam-incoming-ids (id)
     (interactive)
     (seq-uniq
-     (seq-map
-      #'car
+     (seq-map #'car
       (org-roam-db-query [:select source
                           :from links
                           :where (= dest $s1)
@@ -164,8 +138,7 @@
 
   (defun my/org-roam-ids ()
     (interactive)
-    (seq-map
-     #'car
+    (seq-map #'car
      (org-roam-db-query [:select id :from nodes])))
 
   ; override to store more stuffs in the properties column for https links
@@ -209,6 +182,26 @@
         (org-set-property "visited-at" (iso8601-format)))))
 
   '(add-hook 'org-follow-link-hook #'my/visited-at)
+
+  (defun my/org-roam-save-count ()
+    "Save links and backlinks count in database"
+    (interactive)
+    (org-with-point-at 1
+      (when (and (= (org-outline-level) 0) (org-roam-db-node-p))
+        (when-let ((id (org-id-get)))
+          (letrec ((node (org-roam-node-from-id id))
+                   (properties (org-entry-properties))
+                   (links-count (org-roam-node-links-count node))
+                   (backlinks-count (org-roam-node-backlinks-count node)))
+            (unless (assoc "LINKS-COUNT" properties) (push '("LINKS-COUNT" . 0) properties))
+            (setcdr (assoc "LINKS-COUNT" properties) links-count)
+            (unless (assoc "BACKLINKS-COUNT" properties) (push '("BACKLINKS-COUNT" . 0) properties))
+            (setcdr (assoc "BACKLINKS-COUNT" properties) backlinks-count)
+            (org-roam-db-query
+             [:update nodes
+              :set (= properties $s2)
+              :where (= id $s1)] id properties))))))
+  '(advice-add 'org-roam-db-update-file :after #'my/org-roam-save-count)
 
   ;; random predicate natively implemented in https://github.com/org-roam/org-roam/pull/2050
 
@@ -272,8 +265,7 @@
                          (org-roam-node-id node)))))
       (format "%d" count)))
 
-  (cl-defmethod org-roam-node-template-level ((node org-roam-node))
-    (number-to-string (org-roam-node-level node)))
+  ; property accessors
 
   (cl-defmethod org-roam-node-mtime ((node org-roam-node))
     (format-time-string "%Y-%m-%d" (org-roam-node-file-mtime node)))
@@ -291,27 +283,6 @@
 
   (cl-defmethod org-roam-node-description ((node org-roam-node))
     (or (cdr (assoc "DESCRIPTION" (org-roam-node-properties node))) ""))
-
-  (cl-defmethod org-roam-node-template-title ((node org-roam-node))
-    (let* ((acronym (cdr (assoc "ACRONYM" (org-roam-node-properties node))))
-           (pacronym (propertize (concat "‹" acronym "›") 'face 'org-property-value))
-           (description (cdr (assoc "DESCRIPTION" (org-roam-node-properties node))))
-           (pdescription (propertize (concat "«" description "»") 'face 'org-property-value))
-           (aliases (org-roam-node-aliases node))
-           (title (org-roam-node-title node))
-           (parent (car (split-string title " > ")))
-           (child (cadr (split-string title " > ")))
-           (ptitle (if (member child my/org-roam-ids) (concat parent " > " (propertize child 'face 'org-code)) title)))
-      (cond
-       ((and acronym (not (string-equal acronym title))) (concat ptitle " " pacronym))
-       ((and acronym (string-equal acronym title)) pacronym)
-       ((and description) (concat ptitle " " pdescription))
-       ((and aliases) (concat ptitle "*"))
-       (t ptitle))))
-
-  (cl-defmethod org-roam-node-template-mtime ((node org-roam-node))
-    (let ((mtime (org-roam-node-mtime node)))
-      (propertize mtime 'face (if (> (iso8601-diff-days mtime) 180) 'error 'mode-line))))
 
   (cl-defmethod org-roam-node-released-at ((node org-roam-node))
     (or (cdr (assoc "RELEASED-AT" (org-roam-node-properties node))) "    "))
@@ -366,6 +337,42 @@
   (cl-defmethod org-roam-node-died-at ((node org-roam-node))
     (or (cdr (assoc "DIED-AT" (org-roam-node-properties node))) ""))
 
+  (cl-defmethod org-roam-node-combos ((node org-roam-node))
+    (or (cdr (assoc "COMBOS" (org-roam-node-properties node))) ""))
+
+  ; fuzzy candidate templates
+
+  (cl-defmethod org-roam-node-template-title ((node org-roam-node))
+    (let* ((acronym (cdr (assoc "ACRONYM" (org-roam-node-properties node))))
+           (pacronym (propertize (concat "‹" acronym "›") 'face 'org-property-value))
+           (description (cdr (assoc "DESCRIPTION" (org-roam-node-properties node))))
+           (pdescription (propertize (concat "«" description "»") 'face 'org-property-value))
+           (aliases (org-roam-node-aliases node))
+           (title (org-roam-node-title node))
+           (parent (car (split-string title " > ")))
+           (child (cadr (split-string title " > ")))
+           (ptitle (if (member child my/org-roam-ids) (concat parent " > " (propertize child 'face 'org-code)) title)))
+      (cond
+       ((and acronym (not (string-equal acronym title))) (concat ptitle " " pacronym))
+       ((and acronym (string-equal acronym title)) pacronym)
+       ((and description) (concat ptitle " " pdescription))
+       ((and aliases) (concat ptitle "*"))
+       (t ptitle))))
+
+  (cl-defmethod org-roam-node-template-level ((node org-roam-node))
+    (number-to-string (org-roam-node-level node)))
+
+  (cl-defmethod org-roam-node-template-mtime ((node org-roam-node))
+    (let ((mtime (org-roam-node-mtime node)))
+      (propertize mtime 'face (if (> (iso8601-diff-days mtime) 180) 'error 'mode-line))))
+
+  (cl-defmethod org-roam-node-template-links ((node org-roam-node))
+    (let* ((backlinks-count (cdr (assoc "BACKLINKS-COUNT" (org-roam-node-properties node))))
+           (backlinks-count (if backlinks-count (concat (string-pad backlinks-count 2) "→" ) "  →"))
+           (links-count (cdr (assoc "LINKS-COUNT" (org-roam-node-properties node))))
+           (links-count (if links-count (concat " →" (string-pad links-count 2)) " →  ")))
+      (concat backlinks-count links-count)))
+
   (cl-defmethod org-roam-node-template-tags ((node org-roam-node))
     (let* ((country (cdr (assoc "COUNTRY" (org-roam-node-properties node))))
            (country (if country (concat " ⚑" country) ""))
@@ -380,6 +387,30 @@
            (tags (mapconcat (lambda (v) (concat "#" v)) (org-roam-node-tags node)  " ")))
       (concat tags country population born-at died-at released-at)))
 
+  (defun my/org-roam-template-default ()
+    (interactive)
+    (setq org-roam-node-display-template "${template-title:*} | @${template-level} | f${file:50} | ${template-links} | ★${interest} | ↑${upgraded-at} | m${template-mtime} | ${combos} ${template-tags:50}"))
+
+  (my/org-roam-template-default)
+
+  ; The gain in performance is quite significant, from 3 seconds to instant
+  (setq org-roam-node-default-sort nil)
+  (require 'memoize)
+  (memoize 'org-roam-node-read--completions "10 minute")
+
+  (defun memoize-force-update (func &optional timeout)
+    (when (get func :memoize-original-function)
+      (progn (memoize-restore func)
+             (memoize func timeout))))
+
+  (defun my/force-update-org-roam-node-read-if-memoized (&optional timeout)
+    (interactive)
+    (setq my/org-roam-ids (my/org-roam-ids))
+    (memoize-force-update 'org-roam-node-read--completions
+                          (if timeout timeout memoize-default-timeout)))
+
+  (run-with-idle-timer 180 t #'my/force-update-org-roam-node-read-if-memoized)
+
   ; capture
 
   (defun my/org-capture-before-finalize ()
@@ -389,6 +420,17 @@
     (my/created-at))
 
   (add-hook 'org-capture-before-finalize-hook 'my/org-capture-before-finalize)
+  (add-hook 'org-mode-hook #'(lambda () (highlight-regexp "·" "org-link-interpunct")))
+
+  (defun my/org-roam-goto-previous ()
+    (interactive)
+    (let ((node (car (split-string (org-get-title) "·"))))
+      (org-roam-link-follow-link node)))
+
+  (defun my/org-roam-goto-next ()
+    (interactive)
+    (let ((node (cadr (split-string (org-get-title) "·"))))
+      (org-roam-link-follow-link node)))
 
   ; keys
 
@@ -401,7 +443,9 @@
         :desc "Find person" "r p" #'my/org-roam-node-find-person
         :desc "Find tool" "r t" #'my/org-roam-node-find-tool
         :desc "Find node" "r r" #'my/org-roam-node-find-default
-        :desc "Find ★1" "r 1" #'my/org-roam-node-find-interest))
+        :desc "Find ★1" "r 1" #'my/org-roam-node-find-interest
+        :desc "Goto previous" "P" #'my/org-roam-goto-previous
+        :desc "Goto next" "N" #'my/org-roam-goto-next))
 
 (use-package! org-roam-ql
   :config

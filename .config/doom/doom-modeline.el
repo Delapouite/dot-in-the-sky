@@ -27,6 +27,7 @@
              (backlinks (if node (org-roam-node-backlinks-count node) ""))
              (interest (if node (org-roam-node-interest node) ""))
              (upgraded-at (if node (org-roam-node-upgraded-at node) ""))
+             (combos (if node (org-roam-node-combos node) ""))
              (tags (if node (org-roam-node-template-tags node) "")))
       (concat (doom-modeline-wspc)
               (propertize backlinks 'face (if (string-prefix-p "0" backlinks) 'error 'mode-line))
@@ -36,6 +37,8 @@
               (propertize interest 'face 'mode-line)
               " ↑"
               (propertize upgraded-at 'face 'mode-line)
+              " "
+              (propertize combos 'face 'mode-line)
               " "
               (propertize tags 'face 'mode-line)
               )))

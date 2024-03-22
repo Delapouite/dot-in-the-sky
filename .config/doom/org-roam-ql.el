@@ -1,14 +1,22 @@
 ;;; org-roam-ql.el -*- lexical-binding: t; -*-
+;;; https://github.com/ahmed-shariff/org-roam-ql
 
 (use-package! org-roam-ql
   :config
+
+  (defun org-dblock-write:combos (params)
+    "Write org block for org-roam-combos with PARAMS."
+    (let ((title (or (plist-get params :title) (org-get-title))))
+      (org-dblock-write:org-roam-ql `(:query (and (title ,(concat "\\(^" title "·\\)\\|\\(·" title "$\\)")))
+                                      :columns (link combos)
+                                      :no-link true))))
 
   (defun org-dblock-write:org-roam-albums (params)
     "Write org block for org-roam-albums with PARAMS."
     (let ((artist (plist-get params :artist))
           (year (plist-get params :year)))
       (when artist
-        (org-dblock-write:org-roam-ql `(:query (and (tags "album") (properties "artist" ,artist))
+        (org-dblock-write:org-roam-ql `(:query (and (tags "album") (properties "artist" ,(concat "\\[" artist "\\]\\]")))
                                         :columns (released-at album-link)
                                         :sort "released-at"
                                         :no-link true)))
@@ -26,7 +34,7 @@
   (defun org-dblock-write:org-roam-tracks (params)
     "Write org block for org-roam-tracks with PARAMS."
     (let ((artist (plist-get params :artist)))
-      (org-dblock-write:org-roam-ql `(:query (and (tags "track") (properties "artist" ,artist))
+      (org-dblock-write:org-roam-ql `(:query (and (tags "track") (properties "artist" ,(concat "\\[" artist "\\]\\]")))
                                       :columns (link tier played-at play-count)
                                       :no-link true))))
 
