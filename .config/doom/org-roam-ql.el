@@ -8,7 +8,7 @@
     "Write org block for org-roam-combos with PARAMS."
     (let ((title (or (plist-get params :title) (org-get-title))))
       (org-dblock-write:org-roam-ql `(:query (and (title ,(concat "\\(^" title "·\\)\\|\\(·" title "$\\)")))
-                                      :columns (link combos)
+                                      :columns (combo-link combos)
                                       :no-link true))))
 
   (defun org-dblock-write:org-roam-albums (params)

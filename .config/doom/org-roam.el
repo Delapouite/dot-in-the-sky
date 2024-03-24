@@ -284,25 +284,11 @@
   (cl-defmethod org-roam-node-description ((node org-roam-node))
     (or (cdr (assoc "DESCRIPTION" (org-roam-node-properties node))) ""))
 
-  (cl-defmethod org-roam-node-released-at ((node org-roam-node))
-    (or (cdr (assoc "RELEASED-AT" (org-roam-node-properties node))) "    "))
-
   (cl-defmethod org-roam-node-artist ((node org-roam-node))
     (or (cdr (assoc "ARTIST" (org-roam-node-properties node))) ""))
 
   (cl-defmethod org-roam-node-author ((node org-roam-node))
     (or (cdr (assoc "AUTHOR" (org-roam-node-properties node))) ""))
-
-  (cl-defmethod org-roam-node-link ((node org-roam-node))
-    (format "[[id:%s][%s]]" (org-roam-node-id node) (org-roam-node-title node)))
-
-  (cl-defmethod org-roam-node-album-link ((node org-roam-node))
-    (format "[[id:%s][%s]]"
-            (org-roam-node-id node)
-            (string-join (cdr (split-string (org-roam-node-title node) " - ")) " ")))
-
-  (cl-defmethod org-roam-node-debut ((node org-roam-node))
-    (or (cdr (assoc "DEBUT" (org-roam-node-properties node))) ""))
 
   (cl-defmethod org-roam-node-description ((node org-roam-node))
     (or (cdr (assoc "DESCRIPTION" (org-roam-node-properties node))) ""))
@@ -316,9 +302,6 @@
   (cl-defmethod org-roam-node-role ((node org-roam-node))
     (or (cdr (assoc "ROLE" (org-roam-node-properties node))) ""))
 
-  (cl-defmethod org-roam-node-live ((node org-roam-node))
-    (or (cdr (assoc "LIVE" (org-roam-node-properties node))) ""))
-
   (cl-defmethod org-roam-node-population ((node org-roam-node))
     (or (cdr (assoc "POPULATION" (org-roam-node-properties node))) ""))
 
@@ -328,8 +311,32 @@
   (cl-defmethod org-roam-node-play-count ((node org-roam-node))
     (or (cdr (assoc "PLAY-COUNT" (org-roam-node-properties node))) ""))
 
-  (cl-defmethod org-roam-node-played-at ((node org-roam-node))
-    (or (cdr (assoc "PLAYED-AT" (org-roam-node-properties node))) ""))
+  (cl-defmethod org-roam-node-combos ((node org-roam-node))
+    (or (cdr (assoc "COMBOS" (org-roam-node-properties node))) ""))
+
+  ;; links
+
+  (cl-defmethod org-roam-node-link ((node org-roam-node))
+    (format "[[id:%s][%s]]" (org-roam-node-id node) (org-roam-node-title node)))
+
+  (cl-defmethod org-roam-node-album-link ((node org-roam-node))
+    (format "[[id:%s][%s]]" (org-roam-node-id node)
+            (string-join (cdr (split-string (org-roam-node-title node) " - ")) " ")))
+
+  (cl-defmethod org-roam-node-combo-link ((node org-roam-node))
+    (letrec ((parts (split-string (org-roam-node-title node) "·" t))
+             (other (if (string= (nth 0 parts) (org-get-title)) (nth 1 parts) (nth 0 parts))))
+      (format "[[id:%s][%s]]" (org-roam-node-id node) other)))
+
+  ;; booleans
+
+  (cl-defmethod org-roam-node-debut ((node org-roam-node))
+    (or (cdr (assoc "DEBUT" (org-roam-node-properties node))) ""))
+
+  (cl-defmethod org-roam-node-live ((node org-roam-node))
+    (or (cdr (assoc "LIVE" (org-roam-node-properties node))) ""))
+
+  ;; dates
 
   (cl-defmethod org-roam-node-born-at ((node org-roam-node))
     (or (cdr (assoc "BORN-AT" (org-roam-node-properties node))) ""))
@@ -337,8 +344,11 @@
   (cl-defmethod org-roam-node-died-at ((node org-roam-node))
     (or (cdr (assoc "DIED-AT" (org-roam-node-properties node))) ""))
 
-  (cl-defmethod org-roam-node-combos ((node org-roam-node))
-    (or (cdr (assoc "COMBOS" (org-roam-node-properties node))) ""))
+  (cl-defmethod org-roam-node-played-at ((node org-roam-node))
+    (or (cdr (assoc "PLAYED-AT" (org-roam-node-properties node))) ""))
+
+  (cl-defmethod org-roam-node-released-at ((node org-roam-node))
+    (or (cdr (assoc "RELEASED-AT" (org-roam-node-properties node))) "    "))
 
   ; fuzzy candidate templates
 
