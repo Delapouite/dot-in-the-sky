@@ -275,14 +275,8 @@
                             "          ")))
       (substring upgraded-at 0 10)))
 
-  (cl-defmethod org-roam-node-interest ((node org-roam-node))
-    (or (cdr (assoc "INTEREST" (org-roam-node-properties node))) "  "))
-
   (cl-defmethod org-roam-node-acronym ((node org-roam-node))
     (or (cdr (assoc "ACRONYM" (org-roam-node-properties node))) ""))
-
-  (cl-defmethod org-roam-node-description ((node org-roam-node))
-    (or (cdr (assoc "DESCRIPTION" (org-roam-node-properties node))) ""))
 
   (cl-defmethod org-roam-node-artist ((node org-roam-node))
     (or (cdr (assoc "ARTIST" (org-roam-node-properties node))) ""))
@@ -305,14 +299,19 @@
   (cl-defmethod org-roam-node-population ((node org-roam-node))
     (or (cdr (assoc "POPULATION" (org-roam-node-properties node))) ""))
 
-  (cl-defmethod org-roam-node-tier ((node org-roam-node))
-    (or (cdr (assoc "TIER" (org-roam-node-properties node))) ""))
-
   (cl-defmethod org-roam-node-play-count ((node org-roam-node))
     (or (cdr (assoc "PLAY-COUNT" (org-roam-node-properties node))) ""))
 
   (cl-defmethod org-roam-node-combos ((node org-roam-node))
     (or (cdr (assoc "COMBOS" (org-roam-node-properties node))) ""))
+
+  ;; scales
+
+  (cl-defmethod org-roam-node-interest ((node org-roam-node))
+    (or (cdr (assoc "INTEREST" (org-roam-node-properties node))) "  "))
+
+  (cl-defmethod org-roam-node-tier ((node org-roam-node))
+    (or (cdr (assoc "TIER" (org-roam-node-properties node))) ""))
 
   ;; links
 
@@ -325,7 +324,8 @@
 
   (cl-defmethod org-roam-node-combo-link ((node org-roam-node))
     (letrec ((parts (split-string (org-roam-node-title node) "·" t))
-             (other (if (string= (nth 0 parts) (org-get-title)) (nth 1 parts) (nth 0 parts))))
+             (acronym-or-title (or (my/org-get-acronym) (org-get-title)))
+             (other (if (string= (nth 0 parts) acronym-or-title) (nth 1 parts) (nth 0 parts))))
       (format "[[id:%s][%s]]" (org-roam-node-id node) other)))
 
   ;; booleans
@@ -432,15 +432,50 @@
   (add-hook 'org-capture-before-finalize-hook 'my/org-capture-before-finalize)
   (add-hook 'org-mode-hook #'(lambda () (highlight-regexp "·" "org-link-interpunct")))
 
+  ; navigation
+
+  (defun my/org-get-acronym ()
+    (interactive)
+    (org-with-point-at 1 (cdr (assoc "ACRONYM" (org-entry-properties)))))
+
+  (defun my/org-roam-node-from-acronym (acronym)
+    (org-roam-db-query [:select [id] :from nodes
+                        :where (like properties $r1)]
+                       (concat "%\"ACRONYM\" . \"" acronym "\"%")))
+
+  (defun my/org-roam-node-from-title-or-alias-or-acronym (s)
+    "Return an `org-roam-node' for the node with title or alias or acronym S.
+     Return nil if the node does not exist.
+     Throw an error if multiple choices exist."
+    (let ((matches (seq-uniq (append
+                              (org-roam-db-query [:select [id] :from nodes
+                                                  :where (= title $s1)] s)
+                              (org-roam-db-query [:select [node-id] :from aliases
+                                                  :where (= alias $s1)] s)
+                              (my/org-roam-node-from-acronym s)))))
+      (cond
+       ((seq-empty-p matches)
+        nil)
+       ((= 1 (length matches))
+        (org-roam-populate (org-roam-node-create :id (caar matches))))
+       (t
+        (user-error "Multiple nodes exist with title or alias \"%s\"" s)))))
+
+  (defun my/org-roam-goto (s)
+    "Goto roam node where S is either its title, its alias or its acronym."
+    (when-let ((node (my/org-roam-node-from-title-or-alias-or-acronym s)))
+      (org-mark-ring-push)
+      (org-roam-node-visit node nil 'force)))
+
   (defun my/org-roam-goto-previous ()
     (interactive)
     (let ((node (car (split-string (org-get-title) "·"))))
-      (org-roam-link-follow-link node)))
+      (my/org-roam-goto node)))
 
   (defun my/org-roam-goto-next ()
     (interactive)
     (let ((node (cadr (split-string (org-get-title) "·"))))
-      (org-roam-link-follow-link node)))
+      (my/org-roam-goto node)))
 
   ; keys
 

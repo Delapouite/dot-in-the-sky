@@ -6,7 +6,7 @@
 
   (defun org-dblock-write:combos (params)
     "Write org block for org-roam-combos with PARAMS."
-    (let ((title (or (plist-get params :title) (org-get-title))))
+    (let ((title (or (plist-get params :title) (my/org-get-acronym) (org-get-title))))
       (org-dblock-write:org-roam-ql `(:query (and (title ,(concat "\\(^" title "·\\)\\|\\(·" title "$\\)")))
                                       :columns (combo-link combos)
                                       :no-link true))))
