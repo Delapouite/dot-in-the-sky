@@ -3746,5 +3746,385 @@
     "deprecated": null,
     "extendsBaseRule": null,
     "requiresTypeChecking": true
+  },
+  {
+    "id": "@angular-eslint/component-class-suffix",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Classes decorated with @Component must have suffix \"Component\" (or custom) in their name. See more at https://angular.io/styleguide#style-02-03",
+    "recommended": "recommended",
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "@angular-eslint/component-max-inline-declarations",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Enforces a maximum number of lines in inline template, styles and animations. See more at https://angular.io/guide/styleguide#style-05-04",
+    "recommended": null,
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "@angular-eslint/component-selector",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Component selectors should follow given naming rules. See more at https://angular.io/guide/styleguide#style-02-07, https://angular.io/guide/styleguide#style-05-02\n      and https://angular.io/guide/styleguide#style-05-03.",
+    "recommended": null,
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "@angular-eslint/consistent-component-styles",
+    "type": "suggestion",
+    "fixable": "code",
+    "description": "Ensures consistent usage of `styles`/`styleUrls`/`styleUrl` within Component metadata",
+    "recommended": null,
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "@angular-eslint/contextual-decorator",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Ensures that classes use contextual decorators in its body",
+    "recommended": null,
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "@angular-eslint/contextual-lifecycle",
+    "type": "problem",
+    "fixable": null,
+    "description": "Ensures that lifecycle methods are used in a correct context",
+    "recommended": "recommended",
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "@angular-eslint/directive-class-suffix",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Classes decorated with @Directive must have suffix \"Directive\" (or custom) in their name. See more at https://angular.io/styleguide#style-02-03",
+    "recommended": "recommended",
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "@angular-eslint/directive-selector",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Directive selectors should follow given naming rules. See more at https://angular.io/guide/styleguide#style-02-06 and https://angular.io/guide/styleguide#style-02-08.",
+    "recommended": null,
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "@angular-eslint/no-async-lifecycle-method",
+    "type": "problem",
+    "fixable": null,
+    "description": "Angular Lifecycle methods should not be async. Angular does not wait for async lifecycle but the code incorrectly suggests it does.",
+    "recommended": null,
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "@angular-eslint/no-attribute-decorator",
+    "type": "problem",
+    "fixable": null,
+    "description": "The @Attribute decorator is used to obtain a single value for an attribute. This is a much less common use-case than getting a stream of values (using @Input), so often the @Attribute decorator is mistakenly used when @Input was what was intended. This rule disallows usage of @Attribute decorator altogether in order to prevent these mistakes.",
+    "recommended": null,
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "@angular-eslint/no-conflicting-lifecycle",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Ensures that directives not implement conflicting lifecycle interfaces.",
+    "recommended": null,
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "@angular-eslint/no-empty-lifecycle-method",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Disallows declaring empty lifecycle methods",
+    "recommended": "recommended",
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "@angular-eslint/no-forward-ref",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Disallows usage of `forwardRef` references for DI",
+    "recommended": null,
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "@angular-eslint/no-host-metadata-property",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Disallows usage of the `host` metadata property. See more at https://angular.io/styleguide#style-06-03",
+    "recommended": "recommended",
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "@angular-eslint/no-input-prefix",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Ensures that input bindings, including aliases, are not named or prefixed by the configured disallowed prefixes",
+    "recommended": null,
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "@angular-eslint/no-input-rename",
+    "type": "suggestion",
+    "fixable": "code",
+    "description": "Ensures that input bindings are not aliased",
+    "recommended": "recommended",
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "@angular-eslint/no-inputs-metadata-property",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Disallows usage of the `inputs` metadata property. See more at https://angular.io/styleguide#style-05-12",
+    "recommended": "recommended",
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "@angular-eslint/no-lifecycle-call",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Disallows explicit calls to lifecycle methods",
+    "recommended": null,
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "@angular-eslint/no-output-native",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Ensures that output bindings, including aliases, are not named as standard DOM events",
+    "recommended": "recommended",
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "@angular-eslint/no-output-on-prefix",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Ensures that output bindings, including aliases, are not named \"on\", nor prefixed with it. See more at https://angular.io/guide/styleguide#style-05-16",
+    "recommended": "recommended",
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "@angular-eslint/no-output-rename",
+    "type": "suggestion",
+    "fixable": "code",
+    "description": "Ensures that output bindings are not aliased",
+    "recommended": "recommended",
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "@angular-eslint/no-outputs-metadata-property",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Disallows usage of the `outputs` metadata property. See more at https://angular.io/styleguide#style-05-12",
+    "recommended": "recommended",
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "@angular-eslint/no-pipe-impure",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Disallows the declaration of impure pipes",
+    "recommended": null,
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "@angular-eslint/no-queries-metadata-property",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Disallows usage of the `queries` metadata property. See more at https://angular.io/styleguide#style-05-12.",
+    "recommended": null,
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "@angular-eslint/pipe-prefix",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Enforce consistent prefix for pipes.",
+    "recommended": null,
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "@angular-eslint/prefer-on-push-component-change-detection",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Ensures component's `changeDetection` is set to `ChangeDetectionStrategy.OnPush`",
+    "recommended": null,
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "@angular-eslint/prefer-standalone",
+    "type": "suggestion",
+    "fixable": "code",
+    "description": "Ensures component, directive and pipe `standalone` property is set to `true` in the component decorator",
+    "recommended": null,
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "@angular-eslint/prefer-standalone-component",
+    "type": "suggestion",
+    "fixable": "code",
+    "description": "Ensures component `standalone` property is set to `true` in the component decorator",
+    "recommended": null,
+    "deprecated": true,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "@angular-eslint/prefer-output-readonly",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Prefer to declare `@Output` as `readonly` since they are not supposed to be reassigned",
+    "recommended": null,
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "@angular-eslint/relative-url-prefix",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "The ./ and ../ prefix is standard syntax for relative URLs; don't depend on Angular's current ability to do without that prefix. See more at https://angular.io/styleguide#style-05-04",
+    "recommended": null,
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "@angular-eslint/require-localize-metadata",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Ensures that $localize tagged messages contain helpful metadata to aid with translations.",
+    "recommended": null,
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "@angular-eslint/sort-lifecycle-methods",
+    "type": "problem",
+    "fixable": null,
+    "description": "Ensures that lifecycle methods are declared in order of execution",
+    "recommended": null,
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "@angular-eslint/sort-ngmodule-metadata-arrays",
+    "type": "suggestion",
+    "fixable": "code",
+    "description": "Ensures ASC alphabetical order for `NgModule` metadata arrays for easy visual scanning",
+    "recommended": null,
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "@angular-eslint/use-component-selector",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Component selector must be declared",
+    "recommended": null,
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "@angular-eslint/use-component-view-encapsulation",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Disallows using `ViewEncapsulation.None`",
+    "recommended": null,
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "@angular-eslint/use-injectable-provided-in",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Using the `providedIn` property makes `Injectables` tree-shakable",
+    "recommended": null,
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "@angular-eslint/use-lifecycle-interface",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Ensures that classes implement lifecycle interfaces corresponding to the declared lifecycle methods. See more at https://angular.io/styleguide#style-09-01",
+    "recommended": null,
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "@angular-eslint/use-pipe-transform-interface",
+    "type": "suggestion",
+    "fixable": "code",
+    "description": "Ensures that `Pipes` implement `PipeTransform` interface",
+    "recommended": "recommended",
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": null
   }
 ]

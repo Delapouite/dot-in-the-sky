@@ -952,18 +952,23 @@ function fz --description 'entry point for all the fuzziness glory'
 			return
 		end
 
+
 		set --local rule_id (cat "$data_source" \
-			| _jq '.[] | "\(.id)\u001f\(.type)\u001f\(.recommended)\u001f\(.fixable)\u001f\(.description)"' \
-			| _awk "$awk_dim5" \
+			| _jq  '["id", "type", "recommended", "deprecated", "fixable", "description"],
+							(.[] | [.id, "t:\(.type)", "r:\(.recommended)", "d:\(.deprecated)", "f:\(.fixable)", .description]) | @tsv' \
+				| column -ts \t \
 			| _fzf \
-				--header "$data_source" \
+				--header-lines 1 \
 				--preview "jq --color-output '.[] | select(.id==\"{1}\")' '$data_source'" \
 			| awk '{print $1}')
 
 		if test -n "$rule_id"
-			if string match -r '@' "$rule_id"
+			if string match -r '@typescript' "$rule_id"
 				set --local ts_rule_id (string sub --start 20 $rule_id)
 				firefox-developer-edition "https://typescript-eslint.io/rules/$ts_rule_id"
+			else if string match -r '@angular' "$rule_id"
+				set --local ng_rule_id (string sub --start 16 $rule_id)
+				firefox-developer-edition "https://github.com/angular-eslint/angular-eslint/blob/main/packages/eslint-plugin/docs/rules/$ng_rule_id.md"
 			else
 				firefox-developer-edition "https://eslint.org/docs/rules/$rule_id"
 			end
