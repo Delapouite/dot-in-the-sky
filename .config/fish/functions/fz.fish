@@ -1036,15 +1036,17 @@ function fz --description 'entry point for all the fuzziness glory'
 
 			git branches --color=always | _fzf --preview 'git show {2} --color=always'
 
-		case git-local-config
+		case git-config
 			if test "$argv[2]" = "--help"
-				printf 'list: git local config\n'
+				printf 'list: git config global and local\n'
 				print_dim 'preview: none'
 				print_dim 'action: none'
 				return
 			end
 
-			git config --list --local | _fzf
+			cat (git config --list --global | sed 's/^/global /' | psub) \
+				(git config --list --local | sed 's/^/local  /' | psub) \
+				| _fzf
 
 		case git-log
 			if test "$argv[2]" = "--help"
@@ -1925,7 +1927,7 @@ function fz --description 'entry point for all the fuzziness glory'
 			fonts \
 			git \
 			git-branches \
-			git-local-config \
+			git-config \
 			git-log \
 			git-remotes \
 			git-status \
