@@ -431,6 +431,7 @@
 
   (add-hook 'org-capture-before-finalize-hook 'my/org-capture-before-finalize)
   (add-hook 'org-mode-hook #'(lambda () (highlight-regexp "·" "org-link-interpunct")))
+  (add-hook 'org-mode-hook #'my/org-replace-drawers-with-recap)
 
   ; navigation
 
