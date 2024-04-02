@@ -353,6 +353,115 @@ function fz --description 'entry point for all the fuzziness glory'
 					--prompt "$argv[1] ($functionapp) ❯ " \
 					--header "$account")
 
+		case azure-iot-dps
+			if test "$argv[2]" = "--help"
+				print_azure_help
+				printf 'list: azure iot-dps using az\n'
+				printf 'preview: azure iot-dps details\n'
+				printf 'action: ^ - fz azure-resources\n'
+				printf 'action: ctrl-alt-c - fz azure-iot-dps-certificates\n'
+				return
+			end
+
+			set --local choice (az iot dps list \
+				| _jq '.[] | "\(.name)\u001f\(.location)\u001f\(.id)"' \
+				| _awk "$awk_dim3" \
+				| _fzf \
+					--header "$account" \
+					--expect ^ \
+					--expect ctrl-alt-c \
+					--expect ctrl-alt-g \
+					--preview "az iot dps show --name {1} | $bat_json")
+
+			if test -n "$choice"
+				set --local verb_ids (string split ' ' "$choice")
+				set --local iotdps $verb_ids[2]
+
+				switch $verb_ids[1]
+
+				case '^'
+					fz azure-resources
+
+				case 'ctrl-alt-c'
+					az config set defaults.iotdps="$iotdps" 2> /dev/null
+					fz azure-iot-dps-certificates
+
+				case 'ctrl-alt-g'
+					az config set defaults.iotdps="$iotdps" 2> /dev/null
+					fz azure-iot-dps-groups
+
+				case '*'
+					az config set defaults.iotdps="$iotdps" 2> /dev/null
+
+				end
+			end
+
+		case azure-iot-dps-certificates
+			set --local iotdps (az config get defaults.iotdps 2> /dev/null | _jq .value)
+
+			if test "$argv[2]" = "--help"
+				print_azure_help
+				print_info iotdps "$iotdps"
+				printf 'list: azure iot-dps certificates using az\n'
+				printf 'preview: azure iot-dps certificate\n'
+				printf 'action: ^ - fz azure-iot-dps\n'
+				return
+			end
+
+			set --local choice (az iot dps certificate list --dps-name "$iotdps" \
+				| _jq '.value | .[].name' \
+				| _awk "$awk_dim3" \
+				| _fzf \
+					--prompt "$argv[1] ($iotdps) ❯ " \
+					--header "$account" \
+					--expect ^ \
+					--preview "az iot dps certificate show --dps-name $iotdps --certificate-name {1} | $bat_json")
+
+			if test -n "$choice"
+				set --local verb_ids (string split ' ' "$choice")
+
+				switch $verb_ids[1]
+
+				case '^'
+					fz azure-iot-dps
+
+				case '*'
+				end
+			end
+
+		case azure-iot-dps-groups
+			set --local iotdps (az config get defaults.iotdps 2> /dev/null | _jq .value)
+
+			if test "$argv[2]" = "--help"
+				print_azure_help
+				print_info iotdps "$iotdps"
+				printf 'list: azure iot-dps enrollment groups using az\n'
+				printf 'preview: azure iot-dps group\n'
+				printf 'action: ^ - fz azure-iot-dps\n'
+				return
+			end
+
+			set --local choice (az iot dps enrollment-group list --dps-name "$iotdps" \
+				| _jq '.[] | .enrollmentGroupId' \
+				| _awk "$awk_dim3" \
+				| _fzf \
+					--prompt "$argv[1] ($iotdps) ❯ " \
+					--header "$account" \
+					--expect ^ \
+					--preview "az iot dps enrollment-group show --dps-name $iotdps --group-id {1} | $bat_json")
+
+			if test -n "$choice"
+				set --local verb_ids (string split ' ' "$choice")
+
+				switch $verb_ids[1]
+
+				case '^'
+					fz azure-iot-dps
+
+				case '*'
+				end
+			end
+
 		case azure-iot-hubs
 			if test "$argv[2]" = "--help"
 				print_azure_help
@@ -1895,6 +2004,9 @@ function fz --description 'entry point for all the fuzziness glory'
 			azure-event-hubs \
 			azure-extensions \
 			azure-functions \
+			azure-iot-dps \
+			azure-iot-dps-certificates \
+			azure-iot-dps-groups \
 			azure-iot-hubs \
 			azure-iot-hub-endpoints \
 			azure-iot-hub-routes \
