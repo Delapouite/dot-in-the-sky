@@ -118,13 +118,17 @@ https://code.orgmode.org/bzg/org-mode/commit/13424336a6f30c50952d291e7a82906c121
   (let ((parts '()))
     ;; dates
     (when-let (prop (cdr (assoc "FETCHED-AT" drawer-props)))
-      (push (substring prop 0 7) parts))
+      (push (concat "↓" (substring prop 0 10)) parts))
     (when-let (prop (cdr (assoc "RELEASED-AT" drawer-props)))
       (push (substring prop 0 4) parts))
     (when-let (prop (cdr (assoc "PUBLISHED-AT" drawer-props)))
       (push (substring prop 0 4) parts))
     (when-let (prop (cdr (assoc "UPGRADED-AT" drawer-props)))
       (push (concat "↑" (substring prop 0 10)) parts))
+    (when-let (prop (cdr (assoc "BORN-AT" drawer-props)))
+      (push (concat "⧖" (substring prop 0 4)) parts))
+    (when-let (prop (cdr (assoc "DIED-AT" drawer-props)))
+      (push (concat "⧗" (substring prop 0 4)) parts))
     (when-let (prop (cdr (assoc "PLAYED-AT" drawer-props)))
       (push (substring prop 0 7) parts))
     ;; suffixes
@@ -135,11 +139,13 @@ https://code.orgmode.org/bzg/org-mode/commit/13424336a6f30c50952d291e7a82906c121
     (when-let (prop (cdr (assoc "SCORE" drawer-props)))
       (push (concat prop "★") parts))
     (when-let (prop (cdr (assoc "STARS" drawer-props)))
-      (push (concat prop "★") parts))
+      (push (concat prop (if (cdr (assoc "STARRED" drawer-props)) "★" "☆")) parts))
     (when-let (prop (cdr (assoc "VIEWS" drawer-props)))
       (push (concat prop "views") parts))
     (when-let (prop (cdr (assoc "DEPENDENCIES" drawer-props)))
       (push (concat prop "dependencies") parts))
+    (when-let (prop (cdr (assoc "SOURCE-RANK" drawer-props)))
+      (push (concat prop "source-rank") parts))
     ;; raws
     (when-let (prop (cdr (assoc "ACRONYM" drawer-props)))
       (push prop parts))
@@ -148,7 +154,7 @@ https://code.orgmode.org/bzg/org-mode/commit/13424336a6f30c50952d291e7a82906c121
     (when-let (prop (cdr (assoc "LANGUAGE" drawer-props)))
       (push prop parts))
     (let ((recap (s-join " " (reverse parts))))
-      (if (string-empty-p recap) "properties:" recap))))
+      (if (string-empty-p recap) ":properties:" recap))))
 
 (defun my/org-replace-drawers-with-recap ()
   "Replace all org properties-drawers beginnings with a recap"
