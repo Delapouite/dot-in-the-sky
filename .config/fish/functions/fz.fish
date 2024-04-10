@@ -1535,6 +1535,20 @@ function fz --description 'entry point for all the fuzziness glory'
 			npm run "$choice"
 		end
 
+	case org-roam-links
+		if test "$argv[2]" = "--help"
+			printf "list: https links from org-roam\n"
+			print_dim 'preview: none'
+			printf 'action: open https link in default browser\n'
+			return
+		end
+
+		sqlite3 ~/.config/emacs/.local/cache/org-roam.db 'select dest from links where type = \'"https"\' order by dest' \
+			| _awk '{gsub(/"/, "", $1); printf "https:%s\n", $1}' \
+			| _fzf \
+			| xargs xdg-open
+		sleep 0.2
+
 	case pacman-mirrors
 		if test "$argv[2]" = "--help"
 			printf 'list: pacman mirrors\n'
@@ -2065,6 +2079,7 @@ function fz --description 'entry point for all the fuzziness glory'
 			network-ports \
 			npm-dependencies \
 			npm-scripts \
+			org-roam-links \
 			pacman-mirrors \
 			pacman-packages \
 			pastel-colors \

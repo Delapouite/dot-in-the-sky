@@ -40,6 +40,7 @@ bindsym $mod+p exec kitty --single-instance --class floating-term fish -c 'fz i3
 bindsym $mod+minus exec kitty --single-instance --class floating-term fish -c browser-search
 bindsym $mod+plus exec kitty --single-instance --class floating-term fish -c 'fz browser-bookmarks'
 bindsym $mod+dead_circumflex exec kitty --single-instance --class floating-term fish -c 'fz browser-tabs'
+bindsym $mod+dead_diaeresis exec kitty --single-instance --class floating-term fish -c 'fz org-roam-links'
 
 bindsym $mod+Shift+asciitilde move scratchpad
 bindsym $mod+asciitilde scratchpad show
