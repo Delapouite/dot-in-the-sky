@@ -140,6 +140,7 @@
     (interactive)
     (seq-map #'car
      (org-roam-db-query [:select id :from nodes])))
+  (setq my/org-roam-ids (my/org-roam-ids))
 
   ; override to store more stuffs in the properties column for https links
 
@@ -323,10 +324,11 @@
             (string-join (cdr (split-string (org-roam-node-title node) " - ")) " ")))
 
   (cl-defmethod org-roam-node-combo-link ((node org-roam-node))
-    (letrec ((parts (split-string (org-roam-node-title node) "·" t))
+    (letrec ((link-parts (s-split "·" (org-roam-node-title node)))
              (acronym-or-title (or (my/org-get-acronym) (org-get-title)))
-             (other (if (string= (nth 0 parts) acronym-or-title) (nth 1 parts) (nth 0 parts))))
-      (format "[[id:%s][%s]]" (org-roam-node-id node) other)))
+             (current-parts (s-split "·" acronym-or-title))
+             (description (s-join "·" (-difference link-parts current-parts))))
+      (format "[[id:%s][%s]]" (org-roam-node-id node) description)))
 
   ;; booleans
 
@@ -468,14 +470,10 @@
       (org-mark-ring-push)
       (org-roam-node-visit node nil 'force)))
 
-  (defun my/org-roam-goto-previous ()
+  (defun my/org-roam-goto-combo (index)
+    "Goto roam node INDEX of the combo"
     (interactive)
-    (let ((node (car (split-string (org-get-title) "·"))))
-      (my/org-roam-goto node)))
-
-  (defun my/org-roam-goto-next ()
-    (interactive)
-    (let ((node (cadr (split-string (org-get-title) "·"))))
+    (let ((node (nth index (s-split "·" (org-get-title)))))
       (my/org-roam-goto node)))
 
   ; keys
@@ -490,8 +488,9 @@
         :desc "Find tool" "r t" #'my/org-roam-node-find-tool
         :desc "Find node" "r r" #'my/org-roam-node-find-default
         :desc "Find ★1" "r 1" #'my/org-roam-node-find-interest
-        :desc "Goto previous" "P" #'my/org-roam-goto-previous
-        :desc "Goto next" "N" #'my/org-roam-goto-next))
+        :desc "Goto first combo" "g 1" (lambda () (interactive) (my/org-roam-goto-combo 0))
+        :desc "Goto second combo" "g 2" (lambda () (interactive) (my/org-roam-goto-combo 1))
+        :desc "Goto third combo" "g 3" (lambda () (interactive) (my/org-roam-goto-combo 2))))
 
 (use-package! org-roam-ql
   :config
