@@ -38,38 +38,6 @@
 
   ;; finders
 
-  (defun my/org-roam-node-find-album ()
-    (interactive)
-    (org-roam-node-find nil "#album"))
-
-  (defun my/org-roam-node-find-book ()
-    (interactive)
-    (org-roam-node-find nil "#book"))
-
-  (defun my/org-roam-node-find-artist ()
-    (interactive)
-    (org-roam-node-find nil "#artist"))
-
-  (defun my/org-roam-node-find-concept ()
-    (interactive)
-    (org-roam-node-find nil "#concept"))
-
-  (defun my/org-roam-node-find-interest ()
-    (interactive)
-    (org-roam-node-find nil "★+1"))
-
-  (defun my/org-roam-node-find-person ()
-    (interactive)
-    (org-roam-node-find nil "#person"))
-
-  (defun my/org-roam-node-find-tool ()
-    (interactive)
-    (org-roam-node-find nil "#tool"))
-
-  (defun my/org-roam-node-find-default ()
-    (interactive)
-    (org-roam-node-find))
-
   (setq org-tags-exclude-from-inheritance '("album" "artist" "debut" "top"))
 
   ; sections in sidebar
@@ -480,14 +448,15 @@
 
   (map! :n "M-<return>" #'my/org-roam-visit-node-at-point)
   (map! :leader
-        :desc "Find book" "r b" #'my/org-roam-node-find-book
-        :desc "Find concept" "r c" #'my/org-roam-node-find-concept
-        :desc "Find artist" "r i" #'my/org-roam-node-find-artist
-        :desc "Find album" "r l" #'my/org-roam-node-find-album
-        :desc "Find person" "r p" #'my/org-roam-node-find-person
-        :desc "Find tool" "r t" #'my/org-roam-node-find-tool
-        :desc "Find node" "r r" #'my/org-roam-node-find-default
-        :desc "Find ★1" "r 1" #'my/org-roam-node-find-interest
+        :desc "Find book" "r b" (lambda () (interactive) (org-roam-node-find nil "#book "))
+        :desc "Find concept" "r c" (lambda () (interactive) (org-roam-node-find nil "#concept "))
+        :desc "Find artist" "r i" (lambda () (interactive) (org-roam-node-find nil "#artist "))
+        :desc "Find album" "r l" (lambda () (interactive) (org-roam-node-find nil "#album "))
+        :desc "Find combo" "r o" (lambda () (interactive) (org-roam-node-find nil (concat "· " (or (my/org-get-acronym) (org-get-title)) " ")))
+        :desc "Find person" "r p" (lambda () (interactive) (org-roam-node-find nil "#person "))
+        :desc "Find tool" "r t" (lambda () (interactive) (org-roam-node-find nil "#tool "))
+        :desc "Find node" "r r" (lambda () (interactive) (org-roam-node-find))
+        :desc "Find ★1" "r 1" (lambda () (interactive) (org-roam-node-find nil "★+1 "))
         :desc "Goto first combo" "g 1" (lambda () (interactive) (my/org-roam-goto-combo 0))
         :desc "Goto second combo" "g 2" (lambda () (interactive) (my/org-roam-goto-combo 1))
         :desc "Goto third combo" "g 3" (lambda () (interactive) (my/org-roam-goto-combo 2))))
