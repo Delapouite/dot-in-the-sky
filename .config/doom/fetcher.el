@@ -5,6 +5,9 @@
 (require 'json)
 (require 'xml)
 
+(defun round-2 (x)
+  (/ (round (* 100 x)) 100.0))
+
 (defun my/fetch (url success)
   '(message (concat "fetching " url))
   (request url :parser 'json-read :success success :error
@@ -462,12 +465,14 @@
                 (lambda (&key data &allow-other-keys)
                   (let* ((extension (aref (assoc-default 'extensions (aref (assoc-default 'results data) 0)) 0))
                          (last-version (aref (assoc-default 'versions extension) 0))
+                         (stats (assoc-default 'statistics extension))
                          (manifest (assoc-default 'source (aref (assoc-default 'files last-version) 0))))
                     (setq org-property-format "%-18s %s")
                     (my/empty-property-drawer)
                     (my/org-set-prop "name" 'displayName extension)
                     (my/org-set-prop "description" 'shortDescription extension)
                     (my/org-set-prop "version" 'version last-version)
+                    (org-set-property "score" (number-to-string (round-2 (cdr (nth 1 (aref stats 1))))))
                     (org-set-property "manifest" manifest)
                     (my/org-set-prop "updated-at" 'lastUpdated extension)
                     (my/fetch manifest
