@@ -4126,5 +4126,535 @@
     "deprecated": null,
     "extendsBaseRule": null,
     "requiresTypeChecking": null
+  },
+  {
+    "id": "jest/consistent-test-it",
+    "type": "suggestion",
+    "fixable": "code",
+    "description": "Enforce `test` and `it` usage conventions",
+    "recommended": false,
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "jest/expect-expect",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Enforce assertion to be made in a test body",
+    "recommended": true,
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "jest/max-expects",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Enforces a maximum number assertion calls in a test body",
+    "recommended": false,
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "jest/max-nested-describe",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Enforces a maximum depth to nested describe calls",
+    "recommended": false,
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "jest/no-alias-methods",
+    "type": "suggestion",
+    "fixable": "code",
+    "description": "Disallow alias methods",
+    "recommended": true,
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "jest/no-commented-out-tests",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Disallow commented out tests",
+    "recommended": true,
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "jest/no-conditional-expect",
+    "type": "problem",
+    "fixable": null,
+    "description": "Disallow calling `expect` conditionally",
+    "recommended": true,
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "jest/no-conditional-in-test",
+    "type": "problem",
+    "fixable": null,
+    "description": "Disallow conditional logic in tests",
+    "recommended": false,
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "jest/no-confusing-set-timeout",
+    "type": "problem",
+    "fixable": null,
+    "description": "Disallow confusing usages of jest.setTimeout",
+    "recommended": false,
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "jest/no-deprecated-functions",
+    "type": "suggestion",
+    "fixable": "code",
+    "description": "Disallow use of deprecated functions",
+    "recommended": true,
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "jest/no-disabled-tests",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Disallow disabled tests",
+    "recommended": true,
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "jest/no-done-callback",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Disallow using a callback in asynchronous tests and hooks",
+    "recommended": true,
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "jest/no-duplicate-hooks",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Disallow duplicate setup and teardown hooks",
+    "recommended": false,
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "jest/no-export",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Disallow using `exports` in files containing tests",
+    "recommended": true,
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "jest/no-focused-tests",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Disallow focused tests",
+    "recommended": true,
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "jest/no-hooks",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Disallow setup and teardown hooks",
+    "recommended": false,
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "jest/no-identical-title",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Disallow identical titles",
+    "recommended": true,
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "jest/no-interpolation-in-snapshots",
+    "type": "problem",
+    "fixable": null,
+    "description": "Disallow string interpolation inside snapshots",
+    "recommended": true,
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "jest/no-jasmine-globals",
+    "type": "suggestion",
+    "fixable": "code",
+    "description": "Disallow Jasmine globals",
+    "recommended": true,
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "jest/no-large-snapshots",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Disallow large snapshots",
+    "recommended": false,
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "jest/no-mocks-import",
+    "type": "problem",
+    "fixable": null,
+    "description": "Disallow manually importing from `__mocks__`",
+    "recommended": true,
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "jest/no-restricted-jest-methods",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Disallow specific `jest.` methods",
+    "recommended": false,
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "jest/no-restricted-matchers",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Disallow specific matchers & modifiers",
+    "recommended": false,
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "jest/no-standalone-expect",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Disallow using `expect` outside of `it` or `test` blocks",
+    "recommended": true,
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "jest/no-test-prefixes",
+    "type": "suggestion",
+    "fixable": "code",
+    "description": "Require using `.only` and `.skip` over `f` and `x`",
+    "recommended": true,
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "jest/no-test-return-statement",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Disallow explicitly returning from tests",
+    "recommended": false,
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "jest/no-untyped-mock-factory",
+    "type": "suggestion",
+    "fixable": "code",
+    "description": "Disallow using `jest.mock()` factories without an explicit type parameter",
+    "recommended": false,
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "jest/prefer-called-with",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Suggest using `toBeCalledWith()` or `toHaveBeenCalledWith()`",
+    "recommended": false,
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "jest/prefer-comparison-matcher",
+    "type": "suggestion",
+    "fixable": "code",
+    "description": "Suggest using the built-in comparison matchers",
+    "recommended": false,
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "jest/prefer-each",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Prefer using `.each` rather than manual loops",
+    "recommended": false,
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "jest/prefer-equality-matcher",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Suggest using the built-in equality matchers",
+    "recommended": false,
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "jest/prefer-expect-assertions",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Suggest using `expect.assertions()` OR `expect.hasAssertions()`",
+    "recommended": false,
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "jest/prefer-expect-resolves",
+    "type": "suggestion",
+    "fixable": "code",
+    "description": "Prefer `await expect(...).resolves` over `expect(await ...)` syntax",
+    "recommended": false,
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "jest/prefer-hooks-in-order",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Prefer having hooks in a consistent order",
+    "recommended": false,
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "jest/prefer-hooks-on-top",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Suggest having hooks before any test cases",
+    "recommended": false,
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "jest/prefer-importing-jest-globals",
+    "type": "problem",
+    "fixable": "code",
+    "description": "Prefer importing Jest globals",
+    "recommended": false,
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "jest/prefer-lowercase-title",
+    "type": "suggestion",
+    "fixable": "code",
+    "description": "Enforce lowercase test names",
+    "recommended": false,
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "jest/prefer-mock-promise-shorthand",
+    "type": "suggestion",
+    "fixable": "code",
+    "description": "Prefer mock resolved/rejected shorthands for promises",
+    "recommended": false,
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "jest/prefer-snapshot-hint",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Prefer including a hint with external snapshots",
+    "recommended": false,
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "jest/prefer-spy-on",
+    "type": "suggestion",
+    "fixable": "code",
+    "description": "Suggest using `jest.spyOn()`",
+    "recommended": false,
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "jest/prefer-strict-equal",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Suggest using `toStrictEqual()`",
+    "recommended": false,
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "jest/prefer-to-be",
+    "type": "suggestion",
+    "fixable": "code",
+    "description": "Suggest using `toBe()` for primitive literals",
+    "recommended": false,
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "jest/prefer-to-contain",
+    "type": "suggestion",
+    "fixable": "code",
+    "description": "Suggest using `toContain()`",
+    "recommended": false,
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "jest/prefer-to-have-length",
+    "type": "suggestion",
+    "fixable": "code",
+    "description": "Suggest using `toHaveLength()`",
+    "recommended": false,
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "jest/prefer-todo",
+    "type": "layout",
+    "fixable": "code",
+    "description": "Suggest using `test.todo`",
+    "recommended": false,
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "jest/require-hook",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Require setup and teardown code to be within a hook",
+    "recommended": false,
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "jest/require-to-throw-message",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Require a message for `toThrow()`",
+    "recommended": false,
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "jest/require-top-level-describe",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Require test cases and hooks to be inside a `describe` block",
+    "recommended": false,
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "jest/unbound-method",
+    "type": "problem",
+    "fixable": null,
+    "description": "Enforce unbound methods are called with their expected scope",
+    "recommended": false,
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": true
+  },
+  {
+    "id": "jest/valid-describe-callback",
+    "type": "problem",
+    "fixable": null,
+    "description": "Enforce valid `describe()` callback",
+    "recommended": true,
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "jest/valid-expect-in-promise",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Require promises that have expectations in their chain to be valid",
+    "recommended": true,
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "jest/valid-expect",
+    "type": "suggestion",
+    "fixable": null,
+    "description": "Enforce valid `expect()` usage",
+    "recommended": true,
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": null
+  },
+  {
+    "id": "jest/valid-title",
+    "type": "suggestion",
+    "fixable": "code",
+    "description": "Enforce valid titles",
+    "recommended": true,
+    "deprecated": null,
+    "extendsBaseRule": null,
+    "requiresTypeChecking": null
   }
 ]

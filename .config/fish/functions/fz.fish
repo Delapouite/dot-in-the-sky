@@ -1078,6 +1078,9 @@ function fz --description 'entry point for all the fuzziness glory'
 			else if string match -r '@angular' "$rule_id"
 				set --local ng_rule_id (string sub --start 16 $rule_id)
 				firefox-developer-edition "https://github.com/angular-eslint/angular-eslint/blob/main/packages/eslint-plugin/docs/rules/$ng_rule_id.md"
+			else if string match -r 'jest' "$rule_id"
+				set --local jest_rule_id (string sub --start 5 $rule_id)
+				firefox-developer-edition "https://github.com/jest-community/eslint-plugin-jest/blob/main/docs/rules/$jest_rule_id.md"
 			else
 				firefox-developer-edition "https://eslint.org/docs/rules/$rule_id"
 			end
