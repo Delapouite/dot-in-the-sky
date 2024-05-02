@@ -15,6 +15,11 @@ abbr --add --position anywhere -- --jwt '--header "Authorization: Bearer $JWT"'
 # docker / podman
 abbr --add --position anywhere -- --transient '--rm --interactive --tty'
 
+# use fish_key_reader
+
+# ctrl+backspace
+bind \b backward-kill-bigword
+
 # ← arrow
 bind \e\[1\;3D backward-kill-word
 bind \e\[1\;4D backward-kill-bigword
