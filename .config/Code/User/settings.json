@@ -105,7 +105,7 @@
   // format
   "prettier.semi": false,
   "prettier.trailingComma": "all",
-  "[css][html][javascript][json][jsonc][scss][typescript][typescriptreact][yaml]": {
+  "[css][html][javascript][json][jsonc][markdown][scss][typescript][typescriptreact][yaml]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   "[terraform][terraform-vars]": {
