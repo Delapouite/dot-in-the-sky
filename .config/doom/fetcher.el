@@ -76,7 +76,7 @@
                                          (lambda (&key data &allow-other-keys)
                                            (when (> (length data) 0)
                                              (org-set-property "last-release" (assoc-default 'tag_name (aref data 0)))
-                                             (org-set-property "published-at" (assoc-default 'published_at (aref data 0))))
+                                             (org-set-property "released-at" (assoc-default 'published_at (aref data 0))))
                                            (my/fetch (concat "https://api.github.com/repos/" org "/" name "/commits?author=Delapouite&per_page=1")
                                                      (cl-function
                                                       (lambda (&key data &allow-other-keys)
@@ -287,14 +287,14 @@
     (my/fetch (concat "https://youtube.googleapis.com/youtube/v3/videos?part=snippet%2CcontentDetails%2Cstatistics&id=" youtube-id "&key=" my/youtube-api-key)
               (cl-function
                (lambda (&key data &allow-other-keys)
-                 (setq org-property-format "%-14s %s")
+                 (setq org-property-format "%-13s %s")
                  (my/empty-property-drawer)
                  (let ((item (aref (assoc-default 'items data) 0)))
                    (org-set-property "channel" (assoc-default 'channelTitle (assoc-default 'snippet item)))
                    (org-set-property "title" (assoc-default 'title (assoc-default 'snippet item)))
                    (org-set-property "views" (assoc-default 'viewCount (assoc-default 'statistics item)))
                    (org-set-property "duration" (assoc-default 'duration (assoc-default 'contentDetails item)))
-                   (org-set-property "published-at" (assoc-default 'publishedAt (assoc-default 'snippet item))))
+                   (org-set-property "released-at" (assoc-default 'publishedAt (assoc-default 'snippet item))))
                  (my/fetched-at))))))
 
 (defun my/visit-npm () (interactive) (my/visit-url "npmjs.com"))
@@ -318,6 +318,7 @@
                    (org-set-property "dependencies" (number-to-string dependencies))
                    (org-set-property "last-version" last-version)
                    (org-set-property "types" (or types "null"))
+                   (org-set-property "repository" (assoc-default 'url (assoc-default 'repository data)))
                    ;; final slash is important to get the listing
                    (org-set-property "unpkg" (concat "https://unpkg.com/" npm-id "/"))
                    (org-set-property "libraries.io" (concat "https://libraries.io/npm/" npm-id-hex))

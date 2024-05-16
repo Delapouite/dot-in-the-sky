@@ -16,7 +16,7 @@
                                       "fetched-at"
                                       "last-commit-at"
                                       "merged-at"
-                                      "published-at"
+                                      "released-at"
                                       "updated-at"
                                       "upgraded-at")
   "Names of properties with dates."

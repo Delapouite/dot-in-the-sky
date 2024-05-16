@@ -36,10 +36,10 @@
   (interactive)
   (org-set-property "upgraded-at" (iso8601-format)))
 
-(defun my/published-at (date)
-  "Set drawer property published-at to provided DATE"
-  (interactive "spublished-at? ")
-  (org-set-property "published-at" date))
+(defun my/released-at (date)
+  "Set drawer property released-at to provided DATE"
+  (interactive "sreleased-at? ")
+  (org-set-property "released-at" date))
 
 (defun my/created-at ()
   "Set drawer property created-at to now in ISO8601"
@@ -113,22 +113,24 @@ https://code.orgmode.org/bzg/org-mode/commit/13424336a6f30c50952d291e7a82906c121
         (replace-match (downcase (match-string-no-properties 1)) :fixedcase nil nil 1))
       (message "Lower-cased %d matches" count))))
 
+
+(defun my/substring-ym (string)
+  (substring string 0 (min 10 (length string))))
+
 (defun my/org-drawer-recap (drawer-props)
   "Compute recap of an org properties-drawer"
   (let ((parts '()))
     ;; dates
     (when-let (prop (cdr (assoc "FETCHED-AT" drawer-props)))
       (push (concat "↓" (substring prop 0 10)) parts))
-    (when-let (prop (cdr (assoc "RELEASED-AT" drawer-props)))
-      (push (substring prop 0 4) parts))
-    (when-let (prop (cdr (assoc "PUBLISHED-AT" drawer-props)))
-      (push (substring prop 0 4) parts))
     (when-let (prop (cdr (assoc "UPGRADED-AT" drawer-props)))
       (push (concat "↑" (substring prop 0 10)) parts))
+    (when-let (prop (cdr (assoc "RELEASED-AT" drawer-props)))
+      (push (my/substring-ym prop) parts))
     (when-let (prop (cdr (assoc "BORN-AT" drawer-props)))
-      (push (concat "⧖" (substring prop 0 4)) parts))
+      (push (concat "⧖" (my/substring-ym prop)) parts))
     (when-let (prop (cdr (assoc "DIED-AT" drawer-props)))
-      (push (concat "⧗" (substring prop 0 4)) parts))
+      (push (concat "⧗" (my/substring-ym prop)) parts))
     (when-let (prop (cdr (assoc "PLAYED-AT" drawer-props)))
       (push (substring prop 0 7) parts))
     ;; suffixes
@@ -146,6 +148,9 @@ https://code.orgmode.org/bzg/org-mode/commit/13424336a6f30c50952d291e7a82906c121
       (push (concat prop "dependencies") parts))
     (when-let (prop (cdr (assoc "SOURCE-RANK" drawer-props)))
       (push (concat prop "source-rank") parts))
+    ;; booleans
+    (when-let (prop (cdr (assoc "TYPES" drawer-props)))
+      (push (if (not (string= prop "null")) "types" "") parts))
     ;; raws
     (when-let (prop (cdr (assoc "ACRONYM" drawer-props)))
       (push prop parts))
@@ -159,10 +164,9 @@ https://code.orgmode.org/bzg/org-mode/commit/13424336a6f30c50952d291e7a82906c121
 (defun my/org-replace-drawers-with-recap ()
   "Replace all org properties-drawers beginnings with a recap"
   (interactive)
-  (let ((parsed-buffer (org-element-parse-buffer)))
-    (org-element-map parsed-buffer 'property-drawer
-      (lambda (drawer)
-        (let* ((begin (org-element-property :begin drawer))
-               (props (org-entry-properties begin))
-               (overlay (make-overlay begin (+ begin (length ":properties:")))))
-          (overlay-put overlay 'display (my/org-drawer-recap props)))))))
+  (org-element-map (org-element-parse-buffer) 'property-drawer
+    (lambda (drawer)
+      (let* ((begin (org-element-property :begin drawer))
+             (props (org-entry-properties begin))
+             (overlay (make-overlay begin (+ begin (length ":properties:")))))
+        (overlay-put overlay 'display (my/org-drawer-recap props))))))
