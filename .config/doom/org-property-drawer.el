@@ -135,15 +135,15 @@ https://code.orgmode.org/bzg/org-mode/commit/13424336a6f30c50952d291e7a82906c121
       (push (substring prop 0 7) parts))
     ;; suffixes
     (when-let (prop (cdr (assoc "REVISIONS" drawer-props)))
-      (push (concat prop "revisions") parts))
+      (push (concat (my/number-approx prop) "_revisions") parts))
     (when-let (prop (cdr (assoc "FOLLOWERS" drawer-props)))
-      (push (concat prop "followers") parts))
+      (push (concat (my/number-approx prop) "_followers") parts))
     (when-let (prop (cdr (assoc "SCORE" drawer-props)))
-      (push (concat prop "★") parts))
+      (push (concat (my/number-approx prop) "★") parts))
     (when-let (prop (cdr (assoc "STARS" drawer-props)))
-      (push (concat prop (if (cdr (assoc "STARRED" drawer-props)) "★" "☆")) parts))
+      (push (concat (my/number-approx prop) (if (cdr (assoc "STARRED" drawer-props)) "★" "☆")) parts))
     (when-let (prop (cdr (assoc "VIEWS" drawer-props)))
-      (push (concat prop "views") parts))
+      (push (concat (my/number-approx prop) "_views") parts))
     (when-let (prop (cdr (assoc "DEPENDENCIES" drawer-props)))
       (push (concat prop "dependencies") parts))
     (when-let (prop (cdr (assoc "SOURCE-RANK" drawer-props)))
@@ -170,3 +170,33 @@ https://code.orgmode.org/bzg/org-mode/commit/13424336a6f30c50952d291e7a82906c121
              (props (org-entry-properties begin))
              (overlay (make-overlay begin (+ begin (length ":properties:")))))
         (overlay-put overlay 'display (my/org-drawer-recap props))))))
+
+;; https://stackoverflow.com/questions/5580562/formatting-an-integer-using-iso-prefixes-for-kb-mb-gb-and-kib-mib-gib
+(defconst number-to-string-approx-suffixes
+  '("k" "M" "G" "T" "P" "E" "Z" "Y"))
+(defun number-to-string-approx-suffix (n &optional binary)
+  "Return an approximate decimal representation of NUMBER as a string,
+followed by a multiplier suffix (k, M, G, T, P, E, Z, Y). The representation
+is at most 5 characters long for numbers between 0 and 10^19-5*10^16.
+Uses a minus sign if negative.
+NUMBER may be an integer or a floating point number.
+If the optional argument BINARY is non-nil, use 1024 instead of 1000 as
+the base multiplier."
+  (if (zerop n)
+      "0"
+    (let ((sign "")
+          (b (if binary 1024 1000))
+          (suffix "")
+          (bigger-suffixes number-to-string-approx-suffixes))
+      (if (< n 0)
+          (setq n (- n)
+                sign "-"))
+      (while (and (>= n 999.5) (consp bigger-suffixes))
+        (setq n (/ n b) ; TODO: this is rounding down; nearest would be better
+              suffix (car bigger-suffixes)
+              bigger-suffixes (cdr bigger-suffixes)))
+      (concat sign
+              (if (integerp n) (int-to-string n) (number-to-string (floor n)))
+              suffix))))
+(defun my/number-approx (s)
+  (number-to-string-approx-suffix (string-to-number s)))
