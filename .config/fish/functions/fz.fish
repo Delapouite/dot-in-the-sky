@@ -218,8 +218,9 @@ function fz --description 'entry point for all the fuzziness glory'
 				return
 			end
 
-			set --local choice (az acr manifest list-metadata "$registry/$repository" 2> /dev/null \
-				| _jq '.[] | .digest' \
+			set --local choice (az acr manifest list-metadata "$registry/$repository" --orderby time_desc 2> /dev/null \
+				| _jq '.[] | "\(.digest)\u001f\(.lastUpdateTime)\u001f\(.imageSize)"' \
+				| _awk "$awk_dim3" \
 				| _fzf --query '' \
 					--prompt "$argv[1] ($registry/$repository) ❯ " \
 					--header "$account" \
