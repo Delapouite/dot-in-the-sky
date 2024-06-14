@@ -13,12 +13,20 @@
                   (file-attributes (buffer-file-name)))))
       (when mtime (iso8601-format mtime))))
 
+  (defun get-mtime-face (mtime)
+    "Select a face in a gradient depending on decay"
+    (let ((days (iso8601-diff-days mtime)))
+      (cond ((> days 180) 'error)
+            ((< days 30) 'success)
+            (t 'mode-line))))
+
   (doom-modeline-def-segment buffer-mtime
     "Define buffer-mtime modeline segment"
     (let* ((mtime (get-buffer-file-mtime))
-          (days (iso8601-diff-days mtime)))
+           (days (iso8601-diff-days mtime))
+           (face (get-mtime-face mtime)))
       (concat (doom-modeline-wspc)
-              (propertize (concat mtime " " (number-to-string days) "d") 'face (if (> days 180) 'error 'mode-line)))))
+              (propertize (concat mtime " " (number-to-string days) "d") 'face face))))
 
   (doom-modeline-def-segment org-roam-node-segment
     "Define org-roam modeline segment using node property accessors"

@@ -344,7 +344,7 @@
 
   (cl-defmethod org-roam-node-template-mtime ((node org-roam-node))
     (let ((mtime (org-roam-node-mtime node)))
-      (propertize mtime 'face (if (> (iso8601-diff-days mtime) 180) 'error 'mode-line))))
+      (propertize mtime 'face (get-mtime-face mtime))))
 
   (cl-defmethod org-roam-node-template-links ((node org-roam-node))
     (let* ((backlinks-count (cdr (assoc "BACKLINKS-COUNT" (org-roam-node-properties node))))
