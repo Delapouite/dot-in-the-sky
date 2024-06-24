@@ -111,10 +111,11 @@ disabled = true
 default = 'unknown AZURE_STORAGE_ACCOUNT'
 style = "cyan"
 
+# https://man.archlinux.org/man/git-log.1#PRETTY_FORMATS
 [custom.git]
 disabled = false
 description = "Author and date of last git commit"
-command = "git log -1 --format='%cn - %cd' --date=relative"
+command = "git log -1 --format='%an - %ad' --date=relative"
 when = "true"
 format = "[$output]($style) "
 style = "cyan"
