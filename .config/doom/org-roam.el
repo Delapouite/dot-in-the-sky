@@ -82,6 +82,11 @@
          :underline nil))
     "Face for · in Org-Mode links"
     :group 'org-faces)
+  (defface org-link-error
+    `((t :foreground ,dracula-red
+         :underline t))
+    "Face for broken Org-Mode links"
+    :group 'org-faces)
 
   (org-link-set-parameters
    "id"
@@ -89,7 +94,9 @@
            ;; let's try with title (which is the same as id in our case), it seems more reliable with caching issues
            (let* ((id (org-get-title)) ;(org-with-point-at 1 (org-id-get)))
                   (ids (my/org-roam-incoming-ids id)))
-             (if (member path ids) 'org-link-bidirectional 'org-link-id))))
+             (if (member path ids)
+                 'org-link-bidirectional
+               (if (org-roam-id-find path) 'org-link-id 'org-link-error)))))
   (org-link-set-parameters "file" :face 'org-link-file)
   (org-link-set-parameters "env" :face 'org-formula)
   (org-link-set-parameters "flag" :face 'org-formula)
