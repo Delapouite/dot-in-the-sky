@@ -33,6 +33,7 @@
     (letrec ((node (org-roam-node-from-id (org-with-point-at 1 (org-id-get))))
              (links (if node (org-roam-node-links-count node) ""))
              (backlinks (if node (org-roam-node-backlinks-count node) ""))
+             (stage (if node (org-roam-node-stage node) ""))
              (interest (if node (org-roam-node-interest node) ""))
              (upgraded-at (if node (org-roam-node-upgraded-at node) ""))
              (combos (if node (org-roam-node-combos node) ""))
@@ -41,6 +42,8 @@
               (propertize backlinks 'face (if (string-prefix-p "0" backlinks) 'error 'mode-line))
               "→ →"
               (propertize links 'face (if (string-prefix-p "0" links) 'error 'mode-line))
+              " ∧"
+              (propertize stage 'face 'mode-line)
               " ★"
               (propertize interest 'face 'mode-line)
               " ↑"

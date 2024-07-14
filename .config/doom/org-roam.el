@@ -251,6 +251,9 @@
                             "          ")))
       (substring upgraded-at 0 10)))
 
+  (cl-defmethod org-roam-node-type ((node org-roam-node))
+    (or (cdr (assoc "TYPE" (org-roam-node-properties node))) ""))
+
   (cl-defmethod org-roam-node-acronym ((node org-roam-node))
     (or (cdr (assoc "ACRONYM" (org-roam-node-properties node))) ""))
 
@@ -281,10 +284,16 @@
   (cl-defmethod org-roam-node-combos ((node org-roam-node))
     (or (cdr (assoc "COMBOS" (org-roam-node-properties node))) ""))
 
+  (cl-defmethod org-roam-node-instruments ((node org-roam-node))
+    (or (cdr (assoc "INSTRUMENTS" (org-roam-node-properties node))) ""))
+
   ;; scales
 
   (cl-defmethod org-roam-node-interest ((node org-roam-node))
     (or (cdr (assoc "INTEREST" (org-roam-node-properties node))) "  "))
+
+  (cl-defmethod org-roam-node-stage ((node org-roam-node))
+    (or (cdr (assoc "STAGE" (org-roam-node-properties node))) " "))
 
   (cl-defmethod org-roam-node-tier ((node org-roam-node))
     (or (cdr (assoc "TIER" (org-roam-node-properties node))) ""))
@@ -312,6 +321,9 @@
 
   (cl-defmethod org-roam-node-live ((node org-roam-node))
     (or (cdr (assoc "LIVE" (org-roam-node-properties node))) ""))
+
+  (cl-defmethod org-roam-node-tab ((node org-roam-node))
+    (or (cdr (assoc "TAB" (org-roam-node-properties node))) ""))
 
   ;; dates
 
@@ -371,12 +383,14 @@
            (died-at (if died-at (concat " ⧗" died-at) ""))
            (released-at (cdr (assoc "RELEASED-AT" (org-roam-node-properties node))))
            (released-at (if released-at (concat " ⧗" released-at) ""))
+           (type (cdr (assoc "TYPE" (org-roam-node-properties node))))
+           (type (if type (concat " ‡" type) ""))
            (tags (mapconcat (lambda (v) (concat "#" v)) (org-roam-node-tags node)  " ")))
-      (concat tags country population born-at died-at released-at)))
+      (concat tags type country population born-at died-at released-at)))
 
   (defun my/org-roam-template-default ()
     (interactive)
-    (setq org-roam-node-display-template "${template-title:*} | @${template-level} | f${file:50} | ${template-links} | ★${interest} | ↑${upgraded-at} | m${template-mtime} | ${combos} ${template-tags:50}"))
+    (setq org-roam-node-display-template "${template-title:*} | @${template-level} | f${file:50} | ${template-links} | ∧${stage} | ★${interest} | ↑${upgraded-at} | m${template-mtime} | ${combos} ${template-tags:50}"))
 
   (my/org-roam-template-default)
 
