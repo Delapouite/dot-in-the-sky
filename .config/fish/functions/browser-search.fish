@@ -126,7 +126,7 @@ function browser-search --description 'browser search with various engines'
 		$browser "https://www.wordnik.com/words/$query"
 
 	case '*'
-		$browser "https://duckduckgo.com/?q=$query"
+		$browser "https://duckduckgo.com/?kav=1&kp=-2&kaj=m&kak=-1&kax=-1&kaq=-1&kap=-1&kao=-1&kau=-1&km=m&kae=d&q=$query"
 
 	end
 end
