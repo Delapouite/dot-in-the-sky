@@ -254,17 +254,12 @@
   (cl-defmethod org-roam-node-type ((node org-roam-node))
     (or (cdr (assoc "TYPE" (org-roam-node-properties node))) ""))
 
-  (cl-defmethod org-roam-node-acronym ((node org-roam-node))
-    (or (cdr (assoc "ACRONYM" (org-roam-node-properties node))) ""))
 
   (cl-defmethod org-roam-node-artist ((node org-roam-node))
     (or (cdr (assoc "ARTIST" (org-roam-node-properties node))) ""))
 
   (cl-defmethod org-roam-node-author ((node org-roam-node))
     (or (cdr (assoc "AUTHOR" (org-roam-node-properties node))) ""))
-
-  (cl-defmethod org-roam-node-description ((node org-roam-node))
-    (or (cdr (assoc "DESCRIPTION" (org-roam-node-properties node))) ""))
 
   (cl-defmethod org-roam-node-country ((node org-roam-node))
     (or (cdr (assoc "COUNTRY" (org-roam-node-properties node))) ""))
@@ -286,6 +281,17 @@
 
   (cl-defmethod org-roam-node-instruments ((node org-roam-node))
     (or (cdr (assoc "INSTRUMENTS" (org-roam-node-properties node))) ""))
+
+  ;; alt identities
+
+  (cl-defmethod org-roam-node-acronym ((node org-roam-node))
+    (or (cdr (assoc "ACRONYM" (org-roam-node-properties node))) ""))
+
+  (cl-defmethod org-roam-node-description ((node org-roam-node))
+    (or (cdr (assoc "DESCRIPTION" (org-roam-node-properties node))) ""))
+
+  (cl-defmethod org-roam-node-gerund ((node org-roam-node))
+    (or (cdr (assoc "GERUND" (org-roam-node-properties node))) ""))
 
   ;; scales
 
@@ -346,6 +352,8 @@
            (pacronym (propertize (concat "‹" acronym "›") 'face 'org-property-value))
            (description (cdr (assoc "DESCRIPTION" (org-roam-node-properties node))))
            (pdescription (propertize (concat "«" description "»") 'face 'org-property-value))
+           (gerund (cdr (assoc "GERUND" (org-roam-node-properties node))))
+           (pgerund (propertize (concat "+ing") 'face 'org-property-value))
            (aliases (org-roam-node-aliases node))
            (title (org-roam-node-title node))
            (parent (car (split-string title " > ")))
@@ -355,6 +363,7 @@
        ((and acronym (not (string-equal acronym title))) (concat ptitle " " pacronym))
        ((and acronym (string-equal acronym title)) pacronym)
        ((and description) (concat ptitle " " pdescription))
+       ((and gerund) (concat ptitle " " pgerund))
        ((and aliases) (concat ptitle "*"))
        (t ptitle))))
 
