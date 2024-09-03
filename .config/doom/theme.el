@@ -48,8 +48,8 @@
 (custom-set-faces!
   `(bold :weight bold :foreground ,dracula-orange)
   ;; yellow titles: in regular buffer and sidebar
-  `(org-document-title :weight: light :height 2.0 :foreground ,dracula-yellow :family "Iosevka Etoile")
-  `(org-roam-header-line :weight bold :height 2.0 :foreground ,dracula-yellow)
+  `(org-document-title :weight: light :height 2.0 :foreground ,dracula-foreground :family "Iosevka Etoile")
+  `(org-roam-header-line :weight bold :height 2.0 :foreground ,dracula-foreground)
   ;; cyan Links / Backlinks titles in sidebar
   `(magit-section-heading :height 1.4 :foreground ,dracula-cyan)
   ;; outline in sidebar
@@ -63,7 +63,11 @@
   `(org-document-info :foreground ,dracula-grey)
   `(org-agenda-done :foreground ,dracula-grey)
   `(org-headline-done :foreground ,dracula-grey)
-  `(org-quote :slant italic :foreground ,dracula-foreground)
-  `(org-link :weight normal :foreground ,dracula-cyan)
-  `(outline-1 :height 1.4 :family "Iosevka Etoile")
-  `(outline-2 :height 0.8))
+  `(org-quote :slant italic :foreground ,dracula-grey)
+  `(org-link :weight normal :foreground ,dracula-foreground)
+  `(org-block :foreground ,dracula-grey)
+  `(org-inline-src-block :foreground ,dracula-grey)
+  `(org-table :foreground ,dracula-grey)
+  `(outline-1 :height 1.4 :foreground ,dracula-foreground :family "Iosevka Etoile")
+  `(outline-2 :height 0.8 :foreground ,dracula-foreground)
+  `(outline-3 :foreground ,dracula-foreground))

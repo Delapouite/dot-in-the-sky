@@ -62,12 +62,12 @@
   ; org-link
 
   (defface org-link-id
-    `((t :foreground ,dracula-green
+    `((t :foreground ,dracula-cyan
          :underline t))
     "Face for Org-Mode links starting with id:."
     :group 'org-faces)
   (defface org-link-bidirectional
-    `((t :foreground ,dracula-green
+    `((t :foreground ,dracula-cyan
          :weight bold
          :underline t))
     "Face for Org-Mode bidirectional links."
