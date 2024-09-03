@@ -96,7 +96,7 @@
   (defun org-dblock-write:org-roam-cities (params)
     "Write org block for org-roam-cities with PARAMS."
     (let ((departement (plist-get params :departement)))
-      (org-dblock-write:org-roam-ql `(:query (and (tags "city") (properties "departement" ,departement))
+      (org-dblock-write:org-roam-ql `(:query (and (properties "type" "city") (properties "departement" ,departement))
                                       :columns (link population role live)
                                       :no-link true))))
 
