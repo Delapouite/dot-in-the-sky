@@ -97,12 +97,12 @@ xkb_keymap {
     key <AB10> {[ question        , questiondown    , U061F           , VoidSymbol      ],[ VoidSymbol      , VoidSymbol      ]}; // ? ¿ ؟
 
     // Left Pinky keys
-    key <TLDE> {[ asciitilde      , dead_tilde      , VoidSymbol      , VoidSymbol      ],[ VoidSymbol      , VoidSymbol      ]}; // ~ ◌̃
+    key <TLDE> {[ asciitilde      , dead_tilde      , VoidSymbol      , VoidSymbol      ],[ U2248           , U2249           ]}; // ~ ◌̃     ≈ ≉
     key <LSGT> {[ Alt_L           , Alt_L          ], type = "TWO_LEVEL" };
 
     // Right Pinky keys
-    key <AE11> {[ minus           , underscore      , emdash          , endash          ],[ VoidSymbol      , VoidSymbol      ]}; // - _ — –
-    key <AE12> {[ equal           , plus            , notequal        , plusminus       ],[ VoidSymbol      , VoidSymbol      ]}; // = + ≠ ±
+    key <AE11> {[ minus           , underscore      , overline        , VoidSymbol      ],[ emdash          , endash          ]}; // - _ ‾   — –
+    key <AE12> {[ equal           , plus            , notequal        , VoidSymbol      ],[ plusminus       , U2213           ]}; // = + ≠   ± ∓
     key <AD11> {[ dead_circumflex , dead_acute      , dead_caron      , VoidSymbol      ],[ VoidSymbol      , VoidSymbol      ]}; // ◌̂ ◌́ ◌̌
     key <AD12> {[ dead_diaeresis  , dead_grave      , dead_breve      , VoidSymbol      ],[ VoidSymbol      , VoidSymbol      ]}; // ◌̈ ◌̀ ◌̆
     key <AC11> {[ apostrophe      , quotedbl        , dead_schwa      , VoidSymbol      ],[ VoidSymbol      , VoidSymbol      ]}; // ' "
