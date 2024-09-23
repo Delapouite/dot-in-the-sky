@@ -15,7 +15,7 @@
            (compound (if (> (length title-parts) 1)
                          (concat "\\|\\(^" (nth 0 title-parts) "·.*·" (nth 1 title-parts) "$\\)") "")))
       (org-dblock-write:org-roam-ql `(:query (and (title ,(concat "\\(^" title "·\\)\\|\\(·" title "$\\)\\|\\(·" title "·\\)" compound)))
-                                      :columns (combo-link combos)
+                                      :columns (combo-link combos acronym)
                                       :no-link true))))
 
   (defun org-dblock-write:org-roam-artist (params)
