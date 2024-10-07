@@ -508,11 +508,15 @@
       (org-mark-ring-push)
       (org-roam-node-visit node nil 'force)))
 
-  (defun my/org-roam-goto-combo (index)
-    "Goto roam node INDEX of the combo"
+  (defun my/org-roam-goto-combo (first second)
+    "Goto roam node from parts of the combo"
     (interactive)
-    (let ((node (nth index (s-split "·" (org-get-title)))))
-      (my/org-roam-goto node)))
+    (let* ((parts (s-split "·" (org-get-title)))
+           (first-part (nth first parts))
+           (second-part (nth second parts))
+           (title (s-join "·" (if (eq first-part second-part)
+                                  `(,first-part) `(,first-part ,second-part)))))
+      (my/org-roam-goto title)))
 
   ; keys
 
@@ -527,9 +531,13 @@
         :desc "Find tool" "r t" (lambda () (interactive) (org-roam-node-find nil "#tool "))
         :desc "Find node" "r r" (lambda () (interactive) (org-roam-node-find))
         :desc "Find ★1" "r 1" (lambda () (interactive) (org-roam-node-find nil "★+1 "))
-        :desc "Goto first combo" "g 1" (lambda () (interactive) (my/org-roam-goto-combo 0))
-        :desc "Goto second combo" "g 2" (lambda () (interactive) (my/org-roam-goto-combo 1))
-        :desc "Goto third combo" "g 3" (lambda () (interactive) (my/org-roam-goto-combo 2))))
+        :desc "Goto first combo part" "g 1 1" (lambda () (interactive) (my/org-roam-goto-combo 0 0))
+        :desc "Goto second combo part" "g 2 2" (lambda () (interactive) (my/org-roam-goto-combo 1 1))
+        :desc "Goto third combo part" "g 3 3" (lambda () (interactive) (my/org-roam-goto-combo 2 2))
+        :desc "Goto fourth combo part" "g 4 4" (lambda () (interactive) (my/org-roam-goto-combo 3 3))
+        :desc "Goto 1 & 2 combo duo" "g 1 2" (lambda () (interactive) (my/org-roam-goto-combo 0 1))
+        :desc "Goto 2 & 3 combo duo" "g 2 3" (lambda () (interactive) (my/org-roam-goto-combo 1 2))
+        :desc "Goto 1 & 3 combo duo" "g 1 3" (lambda () (interactive) (my/org-roam-goto-combo 0 2))))
 
 (use-package! org-roam-ql
   :config
