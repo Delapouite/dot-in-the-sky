@@ -305,7 +305,7 @@
                  (my/fetched-at))))))
 
 (defun my/visit-npm () (interactive) (my/visit-url "npmjs.com"))
-(defvar my/npm-re ".*?https://www.npmjs.com/package/\\([a-zA-Z0-9-_@/]*\\).*")
+(defvar my/npm-re ".*?https://www.npmjs.com/package/\\([a-zA-Z0-9-_@/.]*\\).*")
 
 (defun my/fetch-npm-stats ()
   "Fetch Npm REST API and add the returned values in a PROPERTIES drawer"
