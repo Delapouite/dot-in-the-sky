@@ -557,17 +557,18 @@
                  (my/fetched-at))))))
 
 (defun my/visit-mastodon-social () (interactive) (my/visit-url "mastodon.social"))
-(defvar my/mastodon-social-re ".*?https://mastodon.social/@\\([a-zA-Z0-9-_]*\\).*")
+(defvar my/mastodon-re ".*?https://\\(chaos.social\\|fosstodon.org\\|front-end.social\\|hachyderm.io\\|indieweb.social\\|mas.to\\|masto.ai\\|mastodon.social\\|social.lfx.dev\\|tilde.zone\\|toot.cafe\\)/@\\([a-zA-Z0-9-_]*\\).*")
 
-(defun my/fetch-mastodon-social-stats ()
-  "Fetch Mastodon Social REST API and add the returned values in a PROPERTIES drawer"
+(defun my/fetch-mastodon-stats ()
+  "Fetch Mastodon REST API and add the returned values in a PROPERTIES drawer"
   (interactive)
-  (seq-let (username) (my/parse-url my/mastodon-social-re)
-    (my/fetch (concat "https://mastodon.social/api/v1/accounts/lookup?acct=" username)
+  (seq-let (domain username) (my/parse-url my/mastodon-re)
+    (message domain username)
+    (my/fetch (concat "https://" domain "/api/v1/accounts/lookup?acct=" username)
               (cl-function
                (lambda (&key data &allow-other-keys)
                  (let ((userid (assoc-default 'id data)))
-                   (my/fetch (concat "https://mastodon.social/api/v1/accounts/" userid)
+                   (my/fetch (concat "https://" domain "/api/v1/accounts/" userid)
                              (cl-function
                               (lambda (&key data &allow-other-keys)
                                 (setq org-property-format "%-12s %s")
@@ -594,7 +595,7 @@
       ((string-match-p my/github-pull-re line-content) (my/fetch-github-pull-stats))
       ((string-match-p my/github-re line-content) (my/fetch-github-stats))
       ((string-match-p my/gitlab-re line-content) (my/fetch-gitlab-stats))
-      ((string-match-p my/mastodon-social-re line-content) (my/fetch-mastodon-social-stats))
+      ((string-match-p my/mastodon-re line-content) (my/fetch-mastodon-stats))
       ((string-match-p my/musicbrainz-re line-content) (my/fetch-musicbrainz-stats))
       ((string-match-p my/npm-re line-content) (my/fetch-npm-stats))
       ((string-match-p my/serverfault-re line-content) (my/fetch-serverfault-stats))
