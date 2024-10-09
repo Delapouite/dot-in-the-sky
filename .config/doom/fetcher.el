@@ -67,6 +67,7 @@
                  (setq org-property-format "%-16s %s")
                  (my/empty-property-drawer)
                  (org-set-property "description" (or (assoc-default 'description data) "null"))
+                 (org-set-property "license" (assoc-default 'spdx_id (assoc-default 'license data)))
                  (my/org-set-number-prop "stars" 'stargazers_count data)
                  (my/org-set-number-prop "open-issues" 'open_issues data)
                  (org-set-property "language" (or (assoc-default 'language data) "null"))
