@@ -107,21 +107,38 @@
       (my/org-link-description-replace (concat "‹" acronym "›")))))
 
 (defun my/org-link-description-to-bathonym ()
-  "Turn the description of link into its bathonym if it exists"
+  "Turn the description of link into its bathonym or title if it exists"
   (interactive)
   (let* ((node (my/org-roam-node-from-link))
+         (bathonym (org-roam-node-bathonym node))
          (title (org-roam-node-title node)))
-    (when (not (string= "" title))
-      (my/org-link-description-replace title))))
+    (cond
+     ((not (string= "" bathonym)) (my/org-link-description-replace bathonym))
+     ((not (string= "" title)) (my/org-link-description-replace title)))))
+
+(defun my/org-link-description-to-acronym-bathonym ()
+  "Turn the description of link into its ‹acronym› bathonym if it exists"
+  (interactive)
+  (let* ((node (my/org-roam-node-from-link))
+         (title (org-roam-node-title node))
+         (bathonym (org-roam-node-bathonym node))
+         (acronym (org-roam-node-acronym node)))
+    (when (not (string= "" acronym))
+      (cond
+       ((not (string= "" bathonym)) (my/org-link-description-replace (concat "‹" acronym "› " bathonym)))
+       ((not (string= "" title)) (my/org-link-description-replace (concat "‹" acronym "› " title)))))))
 
 (defun my/org-link-description-to-bathonym-acronym ()
   "Turn the description of link into its bathonym ‹acronym› if it exists"
   (interactive)
   (let* ((node (my/org-roam-node-from-link))
          (title (org-roam-node-title node))
+         (bathonym (org-roam-node-bathonym node))
          (acronym (org-roam-node-acronym node)))
     (when (not (string= "" acronym))
-      (my/org-link-description-replace (concat title " ‹" acronym "›")))))
+      (cond
+       ((not (string= "" bathonym)) (my/org-link-description-replace (concat bathonym " ‹" acronym "›")))
+       ((not (string= "" title)) (my/org-link-description-replace (concat title " ‹" acronym "›")))))))
 
 (defun my/org-link-description-to-spec ()
   "Turn the description of link into its spec «description» if it exists"

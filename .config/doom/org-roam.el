@@ -287,6 +287,9 @@
   (cl-defmethod org-roam-node-acronym ((node org-roam-node))
     (or (cdr (assoc "ACRONYM" (org-roam-node-properties node))) ""))
 
+  (cl-defmethod org-roam-node-bathonym ((node org-roam-node))
+    (or (cdr (assoc "BATHONYM" (org-roam-node-properties node))) ""))
+
   (cl-defmethod org-roam-node-description ((node org-roam-node))
     (or (cdr (assoc "DESCRIPTION" (org-roam-node-properties node))) ""))
 
