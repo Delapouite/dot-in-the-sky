@@ -15,6 +15,7 @@ function browser-search --description 'browser search with various engines'
 		github \
 		google \
 		hacker-news \
+		jsr \
 		linguee \
 		lobsters \
 		mdn \
@@ -88,6 +89,9 @@ function browser-search --description 'browser search with various engines'
 
 	case hacker-news hn
 		$browser "https://hn.algolia.com/?q=$query"
+
+	case jsr
+		$browser "https://jsr.io/packages?search=$query"
 
 	case linguee
 		$browser "https://www.linguee.com/english-french/search?query=$query"
