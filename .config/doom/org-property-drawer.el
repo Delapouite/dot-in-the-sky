@@ -11,13 +11,16 @@
     (kill-region (org-element-property :begin element)
                  (org-element-property :end element))))
 
-(defun my/empty-property-drawer ()
+(defun my/empty-property-drawer (len)
   (let ((element (org-get-property-block)))
     (when element
+      (setq org-property-format (concat "%-" (number-to-string len) "s %s"))
       (kill-region (car element) (cdr element)))))
 
 (defun my/org-set-prop (prop key alist)
-  (org-set-property prop (assoc-default key alist)))
+  (let ((value (or (assoc-default key alist) "null")))
+    (cond ((numberp value) (org-set-property prop (number-to-string value)))
+          (t (org-set-property prop value)))))
 
 (defun my/org-set-number-prop (prop key alist)
   (org-set-property prop (number-to-string (assoc-default key alist))))
