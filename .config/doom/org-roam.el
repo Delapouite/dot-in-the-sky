@@ -106,15 +106,15 @@
     (interactive)
     (seq-uniq
      (seq-map #'car
-      (org-roam-db-query [:select source
-                          :from links
-                          :where (= dest $s1)
-                          :and (= type "id")] id))))
+              (org-roam-db-query [:select source
+                                  :from links
+                                  :where (= dest $s1)
+                                  :and (= type "id")] id))))
 
   (defun my/org-roam-ids ()
     (interactive)
     (seq-map #'car
-     (org-roam-db-query [:select id :from nodes])))
+             (org-roam-db-query [:select id :from nodes])))
   (setq my/org-roam-ids (my/org-roam-ids))
 
   ; override to store more stuffs in the properties column for https links
@@ -521,6 +521,12 @@
                                   `(,first-part) `(,first-part ,second-part)))))
       (my/org-roam-goto title)))
 
+  (defun my/org-roam-goto-year (offset)
+    "Goto relative year roam node"
+    (interactive)
+    (let ((year (string-to-number (org-get-title))))
+      (my/org-roam-goto (number-to-string (+ year offset)))))
+
   ; keys
 
   (map! :n "M-<return>" #'my/org-roam-visit-node-at-point)
@@ -540,7 +546,14 @@
         :desc "Goto fourth combo part" "g 4 4" (lambda () (interactive) (my/org-roam-goto-combo 3 3))
         :desc "Goto 1 & 2 combo duo" "g 1 2" (lambda () (interactive) (my/org-roam-goto-combo 0 1))
         :desc "Goto 2 & 3 combo duo" "g 2 3" (lambda () (interactive) (my/org-roam-goto-combo 1 2))
-        :desc "Goto 1 & 3 combo duo" "g 1 3" (lambda () (interactive) (my/org-roam-goto-combo 0 2))))
+        :desc "Goto 1 & 3 combo duo" "g 1 3" (lambda () (interactive) (my/org-roam-goto-combo 0 2))
+        :desc "Goto 1 & 4 combo duo" "g 1 4" (lambda () (interactive) (my/org-roam-goto-combo 0 3))
+        :desc "Goto 2 & 4 combo duo" "g 2 4" (lambda () (interactive) (my/org-roam-goto-combo 1 3))
+        :desc "Goto 3 & 4 combo duo" "g 3 4" (lambda () (interactive) (my/org-roam-goto-combo 2 3))
+        :desc "Goto previous year" "g p" (lambda () (interactive) (my/org-roam-goto-year -1))
+        :desc "Goto next year" "g n" (lambda () (interactive) (my/org-roam-goto-year 1))
+        :desc "Goto previous decade" "g P" (lambda () (interactive) (my/org-roam-goto-year -10))
+        :desc "Goto next decade" "g N" (lambda () (interactive) (my/org-roam-goto-year 10))))
 
 (use-package! org-roam-ql
   :config
