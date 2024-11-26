@@ -123,6 +123,8 @@ https://code.orgmode.org/bzg/org-mode/commit/13424336a6f30c50952d291e7a82906c121
 (defun my/org-drawer-recap (drawer-props)
   "Compute recap of an org properties-drawer"
   (let ((parts '()))
+    (when-let (prop (cdr (assoc "TYPE" drawer-props)))
+      (push (concat "‡" prop) parts))
     ;; dates
     (when-let (prop (cdr (assoc "FETCHED-AT" drawer-props)))
       (push (concat "↓" (substring prop 0 10)) parts))
