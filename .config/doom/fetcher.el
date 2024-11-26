@@ -55,6 +55,8 @@
 
 (defun my/visit-ietf () (interactive) (my/visit-url "datatracker.ietf.org"))
 
+;;; GitHub
+
 (defun my/visit-github () (interactive) (my/visit-url "github.com"))
 (defvar my/github-re ".*?https://github.com/\\([a-zA-Z0-9-_\.]*\\)/\\([a-zA-Z0-9-_\.]*\\).*")
 
@@ -67,7 +69,7 @@
      (lambda (data)
        (my/empty-property-drawer 16)
        (my/org-set-prop "description" 'description data)
-       (org-set-property "license" (my/assoc-default data 'licence 'spdx_id))
+       (org-set-property "license" (or (my/assoc-default data 'licence 'spdx_id) "null"))
        (my/org-set-prop "stars" 'stargazers_count data)
        (my/org-set-prop "open-issues" 'open_issues data)
        (my/org-set-prop "language" 'language data)
@@ -92,7 +94,7 @@
                             (lambda (data)
                               (when (> (length data) 0)
                                 (org-set-property "last-release" (assoc-default 'tag_name (aref data 0)))
-                                (org-set-property "released-at" (assoc-default 'published_at (aref data 0))))
+                                (org-set-property "released-at" (or (assoc-default 'published_at (aref data 0)) "null")))
                               (my/fetch
                                (concat "https://api.github.com/repos/" org "/" name "/commits?author=Delapouite&per_page=1")
                                (lambda (data)
@@ -119,7 +121,7 @@
                                                   (org-set-property "subscribed" "true")))))
                                  (my/fetched-at)))))))))))))))
 
-
+;; https://docs.github.com/en/rest/issues/issues?apiVersion=2022-11-28
 (defun my/visit-github-issues () (interactive) (my/visit-url "github.com issues"))
 (defvar my/github-issues-re ".*?https://github.com/\\([a-zA-Z0-9-_\.]*\\)/\\([a-zA-Z0-9-_\.]*\\)/issues/\\([a-zA-Z0-9-_\.]*\\).*")
 
@@ -140,6 +142,7 @@
        (org-set-property "closed-at" (or (assoc-default 'closed_at data) "null"))
        (my/fetched-at)))))
 
+;; https://docs.github.com/en/rest/pulls/pulls?apiVersion=2022-11-28
 (defun my/visit-github-pull () (interactive) (my/visit-url "github.com pull"))
 (defvar my/github-pull-re ".*?https://github.com/\\([a-zA-Z0-9-_\.]*\\)/\\([a-zA-Z0-9-_\.]*\\)/pull/\\([a-zA-Z0-9-_\.]*\\).*")
 
@@ -161,6 +164,7 @@
        (org-set-property "merged-at" (or (assoc-default 'merged_at data) "null"))
        (my/fetched-at)))))
 
+;; https://docs.github.com/en/rest/users/users?apiVersion=2022-11-28
 (defvar my/github-user-re ".*?https://github.com/\\([a-zA-Z0-9-_\.]*\\).*")
 (defun my/fetch-github-user-stats ()
   "Fetch GitHub REST API for user and add the returned values in a PROPERTIES drawer"
@@ -552,13 +556,12 @@
        (my/fetched-at)))))
 
 (defun my/visit-mastodon-social () (interactive) (my/visit-url "mastodon.social"))
-(defvar my/mastodon-re ".*?https://\\(chaos.social\\|fosstodon.org\\|front-end.social\\|hachyderm.io\\|indieweb.social\\|mas.to\\|masto.ai\\|mastodon.social\\|social.lfx.dev\\|tilde.zone\\|toot.cafe\\)/@\\([a-zA-Z0-9-_]*\\).*")
+(defvar my/mastodon-re ".*?https://\\(chaos.social\\|fosstodon.org\\|framapiaf.org\\|front-end.social\\|hachyderm.io\\|indieweb.social\\|mas.to\\|masto.ai\\|mastodon.social\\|social.lfx.dev\\|tilde.zone\\|toot.cafe\\|m.webtoo.ls\\)/@\\([a-zA-Z0-9-_]*\\).*")
 
 (defun my/fetch-mastodon-stats ()
   "Fetch Mastodon REST API and add the returned values in a PROPERTIES drawer"
   (interactive)
   (seq-let (domain username) (my/parse-url my/mastodon-re)
-    (message domain username)
     (my/fetch
      (concat "https://" domain "/api/v1/accounts/lookup?acct=" username)
      (lambda (data)
@@ -573,6 +576,23 @@
             (my/org-set-prop "updated-at" 'last_status_at data)
             (my/fetched-at))))))))
 
+(defvar my/bluesky-re ".*?https://bsky.app/profile/\\([a-zA-Z0-9-_\.]*\\).*")
+
+(defun my/fetch-bluesky-stats ()
+  "Fetch Bluesky REST API and add the returned values in a PROPERTIES drawer"
+  (interactive)
+  (seq-let (username) (my/parse-url my/bluesky-re)
+    (message username)
+    (my/fetch
+     (concat "https://public.api.bsky.app/xrpc/app.bsky.actor.getProfile?actor=" username)
+     (lambda (data)
+       (setq org-property-format "%-12s %s")
+       (my/org-set-prop "followers" 'followersCount data)
+       (my/org-set-prop "following" 'followsCount data)
+       (my/org-set-prop "statuses" 'postsCount data)
+       (my/org-set-prop "created-at" 'createdAt data)
+       (my/fetched-at)))))
+
 (defun my/fetch-stats ()
   "Fetch current website REST API and add the returned values in a PROPERTIES drawer"
   (interactive)
@@ -582,6 +602,7 @@
       ((string-match-p my/archlinux-wiki-re line-content) (my/fetch-archlinux-wiki-stats))
       ((string-match-p my/askubuntu-re line-content) (my/fetch-askubuntu-stats))
       ((string-match-p my/aur-re line-content) (my/fetch-aur-stats))
+      ((string-match-p my/bluesky-re line-content) (my/fetch-bluesky-stats))
       ((string-match-p my/bundlephobia-re line-content) (my/fetch-bundlephobia-stats))
       ((string-match-p my/docker-hub-re line-content) (my/fetch-docker-hub))
       ((string-match-p my/docker-hub-official-re line-content) (my/fetch-docker-official-hub))
