@@ -16,7 +16,8 @@
   (defun get-mtime-face (mtime)
     "Select a face in a gradient depending on decay"
     (let ((days (iso8601-diff-days mtime)))
-      (cond ((> days 180) 'error)
+      (cond ((> days 300) 'error)
+            ((> days 180) 'warning)
             ((< days 30) 'success)
             (t 'mode-line))))
 
