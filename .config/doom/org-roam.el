@@ -159,7 +159,7 @@
 
   '(add-hook 'org-follow-link-hook #'my/visited-at)
 
-  (defun my/org-roam-save-count ()
+  (defun my/org-roam-save-counts ()
     "Save links and backlinks count in database"
     (interactive)
     (org-with-point-at 1
@@ -168,16 +168,22 @@
           (letrec ((node (org-roam-node-from-id id))
                    (properties (org-entry-properties))
                    (links-count (org-roam-node-links-count node))
-                   (backlinks-count (org-roam-node-backlinks-count node)))
+                   (backlinks-count (org-roam-node-backlinks-count node))
+                   (wikipedia-links-count (org-roam-node-wikipedia-links-count node))
+                   (social-links-count (org-roam-node-social-links-count node)))
             (unless (assoc "LINKS-COUNT" properties) (push '("LINKS-COUNT" . 0) properties))
             (setcdr (assoc "LINKS-COUNT" properties) links-count)
             (unless (assoc "BACKLINKS-COUNT" properties) (push '("BACKLINKS-COUNT" . 0) properties))
             (setcdr (assoc "BACKLINKS-COUNT" properties) backlinks-count)
+            (unless (assoc "WIKIPEDIA-LINKS-COUNT" properties) (push '("WIKIPEDIA-LINKS-COUNT" . 0) properties))
+            (setcdr (assoc "WIKIPEDIA-LINKS-COUNT" properties) wikipedia-links-count)
+            (unless (assoc "SOCIAL-LINKS-COUNT" properties) (push '("SOCIAL-LINKS-COUNT" . 0) properties))
+            (setcdr (assoc "SOCIAL-LINKS-COUNT" properties) social-links-count)
             (org-roam-db-query
              [:update nodes
               :set (= properties $s2)
               :where (= id $s1)] id properties))))))
-  '(advice-add 'org-roam-db-update-file :after #'my/org-roam-save-count)
+  (advice-add 'org-roam-db-update-file :after #'my/org-roam-save-counts)
 
   ;; random predicate natively implemented in https://github.com/org-roam/org-roam/pull/2050
 
@@ -238,6 +244,40 @@
                           :from links
                           :where (= dest $s1)
                           :and (= type "id")]
+                         (org-roam-node-id node)))))
+      (format "%d" count)))
+
+  (cl-defmethod org-roam-node-wikipedia-links-count ((node org-roam-node))
+    (let* ((count (caar (org-roam-db-query
+                         [:select (funcall count source)
+                          :from links
+                          :where (= source $s1)
+                          :and (= type "https")
+                          :and (like dest "%//en.wikipedia.org%")]
+                         (org-roam-node-id node)))))
+      (format "%d" count)))
+
+  (cl-defmethod org-roam-node-social-links-count ((node org-roam-node))
+    (let* ((count (caar (org-roam-db-query
+                         [:select (funcall count source)
+                          :from links
+                          :where
+                          (and
+                           (= source $s1)
+                           (= type "https")
+                           (or (like dest "%//bsky.app/profile/%")
+                               (like dest "%//chaos.social%")
+                               (like dest "%//framapiaf.org%")
+                               (like dest "%//fosstodon.org%")
+                               (like dest "%//hachyderm.io%")
+                               (like dest "%//indieweb.social%")
+                               (like dest "%//mas.to%")
+                               (like dest "%//masto.ai%")
+                               (like dest "%//mastodon.social%")
+                               (like dest "%//social.lfx.dev%")
+                               (like dest "%//tilde.zone%")
+                               (like dest "%//toot.cafe%")
+                               (like dest "%//m.webtoo.ls%")))]
                          (org-roam-node-id node)))))
       (format "%d" count)))
 
@@ -378,11 +418,16 @@
       (propertize mtime 'face (get-mtime-face mtime))))
 
   (cl-defmethod org-roam-node-template-links ((node org-roam-node))
-    (let* ((backlinks-count (cdr (assoc "BACKLINKS-COUNT" (org-roam-node-properties node))))
+    (let* ((props (org-roam-node-properties node))
+           (backlinks-count (cdr (assoc "BACKLINKS-COUNT" props)))
            (backlinks-count (if backlinks-count (concat (string-pad backlinks-count 2) "→" ) "  →"))
-           (links-count (cdr (assoc "LINKS-COUNT" (org-roam-node-properties node))))
-           (links-count (if links-count (concat " →" (string-pad links-count 2)) " →  ")))
-      (concat backlinks-count links-count)))
+           (links-count (cdr (assoc "LINKS-COUNT" props)))
+           (links-count (if links-count (concat " →" (string-pad links-count 2)) " →  "))
+           (wikipedia-links-count (cdr (assoc "WIKIPEDIA-LINKS-COUNT" props)))
+           (wikipedia-links-count (if wikipedia-links-count (concat " w" wikipedia-links-count) "   "))
+           (social-links-count (cdr (assoc "SOCIAL-LINKS-COUNT" props)))
+           (social-links-count (if social-links-count (concat " s" social-links-count) "   ")))
+      (concat backlinks-count links-count wikipedia-links-count social-links-count)))
 
   (cl-defmethod org-roam-node-template-tags ((node org-roam-node))
     (let* ((country (cdr (assoc "COUNTRY" (org-roam-node-properties node))))
@@ -442,7 +487,8 @@
 
   (defun my/org-roam-template-default ()
     (interactive)
-    (setq org-roam-node-display-template "${template-title:*} | @${template-level} | f${file:50} | ${template-links} | ∧${stage} | ★${interest} | ↑${upgraded-at} | m${template-mtime} | ${combos} ${template-tags:50}"))
+
+    (setq org-roam-node-display-template "${template-title:*} | ⭲${template-level} | ■${file:50} | ${template-links} | ∧${stage} | ★${interest} | ↑${upgraded-at} | m${template-mtime} | ${combos} ${template-tags:50}"))
 
   (my/org-roam-template-default)
 

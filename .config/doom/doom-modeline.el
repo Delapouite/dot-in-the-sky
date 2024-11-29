@@ -34,6 +34,8 @@
     (letrec ((node (org-roam-node-from-id (org-with-point-at 1 (org-id-get))))
              (links (if node (org-roam-node-links-count node) ""))
              (backlinks (if node (org-roam-node-backlinks-count node) ""))
+             (wikipedia-links (if node (org-roam-node-wikipedia-links-count node) ""))
+             (social-links (if node (org-roam-node-social-links-count node) ""))
              (stage (if node (org-roam-node-stage node) ""))
              (interest (if node (org-roam-node-interest node) ""))
              (upgraded-at (if node (org-roam-node-upgraded-at node) ""))
@@ -41,18 +43,14 @@
              (tags (if node (org-roam-node-template-tags node) "")))
       (concat (doom-modeline-wspc)
               (propertize backlinks 'face (if (string-prefix-p "0" backlinks) 'error 'mode-line))
-              "→ →"
-              (propertize links 'face (if (string-prefix-p "0" links) 'error 'mode-line))
-              " ∧"
-              (propertize stage 'face 'mode-line)
-              " ★"
-              (propertize interest 'face 'mode-line)
-              " ↑"
-              (propertize upgraded-at 'face 'mode-line)
-              " "
-              (propertize combos 'face 'mode-line)
-              " "
-              (propertize tags 'face 'mode-line)
+              "→ →" (propertize links 'face (if (string-prefix-p "0" links) 'error 'mode-line))
+              " w" (propertize wikipedia-links 'face (if (string-prefix-p "0" wikipedia-links) 'error 'mode-line))
+              " s" (propertize social-links 'face (if (string-prefix-p "0" social-links) 'error 'mode-line))
+              " ∧" (propertize stage 'face 'mode-line)
+              " ★" (propertize interest 'face 'mode-line)
+              " ↑" (propertize upgraded-at 'face 'mode-line)
+              " " (propertize combos 'face 'mode-line)
+              " " (propertize tags 'face 'mode-line)
               )))
 
   ;; look at the 50+ doom-modeline-segment--* functions to discover possible segments
