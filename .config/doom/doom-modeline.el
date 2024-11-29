@@ -55,9 +55,10 @@
               (propertize tags 'face 'mode-line)
               )))
 
+  ;; look at the 50+ doom-modeline-segment--* functions to discover possible segments
   (doom-modeline-def-modeline 'my-modeline
     '(bar window-number modals matches buffer-info-simple buffer-mtime buffer-position word-count selection-info)
-    '(org-roam-node-segment objed-state misc-info debug lsp minor-modes input-method indent-info major-mode process checker))
+    '(org-roam-node-segment objed-state misc-info debug lsp minor-modes input-method indent-info major-mode process check))
 
   (defun doom-modeline-set-my-modeline ()
     "Enable my modeline"
