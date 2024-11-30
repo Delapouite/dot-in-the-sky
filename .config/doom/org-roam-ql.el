@@ -21,14 +21,24 @@
 
   (defun org-dblock-write:org-roam-artist (params)
     "Write org block for org-roam-artist with PARAMS."
-    (let ((country (plist-get params :country)))
+    (let ((country (plist-get params :country))
+          (year (plist-get params :year)))
       (when country
-        (org-dblock-write:org-roam-ql `(:query (and (tags "artist") (properties "country" ,country))
-                                        :columns (link)
+        (org-dblock-write:org-roam-ql `(:query (and (properties type "artist") (properties "country" ,country))
+                                        :columns (link released-at live)
+                                        :headers ("Artist" "Year" "Live")
+                                        :no-link true)))
+      (when year
+        (org-dblock-write:org-roam-ql `(:query (and (properties type "artist") (properties "released-at" ,year))
+                                        :columns (link country live)
+                                        :headers ("Artist" "Country" "Live")
                                         :no-link true)))))
 
   (defun org-dblock-write:artists-by-country (_params)
     (org-dblock-write:org-roam-artist `(:country ,(org-get-title))))
+
+  (defun org-dblock-write:artists-by-year (_params)
+    (org-dblock-write:org-roam-artist `(:year ,(org-get-title))))
 
   (defun org-dblock-write:org-roam-albums (params)
     "Write org block for org-roam-albums with PARAMS."
@@ -37,11 +47,13 @@
       (when artist
         (org-dblock-write:org-roam-ql `(:query (and (properties type "album") (properties "artist" ,(concat "\\[" artist "\\]\\]")))
                                         :columns (released-at album-link tracks-count debut)
+                                        :headers ("Year" "Album" "Tracks" "Debut")
                                         :sort "released-at"
                                         :no-link true)))
       (when year
         (org-dblock-write:org-roam-ql `(:query (and (properties type "album") (properties "released-at" ,year))
                                         :columns (artist album-link tracks-count debut)
+                                        :headers ("Artist" "Album" "Tracks" "Debut")
                                         :no-link true)))))
 
   (defun org-dblock-write:albums-by-artist (_params)
