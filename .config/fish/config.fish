@@ -49,6 +49,7 @@ if test -e /opt/asdf-vm/asdf.fish
 	source /opt/asdf-vm/asdf.fish
 end
 
-if type -q atuin
+if status is-interactive && type -q atuin
 	atuin init fish | source
 end
+
