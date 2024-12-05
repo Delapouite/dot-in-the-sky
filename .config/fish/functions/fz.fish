@@ -850,7 +850,7 @@ function fz --description 'entry point for all the fuzziness glory'
 			| _fzf \
 				--header "$data_source" \
 			| sed 's#.*\(https*://\)#\1#' \
-			| xargs xdg-open
+			| xargs xdg-open > /dev/null
 		sleep 0.2
 
 	case browser-tabs
@@ -962,7 +962,7 @@ function fz --description 'entry point for all the fuzziness glory'
 				return
 			end
 
-			set --local choice (docker container ls -a \
+			set --local choice (docker containers -a \
 				| _fzf \
 					--header-lines=1 \
 					--preview "docker container inspect {1} | jq .[0] | $bat_json")
@@ -975,7 +975,7 @@ function fz --description 'entry point for all the fuzziness glory'
 				return
 			end
 
-			set --local choice (docker image ls \
+			set --local choice (docker images \
 				| _fzf \
 					--header-lines=1 \
 					--preview "docker image inspect {3} | jq .[0] | $bat_json")
@@ -988,7 +988,7 @@ function fz --description 'entry point for all the fuzziness glory'
 				return
 			end
 
-			set --local choice (docker image ls --filter 'dangling=true' \
+			set --local choice (docker images --filter 'dangling=true' \
 				| _fzf \
 					--header-lines=1 \
 					--preview "docker image inspect {3} | jq .[0] | $bat_json")
@@ -1001,7 +1001,7 @@ function fz --description 'entry point for all the fuzziness glory'
 				return
 			end
 
-			set --local choice (docker network ls \
+			set --local choice (docker networks \
 				| _fzf \
 					--header-lines=1 \
 					--preview "docker network inspect {1} | jq .[0] | $bat_json")
@@ -1025,10 +1025,10 @@ function fz --description 'entry point for all the fuzziness glory'
 				return
 			end
 
-			set --local choice (docker volume ls \
+			set --local choice (docker volumes \
 				| _fzf \
 					--header-lines=1 \
-					--preview "docker volume inspect {2} | jq .[0] | $bat_json")
+					--preview "docker volume inspect {3} | jq .[0] | $bat_json")
 
 		end
 
