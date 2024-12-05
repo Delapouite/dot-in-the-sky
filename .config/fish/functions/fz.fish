@@ -1301,6 +1301,19 @@ function fz --description 'entry point for all the fuzziness glory'
 			| _fzf \
 				--preview 'ip address show {2}'
 
+	case ip-links
+		if test "$argv[2]" = "--help"
+			printf 'list: ip links\n'
+			printf 'preview: ip link details\n'
+			print_dim 'action: none'
+			return
+		end
+
+		ip -oneline link \
+			| _fzf \
+				# the link name has an infortunate ":" suffix
+				--preview 'ip link show (string trim --right --chars=: {2})'
+
 	case json-schemas
 		set --local actions \
 			"download schema to $tmpdir" \
@@ -2067,6 +2080,7 @@ function fz --description 'entry point for all the fuzziness glory'
 			i3-windows \
 			i3-workspaces \
 			ip-addresses \
+			ip-links \
 			json-schemas \
 			kakoune-sessions \
 			key-compositions \
