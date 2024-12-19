@@ -11,12 +11,29 @@
   (defun org-dblock-write:combos (params)
     "Write org block for org-roam-combos with PARAMS."
     (let* ((title (or (plist-get params :title) (my/org-get-acronym) (org-get-title)))
-           (title-parts (s-split "·" title))
-           (compound (if (> (length title-parts) 1)
-                         (concat "\\|\\(^" (nth 0 title-parts) "·.*·" (nth 1 title-parts) "$\\)") "")))
-      (org-dblock-write:org-roam-ql `(:query (and (title ,(concat "\\(^" title "·\\)\\|\\(·" title "$\\)\\|\\(·" title "·\\)" compound)))
+           (parts (s-split "·" title))
+           (depth (plist-get params :depth))
+           (alt "\\|")
+           (start "\\(^")
+           (end "$\\)")
+           (compound (cond
+                      ((= (length parts) 2) (concat alt start (nth 0 parts) "·.*·" (nth 1 parts) end
+                                                    alt start ".*·" (nth 0 parts) "·.*·" (nth 1 parts) end
+                                                    alt start (nth 0 parts) "·.*·" (nth 1 parts) "·.*" end))
+                      ((= (length parts) 3) (concat alt start (nth 0 parts) "·.*·" (nth 1 parts) "·" (nth 2 parts) end
+                                                    alt start (nth 0 parts) "·" (nth 1 parts) "·.*·" (nth 2 parts) end))
+                      ((= (length parts) 4) (concat alt start (nth 0 parts) "·.*·" (nth 1 parts) "·" (nth 2 parts) "·" (nth 3 parts) end
+                                                    alt start (nth 0 parts) "·" (nth 1 parts) "·.*·" (nth 2 parts) "·" (nth 3 parts) end
+                                                    alt start (nth 0 parts) "·" (nth 1 parts) "·" (nth 2 parts) "·.*·" (nth 3 parts) end))
+                      (t ""))))
+
+      (org-dblock-write:org-roam-ql `(:query (and (title ,(concat start title "·\\)"
+                                                                  alt "\\(·" title end
+                                                                  alt "\\(·" title "·\\)"
+                                                                  compound)))
                                       :columns (combo-link combos acronym bathonym)
                                       :headers ("Link" "Combo" "Acro" "Batho")
+                                      :combos-depth ,depth
                                       :no-link true))))
 
   (defun org-dblock-write:org-roam-artist (params)
@@ -173,6 +190,7 @@
           (headers (plist-get params :headers))
           (sort (plist-get params :sort))
           (take (plist-get params :take))
+          (combos-depth (plist-get params :combos-depth))
           (no-link (plist-get params :no-link)))
       (if (and query columns)
           (-if-let (nodes (org-roam-ql-nodes query sort))
@@ -181,6 +199,10 @@
                   (setq nodes (cl-etypecase take
                                 ((and integer (satisfies cl-minusp)) (-take-last (abs take) nodes))
                                 (integer (-take take nodes)))))
+                (when combos-depth
+                  (setq nodes (--filter
+                               (>= combos-depth (length (s-split "·" (org-roam-node-title it)))) nodes)))
+                ;; headers
                 (insert "|"
                         (if no-link "" "|")
                         (string-join (--map-indexed
