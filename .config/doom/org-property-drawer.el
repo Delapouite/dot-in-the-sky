@@ -151,6 +151,8 @@ https://code.orgmode.org/bzg/org-mode/commit/13424336a6f30c50952d291e7a82906c121
       (push (concat (my/number-approx prop) "_views") parts))
     (when-let (prop (cdr (assoc "DEPENDENCIES" drawer-props)))
       (push (concat prop "dependencies") parts))
+    (when-let (prop (cdr (assoc "REPOSITORIES" drawer-props)))
+      (push (concat prop "repositories") parts))
     (when-let (prop (cdr (assoc "SOURCE-RANK" drawer-props)))
       (push (concat prop "source-rank") parts))
     ;; booleans
