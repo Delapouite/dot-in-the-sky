@@ -69,9 +69,10 @@
      (lambda (data)
        (my/empty-property-drawer 16)
        (my/org-set-prop "description" 'description data)
-       (org-set-property "license" (or (my/assoc-default data 'licence 'spdx_id) "null"))
+       (org-set-property "license" (or (my/assoc-default data 'license 'spdx_id) "null"))
        (my/org-set-prop "stars" 'stargazers_count data)
        (my/org-set-prop "open-issues" 'open_issues data)
+       (my/org-set-prop "size" 'size data)
        (my/org-set-prop "language" 'language data)
        (my/org-set-boolean-prop "archived" 'archived data)
        (my/org-set-prop "created-at" 'created_at data)
@@ -432,6 +433,7 @@
 (defun my/visit-docker-hub () (interactive) (my/visit-url "hub.docker.com"))
 (defvar my/docker-hub-re ".*?https://hub.docker.com/r/\\([a-zA-Z0-9-_]*\\)/\\([a-zA-Z0-9-_]*\\).*")
 (defvar my/docker-hub-official-re ".*?https://hub.docker.com/_/\\([a-zA-Z0-9-_]*\\).*")
+(defvar my/docker-hub-user-re ".*?https://hub.docker.com/u/\\([a-zA-Z0-9-_]*\\).*")
 
 (defun my/fetch-docker-hub ()
   "Try to fetch a pseudo Dockerfile"
@@ -448,6 +450,17 @@
     (let ((dockerfile (shell-command-to-string (concat "skopeo inspect --config docker://docker.io/" image " | jq -r '.history | map(.created_by) | join(\"\n\")'"))))
       (end-of-line)
       (insert (concat "\n#+begin_src dockerfile\n" dockerfile "#+end_src")))))
+
+(defun my/fetch-docker-hub-user ()
+  "Fetch repositories for a Docker Hub user"
+  (interactive)
+  (seq-let (user) (my/parse-url my/docker-hub-user-re)
+    (my/fetch
+     (concat "https://hub.docker.com/v2/repositories/" user)
+     (lambda (data)
+       (my/empty-property-drawer 14)
+       (my/org-set-prop "repositories" 'count data)
+       (my/fetched-at)))))
 
 (defun my/visit-bundlephobia () (interactive) (my/visit-url "bundlephobia.com"))
 (defvar my/bundlephobia-re ".*?https://bundlephobia.com/package/\\([a-zA-Z0-9-_@.]*\\).*")
@@ -606,6 +619,7 @@
       ((string-match-p my/bundlephobia-re line-content) (my/fetch-bundlephobia-stats))
       ((string-match-p my/docker-hub-re line-content) (my/fetch-docker-hub))
       ((string-match-p my/docker-hub-official-re line-content) (my/fetch-docker-official-hub))
+      ((string-match-p my/docker-hub-user-re line-content) (my/fetch-docker-hub-user))
       ((string-match-p my/hacker-news-re line-content) (my/fetch-hacker-news-stats))
       ((string-match-p my/github-issues-re line-content) (my/fetch-github-issues-stats))
       ((string-match-p my/github-pull-re line-content) (my/fetch-github-pull-stats))
