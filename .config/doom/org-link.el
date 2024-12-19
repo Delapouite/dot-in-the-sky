@@ -27,14 +27,6 @@
         (delete-region (match-beginning 0) (match-end 0)))
     (org-insert-link nil (s-replace " + " "·" raw-path) (s-replace " + " "·" description))))
 
-(defun my/org-link-rename-vs ()
-  (interactive)
-  (let ((raw-path (my/org-link-raw))
-        (description (my/org-link-description)))
-    (if (org-in-regexp org-link-bracket-re 1)
-        (delete-region (match-beginning 0) (match-end 0)))
-    (org-insert-link nil (s-replace " vs " "·" raw-path) (s-replace " vs " "·" description))))
-
 (defun my/org-link-raw (&optional link)
   "Return raw LINK"
   (unless link (setq link (org-element-context)))
@@ -156,3 +148,56 @@
          (gerund (org-roam-node-gerund node)))
     (when (not (string= "" gerund))
       (my/org-link-description-replace gerund))))
+
+(defun my/org-link-description-to-tion ()
+  "Turn the description of link into its tion if it exists"
+  (interactive)
+  (let* ((node (my/org-roam-node-from-link))
+         (tion (org-roam-node-tion node)))
+    (when (not (string= "" tion))
+      (my/org-link-description-replace tion))))
+
+(defun my/org-link-description-with-released-at ()
+  "Append released-at property to the description of link if it exists"
+  (interactive)
+  (let* ((node (my/org-roam-node-from-link))
+         (title (org-roam-node-title node))
+         (released-at (org-roam-node-released-at node)))
+    (when (not (string= "    " released-at))
+       (my/org-link-description-replace (concat title " (" released-at ")")))))
+
+(defun my/org-link-description-prepend-fa ()
+  "Prepend Font Awesome Icon for well-known brands"
+  (interactive)
+  (let ((description (my/org-link-description)))
+    (when (s-ends-with? " - Wikipedia" description)
+      (my/org-link-description-replace (concat " " (s-chop-suffix " - Wikipedia" description))))
+    (when (s-ends-with? " · GitHub" description)
+      (my/org-link-description-replace (concat " " (s-chop-suffix " · GitHub" description))))
+    (when (s-starts-with? "GitHub - " description)
+      (my/org-link-description-replace (concat " " (s-chop-prefix "GitHub - " description))))
+    (when (s-ends-with? " - Stack Overflow" description)
+      (my/org-link-description-replace (concat " " (s-chop-suffix " - Stack Overflow" description))))
+    (when (s-ends-with? " - YouTube" description)
+      (my/org-link-description-replace (concat " " (s-chop-suffix " - YouTube" description))))
+    (when (s-ends-with? " | Hacker News" description)
+      (my/org-link-description-replace (concat " " (s-chop-suffix " | Hacker News" description))))
+    (when (s-ends-with? " - OpenBSD manual pages" description)
+      (my/org-link-description-replace (concat " " (s-chop-suffix " - OpenBSD manual pages" description))))
+    ))
+
+(defun my/org-link-description-prepend-fa-wikipedia ()
+  (interactive)
+  (my/org-link-description-replace (concat " " (my/org-link-description))))
+
+(defun my/org-link-description-prepend-fa-docker ()
+  (interactive)
+  (my/org-link-description-replace (concat " " (my/org-link-description))))
+
+(defun my/org-link-description-prepend-fa-github ()
+  (interactive)
+  (my/org-link-description-replace (concat " " (my/org-link-description))))
+
+(defun my/org-link-description-prepend-fa-stackoverflow ()
+  (interactive)
+  (my/org-link-description-replace (concat " " (my/org-link-description))))
