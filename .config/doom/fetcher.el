@@ -600,6 +600,8 @@
      (concat "https://public.api.bsky.app/xrpc/app.bsky.actor.getProfile?actor=" username)
      (lambda (data)
        (setq org-property-format "%-12s %s")
+       (my/org-set-prop "did" 'did data)
+       (my/org-set-prop "name" 'displayName data)
        (my/org-set-prop "followers" 'followersCount data)
        (my/org-set-prop "following" 'followsCount data)
        (my/org-set-prop "statuses" 'postsCount data)
