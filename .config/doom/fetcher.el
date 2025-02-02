@@ -294,20 +294,45 @@
               'my/parse-stack-tags-response)))
 
 (defun my/visit-youtube () (interactive) (my/visit-url "youtube.com"))
-(defvar my/youtube-re ".*?https://www.youtube.com/watch\\?v=\\([a-zA-Z0-9-_]*\\).*")
 
-(defun my/fetch-youtube-stats ()
-  "Fetch Youtube REST API and add the returned values in a PROPERTIES drawer"
+(defvar my/youtube-channel-re ".*?https://www.youtube.com/@\\([a-zA-Z0-9-_]*\\).*")
+
+(defun my/fetch-youtube-channel-stats ()
+  "Fetch Youtube Channel REST API and add the returned values in a PROPERTIES drawer"
   (interactive)
-  (seq-let (youtube-id) (my/parse-url my/youtube-re)
+  (seq-let (youtube-handle) (my/parse-url my/youtube-channel-re)
+    (my/fetch
+     (concat "https://youtube.googleapis.com/youtube/v3/channels?part=snippet%2CcontentDetails%2Cstatistics&forHandle=" youtube-handle "&key=" my/youtube-api-key)
+     (lambda (data)
+       (my/empty-property-drawer 13)
+       (let ((item (aref (assoc-default 'items data) 0)))
+         (org-set-property "title" (my/assoc-default item 'snippet 'title))
+         (org-set-property "channel-id" (my/assoc-default item 'id))
+         (org-set-property "custom-url" (my/assoc-default item 'snippet 'customUrl))
+         (org-set-property "country" (my/assoc-default item 'snippet 'country))
+         (org-set-property "subscribers" (my/assoc-default item 'statistics 'subscriberCount))
+         (org-set-property "views" (my/assoc-default item 'statistics 'viewCount))
+         (org-set-property "videos" (my/assoc-default item 'statistics 'videoCount))
+         (org-set-property "released-at" (my/assoc-default item 'snippet 'publishedAt)))
+       (my/fetched-at)))))
+
+(defvar my/youtube-video-re ".*?https://www.youtube.com/watch\\?v=\\([a-zA-Z0-9-_]*\\).*")
+
+(defun my/fetch-youtube-video-stats ()
+  "Fetch Youtube Videos REST API and add the returned values in a PROPERTIES drawer"
+  (interactive)
+  (seq-let (youtube-id) (my/parse-url my/youtube-video-re)
     (my/fetch
      (concat "https://youtube.googleapis.com/youtube/v3/videos?part=snippet%2CcontentDetails%2Cstatistics&id=" youtube-id "&key=" my/youtube-api-key)
      (lambda (data)
        (my/empty-property-drawer 13)
        (let ((item (aref (assoc-default 'items data) 0)))
          (org-set-property "channel" (my/assoc-default item 'snippet 'channelTitle))
+         (org-set-property "channel-id" (my/assoc-default item 'snippet 'channelId))
          (org-set-property "title" (my/assoc-default item 'snippet 'title))
          (org-set-property "views" (my/assoc-default item 'statistics 'viewCount))
+         (org-set-property "likes" (my/assoc-default item 'statistics 'likeCount))
+         (org-set-property "comment" (my/assoc-default item 'statistics 'commentCount))
          (org-set-property "duration" (my/assoc-default item 'contentDetails 'duration))
          (org-set-property "released-at" (my/assoc-default item 'snippet 'publishedAt)))
        (my/fetched-at)))))
@@ -518,7 +543,7 @@
                          (my/fetched-at))))))))))
 
 (defun my/visit-wikipedia () (interactive) (my/visit-url "wikipedia.org"))
-(defvar my/wikipedia-re ".*?https://\\(.*?\\).wikipedia.org/wiki/\\([a-zA-Z0-9-_@.%()]*\\).*")
+(defvar my/wikipedia-re ".*?https://\\(.*?\\).wikipedia.org/wiki/\\([a-zA-Z0-9-_@.,%()'&]*\\).*")
 
 (defun my/fetch-wikipedia-stats ()
   "Fetch Wikipedia REST API and add the returned values in a PROPERTIES drawer"
@@ -639,4 +664,5 @@
       ((string-match-p my/stackoverflow-re line-content) (my/fetch-stackoverflow-stats))
       ((string-match-p my/vscode-re line-content) (my/fetch-vscode))
       ((string-match-p my/wikipedia-re line-content) (my/fetch-wikipedia-stats))
-      ((string-match-p my/youtube-re line-content) (my/fetch-youtube-stats)))))
+      ((string-match-p my/youtube-channel-re line-content) (my/fetch-youtube-channel-stats))
+      ((string-match-p my/youtube-video-re line-content) (my/fetch-youtube-video-stats)))))
