@@ -2,6 +2,7 @@
 
 Name | Web / Source | [Guix](https://packages.guix.gnu.org/) | [Arch](https://archlinux.org/packages/) | Lang | TLDR | [🧛](https://draculatheme.com/) | Date | Version |
 -----|--------------|------|------|------|------|----|------|---------|
+atuin | [GH/atuinsh/atuin](https://github.com/atuinsh/atuin) | ✓ | ✓ | 🦀 | ✓ | ✓ | ![lc](https://img.shields.io/github/last-commit/atuinsh/atuin?label=) | ![v](https://img.shields.io/github/v/release/atuinsh/atuin?sort=semver&label=)
 bat | [GH/sharkdp/bat](https://github.com/sharkdp/bat) | ✓ | ✓ | 🦀 | ✓ | ✓ | ![lc](https://img.shields.io/github/last-commit/sharkdp/bat?label=) | ![v](https://img.shields.io/github/v/release/sharkdp/bat?sort=semver&label=)
 bat-extras | [GH/eth-p/bat-extras](https://github.com/eth-p/bat-extras) | | AUR | sh | | | ![lc](https://img.shields.io/github/last-commit/eth-p/bat-extras?label=) | ![v](https://img.shields.io/github/v/release/eth-p/bat-extras?sort=semver&label=)
 bottom | [GH/ClementTsang/bottom](https://github.com/ClementTsang/bottom) | | ✓ | 🦀 | ✓ | ✓ | ![lc](https://img.shields.io/github/last-commit/ClementTsang/bottom?label=) | ![v](https://img.shields.io/github/v/release/ClementTsang/bottom?sort=semver&label=)
