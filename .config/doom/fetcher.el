@@ -239,6 +239,7 @@
 
 (defun my/visit-serverfault () (interactive) (my/visit-url "serverfault.com"))
 (defvar my/serverfault-re ".*?https://serverfault.com/questions/\\([0-9]*\\)/.*")
+(defvar my/serverfault-tags-re ".*?https://serverfault.com/questions/tagged/\\([a-zA-Z0-9-_\.]*\\).*")
 
 (defun my/fetch-serverfault-stats ()
   "Fetch ServerFault REST API and add the returned values in a PROPERTIES drawer"
@@ -246,6 +247,13 @@
   (seq-let (question-id) (my/parse-url my/serverfault-re)
     (my/fetch (concat "https://api.stackexchange.com/2.3/questions/" question-id "?site=serverfault")
               'my/parse-stack-response)))
+
+(defun my/fetch-serverfault-tags-stats ()
+  "Fetch ServerFault REST API for tags and add the returned values in a PROPERTIES drawer"
+  (interactive)
+  (seq-let (tag) (my/parse-url my/serverfault-tags-re)
+    (my/fetch (concat "https://api.stackexchange.com/2.3/tags/" tag "/info?site=serverfault")
+              'my/parse-stack-tags-response)))
 
 (defun my/visit-superuser () (interactive) (my/visit-url "superuser.com"))
 (defvar my/superuser-re ".*?https://superuser.com/questions/\\([0-9]*\\)/.*")
@@ -660,6 +668,7 @@
       ((string-match-p my/mastodon-re line-content) (my/fetch-mastodon-stats))
       ((string-match-p my/musicbrainz-re line-content) (my/fetch-musicbrainz-stats))
       ((string-match-p my/npm-re line-content) (my/fetch-npm-stats))
+      ((string-match-p my/serverfault-tags-re line-content) (my/fetch-serverfault-tags-stats))
       ((string-match-p my/serverfault-re line-content) (my/fetch-serverfault-stats))
       ((string-match-p my/superuser-tags-re line-content) (my/fetch-superuser-tags-stats))
       ((string-match-p my/superuser-re line-content) (my/fetch-superuser-stats))
