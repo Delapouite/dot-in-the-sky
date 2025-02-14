@@ -423,6 +423,10 @@
 (defun my/visit-archlinux-man () (interactive) (my/visit-url "man.archlinux.org"))
 (defvar my/archlinux-re ".*?https://archlinux.org/packages/\\(community\\|core\\|extra\\)/\\(any\\|x86_64\\)/\\([a-zA-Z0-9-_]*\\)/.*")
 
+(defun my/get-pacman-version (package-id)
+  (let ((version (string-trim (shell-command-to-string (concat "pacman -Q " package-id " 2> /dev/null | awk '{ print $2 }'")))))
+    (if (string-empty-p version) "null" version)))
+
 (defun my/fetch-archlinux-stats ()
   "Fetch Archlinux REST API and add the returned values in a PROPERTIES drawer"
   (interactive)
@@ -434,14 +438,13 @@
        (my/org-set-prop "name" 'pkgname data)
        (my/org-set-prop "description" 'pkgdesc data)
        (my/org-set-prop "remote-version" 'pkgver data)
-       (org-set-property "system-version" (string-trim (shell-command-to-string (concat "pacman -Q " package-id " 2> /dev/null | awk '{ print $2 }'"))))
+       (org-set-property "system-version" (my/get-pacman-version package-id))
        (org-set-property "dependencies" (number-to-string (length (assoc-default 'depends data))))
        (my/org-set-prop "compressed-size" 'compressed_size data)
        (my/org-set-prop "installed-size" 'installed_size data)
        (my/org-set-prop "built-at" 'build_date data)
        (my/org-set-prop "updated-at" 'last_update data)
        (my/fetched-at)))))
-
 
 (defun my/visit-aur () (interactive) (my/visit-url "aur.archlinux.org"))
 (defvar my/aur-re ".*?https://aur.archlinux.org/packages/\\([a-zA-Z0-9-_]*\\).*")
@@ -458,7 +461,7 @@
          (my/org-set-prop "name" 'Name item)
          (my/org-set-prop "description" 'Description item)
          (my/org-set-prop "remote-version" 'Version item)
-         (org-set-property "system-version" (string-trim (shell-command-to-string (concat "pacman -Q " package-id " 2> /dev/null | awk '{ print $2 }'"))))
+         (org-set-property "system-version" (my/get-pacman-version package-id))
          (org-set-property "created-at" (iso8601-format (assoc-default 'FirstSubmitted item)))
          (org-set-property "updated-at" (iso8601-format (assoc-default 'LastModified item))))
        (my/fetched-at)))))
