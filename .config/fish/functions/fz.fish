@@ -1566,6 +1566,17 @@ function fz --description 'entry point for all the fuzziness glory'
 			| xargs xdg-open
 		sleep 0.2
 
+	case pacman-files
+		if test "$argv[2]" = "--help"
+			printf 'list: packages files\n'
+			print_dim 'preview: none'
+			print_dim 'action: none'
+			return
+		end
+
+		pacman --query --list \
+			| _fzf
+
 	case pacman-mirrors
 		if test "$argv[2]" = "--help"
 			printf 'list: pacman mirrors\n'
@@ -2098,6 +2109,7 @@ function fz --description 'entry point for all the fuzziness glory'
 			npm-dependencies \
 			npm-scripts \
 			org-roam-links \
+			pacman-files \
 			pacman-mirrors \
 			pacman-packages \
 			pastel-colors \
