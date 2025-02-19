@@ -42,8 +42,8 @@
           (year (plist-get params :year)))
       (when country
         (org-dblock-write:org-roam-ql `(:query (and (properties type "artist") (properties "country" ,country))
-                                        :columns (link released-at live)
-                                        :headers ("Artist" "Year" "Live")
+                                        :columns (link released-at city live)
+                                        :headers ("Artist" "Year" "City" "Live")
                                         :no-link true)))
       (when year
         (org-dblock-write:org-roam-ql `(:query (and (properties type "artist") (properties "released-at" ,year))
@@ -171,7 +171,7 @@
                                         :no-link true)))
       (when country
         (org-dblock-write:org-roam-ql `(:query (and (properties type "company") (properties "country" ,country))
-                                        :columns (link released-at)
+                                        :columns (link city released-at)
                                         :no-link true)))))
 
   (defun org-dblock-write:companies-by-year (_params)
