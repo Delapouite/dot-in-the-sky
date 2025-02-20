@@ -120,7 +120,7 @@ function fz --description 'entry point for all the fuzziness glory'
 				| _jq '.[] | "\(.name)\u001f\(.user.name)\u001f(default:\(.isDefault))\u001f\(.id)"' \
 				| _awk "$awk_dim4" \
 				| _fzf --preview "az account show --subscription {-1} | $bat_json" \
-				| awk '{print $NF}')
+					--accept-nth -1)
 
 			if test -n "$choice"
 				az account set --subscription "$choice"
@@ -142,7 +142,7 @@ function fz --description 'entry point for all the fuzziness glory'
 				| _fzfa \
 					--header "$account" \
 					--preview "az functionapp show --name {1} --resource-group {2} | $bat_json" \
-				| awk '{print $1}')
+					--accept-nth 1)
 
 			if test -n "$choice"
 				az config set defaults.functionapp="$choice" 2> /dev/null
@@ -196,7 +196,7 @@ function fz --description 'entry point for all the fuzziness glory'
 				| _fzf \
 					--header "$account" \
 					--preview "az acr show --name {1} | $bat_json" \
-				| awk '{print $2}')
+					--accept-nth 2)
 
 			if test -n "$choice"
 				az config set defaults.acr="$choice" 2> /dev/null
@@ -225,7 +225,7 @@ function fz --description 'entry point for all the fuzziness glory'
 					--prompt "$argv[1] ($registry/$repository) ❯ " \
 					--header "$account" \
 					--preview "az acr manifest show-metadata $registry/$repository@{1} 2> /dev/null | $bat_json" \
-				| awk '{print $1}')
+					--accept-nth 1)
 
 		case azure-container-registry-repositories
 			# prompt
@@ -246,7 +246,7 @@ function fz --description 'entry point for all the fuzziness glory'
 					--prompt "$argv[1] ($registry) ❯ " \
 					--header "$account" \
 					--preview "az acr repository show --repository {1} 2> /dev/null | $bat_json" \
-				| awk '{print $1}')
+					--accept-nth 1)
 
 			if test -n "$choice"
 				az config set defaults.acrepo="$choice" 2> /dev/null
@@ -867,7 +867,7 @@ function fz --description 'entry point for all the fuzziness glory'
 			| _fzf \
 				--multi \
 				--expect alt-d \
-			| awk '{print $1}')
+				--accept-nth 1)
 
 		if test -n "$choice"
 			set --local verb_ids (string split ' ' "$choice")
@@ -924,7 +924,7 @@ function fz --description 'entry point for all the fuzziness glory'
 		set --local choice (_jq '.tasks | to_entries | .[] | "\(.key)\u001f\(.value)"' deno.jsonc \
 			| _awk "{printf \"%s $comment%s$reset\n\", \$1, \$NF}" \
 			| _fzf \
-			| awk '{print $1}')
+				--accept-nth 1)
 
 		if test -n "$choice"
 			deno task "$choice"
@@ -1070,7 +1070,7 @@ function fz --description 'entry point for all the fuzziness glory'
 			| _fzf \
 				--header-lines 1 \
 				--preview "jq --color-output '.[] | select(.id==\"{1}\")' '$data_source'" \
-			| awk '{print $1}')
+				--accept-nth 1)
 
 		if test -n "$rule_id"
 			if string match -r '@typescript' "$rule_id"
@@ -1218,7 +1218,8 @@ function fz --description 'entry point for all the fuzziness glory'
 
 		set --local choice (gh repo list \
 			| _fzf \
-				--preview 'gh repo view {1}' | awk '{print $1}')
+				--preview 'gh repo view {1}' \
+				--accept-nth 1)
 
 		if test -n "$choice"
 			gh repo view --web "$choice"
@@ -1264,7 +1265,7 @@ function fz --description 'entry point for all the fuzziness glory'
 				| _jq "$jq_filter" \
 				| _awk '{printf "%s \x1b[36m%s\x1b[m %s\n", $1, $2, $3}' \
 				| _fzf --with-nth=2.. \
-				| awk '{print $1}')
+					--accept-nth 1)
 
 			if test -n "$choice"
 				i3-msg --quiet "[con_id=$choice] focus"
@@ -1522,7 +1523,7 @@ function fz --description 'entry point for all the fuzziness glory'
 			| _awk "{printf \"%s $comment%s$reset\n\", \$1, \$NF}" \
 			| _fzf \
 				--header "$data_source" \
-			| awk '{print $1}')
+				--accept-nth 1)
 
 		if test -n "$choice"
 			firefox-developer-edition "https://www.npmjs.com/package/$choice"
@@ -1546,7 +1547,7 @@ function fz --description 'entry point for all the fuzziness glory'
 			| _awk "{printf \"%s $comment%s$reset\n\", \$1, \$NF}" \
 			| _fzf \
 				--header "$data_source" \
-			| awk '{print $1}')
+				--accept-nth 1)
 
 		if test -n "$choice"
 			npm run "$choice"
@@ -1660,7 +1661,7 @@ function fz --description 'entry point for all the fuzziness glory'
 				| _jq '.[] | "\(.properties["module.description"])\u001f\(.name)"' \
 				| _awk "$awk_dim2" \
 				| _fzf \
-				| awk '{print $1}')
+					--accept-nth 1)
 
 		case pulseaudio-sinks
 			if test "$argv[2]" = "--help"
@@ -1674,7 +1675,7 @@ function fz --description 'entry point for all the fuzziness glory'
 				| _jq '.[] | "\(.description)\u001f\(.active_port)"' \
 				| _awk "$awk_dim2" \
 				| _fzf \
-				| awk '{print $1}')
+					--accept-nth 1)
 
 		case pulseaudio-sources
 			if test "$argv[2]" = "--help"
@@ -1688,7 +1689,7 @@ function fz --description 'entry point for all the fuzziness glory'
 				| _jq '.[] | "\(.description)\u001f\(.active_port)"' \
 				| _awk "$awk_dim2" \
 				| _fzf \
-				| awk '{print $1}')
+					--accept-nth 1)
 
 		end
 
@@ -1848,7 +1849,7 @@ function fz --description 'entry point for all the fuzziness glory'
 		end
 
 		set --local configs (fd config ~/.ssh/)
-		set --local choice (cat $configs | rg 'Host ' | _fzf | awk '{print $2}')
+		set --local choice (cat $configs | rg 'Host ' | _fzf --accept-nth 2)
 
 		if test -n "$choice"
 			ssh "$choice"
