@@ -567,6 +567,12 @@
                                   `(,first-part) `(,first-part ,second-part)))))
       (my/org-roam-goto title)))
 
+  (defun my/org-roam-goto-tag (tag-index)
+    "Goto roam node from parts of filetags"
+    (interactive)
+    (let ((parts (s-split ":" (org-roam--get-keyword "filetags"))))
+      (my/org-roam-goto (nth tag-index parts))))
+
   (defun my/org-roam-goto-year (offset)
     "Goto relative year roam node"
     (interactive)
@@ -596,6 +602,10 @@
         :desc "Goto 1 & 4 combo duo" "g 1 4" (lambda () (interactive) (my/org-roam-goto-combo 0 3))
         :desc "Goto 2 & 4 combo duo" "g 2 4" (lambda () (interactive) (my/org-roam-goto-combo 1 3))
         :desc "Goto 3 & 4 combo duo" "g 3 4" (lambda () (interactive) (my/org-roam-goto-combo 2 3))
+        :desc "Goto first tag" "g 1 t" (lambda () (interactive) (my/org-roam-goto-tag 1))
+        :desc "Goto second tag" "g 2 t" (lambda () (interactive) (my/org-roam-goto-tag 2))
+        :desc "Goto third tag" "g 3 t" (lambda () (interactive) (my/org-roam-goto-tag 3))
+        :desc "Goto fourth tag" "g 4 t" (lambda () (interactive) (my/org-roam-goto-tag 4))
         :desc "Goto previous year" "g p" (lambda () (interactive) (my/org-roam-goto-year -1))
         :desc "Goto next year" "g n" (lambda () (interactive) (my/org-roam-goto-year 1))
         :desc "Goto previous decade" "g P" (lambda () (interactive) (my/org-roam-goto-year -10))
