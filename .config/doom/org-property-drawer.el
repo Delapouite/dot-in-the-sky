@@ -54,6 +54,11 @@
   (interactive)
   (org-set-property "played-at" (iso8601-format)))
 
+(defun my/sloc (count)
+  "Set drawer property sloc to provided COUNT"
+  (interactive "sSLOC? ")
+  (org-set-property "sloc" count))
+
 (defun my/infer-created-at ()
   "Set drawer property created-at to date in buffer name"
   (interactive)
@@ -155,6 +160,8 @@ https://code.orgmode.org/bzg/org-mode/commit/13424336a6f30c50952d291e7a82906c121
       (push (concat prop "repositories") parts))
     (when-let (prop (cdr (assoc "SOURCE-RANK" drawer-props)))
       (push (concat prop "source-rank") parts))
+    (when-let (prop (cdr (assoc "SLOC" drawer-props)))
+      (push (concat prop "SLOC") parts))
     ;; booleans
     (when-let (prop (cdr (assoc "TYPES" drawer-props)))
       (push (if (not (string= prop "null")) "types" "") parts))
