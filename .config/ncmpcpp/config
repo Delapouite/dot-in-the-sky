@@ -1,6 +1,9 @@
 # https://github.com/ncmpcpp/ncmpcpp/blob/master/doc/config
+alternative_header_first_line_format = $b$1$aqqu$/a$9 {$3%N$9} - {%t}|{%f} $1$atqq$/a$9$/b
+alternative_header_second_line_format = {{$4$b%a$/b$9}{ - $7$b%b$/b$9}{ ($5$b%y$/b$9)}}|{%D}
 song_list_format = {%a - }{%b - }{%t}|{$8%f$9}$R{$3(%l)$9} {%y} {%g}
-song_columns_list_format = (20)[]{a} (6f)[green]{NE} (50)[white]{t|f:Title} (20)[cyan]{b} (7f)[magenta]{l} (4f)[]{y}
+# (width of the column)[color of the column]{displayed tag}
+song_columns_list_format = (20)[]{a} (6f)[green]{NE} (50)[white]{t|f:Title} (20)[cyan]{b} (7f)[magenta]{l} (4f)[blue]{y}
 playlist_separate_albums = yes
 autocenter_mode = yes
 centered_cursor = yes
