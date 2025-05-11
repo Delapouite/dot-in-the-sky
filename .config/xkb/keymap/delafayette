@@ -78,10 +78,10 @@ xkb_keymap {
     key <AC03> {[ d               , D               , eth             , Eth             ],[ bracketright    , U27E9           ]}; // d D ð Ð ] ⟩
     key <AC04> {[ f               , F               , ordfeminine     , VoidSymbol      ],[ braceright      , U27EB           ]}; // f F ª   } ⟫
     key <AC05> {[ g               , G               , dead_greek      , VoidSymbol      ],[ copyright       , VoidSymbol      ]}; // g G Ω   ©
-    key <AC06> {[ h               , H               , leftarrow       , U21D0           ],[ VoidSymbol      , VoidSymbol      ]}; // h H ← ⇐
+    key <AC06> {[ h               , H               , leftarrow       , U21D0           ],[ Home            , VoidSymbol      ]}; // h H ← ⇐ ⇱
     key <AC07> {[ j               , J               , downarrow       , U21D3           ],[ slash           , VoidSymbol      ]}; // j J ↓ ⇓ /
     key <AC08> {[ k               , K               , uparrow         , U21D1           ],[ backslash       , VoidSymbol      ]}; // k K ↑ ⇑ \
-    key <AC09> {[ l               , L               , rightarrow      , U21D2           ],[ VoidSymbol      , VoidSymbol      ]}; // l L → ⇒
+    key <AC09> {[ l               , L               , rightarrow      , U21D2           ],[ End             , VoidSymbol      ]}; // l L → ⇒ ⇲
     key <AC10> {[ ISO_Level3_Latch, ISO_Level3_Latch, Multi_key       , Multi_key       ],[ VoidSymbol      , VoidSymbol      ]}; // magic
 
     // Letters, third row
