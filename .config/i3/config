@@ -165,10 +165,12 @@ mode $musicmode {
 bindsym XF86AudioMute exec "amixer set Master toggle"
 bindsym XF86AudioLowerVolume exec "amixer set Master 3%-"
 bindsym XF86AudioRaiseVolume exec "amixer set Master 3%+"
-bindsym XF86AudioMicMute exec "amixer set Mic toggle"
+bindsym XF86AudioMicMute exec "amixer set Capture toggle"
 
 bindsym XF86AudioPrev exec "mpc prev"
 bindsym XF86AudioPlay exec "mpc toggle"
+bindsym XF86AudioPause exec "mpc pause"
+bindsym XF86AudioStop exec "mpc stop"
 bindsym XF86AudioNext exec "mpc next"
 
 bindsym $mod+Delete mode $i3mode
