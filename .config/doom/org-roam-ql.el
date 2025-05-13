@@ -26,7 +26,6 @@
                                                     alt start (nth 0 parts) "·" (nth 1 parts) "·.*·" (nth 2 parts) "·" (nth 3 parts) end
                                                     alt start (nth 0 parts) "·" (nth 1 parts) "·" (nth 2 parts) "·.*·" (nth 3 parts) end))
                       (t ""))))
-
       (org-dblock-write:org-roam-ql `(:query (and (title ,(concat start title "·\\)"
                                                                   alt "\\(·" title end
                                                                   alt "\\(·" title "·\\)"
@@ -41,12 +40,12 @@
     (let ((country (plist-get params :country))
           (year (plist-get params :year)))
       (when country
-        (org-dblock-write:org-roam-ql `(:query (and (properties type "artist") (properties "country" ,country))
+        (org-dblock-write:org-roam-ql `(:query (and (tags "artist") (properties "country" ,country))
                                         :columns (link released-at city live)
                                         :headers ("Artist" "Year" "City" "Live")
                                         :no-link true)))
       (when year
-        (org-dblock-write:org-roam-ql `(:query (and (properties type "artist") (properties "released-at" ,year))
+        (org-dblock-write:org-roam-ql `(:query (and (tags "artist") (properties "released-at" ,year))
                                         :columns (link country live)
                                         :headers ("Artist" "Country" "Live")
                                         :no-link true)))))
@@ -62,13 +61,13 @@
     (let ((artist (plist-get params :artist))
           (year (plist-get params :year)))
       (when artist
-        (org-dblock-write:org-roam-ql `(:query (and (properties type "album") (properties "artist" ,(concat "\\[" artist "\\]\\]")))
+        (org-dblock-write:org-roam-ql `(:query (and (tags "album") (properties "artist" ,(concat "\\[" artist "\\]\\]")))
                                         :columns (released-at album-link tracks-count debut)
                                         :headers ("Year" "Album" "Tracks" "Debut")
                                         :sort "released-at"
                                         :no-link true)))
       (when year
-        (org-dblock-write:org-roam-ql `(:query (and (properties type "album") (properties "released-at" ,year))
+        (org-dblock-write:org-roam-ql `(:query (and (tags "album") (properties "released-at" ,year))
                                         :columns (artist album-link tracks-count debut)
                                         :headers ("Artist" "Album" "Tracks" "Debut")
                                         :no-link true)))))
@@ -94,12 +93,12 @@
     (let ((author (plist-get params :author))
           (year (plist-get params :year)))
       (when author
-        (org-dblock-write:org-roam-ql `(:query (and (properties type "book") (properties "author" ,author))
+        (org-dblock-write:org-roam-ql `(:query (and (tags "book") (properties "author" ,author))
                                         :columns (released-at link live)
                                         :sort "released-at"
                                         :no-link true)))
       (when year
-        (org-dblock-write:org-roam-ql `(:query (and (properties type "book") (properties "released-at" ,year))
+        (org-dblock-write:org-roam-ql `(:query (and (tags "book") (properties "released-at" ,year))
                                         :columns (link author live)
                                         :no-link true)))))
 
@@ -133,7 +132,7 @@
   (defun org-dblock-write:org-roam-departements (params)
     "Write org block for org-roam-departements with PARAMS."
     (let ((region (plist-get params :region)))
-      (org-dblock-write:org-roam-ql `(:query (and (properties type "departement") (properties "region" ,region))
+      (org-dblock-write:org-roam-ql `(:query (and (tags "departement") (properties "region" ,region))
                                       :columns (link prefecture)
                                       :no-link true))))
 
@@ -145,11 +144,11 @@
     (let ((departement (plist-get params :departement))
           (country (plist-get params :country)))
       (when departement
-        (org-dblock-write:org-roam-ql `(:query (and (properties type "city") (properties "departement" ,departement))
+        (org-dblock-write:org-roam-ql `(:query (and (tags "city") (properties "departement" ,departement))
                                         :columns (link population role live)
                                         :no-link true)))
       (when country
-        (org-dblock-write:org-roam-ql `(:query (and (properties type "city") (properties "country" ,country))
+        (org-dblock-write:org-roam-ql `(:query (and (tags "city") (properties "country" ,country))
                                         :columns (link population role live)
                                         :no-link true)))))
 
@@ -166,11 +165,11 @@
     (let ((year (plist-get params :year))
           (country (plist-get params :country)))
       (when year
-        (org-dblock-write:org-roam-ql `(:query (and (properties type "company") (properties "released-at" ,year))
+        (org-dblock-write:org-roam-ql `(:query (and (tags "company") (properties "released-at" ,year))
                                         :columns (link country)
                                         :no-link true)))
       (when country
-        (org-dblock-write:org-roam-ql `(:query (and (properties type "company") (properties "country" ,country))
+        (org-dblock-write:org-roam-ql `(:query (and (tags "company") (properties "country" ,country))
                                         :columns (link city released-at)
                                         :no-link true)))))
 
