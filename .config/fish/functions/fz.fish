@@ -1914,6 +1914,18 @@ function fz --description 'entry point for all the fuzziness glory'
 
 		sysz
 
+	case tc39-proposals
+		if test "$argv[2]" = "--help"
+			printf 'list: TC39 proposals from https://tc39.es/dataset/proposals.json\n'
+			print_dim 'preview: none'
+			print_dim 'action: none'
+			return
+		end
+
+		set --local candidate (curl --silent 'https://tc39.es/dataset/proposals.json' \
+			| _jq '.[] | "\(.stage) \(.name)"' \
+			| _fzf)
+
 	case top-level-domains
 		if test "$argv[2]" = "--help"
 			printf 'list: TLDs fetched from IANA.org\n'
@@ -2136,6 +2148,7 @@ function fz --description 'entry point for all the fuzziness glory'
 			starship-presets \
 			sysctl-values \
 			systemd \
+			tc39-proposals \
 			top-level-domains \
 			trust-policies \
 			usb-devices \
