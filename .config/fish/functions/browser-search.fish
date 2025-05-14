@@ -15,6 +15,7 @@ function browser-search --description 'browser search with various engines'
 		github \
 		google \
 		hacker-news \
+		hacker-news-url \
 		jsr \
 		linguee \
 		lobsters \
@@ -90,6 +91,9 @@ function browser-search --description 'browser search with various engines'
 	case hacker-news hn
 		$browser "https://hn.algolia.com/?q=$query"
 
+	case hacker-news-url hn
+		$browser "https://hn.algolia.com/api/v1/search?restrictSearchableAttributes=url&query=$query"
+
 	case jsr
 		$browser "https://jsr.io/packages?search=$query"
 
@@ -133,4 +137,7 @@ function browser-search --description 'browser search with various engines'
 		$browser "https://duckduckgo.com/?kav=1&kp=-2&kaj=m&kak=-1&kax=-1&kaq=-1&kap=-1&kao=-1&kau=-1&km=m&kae=d&q=$query"
 
 	end
+
+	sleep 0.2
 end
+
