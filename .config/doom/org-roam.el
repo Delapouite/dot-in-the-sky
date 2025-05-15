@@ -507,7 +507,7 @@
   ; The gain in performance is quite significant, from 3 seconds to instant
   (setq org-roam-node-default-sort nil)
   (require 'memoize)
-  (memoize 'org-roam-node-read--completions "10 minute")
+  (memoize 'org-roam-node-read--completions)
 
   (defun memoize-force-update (func &optional timeout)
     (when (get func :memoize-original-function)
@@ -520,7 +520,7 @@
     (memoize-force-update 'org-roam-node-read--completions
                           (if timeout timeout memoize-default-timeout)))
 
-  (run-with-idle-timer 180 t #'my/force-update-org-roam-node-read-if-memoized)
+  (run-with-idle-timer (* 60 60 2) t #'my/force-update-org-roam-node-read-if-memoized)
 
   ; capture
 
