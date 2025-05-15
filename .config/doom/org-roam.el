@@ -304,6 +304,9 @@
   (cl-defmethod org-roam-node-country ((node org-roam-node))
     (or (cdr (assoc "COUNTRY" (org-roam-node-properties node))) ""))
 
+  (cl-defmethod org-roam-node-city ((node org-roam-node))
+    (or (cdr (assoc "CITY" (org-roam-node-properties node))) ""))
+
   (cl-defmethod org-roam-node-prefecture ((node org-roam-node))
     (or (cdr (assoc "PREFECTURE" (org-roam-node-properties node))) ""))
 
@@ -335,6 +338,9 @@
 
   (cl-defmethod org-roam-node-gerund ((node org-roam-node))
     (or (cdr (assoc "GERUND" (org-roam-node-properties node))) ""))
+
+  (cl-defmethod org-roam-node-tion ((node org-roam-node))
+    (or (cdr (assoc "TION" (org-roam-node-properties node))) ""))
 
   ;; scales
 
@@ -397,6 +403,10 @@
            (pdescription (propertize (concat "«" description "»") 'face 'org-property-value))
            (gerund (cdr (assoc "GERUND" (org-roam-node-properties node))))
            (pgerund (propertize (concat "+ing") 'face 'org-property-value))
+           (tion (cdr (assoc "TION" (org-roam-node-properties node))))
+           (ption (propertize (concat "+tion") 'face 'org-property-value))
+           (er (cdr (assoc "ER" (org-roam-node-properties node))))
+           (per (propertize (concat "+er") 'face 'org-property-value))
            (aliases (org-roam-node-aliases node))
            (title (org-roam-node-title node))
            (parent (car (split-string title " > ")))
@@ -407,6 +417,8 @@
        ((and acronym (string-equal acronym title)) pacronym)
        ((and description) (concat ptitle " " pdescription))
        ((and gerund) (concat ptitle " " pgerund))
+       ((and tion) (concat ptitle " " ption))
+       ((and er) (concat ptitle " " per))
        ((and aliases) (concat ptitle "*"))
        (t ptitle))))
 
