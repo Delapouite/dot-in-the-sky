@@ -62,14 +62,14 @@
           (year (plist-get params :year)))
       (when artist
         (org-dblock-write:org-roam-ql `(:query (and (tags "album") (properties "artist" ,(concat "\\[" artist "\\]\\]")))
-                                        :columns (released-at album-link tracks-count debut)
-                                        :headers ("Year" "Album" "Tracks" "Debut")
+                                        :columns (released-at album-link index tracks-count)
+                                        :headers ("Year" "Album" "#" "Tracks")
                                         :sort "released-at"
                                         :no-link true)))
       (when year
         (org-dblock-write:org-roam-ql `(:query (and (tags "album") (properties "released-at" ,year))
-                                        :columns (artist album-link tracks-count debut)
-                                        :headers ("Artist" "Album" "Tracks" "Debut")
+                                        :columns (artist album-link index tracks-count)
+                                        :headers ("Artist" "Album" "#" "Tracks")
                                         :no-link true)))))
 
   (defun org-dblock-write:albums-by-artist (_params)
