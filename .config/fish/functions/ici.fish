@@ -40,7 +40,7 @@ function ici --description 'show info about current repo and tools'
 
 			case 'terraform'
 			ici_terraform
-			
+
 			case 'vscode'
 			ici_vscode
 

@@ -1947,6 +1947,29 @@ function fz --description 'entry point for all the fuzziness glory'
 
 		trust list | rg label | _fzf
 
+	case unicode-blocks
+		if test "$argv[2]" = "--help"
+			printf 'list: Unicode blocks fetched from unicode.org\n'
+			print_dim 'preview: none'
+			print_dim 'action: none'
+			return
+		end
+
+		curl --silent 'https://www.unicode.org/Public/UCD/latest/ucd/Blocks.txt' \
+			| rg -v '^#' | rg -v '^$' \
+			| _fzf
+
+	case unicode-code-points
+		if test "$argv[2]" = "--help"
+			printf 'list: Unicode code points fetched from unicode.org\n'
+			print_dim 'preview: none'
+			print_dim 'action: none'
+			return
+		end
+
+		curl --silent 'https://www.unicode.org/Public/UCD/latest/ucd/UnicodeData.txt' \
+			| _fzf
+
 	case usb-devices
 		if not command -q lsusb
 			print_error 'lsusb command not found'
@@ -2151,6 +2174,8 @@ function fz --description 'entry point for all the fuzziness glory'
 			tc39-proposals \
 			top-level-domains \
 			trust-policies \
+			unicode-blocks \
+			unicode-code-points \
 			usb-devices \
 			user-groups \
 			vscode-extensions \
