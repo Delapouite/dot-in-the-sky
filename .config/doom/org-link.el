@@ -137,9 +137,10 @@
   (interactive)
   (let* ((node (my/org-roam-node-from-link))
          (title (org-roam-node-title node))
+         (year (org-roam-node-released-at node))
          (spec-description (org-roam-node-description node)))
     (when (not (string= "" spec-description))
-      (my/org-link-description-replace (concat title " «" spec-description "»")))))
+      (my/org-link-description-replace (concat title " (" year ") «" spec-description "»")))))
 
 (defun my/org-link-description-to-gerund ()
   "Turn the description of link into its gerund if it exists"
@@ -165,6 +166,16 @@
          (released-at (org-roam-node-released-at node)))
     (when (not (string= "    " released-at))
        (my/org-link-description-replace (concat title " (" released-at ")")))))
+
+(defun my/org-link-description-with-born-died-at ()
+  "Append born-died-at properties to the description of link if they exist"
+  (interactive)
+  (let* ((node (my/org-roam-node-from-link))
+         (title (org-roam-node-title node))
+         (born-at (org-roam-node-born-at node))
+         (died-at (org-roam-node-died-at node)))
+    (when (and (not (string= "" born-at)) (not (string= "" died-at)))
+       (my/org-link-description-replace (concat title " (" born-at "/" died-at ")")))))
 
 (defun my/org-link-description-prepend-fa ()
   "Prepend Font Awesome Icon for well-known brands"
