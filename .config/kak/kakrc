@@ -7,7 +7,7 @@ set-option global grepcmd 'rg --column'
 set-option global completers filename word=all
 set-option global startup_info_version 20420101
 set-option -add global matching_pairs ‹ › « » “ ” ‘ ’
-set-option -add global ui_options ncurses_assistant=none ncurses_change_colors=true ncurses_status_on_top=true
+set-option -add global ui_options terminal_assistant=none terminal_status_on_top=true
 
 define-command update-status %{ evaluate-commands %sh{
   printf %s 'set-option buffer modelinefmt %{'
