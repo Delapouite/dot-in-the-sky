@@ -27,6 +27,8 @@ bind \e\[1\;4D backward-kill-bigword
 bind \e\[1\;3C kill-word
 bind \e\[1\;4C kill-bigword
 
+fish_add_path ~/.local/bin
+
 # prompt
 if type -q starship
 	function starship_transient_prompt_func
