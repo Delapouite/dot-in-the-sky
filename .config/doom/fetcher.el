@@ -655,6 +655,23 @@
             (org-set-property "last-post-at" (my/assoc-default item 'post 'record 'createdAt)))
           (my/fetched-at)))))))
 
+(defvar my/bugzilla-re ".*?https://bugzilla.mozilla.org/show_bug.cgi\\?id=\\([0-9]*\\).*")
+
+(defun my/fetch-bugzilla-stats ()
+  "Fetch Bugzilla REST API and add the returned values in a PROPERTIES drawer"
+  (interactive)
+  (seq-let (bug-id) (my/parse-url my/bugzilla-re)
+    (my/fetch
+     (concat "https://bugzilla.mozilla.org/rest/bug/" bug-id)
+     (lambda (data)
+       (my/empty-property-drawer 12)
+       (let ((bug (aref (assoc-default 'bugs data) 0)))
+         (my/org-set-prop "status" 'status bug)
+         (my/org-set-prop "created-at" 'creation_time bug)
+         (my/org-set-prop "updated-at" 'last_change_time bug)
+         (my/org-set-prop "closed-at" 'cf_last_resolved bug)
+         (my/fetched-at))))))
+
 (defun my/fetch-stats ()
   "Fetch current website REST API and add the returned values in a PROPERTIES drawer"
   (interactive)
@@ -665,6 +682,7 @@
       ((string-match-p my/askubuntu-re line-content) (my/fetch-askubuntu-stats))
       ((string-match-p my/aur-re line-content) (my/fetch-aur-stats))
       ((string-match-p my/bluesky-re line-content) (my/fetch-bluesky-stats))
+      ((string-match-p my/bugzilla-re line-content) (my/fetch-bugzilla-stats))
       ((string-match-p my/bundlephobia-re line-content) (my/fetch-bundlephobia-stats))
       ((string-match-p my/docker-hub-re line-content) (my/fetch-docker-hub))
       ((string-match-p my/docker-hub-official-re line-content) (my/fetch-docker-official-hub))
