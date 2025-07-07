@@ -637,13 +637,13 @@
   "Fetch Bluesky REST API and add the returned values in a PROPERTIES drawer"
   (interactive)
   (seq-let (username) (my/parse-url my/bluesky-re)
-    (message username)
     (my/fetch
      (concat "https://public.api.bsky.app/xrpc/app.bsky.actor.getProfile?actor=" username)
      (lambda (data)
        (setq org-property-format "%-14s %s")
        (my/org-set-prop "did" 'did data)
-       (my/org-set-prop "name" 'displayName data)
+       (let ((name (assoc-default 'displayName data)))
+         (org-set-property "name" (if (string= "" name) "null" name)))
        (my/org-set-prop "followers" 'followersCount data)
        (my/org-set-prop "following" 'followsCount data)
        (my/org-set-prop "statuses" 'postsCount data)
@@ -651,8 +651,9 @@
        (my/fetch
         (concat "https://public.api.bsky.app/xrpc/app.bsky.feed.getAuthorFeed?actor=" username)
         (lambda (feed)
-          (let ((item (aref (assoc-default 'feed feed) 0)))
-            (org-set-property "last-post-at" (my/assoc-default item 'post 'record 'createdAt)))
+          (when (> (assoc-default 'postsCount data) 0)
+            (let ((item (aref (assoc-default 'feed feed) 0)))
+              (org-set-property "last-post-at" (my/assoc-default item 'post 'record 'createdAt))))
           (my/fetched-at)))))))
 
 (defvar my/bugzilla-re ".*?https://bugzilla.mozilla.org/show_bug.cgi\\?id=\\([0-9]*\\).*")
