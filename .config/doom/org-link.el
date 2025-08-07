@@ -209,12 +209,16 @@
       (my/org-link-description-replace (concat " " (s-chop-suffix " - Super User" description))))
     (when (s-ends-with? " - Emacs Stack Exchange" description)
       (my/org-link-description-replace (concat " " (s-chop-suffix " - Emacs Stack Exchange" description))))
+    (when (s-ends-with? " - Ask Ubuntu" description)
+      (my/org-link-description-replace (concat " " (s-chop-suffix " - Ask Ubuntu" description))))
     (when (s-ends-with? " - YouTube" description)
-      (my/org-link-description-replace (concat " " (s-chop-suffix " - YouTube" description))))
+      (my/org-link-description-replace (concat " " (s-chop-suffix " - YouTube" description))))
     (when (s-ends-with? " | Hacker News" description)
       (my/org-link-description-replace (concat " " (s-chop-suffix " | Hacker News" description))))
     (when (s-ends-with? " - OpenBSD manual pages" description)
       (my/org-link-description-replace (concat " " (s-chop-suffix " - OpenBSD manual pages" description))))
+    (when (s-ends-with? " - npm" description)
+      (my/org-link-description-replace (concat " " (s-chop-suffix " - npm" description))))
     ))
 
 (defun my/org-link-description-prepend-fa-wikipedia ()
@@ -232,3 +236,19 @@
 (defun my/org-link-description-prepend-fa-stackoverflow ()
   (interactive)
   (my/org-link-description-replace (concat " " (my/org-link-description))))
+
+(defun my/org-link-description-prepend-fa-reddit ()
+  (interactive)
+  (my/org-link-description-replace (concat " " (my/org-link-description))))
+
+(defun my/org-link-description-prepend-fa-youtube ()
+  (interactive)
+  (my/org-link-description-replace (concat " " (my/org-link-description))))
+
+(defun my/org-link-description-prepend-fa-hacker-news ()
+  (interactive)
+  (my/org-link-description-replace (concat " " (my/org-link-description))))
+
+(defun my/org-link-description-prepend-fa-eol()
+  (interactive)
+  (my/org-link-description-replace (concat " " (my/org-link-description))))
