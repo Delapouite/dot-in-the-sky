@@ -48,10 +48,13 @@ if type -q zoxide
 end
 
 if test -e /opt/asdf-vm/asdf.fish
-	source /opt/asdf-vm/asdf.fish
+	# source /opt/asdf-vm/asdf.fish
 end
 
 if status is-interactive && type -q atuin
 	atuin init fish | source
 end
 
+if type -q mise
+	mise activate fish | source
+end
