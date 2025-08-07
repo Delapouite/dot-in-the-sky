@@ -71,6 +71,16 @@
   "Return Org-Roam node from link at point"
   (org-roam-node-from-id (my/org-link-path)))
 
+(defun my/org-link-from-word ()
+  "Turn word under point into link"
+  (interactive)
+  (forward-word)
+  (let ((word (word-at-point)))
+    (backward-word)
+    (kill-word nil)
+    (insert (concat "[[id:" word "][" word "]]"))
+    (message word)))
+
 ;;; description replacers
 
 (defun my/org-link-description-downcase ()
