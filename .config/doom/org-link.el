@@ -150,7 +150,9 @@
          (year (org-roam-node-released-at node))
          (spec-description (org-roam-node-description node)))
     (when (not (string= "" spec-description))
-      (my/org-link-description-replace (concat title " (" year ") «" spec-description "»")))))
+      (if (string= "    " year)
+          (my/org-link-description-replace (concat title " «" spec-description "»"))
+        (my/org-link-description-replace (concat title " (" year ") «" spec-description "»"))))))
 
 (defun my/org-link-description-to-gerund ()
   "Turn the description of link into its gerund if it exists"
