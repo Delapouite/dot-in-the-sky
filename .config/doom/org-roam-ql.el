@@ -199,6 +199,17 @@
   (defun org-dblock-write:companies-by-country (_params)
     (org-dblock-write:org-roam-companies `(:country ,(org-get-title))))
 
+  (defun org-dblock-write:org-roam-language (params)
+    "Write org block for org-roam-language with PARAMS."
+    (let ((year (plist-get params :year)))
+      (when year
+        (org-dblock-write:org-roam-ql `(:query (and (tags "language") (properties "released-at" ,year))
+                                        :columns (link)
+                                        :no-link true)))))
+
+  (defun org-dblock-write:languages-by-year (_params)
+    (org-dblock-write:org-roam-language `(:year ,(org-get-title))))
+
   ;; overwrite table generation to handle :headers
   ;; https://github.com/ahmed-shariff/org-roam-ql/issues/10
 
