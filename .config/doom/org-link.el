@@ -189,6 +189,15 @@
     (when (and (not (string= "" born-at)) (not (string= "" died-at)))
        (my/org-link-description-replace (concat title " (" born-at "/" died-at ")")))))
 
+(defun my/org-link-description-with-sosa ()
+  "Append sosa property to the description of link if they exist"
+  (interactive)
+  (let* ((node (my/org-roam-node-from-link))
+         (title (org-roam-node-title node))
+         (sosa (org-roam-node-sosa node)))
+    (when (not (string= "" sosa))
+       (my/org-link-description-replace (concat title " (" sosa ")")))))
+
 (defun my/org-link-description-prepend-fa ()
   "Prepend Font Awesome Icon for well-known brands"
   (interactive)
@@ -249,6 +258,6 @@
   (interactive)
   (my/org-link-description-replace (concat " " (my/org-link-description))))
 
-(defun my/org-link-description-prepend-fa-eol()
+(defun my/org-link-description-prepend-fa-eol ()
   (interactive)
   (my/org-link-description-replace (concat " " (my/org-link-description))))
