@@ -33,7 +33,9 @@
 	authors = shortlog --summary --numbered --email
 	first = !git rev-list --max-parents=0 HEAD | xargs git show
 	fix = rebase -i HEAD~2
-	nuke = !git branch --merged | grep -v -P '^\\*|master|main|staging|develop' | xargs -n1 -r git branch -d
+	nuke = !git branch --merged \
+		| grep --invert-match --perl-regexp '^\\*|master|main|staging|develop' \
+		| xargs --max-args 1 --no-run-if-empty git branch --delete
 	tidy = rebase -i @{upstream}..
 
 	# undo
