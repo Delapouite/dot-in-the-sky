@@ -37,7 +37,7 @@
     "Cargo.toml": "Cargo.lock",
     "GemFile": "Gemfile.lock",
     "README.md": "CHANGELOG.md,CODEOWNERS,CODE_OF_CONDUCT.md,CONTRIBUTING.md,INSTALL.md,LICENSE,LICENSE.txt,OWNERS,SECURITY.md,TESTING.md",
-    "*.ts": "${capture}.js,${capture}.spec.ts"
+    "*.ts": "${capture}.js,${capture}.spec.ts,${capture}.test.ts"
   },
   "explorer.sortOrder": "type",
   "keyboard.dispatch": "keyCode",
