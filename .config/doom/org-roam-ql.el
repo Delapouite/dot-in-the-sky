@@ -50,8 +50,8 @@
                                         :headers ("Artist" "Country" "Live")
                                         :no-link true)))))
 
-  (defun org-dblock-write:artists-by-country (_params)
-    (org-dblock-write:org-roam-artist `(:country ,(org-get-title))))
+  (defun org-dblock-write:artists-by-country (params)
+    (org-dblock-write:org-roam-artist `(:country ,(or (plist-get params :title) (org-get-title)))))
 
   (defun org-dblock-write:artists-by-year (_params)
     (org-dblock-write:org-roam-artist `(:year ,(org-get-title))))
@@ -146,8 +146,8 @@
 
   ;; geo
 
-  (defun org-dblock-write:people-by-country (_params)
-    (org-dblock-write:org-roam-people `(:country ,(org-get-title))))
+  (defun org-dblock-write:people-by-country (params)
+    (org-dblock-write:org-roam-people `(:country ,(or (plist-get params :title) (org-get-title)))))
 
   (defun org-dblock-write:org-roam-departements (params)
     "Write org block for org-roam-departements with PARAMS."
@@ -166,14 +166,15 @@
       (when departement
         (org-dblock-write:org-roam-ql `(:query (and (tags "city") (properties "departement" ,departement))
                                         :columns (link population role live)
+                                        :headers ("Link" "Pop" "Role" "Live")
                                         :no-link true)))
       (when country
         (org-dblock-write:org-roam-ql `(:query (and (tags "city") (properties "country" ,country))
                                         :columns (link population role live)
                                         :no-link true)))))
 
-  (defun org-dblock-write:cities-by-country (_params)
-    (org-dblock-write:org-roam-cities `(:country ,(org-get-title))))
+  (defun org-dblock-write:cities-by-country (params)
+    (org-dblock-write:org-roam-cities `(:country ,(or (plist-get params :title) (org-get-title)))))
 
   (defun org-dblock-write:cities-by-departement (_params)
     (org-dblock-write:org-roam-cities `(:departement ,(org-get-title))))
