@@ -29,6 +29,8 @@
   (unless (eq :json-false (assoc-default key alist))
     (org-set-property prop "true")))
 
+;; -at
+
 (defun my/fetched-at ()
   "Set drawer property fetched-at to now in ISO8601"
   (org-set-property "fetched-at" (iso8601-format))
@@ -53,6 +55,16 @@
   "Set drawer property played-at to now in ISO8601"
   (interactive)
   (org-set-property "played-at" (iso8601-format)))
+
+(defun my/visited-at ()
+  "Set drawer property visited-at to now in ISO8601"
+  (interactive)
+  (org-set-property "visited-at" (iso8601-format)))
+
+(defun my/listened-at ()
+  "Set drawer property listened-at to now in ISO8601"
+  (interactive)
+  (org-set-property "listened-at" (iso8601-format)))
 
 (defun my/sloc (count)
   "Set drawer property sloc to provided COUNT"
@@ -154,6 +166,10 @@ https://code.orgmode.org/bzg/org-mode/commit/13424336a6f30c50952d291e7a82906c121
       (push (concat (my/number-approx prop) (if (cdr (assoc "STARRED" drawer-props)) "★" "☆")) parts))
     (when-let (prop (cdr (assoc "VIEWS" drawer-props)))
       (push (concat (my/number-approx prop) "_views") parts))
+    (when-let (prop (cdr (assoc "RATINGS" drawer-props)))
+      (push (concat (my/number-approx prop) "_ratings") parts))
+    (when-let (prop (cdr (assoc "REVIEWS" drawer-props)))
+      (push (concat (my/number-approx prop) "_reviews") parts))
     (when-let (prop (cdr (assoc "DEPENDENCIES" drawer-props)))
       (push (concat prop "dependencies") parts))
     (when-let (prop (cdr (assoc "REPOSITORIES" drawer-props)))
@@ -171,6 +187,9 @@ https://code.orgmode.org/bzg/org-mode/commit/13424336a6f30c50952d291e7a82906c121
     (when-let (prop (cdr (assoc "STATE" drawer-props)))
       (push prop parts))
     (when-let (prop (cdr (assoc "LANGUAGE" drawer-props)))
+      (push prop parts))
+    ;; handy for youtube bass covers
+    (when-let (prop (cdr (assoc "CHANNEL" drawer-props)))
       (push prop parts))
     (let ((recap (s-join " " (reverse parts))))
       (if (string-empty-p recap) ":properties:" recap))))
@@ -214,3 +233,18 @@ the base multiplier."
               suffix))))
 (defun my/number-approx (s)
   (number-to-string-approx-suffix (string-to-number s)))
+
+(defun my/stars (stars)
+  "Set drawer property stars to provided STARS"
+  (interactive "sstars? ")
+  (org-set-property "stars" stars))
+
+(defun my/ratings (ratings)
+  "Set drawer property ratings to provided RATINGS"
+  (interactive "sratings? ")
+  (org-set-property "ratings" ratings))
+
+(defun my/reviews (reviews)
+  "Set drawer property reviews to provided REVIEWS"
+  (interactive "sreviews? ")
+  (org-set-property "reviews" reviews))
