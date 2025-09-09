@@ -144,6 +144,17 @@
   (defun org-dblock-write:people-by-year (_params)
     (org-dblock-write:org-roam-people `(:year ,(org-get-title))))
 
+  (defun org-dblock-write:org-roam-sosa (params)
+    "Write org block for org-roam-sosa with PARAMS."
+    (let ((year (plist-get params :year)))
+      (when year
+        (org-dblock-write:org-roam-ql `(:query (and (tags "sosa") (or (properties "born-at" ,year) (properties "died-at" ,year)))
+                                        :columns (link born-at died-at sosa)
+                                        :no-link true)))))
+
+  (defun org-dblock-write:sosa-by-year (_params)
+    (org-dblock-write:org-roam-sosa `(:year ,(org-get-title))))
+
   ;; geo
 
   (defun org-dblock-write:people-by-country (params)
