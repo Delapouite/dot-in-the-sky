@@ -221,6 +221,7 @@ mode $barmode {
   bindsym Escape mode default
 }
 
+bindsym $mod+r mode $resizemode
 set $resizemode "resize: [1-0] size [hjkl]"
 mode $resizemode {
   bindsym $mod+h focus left
