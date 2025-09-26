@@ -89,7 +89,8 @@
             :complete (cl-function
                        (lambda (&key response &allow-other-keys)
                          (let ((link (request-response-header response "link")))
-                           (org-set-property "contributors" (car (s-split ">" (-last-item (s-split "=" (nth 1 (s-split ";" link)))))))
+                           (when link
+                             (org-set-property "contributors" (car (s-split ">" (-last-item (s-split "=" (nth 1 (s-split ";" link))))))))
                            (my/fetch
                             (concat "https://api.github.com/repos/" org  "/" name "/releases")
                             (lambda (data)
