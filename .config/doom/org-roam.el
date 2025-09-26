@@ -380,6 +380,9 @@
   (cl-defmethod org-roam-node-tab ((node org-roam-node))
     (or (cdr (assoc "TAB" (org-roam-node-properties node))) ""))
 
+  (cl-defmethod org-roam-node-obsolete ((node org-roam-node))
+    (or (cdr (assoc "OBSOLETE" (org-roam-node-properties node))) ""))
+
   ;; dates
 
   (cl-defmethod org-roam-node-born-at ((node org-roam-node))
