@@ -349,7 +349,7 @@
          (org-set-property "title" (my/assoc-default item 'snippet 'title))
          (org-set-property "views" (my/assoc-default item 'statistics 'viewCount))
          (org-set-property "likes" (my/assoc-default item 'statistics 'likeCount))
-         (org-set-property "comment" (my/assoc-default item 'statistics 'commentCount))
+         (org-set-property "comments" (my/assoc-default item 'statistics 'commentCount))
          (org-set-property "duration" (my/assoc-default item 'contentDetails 'duration))
          (org-set-property "released-at" (my/assoc-default item 'snippet 'publishedAt)))
        (my/fetched-at)))))
