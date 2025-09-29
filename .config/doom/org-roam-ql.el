@@ -208,8 +208,53 @@
   (defun org-dblock-write:companies-by-year (_params)
     (org-dblock-write:org-roam-companies `(:year ,(org-get-title))))
 
-  (defun org-dblock-write:companies-by-country (_params)
-    (org-dblock-write:org-roam-companies `(:country ,(org-get-title))))
+  (defun org-dblock-write:companies-by-country (params)
+    (org-dblock-write:org-roam-companies `(:country ,(or (plist-get params :title) (org-get-title)))))
+
+  ;; orgas
+
+  (defun org-dblock-write:org-roam-orgas (params)
+    "Write org block for org-roam-orgas with PARAMS."
+    (let ((year (plist-get params :year))
+          (country (plist-get params :country)))
+      (when year
+        (org-dblock-write:org-roam-ql `(:query (and (tags "orga") (properties "released-at" ,year))
+                                        :columns (link country)
+                                        :no-link true)))
+      (when country
+        (org-dblock-write:org-roam-ql `(:query (and (tags "orga") (properties "country" ,country))
+                                        :columns (link city released-at)
+                                        :no-link true)))))
+
+  (defun org-dblock-write:orgas-by-year (_params)
+    (org-dblock-write:org-roam-orgas `(:year ,(org-get-title))))
+
+  (defun org-dblock-write:orgas-by-country (params)
+    (org-dblock-write:org-roam-orgas `(:country ,(or (plist-get params :title) (org-get-title)))))
+
+  ;; specs
+
+  (defun org-dblock-write:org-roam-specs (params)
+    "write org block for org-roam-specs with params."
+    (let ((year (plist-get params :year)))
+      (when year
+        (org-dblock-write:org-roam-ql `(:query (and (tags "spec") (properties "released-at" ,year))
+                                        :columns (link description)
+                                        :no-link true)))))
+
+  (defun org-dblock-write:specs-by-year (_params)
+    (org-dblock-write:org-roam-specs `(:year ,(org-get-title))))
+
+  (defun org-dblock-write:org-roam-games (params)
+    "Write org block for org-roam-games with PARAMS."
+    (let ((year (plist-get params :year)))
+      (when year
+        (org-dblock-write:org-roam-ql `(:query (and (tags "game") (properties "released-at" ,year))
+                                        :columns (link)
+                                        :no-link true)))))
+
+  (defun org-dblock-write:games-by-year (_params)
+    (org-dblock-write:org-roam-games `(:year ,(org-get-title))))
 
   (defun org-dblock-write:org-roam-language (params)
     "Write org block for org-roam-language with PARAMS."
