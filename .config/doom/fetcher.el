@@ -21,6 +21,15 @@
     :error (cl-function (lambda (&rest args &key error-thrown &allow-other-keys)
                           (message "Got error: %s %S" url error-thrown)))))
 
+(defun my/fetch-brittle (url finally)
+  "For calls that are known to fail often"
+  '(message (concat "fetching " url))
+  (request url :parser 'json-read
+    :success (cl-function (lambda (&key data &allow-other-keys) (funcall finally data)))
+    :error (cl-function (lambda (&rest args &key error-thrown &allow-other-keys)
+                          (message "Got error: %s %S" url error-thrown)
+                          (funcall finally nil)))))
+
 (defun my/get-current-line-content ()
   (buffer-substring-no-properties (line-beginning-position) (line-end-position)))
 
@@ -387,10 +396,10 @@
           (lambda (data)
             (my/org-set-prop "dependents" 'dependents_count data)
             (my/org-set-prop "source-rank" 'rank data)
-            (my/fetch
+            (my/fetch-brittle
              (concat "https://packagephobia.com/api.json?p=" npm-id)
              (lambda (data)
-               (my/org-set-prop "install-size" 'installSize data)
+               (when data (my/org-set-prop "install-size" 'installSize data))
                (my/fetch
                 (concat "https://api.npmjs.org/downloads/point/last-month/" npm-id)
                 (lambda (data)
