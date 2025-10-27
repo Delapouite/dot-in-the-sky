@@ -9,7 +9,7 @@ function fz --description 'entry point for all the fuzziness glory'
 		--prompt '$argv[1] ❯ '"
 
 	if test -n "$argv[2]"
-		set fzf_cmd "$fzf_cmd --query $argv[2]"
+		set fzf_cmd "$fzf_cmd --query '$argv[2] '"
 	end
 
 	alias _fzf="$fzf_cmd"
@@ -853,6 +853,16 @@ function fz --description 'entry point for all the fuzziness glory'
 			| xargs xdg-open > /dev/null
 		sleep 0.2
 
+	case browser-search-engines
+		if test "$argv[2]" = "--help"
+			printf "list: browser search engines\n"
+			print_dim 'preview: none'
+			printf 'action: query search engines\n'
+			return
+		end
+
+		browser-search
+
 	case browser-tabs
 		if test "$argv[2]" = "--help"
 			printf 'list: browser tabs\n'
@@ -1567,6 +1577,21 @@ function fz --description 'entry point for all the fuzziness glory'
 			| xargs xdg-open
 		sleep 0.2
 
+	case org-roam-nodes
+		if test "$argv[2]" = "--help"
+			printf "list: nodes from org-roam\n"
+			print_dim 'preview: none'
+			printf 'action: open node in Emacs\n'
+			return
+		end
+
+		sqlite3 ~/.config/emacs/.local/cache/org-roam.db 'select id from nodes order by id' \
+			| _awk '{gsub(/"/, "", $1); printf "%s\n", $1}' \
+			| _fzf \
+			| _awk '{printf "org-protocol://roam-node?node=%s\n", $1}' \
+			| xargs xdg-open
+		sleep 0.2
+
 	case pacman-files
 		if test "$argv[2]" = "--help"
 			printf 'list: packages files\n'
@@ -2098,6 +2123,7 @@ function fz --description 'entry point for all the fuzziness glory'
 			bluetooth-controllers \
 			bluetooth-devices \
 			browser-bookmarks \
+			browser-search-engines \
 			browser-tabs \
 			dbus-system-peers \
 			dbus-user-peers \
@@ -2145,6 +2171,7 @@ function fz --description 'entry point for all the fuzziness glory'
 			npm-dependencies \
 			npm-scripts \
 			org-roam-links \
+			org-roam-nodes \
 			pacman-files \
 			pacman-mirrors \
 			pacman-packages \
