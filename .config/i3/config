@@ -31,7 +31,7 @@ bindsym $mod+F2 exec kitty --single-instance 'kak' '~/.config/i3/config'
 bindsym $mod+F5 reload
 
 bindsym $mod+Return exec kitty --single-instance
-bindsym $mod+BackSpace exec kitty --single-instance --class floating-term fish -c browser
+bindsym $mod+BackSpace exec kitty --single-instance --class floating-term fish -c 'fz . browser'
 # note: not working with xclip :( https://github.com/astrand/xclip/issues/4 ?
 bindsym $mod+y exec kitty --single-instance --class floating-term fish -c 'firefoxctl tab list | jq ".[] | select(.active)" | xsel --clipboard'
 
