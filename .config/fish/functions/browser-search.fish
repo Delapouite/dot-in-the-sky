@@ -4,24 +4,30 @@ function browser-search --description 'browser search with various engines'
 
 	set --function browser xdg-open
 	set --function engines \
+		# default first
+		duckduckgo \
 		arch \
 		arch-wiki \
 		bitbucket \
 		bugzilla \
 		deepl \
 		devdocs \
-		duckduckgo \
 		gitlab \
 		github \
+		goodreads \
 		google \
 		hacker-news \
 		hacker-news-url \
 		jsr \
+		larousse \
 		linguee \
 		lobsters \
 		mdn \
+		merriam-webster \
 		musicbrainz \
 		npm \
+		oxford-english-dictionary \
+		petit-robert \
 		repology \
 		stackoverflow \
 		wikipedia-en \
@@ -85,6 +91,9 @@ function browser-search --description 'browser search with various engines'
 	case gitlab gl
 		$browser "https://gitlab.com/search?search=$query"
 
+	case goodreads
+		$browser "https://www.goodreads.com/search?utf8=%E2%9C%93&query=$query"
+
 	case google goo
 		$browser "https://www.google.com/search?q=$query"
 
@@ -97,6 +106,9 @@ function browser-search --description 'browser search with various engines'
 	case jsr
 		$browser "https://jsr.io/packages?search=$query"
 
+	case larousse
+		$browser "https://www.larousse.fr/dictionnaires/francais/$query"
+
 	case linguee
 		$browser "https://www.linguee.com/english-french/search?query=$query"
 
@@ -106,6 +118,9 @@ function browser-search --description 'browser search with various engines'
 	case mdn
 		$browser "https://developer.mozilla.org/en-US/search?q=$query"
 
+	case merriam-webster
+		$browser "https://www.merriam-webster.com/dictionary/$query"
+
 	case musicbrainz mb
 		$browser "https://musicbrainz.org/search?type=artist&query=$query"
 
@@ -114,6 +129,12 @@ function browser-search --description 'browser search with various engines'
 
 	case repology repo
 		$browser "https://repology.org/projects/?search=$query"
+
+	case oxford-english-dictionary oed
+		$browser "https://www.oed.com/search/dictionary/?scope=Entries&q=$query"
+
+	case petit-robert
+		$browser "https://dictionnaire.lerobert.com/definition/$query"
 
 	case stackoverflow stack
 		$browser "https://stackoverflow.com/search?q=$query"
