@@ -45,9 +45,9 @@ function browser-search --description 'browser search with various engines'
 	end
 
 	if test -z "$query"
-		read --prompt-str "$engine ❯ " query
+		set --function query (printf "" | fzf --prompt "$engine ❯ " --info hidden --reverse --no-separator --print-query)
 	end
-	# pressing enter key
+	# pressing escape/enter key
 	if test -z "$query"
 		exit
 	end
