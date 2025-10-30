@@ -10,11 +10,15 @@ include "%L"
 <Multi_key> <minus> <plus> : "∓" U2213 # MINOR-OR-PLUS SIGN
 
 # <dead_schwa> is lafayette quote
+<dead_schwa> <c> : "●" U25CF # BLACK CIRCLE
+<dead_schwa> <C> : "○" U25CB # WHITE CIRCLE
 <dead_schwa> <f> : "⚑" U2691 # BLACK FLAG
 <dead_schwa> <F> : "⚐" U2690 # WHITE FLAG
 <dead_schwa> <h> : "⧗" U29D7 # BLACK HOURGLASS
 <dead_schwa> <H> : "⧖" U29D6 # WHITE HOURGLASS
 <dead_schwa> <p> : "🯅" U1FBC5 # STICK FIGURE
+<dead_schwa> <q> : "■" U25A0 # BLACK SQUARE
+<dead_schwa> <Q> : "□" U25A1 # WHITE SQUARE
 <dead_schwa> <s> : "★" U2605 # BLACK STAR
 <dead_schwa> <S> : "☆" U2606 # WHITE STAR
 
