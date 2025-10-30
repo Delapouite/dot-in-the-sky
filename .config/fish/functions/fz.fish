@@ -1575,7 +1575,7 @@ function fz --description 'entry point for all the fuzziness glory'
 			| _awk '{gsub(/"/, "", $1); printf "https:%s\n", $1}' \
 			| _fzf \
 			| xargs xdg-open
-		sleep 0.2
+		i3-msg --quiet "[class=firefox-developer-edition] focus"
 
 	case org-roam-nodes
 		if test "$argv[2]" = "--help"
@@ -1588,9 +1588,11 @@ function fz --description 'entry point for all the fuzziness glory'
 		sqlite3 ~/.config/emacs/.local/cache/org-roam.db 'select id from nodes order by id' \
 			| _awk '{gsub(/"/, "", $1); printf "%s\n", $1}' \
 			| _fzf \
+			| tr -d '\n' \
+			| jq --slurp --raw-input --raw-output @uri \
 			| _awk '{printf "org-protocol://roam-node?node=%s\n", $1}' \
 			| xargs xdg-open
-		sleep 0.2
+		i3-msg --quiet "[class=Emacs] focus"
 
 	case pacman-files
 		if test "$argv[2]" = "--help"
