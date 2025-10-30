@@ -838,63 +838,69 @@ function fz --description 'entry point for all the fuzziness glory'
 
 		set --local candidate (bluetoothctl devices | _fzf)
 
-	case browser-bookmarks
-		set --local data_source '~/.local/share/browser-bookmarks/*.bookmarks'
-		if test "$argv[2]" = "--help"
-			printf "list: browser bookmarks from $data_source\n"
-			print_dim 'preview: none'
-			printf 'action: open bookmark in default browser\n'
-			return
-		end
+	case 'browser-*'
 
-		cat ~/.local/share/browser-bookmarks/*.bookmarks \
-			| rg -v '^#' | rg -v '^$' \
-			| _awk '{printf "%-12s \x1b[36m%s\x1b[m %s\n", $1, $2, $3}' \
-			| _fzf \
-				--header "$data_source" \
-			| sed 's#.*\(https*://\)#\1#' \
-			| xargs xdg-open > /dev/null
-		sleep 0.2
+		alias _fzf="$fzf_cmd --bind 'backward-eof:become(fz . browser)'"
 
-	case browser-search-engines
-		if test "$argv[2]" = "--help"
-			printf "list: browser search engines\n"
-			print_dim 'preview: none'
-			printf 'action: query search engines\n'
-			return
-		end
+		switch $argv[1]
 
-		browser-search
-
-	case browser-tabs
-		if test "$argv[2]" = "--help"
-			printf 'list: browser tabs\n'
-			print_dim 'preview: none'
-			printf 'action: ret - activate browser tab\n'
-			printf 'action: alt-d - delete browser tab\n'
-			return
-		end
-
-		set --local choice (firefoxctl tab list \
-			| _jq '.[] | "\(.id) \(.lastAccessed)\t\(.title) \u001b[38;2;98;114;164m\(.url)\u001b[m"' \
-			| _fzf \
-				--multi \
-				--expect alt-d \
-				--accept-nth 1)
-
-		if test -n "$choice"
-			set --local verb_ids (string split ' ' "$choice")
-			set --local ids "$verb_ids[2..]"
-
-			switch $verb_ids[1]
-
-			case 'alt-d'
-				firefoxctl tab delete $ids
-
-			case '*'
-				firefoxctl tab activate "$ids[1]"
+		case browser-bookmarks
+			set --local data_source '~/.local/share/browser-bookmarks/*.bookmarks'
+			if test "$argv[2]" = "--help"
+				printf "list: browser bookmarks from $data_source\n"
+				print_dim 'preview: none'
+				printf 'action: open bookmark in default browser\n'
+				return
 			end
 
+			cat ~/.local/share/browser-bookmarks/*.bookmarks \
+				| rg -v '^#' | rg -v '^$' \
+				| _awk '{printf "%-12s \x1b[36m%s\x1b[m %s\n", $1, $2, $3}' \
+				| _fzf \
+					--header "$data_source" \
+				| sed 's#.*\(https*://\)#\1#' \
+				| xargs xdg-open > /dev/null
+			i3-msg --quiet "[class=firefox-developer-edition] focus"
+
+		case browser-search-engines
+			if test "$argv[2]" = "--help"
+				printf "list: browser search engines\n"
+				print_dim 'preview: none'
+				printf 'action: query search engines\n'
+				return
+			end
+
+			browser-search
+
+		case browser-tabs
+			if test "$argv[2]" = "--help"
+				printf 'list: browser tabs\n'
+				print_dim 'preview: none'
+				printf 'action: ret - activate browser tab\n'
+				printf 'action: alt-d - delete browser tab\n'
+				return
+			end
+
+			set --local choice (firefoxctl tab list \
+				| _jq '.[] | "\(.id) \(.lastAccessed)\t\(.title) \u001b[38;2;98;114;164m\(.url)\u001b[m"' \
+				| _fzf \
+					--multi \
+					--expect alt-d \
+					--accept-nth 1)
+
+			if test -n "$choice"
+				set --local verb_ids (string split ' ' "$choice")
+				set --local ids "$verb_ids[2..]"
+
+				switch $verb_ids[1]
+
+				case 'alt-d'
+					firefoxctl tab delete $ids
+
+				case '*'
+					firefoxctl tab activate "$ids[1]"
+				end
+			end
 		end
 
 	case dbus-system-peers
