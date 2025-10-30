@@ -6,6 +6,7 @@ function fz --description 'entry point for all the fuzziness glory'
 		--info inline \
 		--no-separator \
 		--preview-window=bottom \
+		--bind 'backward-eof:become(fz)' \
 		--prompt '$argv[1] ❯ '"
 
 	if test -n "$argv[2]"
@@ -93,6 +94,8 @@ function fz --description 'entry point for all the fuzziness glory'
 			print_error 'az command not found'
 			return 1
 		end
+
+		alias _fzf="$fzf_cmd --bind 'backward-eof:become(fz . azure)'"
 
 		# header or prompt
 		set --local account (az account show | _jq '"\(.user.name) at \(.name)"')
@@ -946,6 +949,8 @@ function fz --description 'entry point for all the fuzziness glory'
 			return 1
 		end
 
+		alias _fzf="$fzf_cmd --bind 'backward-eof:become(fz . docker)'"
+
 		switch $argv[1]
 
 		case docker-accounts
@@ -1147,6 +1152,8 @@ function fz --description 'entry point for all the fuzziness glory'
 			return 1
 		end
 
+		alias _fzf="$fzf_cmd --bind 'backward-eof:become(fz . git)'"
+
 		switch $argv[1]
 
 		case git-branches
@@ -1260,6 +1267,8 @@ function fz --description 'entry point for all the fuzziness glory'
 			return 1
 		end
 
+		alias _fzf="$fzf_cmd --bind 'backward-eof:become(fz . i3)'"
+
 		switch $argv[1]
 
 		case i3-windows
@@ -1297,7 +1306,6 @@ function fz --description 'entry point for all the fuzziness glory'
 			if test -n "$choice"
 				i3-msg --quiet "workspace $choice"
 			end
-
 		end
 
 	case ip-addresses
@@ -1460,6 +1468,8 @@ function fz --description 'entry point for all the fuzziness glory'
 			print_error 'mpc command not found'
 			return 1
 		end
+
+		alias _fzf="$fzf_cmd --bind 'backward-eof:become(fz . music)'"
 
 		switch $argv[1]
 
@@ -1674,6 +1684,8 @@ function fz --description 'entry point for all the fuzziness glory'
 			return 1
 		end
 
+		alias _fzf="$fzf_cmd --bind 'backward-eof:become(fz . pulseaudio)'"
+
 		switch $argv[1]
 
 		case pulseaudio-modules
@@ -1887,6 +1899,8 @@ function fz --description 'entry point for all the fuzziness glory'
 			print_error 'starship command not found'
 			return 1
 		end
+
+		alias _fzf="$fzf_cmd --bind 'backward-eof:become(fz . starship)'"
 
 		switch $argv[1]
 
@@ -2300,7 +2314,7 @@ function fz --description 'entry point for all the fuzziness glory'
 			end
 		end
 
-		set --local selected_command (printf '%s\n' $enabled_commands | _fzf --prompt 'fz ❯ ' --preview 'fz {} --help')
+		set --local selected_command (printf '%s\n' $enabled_commands | _fzf --prompt 'fz ❯ ' --preview 'fz {} --help' --bind 'backward-eof:abort')
 		if test -n "$selected_command"
 			fz $selected_command
 		end
