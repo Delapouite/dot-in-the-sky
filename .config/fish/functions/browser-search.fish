@@ -37,7 +37,7 @@ function browser-search --description 'browser search with various engines'
 		wordnik
 
 	if test -z "$engine"
-		set --function engine (printf '%s\n' $engines | fzf --prompt 'browser-search ❯ ' --info inline --reverse --no-separator)
+		set --function engine (printf '%s\n' $engines | fzf --prompt 'browser-search ❯ ' --info inline --reverse --no-separator --bind 'backward-eof:become(fz . browser)')
 	end
 	# pressing escape/enter key
 	if test -z "$engine"
