@@ -4,6 +4,7 @@
   "editor.bracketPairColorization.enabled": true,
   "editor.cursorStyle": "block",
   "editor.cursorSurroundingLines": 10,
+  "editor.fontFamily": "Iosevka Term, Droid Sans Mono, monospace",
   "editor.fontSize": 10,
   "editor.guides.bracketPairs": "active",
   "editor.minimap.size": "fill",
@@ -60,7 +61,7 @@
   "terminal.integrated.smoothScrolling": true,
   "update.mode": "none",
   "window.menuBarVisibility": "toggle",
-  "workbench.colorTheme": "Dracula",
+  "workbench.colorTheme": "Dracula Theme",
   "workbench.colorCustomizations": {
     "tab.activeBorderTop": "#50fa7b",
     "tab.activeBackground": "#444754"
@@ -83,6 +84,7 @@
   /// py
   "python.analysis.typeCheckingMode": "strict",
   // extensions
+  "extensions.ignoreRecommendations": true,
   "atlascode.bitbucket.enabled": true,
   "atlascode.bitbucket.explorer.relatedJiraIssues.enabled": true,
   "atlascode.bitbucket.pipelines.explorerEnabled": true,
