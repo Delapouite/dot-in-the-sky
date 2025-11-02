@@ -319,8 +319,17 @@
   (cl-defmethod org-roam-node-play-count ((node org-roam-node))
     (or (cdr (assoc "PLAY-COUNT" (org-roam-node-properties node))) ""))
 
+  (cl-defmethod org-roam-node-tracks-count ((node org-roam-node))
+    (or (cdr (assoc "TRACKS-COUNT" (org-roam-node-properties node))) ""))
+
+  (cl-defmethod org-roam-node-index ((node org-roam-node))
+    (or (cdr (assoc "INDEX" (org-roam-node-properties node))) ""))
+
   (cl-defmethod org-roam-node-combos ((node org-roam-node))
     (or (cdr (assoc "COMBOS" (org-roam-node-properties node))) ""))
+
+  (cl-defmethod org-roam-node-features ((node org-roam-node))
+    (or (cdr (assoc "FEATURES" (org-roam-node-properties node))) ""))
 
   (cl-defmethod org-roam-node-instruments ((node org-roam-node))
     (or (cdr (assoc "INSTRUMENTS" (org-roam-node-properties node))) ""))
@@ -392,10 +401,15 @@
     (or (cdr (assoc "DIED-AT" (org-roam-node-properties node))) ""))
 
   (cl-defmethod org-roam-node-played-at ((node org-roam-node))
-    (or (cdr (assoc "PLAYED-AT" (org-roam-node-properties node))) ""))
+    (let ((played-at (or (cdr (assoc "PLAYED-AT" (org-roam-node-properties node)))
+                         "          ")))
+      (substring played-at 0 10)))
 
   (cl-defmethod org-roam-node-released-at ((node org-roam-node))
     (or (cdr (assoc "RELEASED-AT" (org-roam-node-properties node))) "    "))
+
+  (cl-defmethod org-roam-node-sosa ((node org-roam-node))
+    (or (cdr (assoc "SOSA" (org-roam-node-properties node))) ""))
 
   ; fuzzy candidate templates
 
