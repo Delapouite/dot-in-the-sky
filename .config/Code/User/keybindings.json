@@ -2,80 +2,75 @@
   // sidebar
   {
     "key": "Ctrl+e",
-    "command": "workbench.view.explorer",
-    "when": "vim.mode != 'Insert'"
+    "title": "Focus explorer view",
+    "command": "workbench.view.explorer"
   },
   {
     "key": "Ctrl+f",
+    "title": "Find in files",
     "command": "workbench.action.findInFiles",
-    "when": "editorTextFocus && vim.mode != 'Insert'"
-  },
-  // palette
-  {
-    "key": "Ctrl+0",
-    "command": "workbench.action.showCommands",
-    "when": "vim.mode != 'Insert'"
+    "when": "editorTextFocus"
   },
   // layout
   {
     "key": "Ctrl+h",
-    "command": "workbench.action.navigateLeft",
-    "when": "vim.mode != 'Insert'"
+    "title": "Navigate left",
+    "command": "workbench.action.navigateLeft"
   },
   {
     "key": "Ctrl+j",
-    "command": "workbench.action.navigateDown",
-    "when": "vim.mode != 'Insert'"
+    "title": "Navigate down",
+    "command": "workbench.action.navigateDown"
   },
   {
     "key": "Ctrl+k",
-    "command": "workbench.action.navigateUp",
-    "when": "vim.mode != 'Insert'"
+    "title": "Navigate up",
+    "command": "workbench.action.navigateUp"
   },
   {
     "key": "Ctrl+l",
-    "command": "workbench.action.navigateRight",
-    "when": "vim.mode != 'Insert'"
+    "title": "Navigate right",
+    "command": "workbench.action.navigateRight"
   },
   // dance: move b to q
   {
     "key": "Q",
-    "when": "editorTextFocus && dance.mode == 'normal'",
     "title": "Select to previous word start",
-    "command": "dance.seek.word.backward"
+    "command": "dance.seek.word.backward",
+    "when": "editorTextFocus && dance.mode == 'normal'"
   },
   {
     "key": "Shift+Q",
-    "when": "editorTextFocus && dance.mode == 'normal'",
     "title": "Extend to previous word start",
-    "command": "dance.seek.word.extend.backward"
+    "command": "dance.seek.word.extend.backward",
+    "when": "editorTextFocus && dance.mode == 'normal'"
   },
   {
     "key": "Alt+Q",
-    "when": "editorTextFocus && dance.mode == 'normal'",
     "title": "Select to previous non-whitespace word start",
-    "command": "dance.seek.word.ws.backward"
+    "command": "dance.seek.word.ws.backward",
+    "when": "editorTextFocus && dance.mode == 'normal'"
   },
   {
     "key": "Shift+Alt+Q",
-    "when": "editorTextFocus && dance.mode == 'normal'",
     "title": "Extend to previous non-whitespace word start",
-    "command": "dance.seek.word.ws.extend.backward"
+    "command": "dance.seek.word.ws.extend.backward",
+    "when": "editorTextFocus && dance.mode == 'normal'"
   },
   {
     "key": "B",
-    "when": "editorTextFocus && dance.mode == 'normal'",
     "title": "Show buffer menu",
     "command": "dance.openMenu",
+    "when": "editorTextFocus && dance.mode == 'normal'",
     "args": {
       "input": "buffer"
     }
   },
   {
     "key": "Shift+B",
-    "when": "editorTextFocus && dance.mode == 'normal'",
     "title": "Show buffer menu (locked)",
     "command": "dance.openMenu",
+    "when": "editorTextFocus && dance.mode == 'normal'",
     "args": {
       "input": "buffer",
       "locked": true
@@ -83,53 +78,59 @@
   },
   {
     "key": "Ctrl+I",
-    "when": "editorTextFocus && dance.mode == 'normal'",
     "title": "Jump forward",
-    "command": "workbench.action.navigateForward"
+    "command": "workbench.action.navigateForward",
+    "when": "editorTextFocus && dance.mode == 'normal'"
   },
   {
     "key": "Ctrl+O",
-    "when": "editorTextFocus && dance.mode == 'normal'",
     "title": "Jump backward",
-    "command": "workbench.action.navigateBack"
+    "command": "workbench.action.navigateBack",
+    "when": "editorTextFocus && dance.mode == 'normal'"
   },
   {
     "key": "Alt+Backspace",
-    "when": "editorTextFocus && dance.mode == 'normal'",
     "title": "Clear main selections",
-    "command": "dance.selections.clear.main"
+    "command": "dance.selections.clear.main",
+    "when": "editorTextFocus && dance.mode == 'normal'"
   },
   {
     "key": "Backspace",
-    "when": "editorTextFocus && dance.mode == 'normal'",
     "title": "Clear secondary selections",
-    "command": "dance.selections.clear.secondary"
+    "command": "dance.selections.clear.secondary",
+    "when": "editorTextFocus && dance.mode == 'normal'"
   },
   {
     "key": "Shift+3",
-    "when": "editorTextFocus && dance.mode == 'normal'",
     "title": "Comment code",
-    "command": "editor.action.commentLine"
+    "command": "editor.action.commentLine",
+    "when": "editorTextFocus && dance.mode == 'normal'"
+  },
+  {
+    "key": "Alt+J",
+    "title": "Search",
+    "command": "dance.search",
+    "when": "editorTextFocus && dance.mode == 'normal'"
   },
   // text-objects
   {
     "key": "Alt+O",
-    "when": "editorTextFocus && dance.mode == 'normal'",
     "title": "Select whole object",
-    "command": "dance.seek.askObject"
+    "command": "dance.seek.askObject",
+    "when": "editorTextFocus && dance.mode == 'normal'"
   },
   {
     "key": "Alt+O",
-    "when": "editorTextFocus && dance.mode == 'insert'",
     "title": "Select whole object",
-    "command": "dance.seek.askObject"
+    "command": "dance.seek.askObject",
+    "when": "editorTextFocus && dance.mode == 'insert'"
   },
   // Spacemacs
   {
     "key": "Space",
-    "when": "editorTextFocus && dance.mode == 'normal'",
     "title": "Show commands",
-    "command": "workbench.action.showCommands"
+    "command": "workbench.action.showCommands",
+    "when": "editorTextFocus && dance.mode == 'normal'"
   },
   // previous / next
   {
