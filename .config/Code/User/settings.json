@@ -60,12 +60,14 @@
   "terminal.integrated.scrollback": 10000,
   "terminal.integrated.smoothScrolling": true,
   "update.mode": "none",
+  "window.confirmBeforeClose": "never",
   "window.menuBarVisibility": "toggle",
   "workbench.colorTheme": "Dracula Theme",
   "workbench.colorCustomizations": {
     "tab.activeBorderTop": "#50fa7b",
     "tab.activeBackground": "#444754"
   },
+  "workbench.editor.enablePreview": false,
   "workbench.editor.highlightModifiedTabs": true,
   "workbench.startupEditor": "newUntitledFile",
   "workbench.statusBar.visible": true,
