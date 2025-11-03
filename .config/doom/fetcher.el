@@ -680,6 +680,8 @@
        (my/empty-property-drawer 12)
        (let ((bug (aref (assoc-default 'bugs data) 0)))
          (my/org-set-prop "status" 'status bug)
+         (my/org-set-prop "comments" 'comment_count bug)
+         (my/org-set-prop "stars" 'votes bug)
          (my/org-set-prop "created-at" 'creation_time bug)
          (my/org-set-prop "updated-at" 'last_change_time bug)
          (my/org-set-prop "closed-at" 'cf_last_resolved bug)
