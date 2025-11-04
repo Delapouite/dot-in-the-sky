@@ -204,8 +204,10 @@
   },
   "dance.menus": {
     "buffer": {
+      "title": "Buffer…",
+      "type": "hotkey",
       "items": {
-        "bf": {
+        "f": {
           "text": "find",
           "command": "workbench.action.quickOpen"
         },
