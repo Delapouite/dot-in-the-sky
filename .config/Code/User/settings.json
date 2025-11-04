@@ -156,6 +156,7 @@
   "nxConsole.enableTelemetry": false,
   "partialDiff.enableTelemetry": false,
   "redhat.telemetry.enabled": false,
+  "sonarlint.disableTelemetry": true,
   // kakoune
   "dance.modes": {
     "normal": {
