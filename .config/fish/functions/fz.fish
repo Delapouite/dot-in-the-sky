@@ -1987,12 +1987,14 @@ function fz --description 'entry point for all the fuzziness glory'
 	case trust-policies
 		if test "$argv[2]" = "--help"
 			printf 'list: anchors, certificates and blocklists from trust policy store (PKCS#11)\n'
-			print_dim 'preview: none'
+			printf 'preview: certificate details\n'
 			print_dim 'action: none'
 			return
 		end
 
-		trust list | rg label | _fzf
+		trust list \
+			| rg --multiline '(pkcs11:.*)\n\s*.*\n\s*label: (.*)' --only-matching --replace '$2 $1' \
+			| _fzf --preview 'p11-kit export-object {-1} | step-cli certificate inspect --format json | jq --color-output .'
 
 	case unicode-blocks
 		if test "$argv[2]" = "--help"
