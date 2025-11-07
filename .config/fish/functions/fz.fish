@@ -22,6 +22,8 @@ function fz --description 'entry point for all the fuzziness glory'
 		--language json \
 		--color always'
 
+	set --local cache_dir "$HOME/.cache/fz"
+
 	# colors
 
 	set --local grey '\x1b[38;2;173;178;203m'
@@ -1064,6 +1066,28 @@ function fz --description 'entry point for all the fuzziness glory'
 		set --local choice (efivar --list \
 			| _fzf --preview "efivar --name {}")
 
+	case end-of-life-date
+		if test "$argv[2]" = "--help"
+			printf 'list: products from endoflife.date\n'
+			printf 'preview: product releases\n'
+			print_dim 'action: none'
+			return
+		end
+
+		mkdir --parents "$cache_dir"
+		set --local cache_file "$cache_dir/end-of-life-date.json"
+		set --local ago "/tmp/n-days-ago"
+
+		touch -d "2 days ago" "$ago"
+		if test "$cache_file" -ot "$ago"
+			curl --silent 'https://endoflife.date/api/v1/products/full' | jq . > "$cache_file"
+		end
+
+		set --local candidate (cat "$cache_file" \
+			| _jq '.result | .[] | "\(.name)\u001f\(.releases[0].name)\u001f\(.releases[0].releaseDate)"' \
+			| _awk "$awk_dim3" \
+			| _fzf --preview "jq --color-output '.result | .[] | select(.name==\"{1}\")' $cache_file")
+
 	case environment-variables
 		if test "$argv[2]" = "--help"
 			printf 'list: environment variables\n'
@@ -1082,7 +1106,6 @@ function fz --description 'entry point for all the fuzziness glory'
 			printf "action: visit rule documentation on eslint.org\n"
 			return
 		end
-
 
 		set --local rule_id (cat "$data_source" \
 			| _jq  '["id", "type", "recommended", "deprecated", "fixable", "description"],
@@ -2160,6 +2183,7 @@ function fz --description 'entry point for all the fuzziness glory'
 			docker-registries \
 			docker-volumes \
 			efi-variables \
+			end-of-life-date \
 			environment-variables \
 			eslint-rules \
 			files \
