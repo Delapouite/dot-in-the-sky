@@ -152,5 +152,10 @@
     "key": "Ctrl+n",
     "command": "workbench.action.quickOpenSelectNext",
     "when": "inQuickOpen"
-  }
+  },
+  {
+    "key": "tab",
+    "command": "editor.toggleFold",
+    "when": "editorTextFocus && foldingEnabled && dance.mode == 'normal'"
+  },
 ]
