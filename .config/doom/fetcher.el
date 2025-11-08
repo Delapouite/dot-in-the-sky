@@ -132,6 +132,26 @@
                                                   (org-set-property "subscribed" "true")))))
                                  (my/fetched-at)))))))))))))))
 
+(defun my/visit-github-discussions () (interactive) (my/visit-url "github.com discussions"))
+(defvar my/github-discussions-re ".*?https://github.com/\\([a-zA-Z0-9-_\.]*\\)/\\([a-zA-Z0-9-_\.]*\\)/discussions/\\([0-9]*\\).*")
+
+(defun my/fetch-github-discussions-stats ()
+  "Fetch GitHub REST API for discusssions and add the returned values in a PROPERTIES drawer"
+  (interactive)
+  (seq-let (org name discussion-id) (my/parse-url my/github-discussions-re)
+    (my/fetch
+     (concat "https://api.github.com/repos/" org  "/" name "/discussions/" discussion-id)
+     (lambda (data)
+       (my/empty-property-drawer 12)
+       (my/org-set-prop "title" 'title data)
+       (org-set-property "author" (my/assoc-default data 'user 'login))
+       (my/org-set-prop "state" 'state data)
+       (my/org-set-prop "comments" 'comments data)
+       (my/org-set-prop "created-at" 'created_at data)
+       (my/org-set-prop "updated-at" 'updated_at data)
+       (org-set-property "closed-at" (or (assoc-default 'answer_chosen_at data) "null"))
+       (my/fetched-at)))))
+
 ;; https://docs.github.com/en/rest/issues/issues?apiVersion=2022-11-28
 (defun my/visit-github-issues () (interactive) (my/visit-url "github.com issues"))
 (defvar my/github-issues-re ".*?https://github.com/\\([a-zA-Z0-9-_\.]*\\)/\\([a-zA-Z0-9-_\.]*\\)/issues/\\([a-zA-Z0-9-_\.]*\\).*")
@@ -703,6 +723,7 @@
       ((string-match-p my/docker-hub-official-re line-content) (my/fetch-docker-official-hub))
       ((string-match-p my/docker-hub-user-re line-content) (my/fetch-docker-hub-user))
       ((string-match-p my/hacker-news-re line-content) (my/fetch-hacker-news-stats))
+      ((string-match-p my/github-discussions-re line-content) (my/fetch-github-discussions-stats))
       ((string-match-p my/github-issues-re line-content) (my/fetch-github-issues-stats))
       ((string-match-p my/github-pull-re line-content) (my/fetch-github-pull-stats))
       ((string-match-p my/github-re line-content) (my/fetch-github-stats))
