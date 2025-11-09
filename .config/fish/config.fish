@@ -1,5 +1,6 @@
 set -x EDITOR kak
 set -x VISUAL kak
+set -x GOBIN "$HOME/.local/bin"
 
 alias ...='cd ../../'
 alias ....='cd ../../../'
