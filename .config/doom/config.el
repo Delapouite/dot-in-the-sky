@@ -101,7 +101,7 @@
 
 (require 'ol-man)
 
-(setq ispell-personal-dictionary "~/Sync/ispell.dictionary")
+(setq ispell-personal-dictionary "~/.local/share/dictionaries/personal.dictionary")
 
 (defun my/rename-file-and-buffer (&optional new-name)
   "Rename the current buffer and file it is visiting."
