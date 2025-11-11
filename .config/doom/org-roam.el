@@ -159,6 +159,15 @@
 
   '(add-hook 'org-follow-link-hook #'my/visited-at)
 
+  (defun my/insert-album-cover ()
+    "Insert album cover image"
+    (interactive)
+    (let* ((title (split-string (org-get-title) " - "))
+           (artist (car title))
+           (album (cadr title))
+           (year (org-roam-node-released-at (org-roam-node-from-id (org-id-get)))))
+      (insert (concat "[[~/music/" artist "/" year " - " album "/cover.jpg]]"))))
+
   (defun my/org-roam-save-counts ()
     "Save links and backlinks count in database"
     (interactive)
@@ -287,8 +296,8 @@
     (format-time-string "%Y-%m-%d" (org-roam-node-file-mtime node)))
 
   (cl-defmethod org-roam-node-upgraded-at ((node org-roam-node))
-    (let* ((upgraded-at (or (cdr (assoc "UPGRADED-AT" (org-roam-node-properties node)))
-                            "          ")))
+    (let ((upgraded-at (or (cdr (assoc "UPGRADED-AT" (org-roam-node-properties node)))
+                           "          ")))
       (substring upgraded-at 0 10)))
 
   (cl-defmethod org-roam-node-type ((node org-roam-node))
@@ -524,7 +533,7 @@
   ; The gain in performance is quite significant, from 3 seconds to instant
   (setq org-roam-node-default-sort nil)
   (require 'memoize)
-  (memoize 'org-roam-node-read--completions)
+  (memoize 'org-roam-node-read--completions) ; 2 hours by default
 
   (defun memoize-force-update (func &optional timeout)
     (when (get func :memoize-original-function)
