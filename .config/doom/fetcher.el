@@ -484,7 +484,12 @@
        (my/org-set-prop "installed-size" 'installed_size data)
        (my/org-set-prop "built-at" 'build_date data)
        (my/org-set-prop "updated-at" 'last_update data)
-       (my/fetched-at)))))
+       (my/fetch
+        (concat "https://www.archlinux.org/packages/" repo "/" arch "/" package-id "/files/json")
+        (lambda (files)
+          (my/org-set-prop "directories" 'dir_count files)
+          (my/org-set-prop "files" 'files_count files)
+          (my/fetched-at)))))))
 
 (defun my/visit-aur () (interactive) (my/visit-url "aur.archlinux.org"))
 (defvar my/aur-re ".*?https://aur.archlinux.org/packages/\\([a-zA-Z0-9-_]*\\).*")
