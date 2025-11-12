@@ -47,7 +47,9 @@
 
 (custom-set-faces!
   `(bold :weight bold :foreground ,dracula-orange)
-  `(whitespace-tab :foreground ,dracula-grey)
+  `(nobreak-hyphen :foreground ,dracula-foreground :background ,dracula-pink)
+  `(nobreak-space :foreground ,dracula-foreground :background ,dracula-pink :underline nil)
+  `(whitespace-tab :foreground ,dracula-grey, :background nil)
   ;; yellow titles: in regular buffer and sidebar
   `(org-document-title :weight: light :height 2.0 :foreground ,dracula-foreground :family "Iosevka Etoile")
   `(org-roam-header-line :weight bold :height 2.0 :foreground ,dracula-foreground)
