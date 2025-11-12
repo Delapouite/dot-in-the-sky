@@ -2,6 +2,7 @@
 
 .envrc
 .envrc.d
+mise.local.toml
 
 # macOS
 
