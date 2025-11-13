@@ -914,7 +914,7 @@ function fz --description 'entry point for all the fuzziness glory'
 		end
 
 		set --local candidate (busctl list --system \
-			| _fzf \
+			| _fzf --preview 'busctl status {1} --system' \
 				--header-lines=1)
 
 	case dbus-user-peers
@@ -926,7 +926,7 @@ function fz --description 'entry point for all the fuzziness glory'
 		end
 
 		set --local candidate (busctl list --user \
-			| _fzf \
+			| _fzf --preview 'busctl status {1} --user' \
 				--header-lines=1)
 
 	case deno-tasks
