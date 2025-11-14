@@ -1969,7 +1969,18 @@ function fz --description 'entry point for all the fuzziness glory'
 
 		set --local choice (sysctl --all | _fzf)
 
-	case systemd
+	case systemd-paths
+		if test "$argv[2]" = "--help"
+			printf 'list: systemd paths\n'
+			print_dim 'preview: none'
+			print_dim 'action: none'
+			return
+		end
+
+		set --local candidate (systemd-path \
+			| _fzf)
+
+	case systemd-units
 		if not command -q sysz
 			print_error 'sysz command not found'
 			return 1
@@ -2245,7 +2256,8 @@ function fz --description 'entry point for all the fuzziness glory'
 			starship-modules \
 			starship-presets \
 			sysctl-values \
-			systemd \
+			systemd-paths \
+			systemd-units \
 			tc39-proposals \
 			top-level-domains \
 			trust-policies \
