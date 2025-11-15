@@ -2052,20 +2052,31 @@ function fz --description 'entry point for all the fuzziness glory'
 			return
 		end
 
-		curl --silent 'https://www.unicode.org/Public/UCD/latest/ucd/Blocks.txt' \
+		set --local cache_file "$cache_dir/unicode-blocks.txt"
+		touch -d "30 days ago" "$ago"
+		if test "$cache_file" -ot "$ago"
+			curl --silent 'https://www.unicode.org/Public/UCD/latest/ucd/Blocks.txt' > "$cache_file"
+		end
+
+		cat "$cache_file" \
 			| rg -v '^#' | rg -v '^$' \
 			| _fzf
 
 	case unicode-code-points
 		if test "$argv[2]" = "--help"
 			printf 'list: Unicode code points fetched from unicode.org\n'
-			print_dim 'preview: none'
+			printf 'preview: code point details with chars\n'
 			print_dim 'action: none'
 			return
 		end
 
-		curl --silent 'https://www.unicode.org/Public/UCD/latest/ucd/UnicodeData.txt' \
-			| _fzf
+		set --local cache_file "$cache_dir/unicode-code-points.txt"
+		touch -d "30 days ago" "$ago"
+		if test "$cache_file" -ot "$ago"
+			curl --silent 'https://www.unicode.org/Public/UCD/latest/ucd/UnicodeData.txt' > "$cache_file"
+		end
+
+		cat "$cache_file" | _fzf --delimiter ';' --preview 'chars U+{1}'
 
 	case usb-devices
 		if not command -q lsusb
