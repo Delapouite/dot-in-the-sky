@@ -22,7 +22,11 @@ function fz --description 'entry point for all the fuzziness glory'
 		--language json \
 		--color always'
 
+	set --local ago "/tmp/n-days-ago"
+	set --local tmpdir "/tmp/fz/$argv[1]"
 	set --local cache_dir "$HOME/.cache/fz"
+	mkdir --parents "$cache_dir"
+
 	function focus_browser
 		i3-msg --quiet "[class=firefox-developer-edition] focus"
 	end
@@ -59,8 +63,6 @@ function fz --description 'entry point for all the fuzziness glory'
 		set_color brblack; printf "$argv[1]"; set_color normal;
 	end
 
-	set --local tmpdir "/tmp/fz/$argv[1]"
-
 	# commands starting with _fzf are from https://github.com/PatrickF1/fzf.fish
 	switch $argv[1]
 
@@ -77,7 +79,7 @@ function fz --description 'entry point for all the fuzziness glory'
 			return
 		end
 
-		set --local choice (acpi --everything | _fzf)
+		acpi --everything | _fzf
 
 	case asdf-plugins
 		if not command -q asdf
@@ -92,7 +94,7 @@ function fz --description 'entry point for all the fuzziness glory'
 			return
 		end
 
-		set --local choice (asdf plugin list | _fzf)
+		asdf plugin list | _fzf
 
 	case 'azure-*'
 		if not command -q az
@@ -166,12 +168,12 @@ function fz --description 'entry point for all the fuzziness glory'
 				return
 			end
 
-			set --local choice (az appservice plan list \
+			az appservice plan list \
 				| _jq '.[] | "\(.name)\u001f\(.resourceGroup)\u001f\(.location)\u001f\(.kind)\u001f\(.id)"' \
 				| _awk "$awk_dim5" \
 				| _fzf \
 					--header "$account" \
-					--preview "az appservice plan show --name {1} --resource-group {2} | $bat_json")
+					--preview "az appservice plan show --name {1} --resource-group {2} | $bat_json"
 
 		case azure-appservice-webapps
 			if test "$argv[2]" = "--help"
@@ -182,12 +184,12 @@ function fz --description 'entry point for all the fuzziness glory'
 				return
 			end
 
-			set --local choice (az webapp list \
+			az webapp list \
 				| _jq '.[] | "\(.name)\u001f\(.resourceGroup)\u001f\(.location)\u001f\(.kind)\u001f\(.id)"' \
 				| _awk "$awk_dim5" \
 				| _fzf \
 					--header "$account" \
-					--preview "az webapp show --name {1} --resource-group {2} | $bat_json")
+					--preview "az webapp show --name {1} --resource-group {2} | $bat_json"
 
 		case azure-container-registries
 			if test "$argv[2]" = "--help"
@@ -226,14 +228,14 @@ function fz --description 'entry point for all the fuzziness glory'
 				return
 			end
 
-			set --local choice (az acr manifest list-metadata "$registry/$repository" --orderby time_desc 2> /dev/null \
+			az acr manifest list-metadata "$registry/$repository" --orderby time_desc 2> /dev/null \
 				| _jq '.[] | "\(.digest)\u001f\(.lastUpdateTime)\u001f\(.imageSize)"' \
 				| _awk "$awk_dim3" \
 				| _fzf --query '' \
 					--prompt "$argv[1] ($registry/$repository) ❯ " \
 					--header "$account" \
 					--preview "az acr manifest show-metadata $registry/$repository@{1} 2> /dev/null | $bat_json" \
-					--accept-nth 1)
+					--accept-nth 1
 
 		case azure-container-registry-repositories
 			# prompt
@@ -335,13 +337,13 @@ function fz --description 'entry point for all the fuzziness glory'
 				return
 			end
 
-			set --local choice (az extension list-available \
+			az extension list-available \
 				| _jq '.[] | "\(.name)\u001f\(.installed)\u001f\(.version)"' \
 				| _awk "$awk_dim3" \
 				| _fzf \
 					--header "$account" \
 					--expect ^ \
-					--preview "az extension show --name {1} | $bat_json")
+					--preview "az extension show --name {1} | $bat_json"
 
 		case azure-functions
 			set --local functionapp (az config get defaults.functionapp 2> /dev/null | _jq .value)
@@ -355,12 +357,12 @@ function fz --description 'entry point for all the fuzziness glory'
 				return
 			end
 
-			set --local choice (az functionapp function list --name "$functionapp" --resource-group "$rg" \
+			az functionapp function list --name "$functionapp" --resource-group "$rg" \
 				| _jq '.[] | "\(.name)\u001f\(.resourceGroup)\u001f\(.location)\u001f\(.kind)\u001f\(.id)"' \
 				| _awk "$awk_dim5" \
 				| _fzf \
 					--prompt "$argv[1] ($functionapp) ❯ " \
-					--header "$account")
+					--header "$account"
 
 		case azure-iot-dps
 			if test "$argv[2]" = "--help"
@@ -849,7 +851,7 @@ function fz --description 'entry point for all the fuzziness glory'
 			return
 		end
 
-		set --local candidate (bluetoothctl list | _fzf)
+		bluetoothctl list | _fzf
 
 	case bluetooth-devices
 		if test "$argv[2]" = "--help"
@@ -859,7 +861,7 @@ function fz --description 'entry point for all the fuzziness glory'
 			return
 		end
 
-		set --local candidate (bluetoothctl devices | _fzf)
+		bluetoothctl devices | _fzf
 
 	case 'browser-*'
 
@@ -883,7 +885,7 @@ function fz --description 'entry point for all the fuzziness glory'
 					--header "$data_source" \
 				| sed 's#.*\(https*://\)#\1#' \
 				| xargs xdg-open > /dev/null
-			i3-msg --quiet "[class=firefox-developer-edition] focus"
+			focus_browser
 
 		case browser-search-engines
 			if test "$argv[2]" = "--help"
@@ -934,9 +936,9 @@ function fz --description 'entry point for all the fuzziness glory'
 			return
 		end
 
-		set --local candidate (busctl list --system \
+		busctl list --system \
 			| _fzf --preview 'busctl status {1} --system' \
-				--header-lines=1)
+				--header-lines=1
 
 	case dbus-user-peers
 		if test "$argv[2]" = "--help"
@@ -946,9 +948,9 @@ function fz --description 'entry point for all the fuzziness glory'
 			return
 		end
 
-		set --local candidate (busctl list --user \
+		busctl list --user \
 			| _fzf --preview 'busctl status {1} --user' \
-				--header-lines=1)
+				--header-lines=1
 
 	case deno-tasks
 		if not test -e './deno.jsonc'
@@ -1006,10 +1008,10 @@ function fz --description 'entry point for all the fuzziness glory'
 				return
 			end
 
-			set --local choice (docker containers -a \
+			docker containers -a \
 				| _fzf \
 					--header-lines=1 \
-					--preview "docker container inspect {1} | jq .[0] | $bat_json")
+					--preview "docker container inspect {1} | jq .[0] | $bat_json"
 
 		case docker-images
 			if test "$argv[2]" = "--help"
@@ -1019,10 +1021,10 @@ function fz --description 'entry point for all the fuzziness glory'
 				return
 			end
 
-			set --local choice (docker images \
+			docker images \
 				| _fzf \
 					--header-lines=1 \
-					--preview "docker image inspect {3} | jq .[0] | $bat_json")
+					--preview "docker image inspect {3} | jq .[0] | $bat_json"
 
 		case docker-images-dangling
 			if test "$argv[2]" = "--help"
@@ -1032,10 +1034,10 @@ function fz --description 'entry point for all the fuzziness glory'
 				return
 			end
 
-			set --local choice (docker images --filter 'dangling=true' \
+			docker images --filter 'dangling=true' \
 				| _fzf \
 					--header-lines=1 \
-					--preview "docker image inspect {3} | jq .[0] | $bat_json")
+					--preview "docker image inspect {3} | jq .[0] | $bat_json"
 
 		case docker-networks
 			if test "$argv[2]" = "--help"
@@ -1045,10 +1047,10 @@ function fz --description 'entry point for all the fuzziness glory'
 				return
 			end
 
-			set --local choice (docker networks \
+			docker networks \
 				| _fzf \
 					--header-lines=1 \
-					--preview "docker network inspect {1} | jq .[0] | $bat_json")
+					--preview "docker network inspect {1} | jq .[0] | $bat_json"
 
 		case docker-registries
 			if test "$argv[2]" = "--help"
@@ -1058,8 +1060,7 @@ function fz --description 'entry point for all the fuzziness glory'
 				return
 			end
 
-			jq --raw-output '.auths | keys | .[]' ~/.docker/config.json \
-				| _fzf
+			jq --raw-output '.auths | keys | .[]' ~/.docker/config.json | _fzf
 
 		case docker-volumes
 			if test "$argv[2]" = "--help"
@@ -1069,10 +1070,10 @@ function fz --description 'entry point for all the fuzziness glory'
 				return
 			end
 
-			set --local choice (docker volumes \
+			docker volumes \
 				| _fzf \
 					--header-lines=1 \
-					--preview "docker volume inspect {3} | jq .[0] | $bat_json")
+					--preview "docker volume inspect {3} | jq .[0] | $bat_json"
 
 		end
 
@@ -1084,8 +1085,7 @@ function fz --description 'entry point for all the fuzziness glory'
 			return
 		end
 
-		set --local choice (efivar --list \
-			| _fzf --preview "efivar --name {}")
+		efivar --list | _fzf --preview "efivar --name {}"
 
 	case end-of-life-date
 		if test "$argv[2]" = "--help"
@@ -1095,19 +1095,16 @@ function fz --description 'entry point for all the fuzziness glory'
 			return
 		end
 
-		mkdir --parents "$cache_dir"
 		set --local cache_file "$cache_dir/end-of-life-date.json"
-		set --local ago "/tmp/n-days-ago"
-
 		touch -d "2 days ago" "$ago"
 		if test "$cache_file" -ot "$ago"
 			curl --silent 'https://endoflife.date/api/v1/products/full' | jq . > "$cache_file"
 		end
 
-		set --local candidate (cat "$cache_file" \
+		cat "$cache_file" \
 			| _jq '.result | .[] | "\(.name)\u001f\(.releases[0].name)\u001f\(.releases[0].releaseDate)"' \
 			| _awk "$awk_dim3" \
-			| _fzf --preview "jq --color-output '.result | .[] | select(.name==\"{1}\")' $cache_file")
+			| _fzf --preview "jq --color-output '.result | .[] | select(.name==\"{1}\")' $cache_file"
 
 	case environment-variables
 		if test "$argv[2]" = "--help"
@@ -1129,8 +1126,8 @@ function fz --description 'entry point for all the fuzziness glory'
 		end
 
 		set --local rule_id (cat "$data_source" \
-			| _jq  '["id", "type", "recommended", "deprecated", "fixable", "description"],
-							(.[] | [.id, "t:\(.type)", "r:\(.recommended)", "d:\(.deprecated)", "f:\(.fixable)", .description]) | @tsv' \
+			| _jq '["id", "type", "recommended", "deprecated", "fixable", "description"],
+						(.[] | [.id, "t:\(.type)", "r:\(.recommended)", "d:\(.deprecated)", "f:\(.fixable)", .description]) | @tsv' \
 				| column -ts \t \
 			| _fzf \
 				--header-lines 1 \
@@ -1140,15 +1137,15 @@ function fz --description 'entry point for all the fuzziness glory'
 		if test -n "$rule_id"
 			if string match -r '@typescript' "$rule_id"
 				set --local ts_rule_id (string sub --start 20 $rule_id)
-				firefox-developer-edition "https://typescript-eslint.io/rules/$ts_rule_id"
+				xdg-open "https://typescript-eslint.io/rules/$ts_rule_id"
 			else if string match -r '@angular' "$rule_id"
 				set --local ng_rule_id (string sub --start 16 $rule_id)
-				firefox-developer-edition "https://github.com/angular-eslint/angular-eslint/blob/main/packages/eslint-plugin/docs/rules/$ng_rule_id.md"
+				xdg-open "https://github.com/angular-eslint/angular-eslint/blob/main/packages/eslint-plugin/docs/rules/$ng_rule_id.md"
 			else if string match -r 'jest' "$rule_id"
 				set --local jest_rule_id (string sub --start 5 $rule_id)
-				firefox-developer-edition "https://github.com/jest-community/eslint-plugin-jest/blob/main/docs/rules/$jest_rule_id.md"
+				xdg-open "https://github.com/jest-community/eslint-plugin-jest/blob/main/docs/rules/$jest_rule_id.md"
 			else
-				firefox-developer-edition "https://eslint.org/docs/rules/$rule_id"
+				xdg-open "https://eslint.org/docs/rules/$rule_id"
 			end
 		end
 
@@ -1193,8 +1190,8 @@ function fz --description 'entry point for all the fuzziness glory'
 			return 1
 		end
 
-		set --local candidate (printf 'branches\nlog\nremotes\nstatus\ntags\n' | _fzf)
-		fz "git-$candidate"
+		set --local choice (printf 'branches\nlog\nremotes\nstatus\ntags\n' | _fzf)
+		fz "git-$choice"
 
 	case 'git-*'
 		if not git status &> /dev/null
@@ -1396,15 +1393,15 @@ function fz --description 'entry point for all the fuzziness glory'
 			return
 		end
 
-		set --local candidate (curl --silent 'https://www.schemastore.org/api/json/catalog.json' \
+		set --local choice (curl --silent 'https://www.schemastore.org/api/json/catalog.json' \
 			| _jq '.schemas | .[] | "\(.name)\u001f\(.fileMatch)\u001f\(.url)"' \
 			| _awk "$awk_dim3" \
 			| _fzf --preview "curl --silent {-1} | jq --color-output .")
 
 		set --local action (printf '%s\n' $actions \
-			| _fzf --prompt 'actions ❯ ' --header $candidate)
+			| _fzf --prompt 'actions ❯ ' --header $choice)
 
-		set --local url (printf $candidate | awk '{print $NF}')
+		set --local url (printf $choice | awk '{print $NF}')
 
 		switch $action
 
@@ -1596,7 +1593,7 @@ function fz --description 'entry point for all the fuzziness glory'
 				--accept-nth 1)
 
 		if test -n "$choice"
-			firefox-developer-edition "https://www.npmjs.com/package/$choice"
+			xdg-open "https://www.npmjs.com/package/$choice"
 		end
 
 	case npm-scripts
@@ -1634,8 +1631,8 @@ function fz --description 'entry point for all the fuzziness glory'
 		sqlite3 ~/.config/emacs/.local/cache/org-roam.db 'select dest from links where type = \'"https"\' order by dest' \
 			| _awk '{gsub(/"/, "", $1); printf "https:%s\n", $1}' \
 			| _fzf \
-			| xargs xdg-open
-		i3-msg --quiet "[class=firefox-developer-edition] focus"
+			| xargs xdg-open > /dev/null
+		focus_browser
 
 	case org-roam-nodes
 		if test "$argv[2]" = "--help"
@@ -1662,8 +1659,7 @@ function fz --description 'entry point for all the fuzziness glory'
 			return
 		end
 
-		pacman --query --list \
-			| _fzf
+		pacman --query --list | _fzf
 
 	case pacman-mirrors
 		if test "$argv[2]" = "--help"
@@ -1746,11 +1742,11 @@ function fz --description 'entry point for all the fuzziness glory'
 				return
 			end
 
-			set --local choice (pactl -f json list modules\
+			pactl -f json list modules\
 				| _jq '.[] | "\(.properties["module.description"])\u001f\(.name)"' \
 				| _awk "$awk_dim2" \
 				| _fzf \
-					--accept-nth 1)
+					--accept-nth 1
 
 		case pulseaudio-sinks
 			if test "$argv[2]" = "--help"
@@ -1760,11 +1756,11 @@ function fz --description 'entry point for all the fuzziness glory'
 				return
 			end
 
-			set --local choice (pactl -f json list sinks \
+			pactl -f json list sinks \
 				| _jq '.[] | "\(.description)\u001f\(.active_port)"' \
 				| _awk "$awk_dim2" \
 				| _fzf \
-					--accept-nth 1)
+					--accept-nth 1
 
 		case pulseaudio-sources
 			if test "$argv[2]" = "--help"
@@ -1774,11 +1770,11 @@ function fz --description 'entry point for all the fuzziness glory'
 				return
 			end
 
-			set --local choice (pactl -f json list sources \
+			pactl -f json list sources \
 				| _jq '.[] | "\(.description)\u001f\(.active_port)"' \
 				| _awk "$awk_dim2" \
 				| _fzf \
-					--accept-nth 1)
+					--accept-nth 1
 
 		end
 
@@ -1862,7 +1858,7 @@ function fz --description 'entry point for all the fuzziness glory'
 		set --local data_source '~/.local/share/skopeo-bookmarks/*.bookmarks'
 		if test "$argv[2]" = "--help"
 			printf "list: bookmarked skopeo images from $data_source\n"
-			printf  'preview: image tags\n'
+			printf 'preview: image tags\n'
 			print_dim 'action: none'
 			return
 		end
@@ -1900,9 +1896,7 @@ function fz --description 'entry point for all the fuzziness glory'
 			return
 		end
 
-		set --local choice (ss --all \
-			| _fzf \
-				--header-lines=1)
+		ss --all | _fzf --header-lines=1
 
 	case ssh-agent-keys
 		if not command -q ssh-add
@@ -1988,7 +1982,7 @@ function fz --description 'entry point for all the fuzziness glory'
 			return
 		end
 
-		set --local choice (sysctl --all | _fzf)
+		sysctl --all | _fzf
 
 	case systemd-paths
 		if test "$argv[2]" = "--help"
@@ -1998,8 +1992,7 @@ function fz --description 'entry point for all the fuzziness glory'
 			return
 		end
 
-		set --local candidate (systemd-path \
-			| _fzf)
+		systemd-path | _fzf
 
 	case systemd-units
 		if not command -q sysz
@@ -2024,9 +2017,9 @@ function fz --description 'entry point for all the fuzziness glory'
 			return
 		end
 
-		set --local candidate (curl --silent 'https://tc39.es/dataset/proposals.json' \
+		curl --silent 'https://tc39.es/dataset/proposals.json' \
 			| _jq '.[] | "\(.stage) \(.name)"' \
-			| _fzf)
+			| _fzf
 
 	case top-level-domains
 		if test "$argv[2]" = "--help"
@@ -2087,7 +2080,7 @@ function fz --description 'entry point for all the fuzziness glory'
 			return
 		end
 
-		set --local choice (lsusb | _fzf --preview 'lsusb --verbose -d {6} 2> /dev/null')
+		lsusb | _fzf --preview 'lsusb --verbose -d {6} 2> /dev/null'
 
 	case user-groups
 		if test "$argv[2]" = "--help"
@@ -2097,7 +2090,7 @@ function fz --description 'entry point for all the fuzziness glory'
 			return
 		end
 
-		set --local candidate (cat /etc/group | _fzf)
+		cat /etc/group | _fzf
 
 	case vscode-extensions
 		if not command -q code
@@ -2112,7 +2105,7 @@ function fz --description 'entry point for all the fuzziness glory'
 			return
 		end
 
-		set --local choice (code --list-extensions --show-versions 2> /dev/null | _fzf)
+		code --list-extensions --show-versions 2> /dev/null | _fzf
 
 	case vscode-workspaces
 		if not command -q code
@@ -2128,7 +2121,7 @@ function fz --description 'entry point for all the fuzziness glory'
 		end
 
 		set --local dir "$HOME/projects/vscode-workspaces/"
-		set --local choice  (fd .code-workspace "$dir" \
+		set --local choice (fd .code-workspace "$dir" \
 			| _fzf --preview 'bat {} --plain --language json --color always')
 
 		if test -n "$choice"
@@ -2148,9 +2141,7 @@ function fz --description 'entry point for all the fuzziness glory'
 			return
 		end
 
-		xinput --list --name-only \
-			| _fzf \
-				--preview 'xinput --list {}'
+		xinput --list --name-only | _fzf --preview 'xinput --list {}'
 
 	case yarn-workspaces
 		if not test -e './package.json'
