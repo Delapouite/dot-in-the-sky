@@ -23,6 +23,9 @@ function fz --description 'entry point for all the fuzziness glory'
 		--color always'
 
 	set --local cache_dir "$HOME/.cache/fz"
+	function focus_browser
+		i3-msg --quiet "[class=firefox-developer-edition] focus"
+	end
 
 	# colors
 
@@ -784,6 +787,24 @@ function fz --description 'entry point for all the fuzziness glory'
 				end
 			end
 		end
+
+	case balade-dominicale-nodes
+		if test "$argv[2]" = "--help"
+			printf "list: nodes from org-roam\n"
+			print_dim 'preview: none'
+			printf 'action: open node in default balade-dominicale\n'
+			return
+		end
+
+		sqlite3 ~/.config/emacs/.local/cache/org-roam.db 'select id, file from nodes order by id' \
+			| tr -d '"' | tr '|' \u001f \
+			| _awk "{printf \"%s\u001f $comment%s$reset\n\", \$1, \$2}" \
+			| _fzf \
+				--delimiter \u001f \
+				--accept-nth 1 \
+			| sed -e 's#^#https://bd.lh/#' \
+			| xargs -d '\n' xdg-open > /dev/null
+		focus_browser
 
 	case bins
 		if test "$argv[2]" = "--help"
@@ -2176,6 +2197,7 @@ function fz --description 'entry point for all the fuzziness glory'
 			azure-storage-accounts \
 			azure-storage-blobs \
 			azure-storage-containers \
+			balade-dominicale-nodes \
 			bins \
 			bin-bookmarks \
 			bluetooth-controllers \
