@@ -7,8 +7,10 @@
   "editor.fontFamily": "Iosevka Term, Droid Sans Mono, monospace",
   "editor.fontSize": 10,
   "editor.guides.bracketPairs": "active",
-  "editor.minimap.size": "fill",
+  "editor.inlayHints.enabled": "offUnlessPressed",
+  "editor.inlayHints.maximumLength": 0,
   "editor.minimap.enabled": false,
+  "editor.minimap.size": "fill",
   "editor.quickSuggestions": {
     "other": true,
     "comments": true,
@@ -80,6 +82,11 @@
   "javascript.updateImportsOnFileMove.enabled": "always",
   /// ts
   "typescript.implementationsCodeLens.enabled": true,
+  "typescript.implementationsCodeLens.showOnInterfaceMethods": true,
+  "typescript.inlayHints.functionLikeReturnTypes.enabled": true,
+  "typescript.inlayHints.parameterTypes.enabled": true,
+  "typescript.inlayHints.propertyDeclarationTypes.enabled": true,
+  "typescript.inlayHints.variableTypes.enabled": true,
   "typescript.referencesCodeLens.enabled": true,
   "typescript.referencesCodeLens.showOnAllFunctions": true,
   "typescript.updateImportsOnFileMove.enabled": "always",
