@@ -104,6 +104,16 @@
   "azureFunctions.showProjectWarning": false,
   "azureResourceGroups.groupBy": "resourceType",
   "azurite.location": ".azurite",
+  "cSpell.enabled": true,
+  "cSpell.language": "en,fr",
+  "cSpell.customDictionaries": {
+    "personal": {
+      "name": "personal",
+      "path": "~/.local/share/dictionaries/personal.dictionary",
+      "scope": "user",
+      "addWords": true
+    }
+  },
   "cosmosDB.showSavePrompt": false,
   "deno.codeLens.implementations": true,
   "deno.codeLens.references": true,
