@@ -34,6 +34,7 @@ $line_break\
 
 $jobs\
 $battery\
+${custom.i3_workspace}\
 ${custom.ssh_keys}\
 ${custom.direnv_allowed}\
 ${custom.direnv_denied}\
@@ -95,9 +96,12 @@ error_symbol = "[✖](bold red)"
 [status]
 disabled = false
 symbol = ""
-format = '[$symbol$common_meaning$signal_name$maybe_int]($style) '
+format = "[$symbol$common_meaning$signal_name$maybe_int]($style) "
 map_symbol = false
 style = "bold red"
+
+[aws]
+disabled = true
 
 [azure]
 disabled = true
@@ -109,7 +113,7 @@ style = "cyan"
 disabled = true
 
 [env_var.AZURE_STORAGE_ACCOUNT]
-default = 'unknown AZURE_STORAGE_ACCOUNT'
+default = "unknown AZURE_STORAGE_ACCOUNT"
 style = "cyan"
 
 # https://man.archlinux.org/man/git-log.1#PRETTY_FORMATS
@@ -142,7 +146,7 @@ description = "SSH key count"
 command = "ssh-add -l | grep --invert-match 'no identities' | wc --lines"
 when = "ssh-add -l | grep --invert-match --quiet 'no identities'"
 shell = ["bash", "--noprofile", "--norc"]
-format = "[$output]($style)🔑"
+format = " [$output]($style)🔑"
 style = "bold green"
 
 [custom.direnv_allowed]
@@ -169,8 +173,16 @@ style = "normal"
 
 [custom.files_hidden]
 disabled = false
-description = 'Number of hidden files'
+description = "Number of hidden files"
 command = "ll -d .* | wc --lines"
 when = "ll -d .*"
 format = " [$output]($style)🥷"
+style = "normal"
+
+[custom.i3_workspace]
+disabled = false
+description = "Current i3 workspace"
+command = "i3-msg -t get_workspaces | jq --raw-output '.[] | select(.focused==true).name'"
+when = "true"
+format = "[$output]($style)🖥️"
 style = "normal"
