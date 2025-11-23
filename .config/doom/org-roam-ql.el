@@ -133,7 +133,9 @@
     (let ((year (plist-get params :year))
           (country (plist-get params :country)))
       (when year
-        (org-dblock-write:org-roam-ql `(:query (and (tags "person") (or (properties "born-at" ,year) (properties "died-at" ,year)))
+        (org-dblock-write:org-roam-ql `(:query (and (tags "person") (or
+                                                                     (properties "born-at" ,(concat year "\\(-[0-9]\\{2\\}\\(-[0-9]\\{2\\}\\)?\\)?"))
+                                                                     (properties "died-at" ,(concat year "\\(-[0-9]\\{2\\}\\(-[0-9]\\{2\\}\\)?\\)?"))))
                                         :columns (link born-at died-at country)
                                         :no-link true)))
       (when country
