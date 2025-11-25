@@ -1,4 +1,5 @@
 {
+  "chat.agent.enabled": false,
   "chat.commandCenter.enabled": false,
   "diffEditor.ignoreTrimWhitespace": true,
   "editor.bracketPairColorization.enabled": true,
