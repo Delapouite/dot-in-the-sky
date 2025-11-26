@@ -156,6 +156,10 @@ https://code.orgmode.org/bzg/org-mode/commit/13424336a6f30c50952d291e7a82906c121
     (when-let (prop (cdr (assoc "PLAYED-AT" drawer-props)))
       (push (substring prop 0 7) parts))
     ;; suffixes
+    (when-let (prop (cdr (assoc "LAST-VERSION" drawer-props)))
+      (push (concat prop "version") parts))
+    (when-let (prop (cdr (assoc "REMOTE-VERSION" drawer-props)))
+      (push (concat prop "version") parts))
     (when-let (prop (cdr (assoc "REVISIONS" drawer-props)))
       (push (concat (my/number-approx prop) "_revisions") parts))
     (when-let (prop (cdr (assoc "FOLLOWERS" drawer-props)))
