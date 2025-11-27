@@ -1088,8 +1088,10 @@ function fz --description 'entry point for all the fuzziness glory'
 		efivar --list | _fzf --preview "efivar --name {}"
 
 	case end-of-life-date
+		set --local url 'https://endoflife.date/api/v1/products/full'
+
 		if test "$argv[2]" = "--help"
-			printf 'list: products from endoflife.date\n'
+			printf "list: products from $url\n"
 			printf 'preview: product releases\n'
 			print_dim 'action: none'
 			return
@@ -1098,7 +1100,7 @@ function fz --description 'entry point for all the fuzziness glory'
 		set --local cache_file "$cache_dir/end-of-life-date.json"
 		touch -d "2 days ago" "$ago"
 		if test "$cache_file" -ot "$ago"
-			curl --silent 'https://endoflife.date/api/v1/products/full' | jq . > "$cache_file"
+			curl --silent "$url" | jq . > "$cache_file"
 		end
 
 		cat "$cache_file" \
@@ -1381,19 +1383,26 @@ function fz --description 'entry point for all the fuzziness glory'
 				--preview 'ip link show (string trim --right --chars=: {2})'
 
 	case json-schemas
+		set --local url 'https://www.schemastore.org/api/json/catalog.json'
 		set --local actions \
 			"download schema to $tmpdir" \
 			'open git repository'
 
 		if test "$argv[2]" = "--help"
-			printf 'list: JSON schemas fetched from https://schemastore.org\n'
+			printf "list: JSON schemas from $url\n"
 			printf 'preview: JSON schema details\n'
 			printf 'actions:\n'
 			printf '- %s\n' $actions
 			return
 		end
 
-		set --local choice (curl --silent 'https://www.schemastore.org/api/json/catalog.json' \
+		set --local cache_file "$cache_dir/json-schemas.json"
+		touch -d "2 days ago" "$ago"
+		if test "$cache_file" -ot "$ago"
+			curl --silent "$url" | jq . > "$cache_file"
+		end
+
+		set --local choice (cat "$cache_file" \
 			| _jq '.schemas | .[] | "\(.name)\u001f\(.fileMatch)\u001f\(.url)"' \
 			| _awk "$awk_dim3" \
 			| _fzf --preview "curl --silent {-1} | jq --color-output .")
@@ -2010,27 +2019,42 @@ function fz --description 'entry point for all the fuzziness glory'
 		sysz
 
 	case tc39-proposals
+		set --local url 'https://tc39.es/dataset/proposals.json'
+
 		if test "$argv[2]" = "--help"
-			printf 'list: TC39 proposals from https://tc39.es/dataset/proposals.json\n'
+			printf "list: TC39 proposals from $url\n"
 			print_dim 'preview: none'
 			print_dim 'action: none'
 			return
 		end
 
-		curl --silent 'https://tc39.es/dataset/proposals.json' \
+		set --local cache_file "$cache_dir/tc39-proposals.json"
+		touch -d "30 days ago" "$ago"
+		if test "$cache_file" -ot "$ago"
+			curl --silent "$url" | jq . > "$cache_file"
+		end
+
+		cat "$cache_file" \
 			| _jq '.[] | "\(.stage) \(.name)"' \
 			| _fzf
 
 	case top-level-domains
+		set --local url 'https://data.iana.org/TLD/tlds-alpha-by-domain.txt'
+
 		if test "$argv[2]" = "--help"
-			printf 'list: TLDs fetched from IANA.org\n'
+			printf "list: TLDs from $url\n"
 			print_dim 'preview: none'
 			print_dim 'action: none'
 			return
 		end
 
-		curl --silent 'https://data.iana.org/TLD/tlds-alpha-by-domain.txt' \
-			| _fzf --header-lines=1
+		set --local cache_file "$cache_dir/top-level-domains.txt"
+		touch -d "30 days ago" "$ago"
+		if test "$cache_file" -ot "$ago"
+			curl --silent "$url" > "$cache_file"
+		end
+
+		cat "$cache_file" | _fzf --header-lines=1
 
 	case trust-policies
 		if test "$argv[2]" = "--help"
@@ -2045,8 +2069,10 @@ function fz --description 'entry point for all the fuzziness glory'
 			| _fzf --preview 'p11-kit export-object {-1} | step-cli certificate inspect --format json | jq --color-output .'
 
 	case unicode-blocks
+		set --local url 'https://www.unicode.org/Public/UCD/latest/ucd/Blocks.txt'
+
 		if test "$argv[2]" = "--help"
-			printf 'list: Unicode blocks fetched from unicode.org\n'
+			printf "list: Unicode blocks from $url\n"
 			print_dim 'preview: none'
 			print_dim 'action: none'
 			return
@@ -2055,7 +2081,7 @@ function fz --description 'entry point for all the fuzziness glory'
 		set --local cache_file "$cache_dir/unicode-blocks.txt"
 		touch -d "30 days ago" "$ago"
 		if test "$cache_file" -ot "$ago"
-			curl --silent 'https://www.unicode.org/Public/UCD/latest/ucd/Blocks.txt' > "$cache_file"
+			curl --silent "$url" > "$cache_file"
 		end
 
 		cat "$cache_file" \
@@ -2063,8 +2089,10 @@ function fz --description 'entry point for all the fuzziness glory'
 			| _fzf
 
 	case unicode-code-points
+		set --local url 'https://www.unicode.org/Public/UCD/latest/ucd/UnicodeData.txt'
+
 		if test "$argv[2]" = "--help"
-			printf 'list: Unicode code points fetched from unicode.org\n'
+			printf "list: Unicode code points from $url\n"
 			printf 'preview: code point details with chars\n'
 			print_dim 'action: none'
 			return
@@ -2073,7 +2101,7 @@ function fz --description 'entry point for all the fuzziness glory'
 		set --local cache_file "$cache_dir/unicode-code-points.txt"
 		touch -d "30 days ago" "$ago"
 		if test "$cache_file" -ot "$ago"
-			curl --silent 'https://www.unicode.org/Public/UCD/latest/ucd/UnicodeData.txt' > "$cache_file"
+			curl --silent "$url" > "$cache_file"
 		end
 
 		cat "$cache_file" | _fzf --delimiter ';' --preview 'chars U+{1}'
