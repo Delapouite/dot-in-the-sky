@@ -34,6 +34,7 @@
     ".prettierrc": ".prettierignore,.editorconfig",
     "flake.nix": "flake.lock",
     "jest.config.js": "jest.*.js,jest.*.ts",
+    "mise.toml": "mise.local.toml",
     "package.json": "package-lock.json,yarn.lock,pnpm-lock.yaml,.yarnrc.yml",
     "tsconfig.json": "tsconfig.*.json",
     "tsconfig.base.json": "tsconfig.*.json",
