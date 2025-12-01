@@ -2024,7 +2024,7 @@ function fz --description 'entry point for all the fuzziness glory'
 		if test "$argv[2]" = "--help"
 			printf "list: TC39 proposals from $url\n"
 			print_dim 'preview: none'
-			print_dim 'action: none'
+			printf 'action: open proposal in default browser\n'
 			return
 		end
 
@@ -2035,8 +2035,10 @@ function fz --description 'entry point for all the fuzziness glory'
 		end
 
 		cat "$cache_file" \
-			| _jq '.[] | "\(.stage) \(.name)"' \
-			| _fzf
+			| _jq '.[] | "\(.stage)\u001f\(.name)\u001f\(.edition)\u001f\(.url)"' \
+			| _awk "$awk_dim4" \
+			| _fzf --accept-nth -1 \
+			| xargs xdg-open > /dev/null
 
 	case top-level-domains
 		set --local url 'https://data.iana.org/TLD/tlds-alpha-by-domain.txt'
