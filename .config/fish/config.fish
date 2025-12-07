@@ -1,7 +1,9 @@
 set -x EDITOR kak
 set -x VISUAL kak
+# XDG user directories
 set -x GOBIN "$HOME/.local/bin"
 set -x FZF_DEFAULT_OPTS_FILE "$HOME/.config/fzf/config"
+set -x NPM_CONFIG_USERCONFIG "$HOME/.config/npm/config"
 
 alias ...='cd ../../'
 alias ....='cd ../../../'
