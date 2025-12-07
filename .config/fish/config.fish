@@ -1,6 +1,7 @@
 set -x EDITOR kak
 set -x VISUAL kak
 set -x GOBIN "$HOME/.local/bin"
+set -x FZF_DEFAULT_OPTS_FILE "$HOME/.config/fzf/config"
 
 alias ...='cd ../../'
 alias ....='cd ../../../'
