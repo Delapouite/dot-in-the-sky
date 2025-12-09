@@ -14,6 +14,7 @@ function fz --description 'entry point for all the fuzziness glory'
 	end
 
 	alias _fzf="$fzf_cmd"
+	alias _fzfh="$fzf_cmd --header-lines 1"
 	alias _awk="awk --field-separator \u001f"
 	alias _jq="jq --raw-output"
 
@@ -937,8 +938,7 @@ function fz --description 'entry point for all the fuzziness glory'
 		end
 
 		busctl list --system \
-			| _fzf --preview 'busctl status {1} --system' \
-				--header-lines=1
+			| _fzfh --preview 'busctl status {1} --system'
 
 	case dbus-user-peers
 		if test "$argv[2]" = "--help"
@@ -949,8 +949,7 @@ function fz --description 'entry point for all the fuzziness glory'
 		end
 
 		busctl list --user \
-			| _fzf --preview 'busctl status {1} --user' \
-				--header-lines=1
+			| _fzfh --preview 'busctl status {1} --user'
 
 	case deno-tasks
 		if not test -e './deno.jsonc'
@@ -981,6 +980,7 @@ function fz --description 'entry point for all the fuzziness glory'
 		end
 
 		alias _fzf="$fzf_cmd --bind 'backward-eof:become(fz . docker)'"
+		alias _fzfh="$fzf_cmd --bind 'backward-eof:become(fz . docker)' --header-lines 1"
 
 		switch $argv[1]
 
@@ -1009,9 +1009,7 @@ function fz --description 'entry point for all the fuzziness glory'
 			end
 
 			docker containers -a \
-				| _fzf \
-					--header-lines=1 \
-					--preview "docker container inspect {1} | jq .[0] | $bat_json"
+				| _fzfh --preview "docker container inspect {1} | jq .[0] | $bat_json"
 
 		case docker-images
 			if test "$argv[2]" = "--help"
@@ -1022,9 +1020,7 @@ function fz --description 'entry point for all the fuzziness glory'
 			end
 
 			docker images \
-				| _fzf \
-					--header-lines=1 \
-					--preview "docker image inspect {3} | jq .[0] | $bat_json"
+				| _fzfh --preview "docker image inspect {3} | jq .[0] | $bat_json"
 
 		case docker-images-dangling
 			if test "$argv[2]" = "--help"
@@ -1035,9 +1031,7 @@ function fz --description 'entry point for all the fuzziness glory'
 			end
 
 			docker images --filter 'dangling=true' \
-				| _fzf \
-					--header-lines=1 \
-					--preview "docker image inspect {3} | jq .[0] | $bat_json"
+				| _fzfh --preview "docker image inspect {3} | jq .[0] | $bat_json"
 
 		case docker-networks
 			if test "$argv[2]" = "--help"
@@ -1048,9 +1042,7 @@ function fz --description 'entry point for all the fuzziness glory'
 			end
 
 			docker networks \
-				| _fzf \
-					--header-lines=1 \
-					--preview "docker network inspect {1} | jq .[0] | $bat_json"
+				| _fzfh --preview "docker network inspect {1} | jq .[0] | $bat_json"
 
 		case docker-registries
 			if test "$argv[2]" = "--help"
@@ -1071,9 +1063,7 @@ function fz --description 'entry point for all the fuzziness glory'
 			end
 
 			docker volumes \
-				| _fzf \
-					--header-lines=1 \
-					--preview "docker volume inspect {3} | jq .[0] | $bat_json"
+				| _fzfh --preview "docker volume inspect {3} | jq .[0] | $bat_json"
 
 		end
 
@@ -1131,8 +1121,7 @@ function fz --description 'entry point for all the fuzziness glory'
 			| _jq '["id", "type", "recommended", "deprecated", "fixable", "description"],
 						(.[] | [.id, "t:\(.type)", "r:\(.recommended)", "d:\(.deprecated)", "f:\(.fixable)", .description]) | @tsv' \
 				| column -ts \t \
-			| _fzf \
-				--header-lines 1 \
+			| _fzfh \
 				--preview "jq --color-output '.[] | select(.id==\"{1}\")' '$data_source'" \
 				--accept-nth 1)
 
@@ -1169,7 +1158,7 @@ function fz --description 'entry point for all the fuzziness glory'
 			return
 		end
 
-		lsfd | _fzf --header-lines=1
+		lsfd | _fzfh
 
 	case fonts
 		if not command -q fontpreview
@@ -1459,10 +1448,7 @@ function fz --description 'entry point for all the fuzziness glory'
 			return
 		end
 
-		lsmod \
-			| _fzf \
-				--header-lines=1 \
-				--preview 'modinfo {1}'
+		lsmod | _fzfh --preview 'modinfo {1}'
 
 	case linux-namespaces
 		if test "$argv[2]" = "--help"
@@ -1472,7 +1458,7 @@ function fz --description 'entry point for all the fuzziness glory'
 			return
 		end
 
-		lsns | _fzf --header-lines=1
+		lsns | _fzfh
 
 	case man-pages
 		if test "$argv[2]" = "--help"
@@ -1507,7 +1493,7 @@ function fz --description 'entry point for all the fuzziness glory'
 			return
 		end
 
-		xrandr --listmonitors | _fzf --header-lines=1
+		xrandr --listmonitors | _fzfh
 
 	case mounts
 		if test "$argv[2]" = "--help"
@@ -1637,7 +1623,7 @@ function fz --description 'entry point for all the fuzziness glory'
 			return
 		end
 
-		sqlite3 ~/.config/emacs/.local/cache/org-roam.db 'select dest from links where type = \'"https"\' order by dest' \
+		sqlite3 ~/.config/emacs/.local/cache/org-roam.db 'select distinct dest from links where type = \'"https"\' order by dest' \
 			| _awk '{gsub(/"/, "", $1); printf "https:%s\n", $1}' \
 			| _fzf \
 			| xargs xdg-open > /dev/null
@@ -1905,7 +1891,7 @@ function fz --description 'entry point for all the fuzziness glory'
 			return
 		end
 
-		ss --all | _fzf --header-lines=1
+		ss --all | _fzfh
 
 	case ssh-agent-keys
 		if not command -q ssh-add
@@ -2003,6 +1989,16 @@ function fz --description 'entry point for all the fuzziness glory'
 
 		systemd-path | _fzf
 
+	case systemd-timers
+		if test "$argv[2]" = "--help"
+			printf 'list: systemd timers\n'
+			print_dim 'preview: none'
+			print_dim 'action: none'
+			return
+		end
+
+		systemctl list-timers --all | _fzfh
+
 	case systemd-units
 		if not command -q sysz
 			print_error 'sysz command not found'
@@ -2056,7 +2052,7 @@ function fz --description 'entry point for all the fuzziness glory'
 			curl --silent "$url" > "$cache_file"
 		end
 
-		cat "$cache_file" | _fzf --header-lines=1
+		cat "$cache_file" | _fzfh
 
 	case trust-policies
 		if test "$argv[2]" = "--help"
@@ -2311,6 +2307,7 @@ function fz --description 'entry point for all the fuzziness glory'
 			starship-presets \
 			sysctl-values \
 			systemd-paths \
+			systemd-timers \
 			systemd-units \
 			tc39-proposals \
 			top-level-domains \
