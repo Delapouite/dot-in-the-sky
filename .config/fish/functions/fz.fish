@@ -2127,7 +2127,17 @@ function fz --description 'entry point for all the fuzziness glory'
 			return
 		end
 
-		cat /etc/group | _fzf
+		cat /etc/group | column --table --separator : | _fzf
+
+	case users
+		if test "$argv[2]" = "--help"
+			printf 'list: users in /etc/passwd\n'
+			print_dim 'preview: none'
+			print_dim 'action: none'
+			return
+		end
+
+		cat /etc/passwd | column --table --separator : | _fzf
 
 	case vscode-extensions
 		if not command -q code
@@ -2316,6 +2326,7 @@ function fz --description 'entry point for all the fuzziness glory'
 			unicode-code-points \
 			usb-devices \
 			user-groups \
+			users \
 			vscode-extensions \
 			vscode-workspaces \
 			xinput-devices \
