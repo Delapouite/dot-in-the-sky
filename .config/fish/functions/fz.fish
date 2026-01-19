@@ -1883,6 +1883,19 @@ function fz --description 'entry point for all the fuzziness glory'
 				--header "$skopeo_image" \
 				--preview "skopeo inspect $skopeo_image:{1} | jq .Created"
 
+	case socat-addresses
+		if test "$argv[2]" = "--help"
+			printf 'list: socat addresses types\n'
+			print_dim 'preview: none'
+			print_dim 'action: none'
+			return
+		end
+
+		socat -h \
+			| sed -e '1,/address-head:/d' \
+			| sed -e 's/^      //' \
+			| _fzf
+
 	case sockets
 		if test "$argv[2]" = "--help"
 			printf 'list: sockets using ss\n'
@@ -2309,10 +2322,11 @@ function fz --description 'entry point for all the fuzziness glory'
 			shell-themes \
 			skopeo-bookmarks \
 			skopeo-tags \
+			socat-addresses \
+			sockets \
 			ssh-agent-keys \
 			ssh-authorized-keys \
 			ssh-hosts \
-			sockets \
 			starship-modules \
 			starship-presets \
 			sysctl-values \
