@@ -69,6 +69,7 @@ xcwd | [GH/schischi/xcwd](https://github.com/schischi/xcwd) | | ✓ | C | | | ![
 xkb | [x.org/wiki/XKB](https://www.x.org/wiki/XKB/)<br>[XDG/xorg/xserver](https://cgit.freedesktop.org/xorg/xserver/tree/xkb) | | ✓ | C | | |
 xsv | [GH/BurnSushi/xsv](https://github.com/BurntSushi/xsv) | | ✓ | 🦀 | ✓ | | ![lc](https://img.shields.io/github/last-commit/BurntSushi/xsv?label=) | ![v](https://img.shields.io/github/v/release/BurntSushi/xsv?sort=semver&label=)
 zola | [getzola.org](https://www.getzola.org)<br>[GH/getzola/zola](https://github.com/getzola/zola) | | ✓ | 🦀 | ✓ | | ![lc](https://img.shields.io/github/last-commit/getzola/zola?label=) | ![v](https://img.shields.io/github/v/release/getzola/zola?sort=semver&label=)
+zoxide | [GH/ajeetdsouza/zoxide](https://github.com/ajeetdsouza/zoxide) | | ✓ | 🦀 | ✓ | | ![lc](https://img.shields.io/github/last-commit/ajeetdsouza/zoxide?label=) | ![v](https://img.shields.io/github/v/release/ajeetdsouza/zoxide?sort=semver&label=)
 
 ## init
 
