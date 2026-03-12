@@ -37,7 +37,23 @@ function browser-search --description 'browser search with various engines'
 		wordnik
 
 	if test -z "$engine"
-		set --function engine (printf '%s\n' $engines | fzf --prompt 'browser-search ❯ ' --info inline --reverse --no-separator --bind 'backward-eof:become(fz . browser)')
+		# --print-query always return 2 lines, even if the first is empty
+		set --local tuple (printf '%s\n' $engines | fzf --prompt 'browser-search ❯ ' --info inline --reverse --no-separator --print-query --bind 'backward-eof:become(fz . browser)')
+
+		switch $status
+			# pressing escape
+			case 130
+				exit
+
+			# unknown engine
+			case 1
+				set --function query "$tuple[1]"
+				set --function engine duckduckgo
+
+			case 0
+				set --function engine "$tuple[2]"
+
+		end
 	end
 	# pressing escape/enter key
 	if test -z "$engine"
