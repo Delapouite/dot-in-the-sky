@@ -1906,44 +1906,51 @@ function fz --description 'entry point for all the fuzziness glory'
 
 		ss --all | _fzfh
 
-	case ssh-agent-keys
-		if not command -q ssh-add
-			print_error 'ssh-add command not found'
-			return 1
-		end
+	case 'ssh-*'
 
-		if test "$argv[2]" = "--help"
-			printf 'list: ssh-agent keys SHA256 fingerprints\n'
-			printf 'preview: full public key\n'
-			print_dim 'action: none'
-			return
-		end
+		alias _fzf="$fzf_cmd --bind 'backward-eof:become(fz . ssh)'"
 
-		ssh-add -l | _fzf --preview 'ssh-add -L | rg {3}' --preview-window wrap
+		switch $argv[1]
 
-	case ssh-authorized-keys
-		if test "$argv[2]" = "--help"
-			printf 'list: keys in ~/.ssh/authorized_keys\n'
-			print_dim 'preview: none'
-			print_dim 'action: none'
-			return
-		end
+		case ssh-agent-keys
+			if not command -q ssh-add
+				print_error 'ssh-add command not found'
+				return 1
+			end
 
-		cat ~/.ssh/authorized_keys | _fzf
+			if test "$argv[2]" = "--help"
+				printf 'list: ssh-agent keys SHA256 fingerprints\n'
+				printf 'preview: full public key\n'
+				print_dim 'action: none'
+				return
+			end
 
-	case ssh-hosts
-		if test "$argv[2]" = "--help"
-			printf 'list: ssh hosts in ~/.ssh configs\n'
-			print_dim 'preview: none'
-			printf 'action: connect to ssh server\n'
-			return
-		end
+			ssh-add -l | _fzf --preview 'ssh-add -L | rg {3}' --preview-window wrap
 
-		set --local configs (fd config ~/.ssh/)
-		set --local choice (cat $configs | rg 'Host ' | _fzf --accept-nth 2)
+		case ssh-authorized-keys
+			if test "$argv[2]" = "--help"
+				printf 'list: keys in ~/.ssh/authorized_keys\n'
+				print_dim 'preview: none'
+				print_dim 'action: none'
+				return
+			end
 
-		if test -n "$choice"
-			ssh "$choice"
+			cat ~/.ssh/authorized_keys | _fzf
+
+		case ssh-hosts
+			if test "$argv[2]" = "--help"
+				printf 'list: ssh hosts in ~/.ssh configs\n'
+				print_dim 'preview: none'
+				printf 'action: connect to ssh server\n'
+				return
+			end
+
+			set --local configs (fd config ~/.ssh/)
+			set --local choice (cat $configs | rg 'Host ' | _fzf --accept-nth 2)
+
+			if test -n "$choice"
+				ssh "$choice"
+			end
 		end
 
 	case 'starship-*'
