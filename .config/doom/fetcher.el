@@ -716,6 +716,26 @@
          (my/org-set-prop "closed-at" 'cf_last_resolved bug)
          (my/fetched-at))))))
 
+(defun my/visit-crates-io () (interactive) (my/visit-url "crates.io"))
+(defvar my/crates-io-re ".*?https://crates.io/crates/\\([a-zA-Z0-9-_]*\\).*")
+
+(defun my/fetch-crates-io-stats ()
+  "Fetch Crates.io REST API and add the returned values in a PROPERTIES drawer"
+  (interactive)
+  (seq-let (crate-id) (my/parse-url my/crates-io-re)
+    (my/fetch
+     (concat "https://crates.io/api/v1/crates/" crate-id)
+     (lambda (data)
+       (my/empty-property-drawer 13)
+       (let ((crate (assoc-default 'crate data)))
+         (my/org-set-prop "name" 'name crate)
+         (org-set-property "description" (string-trim (assoc-default 'description crate)))
+         (my/org-set-prop "version" 'default_version crate)
+         (my/org-set-prop "downloads" 'downloads crate)
+         (my/org-set-prop "created-at" 'created_at crate)
+         (my/org-set-prop "updated-at" 'updated_at crate))
+       (my/fetched-at)))))
+
 (defun my/fetch-stats ()
   "Fetch current website REST API and add the returned values in a PROPERTIES drawer"
   (interactive)
@@ -728,6 +748,7 @@
       ((string-match-p my/bluesky-re line-content) (my/fetch-bluesky-stats))
       ((string-match-p my/bugzilla-re line-content) (my/fetch-bugzilla-stats))
       ((string-match-p my/bundlephobia-re line-content) (my/fetch-bundlephobia-stats))
+      ((string-match-p my/crates-io-re line-content) (my/fetch-crates-io-stats))
       ((string-match-p my/docker-hub-re line-content) (my/fetch-docker-hub))
       ((string-match-p my/docker-hub-official-re line-content) (my/fetch-docker-official-hub))
       ((string-match-p my/docker-hub-user-re line-content) (my/fetch-docker-hub-user))
