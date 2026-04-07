@@ -1694,20 +1694,39 @@ function fz --description 'entry point for all the fuzziness glory'
 
 		pastel list | _fzf --preview 'pastel --force-color paint {} █▓▒░ pastel'
 
-	case podman-pods
+	case 'podman-*'
 		if not command -q podman
 			print_error 'podman command not found'
 			return 1
 		end
 
-		if test "$argv[2]" = "--help"
-			printf 'list: podman pods\n'
-			print_dim 'preview: none'
-			print_dim 'action: none'
-			return
-		end
+		alias _fzf="$fzf_cmd --bind 'backward-eof:become(fz . podman)'"
+		alias _fzfh="$fzf_cmd --bind 'backward-eof:become(fz . podman)' --header-lines 1"
 
-		podman pod ls | _fzf
+		switch $argv[1]
+
+		case podman-pods
+			if test "$argv[2]" = "--help"
+				printf 'list: podman pods\n'
+				print_dim 'preview: none'
+				print_dim 'action: none'
+				return
+			end
+
+			podman pod ls | _fzf
+
+		case podman-volumes
+			if test "$argv[2]" = "--help"
+				printf 'list: podman volumes\n'
+				printf 'preview: podman volume details\n'
+				print_dim 'action: none'
+				return
+			end
+
+			podman volumes \
+				| _fzfh --preview "podman volume inspect {3} | jq .[0] | $bat_json"
+
+		end
 
 	case processes
 		if test "$argv[2]" = "--help"
@@ -2316,6 +2335,7 @@ function fz --description 'entry point for all the fuzziness glory'
 			pacman-packages \
 			pastel-colors \
 			podman-pods \
+			podman-volumes \
 			processes \
 			pulseaudio-modules \
 			pulseaudio-sinks \

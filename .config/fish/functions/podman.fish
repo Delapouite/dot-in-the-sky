@@ -12,6 +12,9 @@ function podman --description 'podman wrapper'
 		printf "\n"
 		command podman network ls
 
+	case 'volumes'
+		command podman volume ls --format 'table {{.Driver}}\t{{.Scope}}\t{{.Name}}\t{{.CreatedAt}}'
+
 	case '*'
 		command podman $argv
 	end
