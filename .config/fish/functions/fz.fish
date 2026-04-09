@@ -1202,7 +1202,7 @@ function fz --description 'entry point for all the fuzziness glory'
 				return
 			end
 
-			git branches --color=always | _fzf --preview 'git show {2} --color=always'
+			git branches --all --color=always | _fzf --preview 'git show {2} --color=always'
 
 		case git-config
 			if test "$argv[2]" = "--help"
