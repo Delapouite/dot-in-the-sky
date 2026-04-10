@@ -123,44 +123,36 @@ hook global BufWritePre .* %{ evaluate-commands %sh{
   test -d "$container" || mkdir --parents "$container"
 }}
 
-# display matching char in insert mode (the one before cursor)
-# https://github.com/mawww/kakoune/issues/1192#issuecomment-277637280
-declare-option -hidden range-specs show_matching_range
-hook global InsertChar [[(<{}>)\]] %{
-  evaluate-commands -draft %{
-    try %{
-      execute-keys -no-hooks <esc>\;hm<a-k>..<ret>\;
-      set-option window show_matching_range "%val{timestamp} %val{selection_desc}|MatchingChar"
-    }
-
-    hook window -once InsertChar [^[(<{}>)\]] %{
-      set-option window show_matching_range
-    }
-  }
-}
-
-hook global ModeChange pop:insert:normal %{
-  set-option buffer show_matching_range
-}
-
-declare-option -hidden regex curword
-
+set-face global CurrentWord +b
 hook global NormalIdle .* %{
   evaluate-commands -draft -no-hooks %{ try %{
-    execute-keys <space><a-i>w <a-k>\A\w+\z<ret>
-    set-option window curword "\b\Q%val{selection}\E\b"
+    exec ,<a-i>w <a-k>\A\w+\z<ret>
+    add-highlighter -override global/current-word regex "\b\Q%val{selection}\E\b" 0:CurrentWord
   } catch %{
-    set-option window curword ''
+    add-highlighter -override global/current-word group
   }}
+}
+
+set-face global CurrentSearch +u
+add-highlighter global/search dynregex '%reg{/}' 0:SearchRegister
+hook global NormalKey '/|<a-/>|\?|<a-\?>' %{
+  set-face window SearchRegister CurrentSearch
+  hook -once window ModeChange 'pop:prompt:normal' %{
+    set-face window SearchRegister Default
+  }
+}
+hook global NormalKey 'n|<a-n>|N|<a-N>|\*|<a-\*>' %{
+  set-face window SearchRegister CurrentSearch
+}
+hook global NormalKey '<esc>' %{
+  set-face window SearchRegister Default
 }
 
 hook global WinCreate .* %{
   add-highlighter window/ number-lines -hlcursor
   add-highlighter window/ show-whitespaces
+  add-highlighter window/ show-matching -previous
   add-highlighter window/trailing-whitespaces regex '\h+$' 0:Error
-  add-highlighter window/ dynregex '%opt{curword}' 0:+ub
-  add-highlighter window/ show-matching
-  add-highlighter window/ ranges show_matching_range
 }
 
 source '~/.config/kak/plugins/plug.kak/rc/plug.kak'
@@ -176,10 +168,6 @@ plug 'alexherbo2/pad-number.kak'
 plug 'alexherbo2/split-object.kak' %{
   # <c-space>
   map global normal ␠ ': enter-user-mode split-object<ret>' -docstring 'split object mode'
-}
-
-plug 'alexherbo2/volatile-highlighter.kak' %{
-  set-face global Volatile +bi
 }
 
 plug 'andreyorst/fzf.kak' config %{
