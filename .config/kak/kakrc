@@ -73,6 +73,12 @@ map global goto <a-m> '<esc><a-m>;'                           -docstring 'matchi
 map global user <space> :                                     -docstring 'command (: alias)'
 map global user g ': grep '                                   -docstring 'grep'
 
+# xclip
+map global user p '<a-!>xclip -out<ret>'                      -docstring 'paste (after) from clipboard'
+map global user P '!xclip -out<ret>'                          -docstring 'paste (before) from clipboard'
+map global user r '|xclip -out<ret>'                          -docstring 'replace from clipboard'
+map global user y '<a-|>xclip -selection clipboard<ret>:echo -markup %{{Information}copied selection to clipboard}<ret>' -docstring 'yank to clipboard'
+
 alias global h doc
 alias global u enter-user-mode
 
@@ -253,10 +259,6 @@ plug 'https://gitlab.com/FlyingWombat/case.kak' %{
 plug 'https://gitlab.com/Screwtapello/kakoune-inc-dec' %{
   map global normal <c-a> ': inc-dec-modify-numbers + %val{count}<ret>' -docstring 'increment'
   map global normal <c-x> ': inc-dec-modify-numbers - %val{count}<ret>' -docstring 'decrement'
-}
-
-plug "lePerdu/kakboard" %{
-  hook global WinCreate .* %{ kakboard-enable }
 }
 
 plug 'occivink/kakoune-expand' %{
