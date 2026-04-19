@@ -171,11 +171,6 @@ plug 'alexherbo2/explore.kak'
 
 plug 'alexherbo2/pad-number.kak'
 
-plug 'alexherbo2/split-object.kak' %{
-  # <c-space>
-  map global normal ␠ ': enter-user-mode split-object<ret>' -docstring 'split object mode'
-}
-
 plug 'andreyorst/fzf.kak' config %{
   map global user f ': fzf-mode<ret>' -docstring 'fzf'
   } defer 'fzf' %{
