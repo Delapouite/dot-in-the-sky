@@ -9,6 +9,7 @@ alias ...='cd ../../'
 alias ....='cd ../../../'
 alias .....='cd ../../../../'
 alias ......='cd ../../../../../'
+alias zed='zeditor'
 
 # plurals
 alias builtins='builtin --names'
