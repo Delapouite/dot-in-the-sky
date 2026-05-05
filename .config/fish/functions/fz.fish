@@ -1643,69 +1643,97 @@ function fz --description 'entry point for all the fuzziness glory'
 			npm run "$choice"
 		end
 
-	case org-roam-links
-		if test "$argv[2]" = "--help"
-			printf "list: https links from org-roam\n"
-			print_dim 'preview: none'
-			printf 'action: open https link in default browser\n'
-			return
+	case 'org-roam-*'
+
+		alias _fzf="$fzf_cmd --bind 'backward-eof:become(fz . org-roam)'"
+
+		switch $argv[1]
+
+		case org-roam-links
+			if test "$argv[2]" = "--help"
+				printf "list: https links from org-roam\n"
+				print_dim 'preview: none'
+				printf 'action: open https link in default browser\n'
+				return
+			end
+
+			sqlite3 ~/.config/emacs/.local/cache/org-roam.db 'select distinct dest from links where type = \'"https"\' order by dest' \
+				| _awk '{gsub(/"/, "", $1); printf "https:%s\n", $1}' \
+				| _fzf \
+				| xargs xdg-open > /dev/null
+			focus_browser
+
+		case org-roam-nodes
+			if test "$argv[2]" = "--help"
+				printf "list: nodes from org-roam\n"
+				print_dim 'preview: none'
+				printf 'action: open node in Emacs\n'
+				return
+			end
+
+			sqlite3 ~/.config/emacs/.local/cache/org-roam.db 'select id from nodes order by id' \
+				| _awk '{gsub(/"/, "", $1); printf "%s\n", $1}' \
+				| _fzf \
+				| tr -d '\n' \
+				| jq --slurp --raw-input --raw-output @uri \
+				| _awk '{printf "org-protocol://roam-node?node=%s\n", $1}' \
+				| xargs xdg-open
+			i3-msg --quiet "[class=Emacs] focus"
+
 		end
 
-		sqlite3 ~/.config/emacs/.local/cache/org-roam.db 'select distinct dest from links where type = \'"https"\' order by dest' \
-			| _awk '{gsub(/"/, "", $1); printf "https:%s\n", $1}' \
-			| _fzf \
-			| xargs xdg-open > /dev/null
-		focus_browser
+	case 'pacman-*'
 
-	case org-roam-nodes
-		if test "$argv[2]" = "--help"
-			printf "list: nodes from org-roam\n"
-			print_dim 'preview: none'
-			printf 'action: open node in Emacs\n'
-			return
+		alias _fzf="$fzf_cmd --bind 'backward-eof:become(fz . pacman)'"
+
+		switch $argv[1]
+
+		case pacman-files
+			if test "$argv[2]" = "--help"
+				printf 'list: packages files\n'
+				print_dim 'preview: none'
+				print_dim 'action: none'
+				return
+			end
+
+			pacman --query --list | _fzf
+
+		case pacman-mirrors
+			if test "$argv[2]" = "--help"
+				printf 'list: pacman mirrors\n'
+				print_dim 'preview: none'
+				print_dim 'action: none'
+				return
+			end
+
+			cat /etc/pacman.d/mirrorlist | rg '^Server' | _fzf
+
+		case pacman-packages
+			if test "$argv[2]" = "--help"
+				printf 'list: packages and their version\n'
+				printf 'preview: package details\n'
+				print_dim 'action: none'
+				return
+			end
+
+			pacman --query \
+				| awk "$awk_dim2" \
+				| _fzf \
+					--preview 'pacman --query --info --list {1}'
+
+		case pacman-outdated-packages
+			if test "$argv[2]" = "--help"
+				printf 'list: outdated packages and their version\n'
+				printf 'preview: package details\n'
+				print_dim 'action: none'
+				return
+			end
+
+			pacman --query --upgrades \
+				| awk "$awk_dim4" \
+				| _fzf \
+					--preview 'pacman --query --info --list {1}'
 		end
-
-		sqlite3 ~/.config/emacs/.local/cache/org-roam.db 'select id from nodes order by id' \
-			| _awk '{gsub(/"/, "", $1); printf "%s\n", $1}' \
-			| _fzf \
-			| tr -d '\n' \
-			| jq --slurp --raw-input --raw-output @uri \
-			| _awk '{printf "org-protocol://roam-node?node=%s\n", $1}' \
-			| xargs xdg-open
-		i3-msg --quiet "[class=Emacs] focus"
-
-	case pacman-files
-		if test "$argv[2]" = "--help"
-			printf 'list: packages files\n'
-			print_dim 'preview: none'
-			print_dim 'action: none'
-			return
-		end
-
-		pacman --query --list | _fzf
-
-	case pacman-mirrors
-		if test "$argv[2]" = "--help"
-			printf 'list: pacman mirrors\n'
-			print_dim 'preview: none'
-			print_dim 'action: none'
-			return
-		end
-
-		cat /etc/pacman.d/mirrorlist | rg '^Server' | _fzf
-
-	case pacman-packages
-		if test "$argv[2]" = "--help"
-			printf 'list: packages and their version\n'
-			printf 'preview: package details\n'
-			print_dim 'action: none'
-			return
-		end
-
-		pacman --query \
-			| awk "$awk_dim2" \
-			| _fzf \
-				--preview 'pacman --query --info --list {1}'
 
 	case pastel-colors
 		if not command -q pastel
@@ -2362,6 +2390,7 @@ function fz --description 'entry point for all the fuzziness glory'
 			org-roam-nodes \
 			pacman-files \
 			pacman-mirrors \
+			pacman-outdated-packages \
 			pacman-packages \
 			pastel-colors \
 			podman-pods \
