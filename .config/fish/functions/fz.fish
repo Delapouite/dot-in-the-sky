@@ -1480,6 +1480,34 @@ function fz --description 'entry point for all the fuzziness glory'
 
 		cat /etc/mime.types | tail --lines +14 | _fzf
 
+	case 'mise-*'
+
+		alias _fzf="$fzf_cmd --bind 'backward-eof:become(fz . mise)'"
+
+		switch $argv[1]
+
+		case mise-backends
+			if test "$argv[2]" = "--help"
+				printf 'list: mise backends\n'
+				print_dim 'preview: none'
+				print_dim 'action: none'
+				return
+			end
+
+			mise backends | _fzf
+
+		case mise-tools
+			if test "$argv[2]" = "--help"
+				printf 'list: mise tools\n'
+				print_dim 'preview: none'
+				print_dim 'action: none'
+				return
+			end
+
+			mise registry | _fzf
+
+		end
+
 	case monitors
 		if not command -q xrandr
 			print_error 'xrandr command not found'
@@ -2319,6 +2347,8 @@ function fz --description 'entry point for all the fuzziness glory'
 			linux-namespaces \
 			man-pages \
 			media-types \
+			mise-backends \
+			mise-tools \
 			monitors \
 			mounts \
 			music-albums \
@@ -2413,6 +2443,9 @@ function fz --description 'entry point for all the fuzziness glory'
 
 			case 'kakoune-*'
 				command -q kak
+
+			case 'mise-*'
+				command -q mise
 
 			case monitors
 				command -q xrandr
