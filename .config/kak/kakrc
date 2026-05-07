@@ -29,16 +29,6 @@ hook global WinDisplay .* update-status
 hook global BufSetOption lsp_diagnostic_error_count=.* update-status
 hook global BufSetOption lsp_diagnostic_warning_count=.* update-status
 
-# needs those kitty map for disambiguation hack:
-# map ctrl+h send_text all \u24D7 // ⓗ
-# map ctrl+i send_text all \u24D8 // ⓘ
-# map ctrl+j send_text all \u24D9 // ⓙ
-# map ctrl+m send_text all \u24DC // ⓜ
-# map ctrl+return send_text all \u240D // ␍
-# map ctrl+space send_text all \u2420 // ␠
-
-map global normal <c-i> '<tab>'
-
 # <a-k> equivalent is defined afer auto-percent is loaded
 map global normal <a-j> ': extend-line-down %val{count}<ret>' -docstring 'extend line down'
 map global normal C '<a-j>'                                   -docstring 'join lines'
@@ -65,7 +55,7 @@ map global insert <a-k> '<esc>'                               -docstring 'escape
 map global insert <a-p> '<c-r>"'                              -docstring 'paste'
 
 map global goto <lt> <esc><c-o>                               -docstring 'jump backward'
-map global goto <gt> <esc><tab>                               -docstring 'jump forward'
+map global goto <gt> <esc><c-i>                               -docstring 'jump forward'
 map global goto m '<esc>m;'                                   -docstring 'matching next char'
 map global goto n '<esc>]p;'                                  -docstring 'next paragraph'
 map global goto p '<esc>[p;'                                  -docstring 'previous paragraph'
