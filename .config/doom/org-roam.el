@@ -621,15 +621,7 @@
 
   (map! :n "M-<return>" #'my/org-roam-visit-node-at-point)
   (map! :leader
-        :desc "Find book" "r b" (lambda () (interactive) (org-roam-node-find nil "#book "))
-        :desc "Find concept" "r c" (lambda () (interactive) (org-roam-node-find nil "#concept "))
-        :desc "Find artist" "r i" (lambda () (interactive) (org-roam-node-find nil "#artist "))
-        :desc "Find album" "r l" (lambda () (interactive) (org-roam-node-find nil "#album "))
-        :desc "Find combo" "r o" (lambda () (interactive) (org-roam-node-find nil (concat "· " (or (my/org-get-acronym) (org-get-title)) " ")))
-        :desc "Find person" "r p" (lambda () (interactive) (org-roam-node-find nil "#person "))
-        :desc "Find tool" "r t" (lambda () (interactive) (org-roam-node-find nil "#tool "))
-        :desc "Find node" "r r" (lambda () (interactive) (org-roam-node-find))
-        :desc "Find ★1" "r 1" (lambda () (interactive) (org-roam-node-find nil "★+1 "))
+        :desc "Find node" "r" (lambda () (interactive) (org-roam-node-find))
         :desc "Goto first combo part" "g 1 1" (lambda () (interactive) (my/org-roam-goto-combo 0 0))
         :desc "Goto second combo part" "g 2 2" (lambda () (interactive) (my/org-roam-goto-combo 1 1))
         :desc "Goto third combo part" "g 3 3" (lambda () (interactive) (my/org-roam-goto-combo 2 2))
