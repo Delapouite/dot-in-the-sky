@@ -5,7 +5,7 @@ function le --description 'print sorted and colorful environment variables'
 		set hide 1
 	end
 
-	set --local atuin 'ATUIN_SESSION'
+	set --local atuin 'ATUIN_SESSION|ATUIN_SHLVL|ATUIN_TMUX_POPUP'
 	set --local direnv 'DIRENV_DIFF|DIRENV_DIR|DIRENV_FILE|DIRENV_WATCHES'
 	set --local eza 'EZA_COLORS'
 	set --local go 'GOBIN'
