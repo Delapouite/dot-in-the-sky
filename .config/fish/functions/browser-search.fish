@@ -10,6 +10,7 @@ function browser-search --description 'browser search with various engines'
 		arch-wiki \
 		bitbucket \
 		bugzilla \
+		crates \
 		deepl \
 		devdocs \
 		gitlab \
@@ -26,6 +27,7 @@ function browser-search --description 'browser search with various engines'
 		merriam-webster \
 		musicbrainz \
 		npm \
+		npmx \
 		oxford-english-dictionary \
 		petit-robert \
 		repology \
@@ -80,6 +82,9 @@ function browser-search --description 'browser search with various engines'
 
 	case bugzilla
 		$browser "https://bugzilla.mozilla.org/buglist.cgi?quicksearch=$query"
+
+	case crates
+		$browser "https://crates.io/search?q=$query"
 
 	case deepl
 		$browser "https://www.deepl.com/translator#en/fr/$query"
@@ -142,6 +147,9 @@ function browser-search --description 'browser search with various engines'
 
 	case npm
 		$browser "https://www.npmjs.com/search?q=$query"
+
+	case npmx
+		$browser "https://npmx.dev/search?q=$query"
 
 	case repology repo
 		$browser "https://repology.org/projects/?search=$query"
