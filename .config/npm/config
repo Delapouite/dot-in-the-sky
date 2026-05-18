@@ -1,2 +1,4 @@
 cache = ${HOME}/.cache/npm
 ignore-scripts = true
+# in days | since npm 11.10
+min-release-age = 7
