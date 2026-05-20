@@ -48,6 +48,9 @@
   },
   "explorer.sortOrder": "type",
 
+  "extensions.autoUpdate": false,
+  "extensions.ignoreRecommendations": true,
+
   "files.exclude": {
     "**/.classpath": true,
     "**/.project": true,
@@ -104,7 +107,7 @@
   /// py
   "python.analysis.typeCheckingMode": "strict",
   // extensions
-  "extensions.ignoreRecommendations": true,
+
   "atlascode.bitbucket.enabled": true,
   "atlascode.bitbucket.explorer.relatedJiraIssues.enabled": true,
   "atlascode.bitbucket.pipelines.explorerEnabled": true,
