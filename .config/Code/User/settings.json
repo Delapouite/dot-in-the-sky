@@ -1,7 +1,9 @@
 {
   "chat.agent.enabled": false,
-  "chat.commandCenter.enabled": false,
+  "chat.disableAIFeatures": true,
+
   "diffEditor.ignoreTrimWhitespace": true,
+
   "editor.bracketPairColorization.enabled": true,
   "editor.cursorStyle": "block",
   "editor.cursorSurroundingLines": 10,
@@ -15,7 +17,7 @@
   "editor.quickSuggestions": {
     "other": true,
     "comments": true,
-    "strings": true
+    "strings": true,
   },
   "editor.renderLineHighlight": "all",
   "editor.renderWhitespace": "all",
@@ -25,6 +27,7 @@
   "editor.suggestSelection": "first",
   "editor.tabSize": 2,
   "editor.wordBasedSuggestions": "allDocuments",
+
   "explorer.confirmDragAndDrop": false,
   "explorer.confirmDelete": false,
   "explorer.fileNesting.enabled": true,
@@ -41,21 +44,25 @@
     "Cargo.toml": "Cargo.lock",
     "GemFile": "Gemfile.lock",
     "README.md": "CHANGELOG.md,CODEOWNERS,CODE_OF_CONDUCT.md,CONTRIBUTING.md,INSTALL.md,LICENSE,LICENSE.txt,OWNERS,SECURITY.md,TESTING.md",
-    "*.ts": "${capture}.js,${capture}.spec.ts,${capture}.test.ts"
+    "*.ts": "${capture}.js,${capture}.spec.ts,${capture}.test.ts",
   },
   "explorer.sortOrder": "type",
-  "keyboard.dispatch": "keyCode",
-  "problems.showCurrentInStatus": true,
-  "references.preferredLocation": "view",
+
   "files.exclude": {
     "**/.classpath": true,
     "**/.project": true,
     "**/.settings": true,
-    "**/.factorypath": true
+    "**/.factorypath": true,
   },
+
+  "keyboard.dispatch": "keyCode",
+  "git.addAICoAuthor": "off",
+  "problems.showCurrentInStatus": true,
+  "references.preferredLocation": "view",
+
   "search.exclude": {
     ".yarn": true,
-    "yarn.lock": true
+    "yarn.lock": true,
   },
   "search.mode": "reuseEditor",
   "terminal.integrated.fontFamily": "iosevka term",
@@ -63,8 +70,11 @@
   "terminal.integrated.scrollback": 10000,
   "terminal.integrated.smoothScrolling": true,
   "update.mode": "none",
+
   "window.confirmBeforeClose": "never",
-  "window.menuBarVisibility": "toggle",
+  "window.menuBarVisibility": "compact",
+
+  "workbench.activityBar.location": "top",
   "workbench.colorTheme": "Dracula Theme",
   "workbench.colorCustomizations": {
     "tab.activeBorderTop": "#50fa7b",
@@ -72,6 +82,9 @@
   },
   "workbench.editor.enablePreview": false,
   "workbench.editor.highlightModifiedTabs": true,
+  "workbench.editor.useModal": "off",
+  "workbench.secondarySideBar.defaultVisibility": "hidden",
+  "workbench.settings.showAISearchToggle": false,
   "workbench.startupEditor": "newUntitledFile",
   "workbench.statusBar.visible": true,
   "workbench.experimental.sidePanel.enabled": true,
