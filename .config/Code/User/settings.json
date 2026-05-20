@@ -89,21 +89,18 @@
   "workbench.statusBar.visible": true,
   "workbench.experimental.sidePanel.enabled": true,
   // languages
-  "debug.javascript.autoAttachFilter": "disabled",
-  /// js
-  "javascript.referencesCodeLens.enabled": true,
-  "javascript.referencesCodeLens.showOnAllFunctions": true,
-  "javascript.updateImportsOnFileMove.enabled": "always",
-  /// ts
-  "typescript.implementationsCodeLens.enabled": true,
-  "typescript.implementationsCodeLens.showOnInterfaceMethods": true,
-  "typescript.inlayHints.functionLikeReturnTypes.enabled": true,
-  "typescript.inlayHints.parameterTypes.enabled": true,
-  "typescript.inlayHints.propertyDeclarationTypes.enabled": true,
-  "typescript.inlayHints.variableTypes.enabled": true,
-  "typescript.referencesCodeLens.enabled": true,
-  "typescript.referencesCodeLens.showOnAllFunctions": true,
-  "typescript.updateImportsOnFileMove.enabled": "always",
+
+  "debug.javascript.autoAttachFilter": "smart",
+  "js/ts.implementationsCodeLens.enabled": true,
+  "js/ts.implementationsCodeLens.showOnInterfaceMethods": true,
+  "js/ts.inlayHints.functionLikeReturnTypes.enabled": true,
+  "js/ts.inlayHints.parameterTypes.enabled": true,
+  "js/ts.inlayHints.propertyDeclarationTypes.enabled": true,
+  "js/ts.inlayHints.variableTypes.enabled": true,
+  "js/ts.referencesCodeLens.enabled": true,
+  "js/ts.referencesCodeLens.showOnAllFunctions": true,
+  "js/ts.updateImportsOnFileMove.enabled": "always",
+
   /// py
   "python.analysis.typeCheckingMode": "strict",
   // extensions
