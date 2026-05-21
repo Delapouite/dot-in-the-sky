@@ -72,6 +72,8 @@
   "terminal.integrated.fontSize": 13,
   "terminal.integrated.scrollback": 10000,
   "terminal.integrated.smoothScrolling": true,
+  "terminal.integrated.stickyScroll.enabled": false,
+
   "update.mode": "none",
 
   "window.confirmBeforeClose": "never",
@@ -81,7 +83,30 @@
   "workbench.colorTheme": "Dracula Theme",
   "workbench.colorCustomizations": {
     "tab.activeBorderTop": "#50fa7b",
-    "tab.activeBackground": "#444754"
+    "tab.activeBackground": "#444754",
+
+    // git
+    "editorOverviewRuler.addedForeground": "#50fa7b33",
+    "editorOverviewRuler.modifiedForeground": "#bd93f933",
+    "editorOverviewRuler.deletedForeground": "#ff79c633",
+    "editorInlayHint.foreground": "#6272a4",
+
+    "peekView.border": "#f8f8f2",
+    "peekViewEditor.background": "#444754",
+
+    // sticky scrolls
+    "editorStickyScroll.border": "#f8f8f2",
+    "editorStickyScroll.background": "#444754",
+    "editorStickyScrollGutter.background": "#444754",
+    "panelStickyScroll.border": "#f8f8f2",
+    "panelStickyScroll.background": "#444754",
+    "panelStickyScrollGutter.background": "#444754",
+    "sideBarStickyScroll.border": "#f8f8f2",
+    "sideBarStickyScroll.background": "#444754",
+    "sideBarStickyScrollGutter.background": "#444754",
+    "terminalStickyScroll.border": "#f8f8f2",
+    "terminalStickyScroll.background": "#444754",
+    "terminalStickyScrollGutter.background": "#444754",
   },
   "workbench.editor.enablePreview": false,
   "workbench.editor.highlightModifiedTabs": true,
@@ -89,8 +114,8 @@
   "workbench.secondarySideBar.defaultVisibility": "hidden",
   "workbench.settings.showAISearchToggle": false,
   "workbench.startupEditor": "newUntitledFile",
-  "workbench.statusBar.visible": true,
-  "workbench.experimental.sidePanel.enabled": true,
+  "workbench.tree.enableStickyScroll": true,
+
   // languages
 
   "debug.javascript.autoAttachFilter": "smart",
