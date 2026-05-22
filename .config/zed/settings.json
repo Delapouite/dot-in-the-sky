@@ -8,6 +8,7 @@
 // command palette (cmd-shift-p / ctrl-shift-p)
 {
   // General
+  "cli_default_open_behavior": "new_window",
   "telemetry": {
     "diagnostics": false,
     "metrics": false,
@@ -24,14 +25,30 @@
     "dark": "Dracula",
   },
   // Keymap
+  "helix_mode": false,
   "vim_mode": true,
+  "which_key": {
+    "enabled": true,
+  },
+  // Editor
+  "code_lens": "on",
   // Windows and Layout
   "tabs": {
     "git_status": true,
   },
   // Panels
   "project_panel": {
+    "bold_folder_labels": true,
+    "diagnostic_badges": true,
     "dock": "left",
+    "entry_spacing": "standard",
+    "file_icons": true,
+    "folder_icons": true,
+    "git_status": true,
+    "git_status_indicator": true,
+    "hide_hidden": false,
+    "hide_root": true,
+    "starts_open": true,
   },
   "outline_panel": {
     "dock": "left",
@@ -40,7 +57,12 @@
     "dock": "left",
   },
   "collaboration_panel": {
-    "dock": "left",
+    "dock": null,
+  },
+  "lsp": {
+    "clangd": {
+      "binary": {},
+    },
   },
   // AI
   "disable_ai": true,
