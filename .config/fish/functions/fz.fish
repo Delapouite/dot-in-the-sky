@@ -1,5 +1,5 @@
 function fz --description 'entry point for all the fuzziness glory'
-	set --local fzf_cmd "fzf \
+	set fzf_cmd "fzf \
 		--ansi \
 		--cycle \
 		--reverse \
@@ -23,9 +23,9 @@ function fz --description 'entry point for all the fuzziness glory'
 		--language json \
 		--color always'
 
-	set --local ago "/tmp/n-days-ago"
-	set --local tmpdir "/tmp/fz/$argv[1]"
-	set --local cache_dir "$HOME/.cache/fz"
+	set ago "/tmp/n-days-ago"
+	set tmpdir "/tmp/fz/$argv[1]"
+	set cache_dir "$HOME/.cache/fz"
 	mkdir --parents "$cache_dir"
 
 	function focus_browser
@@ -34,17 +34,17 @@ function fz --description 'entry point for all the fuzziness glory'
 
 	# colors
 
-	set --local grey '\x1b[38;2;173;178;203m'
-	set --local comment '\x1b[38;2;98;114;164m'
-	set --local reset '\x1b[m'
+	set grey '\x1b[38;2;173;178;203m'
+	set comment '\x1b[38;2;98;114;164m'
+	set reset '\x1b[m'
 
-	set --local awk_dim2 \
+	set awk_dim2 \
 		"{printf \"%s $comment%s$reset\n\", \$1, \$2}"
-	set --local awk_dim3 \
+	set awk_dim3 \
 		"{printf \"%s $grey%s$reset $comment%s$reset\n\", \$1, \$2, \$3}"
-	set --local awk_dim4 \
+	set awk_dim4 \
 		"{printf \"%s %s $grey%s$reset $comment%s$reset\n\", \$1, \$2, \$3, \$4}"
-	set --local awk_dim5 \
+	set awk_dim5 \
 		"{printf \"%s %s $grey%s$reset $comment%s %s$reset\n\", \$1, \$2, \$3, \$4, \$5}"
 
 	function print_info
@@ -2234,40 +2234,57 @@ function fz --description 'entry point for all the fuzziness glory'
 
 		cat /etc/passwd | column --table --separator : | _fzf
 
-	case vscode-extensions
-		if not command -q code
-			print_error 'code command not found'
-			return 1
-		end
+	case 'vscode-*'
 
-		if test "$argv[2]" = "--help"
-			printf 'list: vscode extensions\n'
-			print_dim 'preview: none'
-			print_dim 'action: none'
-			return
-		end
+		alias _fzf="$fzf_cmd --bind 'backward-eof:become(fz . vscode)'"
 
-		code --list-extensions --show-versions 2> /dev/null | _fzf
+		switch $argv[1]
 
-	case vscode-workspaces
-		if not command -q code
-			print_error 'code command not found'
-			return 1
-		end
+		case vscode-extensions
 
-		if test "$argv[2]" = "--help"
-			printf 'list: vscode workspaces\n'
-			printf 'preview: vscode workspace details\n'
-			print_dim 'action: none'
-			return
-		end
+			if test "$argv[2]" = "--help"
+				printf 'list: vscode extensions\n'
+				print_dim 'preview: none'
+				print_dim 'action: none'
+				return
+			end
 
-		set --local dir "$HOME/projects/vscode-workspaces/"
-		set --local choice (fd .code-workspace "$dir" \
-			| _fzf --preview 'bat {} --plain --language json --color always')
+			code --list-extensions --show-versions 2> /dev/null | _fzf
 
-		if test -n "$choice"
-			code "$choice"
+		case vscode-profiles
+
+			if test "$argv[2]" = "--help"
+				printf 'list: vscode profiles\n'
+				print_dim 'preview: none'
+				printf 'action: open vscode with profile\n'
+				return
+			end
+
+			set --local config "$HOME/.config/Code/User/globalStorage/storage.json"
+			set --local choice ( \
+				_jq '.userDataProfiles[] | .name' "$config" \
+				| _fzf)
+
+			if test -n "$choice"
+				code --profile "$choice"
+			end
+
+		case vscode-workspaces
+
+			if test "$argv[2]" = "--help"
+				printf 'list: vscode workspaces\n'
+				printf 'preview: vscode workspace details\n'
+				printf 'action: open vscode with workspace\n'
+				return
+			end
+
+			set --local dir "$HOME/projects/vscode-workspaces/"
+			set --local choice (fd .code-workspace "$dir" \
+				| _fzf --preview 'bat {} --plain --language json --color always')
+
+			if test -n "$choice"
+				code "$choice"
+			end
 		end
 
 	case xinput-devices
@@ -2428,6 +2445,7 @@ function fz --description 'entry point for all the fuzziness glory'
 			user-groups \
 			users \
 			vscode-extensions \
+			vscode-profiles \
 			vscode-workspaces \
 			xinput-devices \
 			yarn-workspaces
