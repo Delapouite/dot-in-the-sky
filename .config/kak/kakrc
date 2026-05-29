@@ -10,7 +10,9 @@ set-option global startup_info_version 20420101
 set-option -add global matching_pairs ‹ › « » “ ” ‘ ’
 set-option -add global ui_options terminal_assistant=none terminal_status_on_top=true
 
-define-command update-status %{ evaluate-commands %sh{
+# default:
+# %val{bufname} %val{cursor_line}:%val{cursor_char_column} {{context_info}} {{mode_info}} - %val{client}@[%val{session}]
+define-command -hidden set-modelinefmt %{ evaluate-commands %sh{
   printf %s 'set-option buffer modelinefmt %{'
   if [ "$kak_opt_lsp_diagnostic_error_count" -ne 0 ]; then
     printf %s '{DiagnosticError}%opt{lsp_diagnostic_error_count}!{Default} '
@@ -18,16 +20,22 @@ define-command update-status %{ evaluate-commands %sh{
   if [ "$kak_opt_lsp_diagnostic_warning_count" -ne 0 ]; then
     printf %s '{DiagnosticWarning}%opt{lsp_diagnostic_warning_count}!{Default} '
   fi
-  printf %s '{{context_info}} {{mode_info}} '
+  printf %s '{{context_info}} {{mode_info}}'
   printf %s ' · %val{bufname} [%opt{filetype}]'
+  if [ "$kak_opt_indentwidth" -eq 0 ]; then
+    printf %s ' ↹%opt{tabstop}'
+  else
+    printf %s ' ␣%opt{indentwidth}'
+  fi
   printf %s ' · %val{cursor_line}:%val{cursor_char_column}/%val{buf_line_count}'
   case "$kak_client" in client*) ;; *) printf %s " · $kak_client";; esac
   case "$kak_session" in ''|*[!0-9]*) printf %s " @$kak_session";; esac
   printf %s '}'
 }}
-hook global WinDisplay .* update-status
-hook global BufSetOption lsp_diagnostic_error_count=.* update-status
-hook global BufSetOption lsp_diagnostic_warning_count=.* update-status
+hook global WinDisplay .* set-modelinefmt
+hook global BufSetOption lsp_diagnostic_error_count=.* set-modelinefmt
+hook global BufSetOption lsp_diagnostic_warning_count=.* set-modelinefmt
+hook global BufSetOption indentwidth=.* set-modelinefmt
 
 # <a-k> equivalent is defined afer auto-percent is loaded
 map global normal <a-j> ': extend-line-down %val{count}<ret>' -docstring 'extend line down'
@@ -69,6 +77,13 @@ map global user p '<a-!>xclip -out<ret>'                      -docstring 'paste 
 map global user P '!xclip -out<ret>'                          -docstring 'paste (before) from clipboard'
 map global user r '|xclip -out<ret>'                          -docstring 'replace from clipboard'
 map global user y '<a-|>xclip -selection clipboard<ret>:echo -markup %{{Information}copied selection to clipboard}<ret>' -docstring 'yank to clipboard'
+
+# indent
+map global normal <tab> <gt>                                  -docstring 'indent ⇥'
+map global normal <s-tab> <lt>                                -docstring 'dedent ⇤'
+map global user <tab> ': set global indentwidth 0<ret>'       -docstring 'indent tab ↹'
+map global user 2 ': set global indentwidth 2<ret>'           -docstring 'indent space ␣2'
+map global user 4 ': set global indentwidth 4<ret>'           -docstring 'indent space ␣4'
 
 alias global h doc
 alias global u enter-user-mode
