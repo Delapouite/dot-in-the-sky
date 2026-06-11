@@ -1095,9 +1095,9 @@ function fz --description 'entry point for all the fuzziness glory'
 		end
 
 		cat "$cache_file" \
-			| _jq '.result | .[] | "\(.name)\u001f\(.releases[0].name)\u001f\(.releases[0].releaseDate)"' \
+			| _jq '.result[] | [.name, .releases[0].name, .releases[0].releaseDate] | join("\u001f")' \
 			| _awk "$awk_dim3" \
-			| _fzf --preview "jq --color-output '.result | .[] | select(.name==\"{1}\")' $cache_file"
+			| _fzf --preview "jq --color-output '.result[] | select(.name==\"{1}\")' $cache_file"
 
 	case environment-variables
 		if test "$argv[2]" = "--help"
@@ -1393,7 +1393,7 @@ function fz --description 'entry point for all the fuzziness glory'
 		end
 
 		set --local choice (cat "$cache_file" \
-			| _jq '.schemas | .[] | "\(.name)\u001f\(.fileMatch)\u001f\(.url)"' \
+			| _jq '.schemas[] | "\(.name)\u001f\(.fileMatch)\u001f\(.url)"' \
 			| _awk "$awk_dim3" \
 			| _fzf --preview "curl --silent {-1} | jq --color-output .")
 
