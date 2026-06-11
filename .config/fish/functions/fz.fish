@@ -799,7 +799,8 @@ function fz --description 'entry point for all the fuzziness glory'
 			return
 		end
 
-		sqlite3 ~/.config/emacs/.local/cache/org-roam.db 'select id, file from nodes order by id' \
+		sqlite3 ~/.config/emacs/.local/cache/org-roam.db \
+			'select id, file from nodes order by id' \
 			| tr -d '"' | tr '|' \u001f \
 			| _awk "{printf \"%s\u001f $comment%s$reset\n\", \$1, \$2}" \
 			| _fzf \
@@ -1657,8 +1658,8 @@ function fz --description 'entry point for all the fuzziness glory'
 				return
 			end
 
-			sqlite3 ~/.config/emacs/.local/cache/org-roam.db 'select distinct dest from links where type = \'"https"\' order by dest' \
-				| _awk '{gsub(/"/, "", $1); printf "https:%s\n", $1}' \
+			sqlite3 ~/.config/emacs/.local/cache/org-roam.db \
+				'select concat(\'https:\', trim(distinct dest, \'"\')) from links where type = \'"https"\' order by dest' \
 				| _fzf \
 				| xargs xdg-open > /dev/null
 			focus_browser
@@ -1671,8 +1672,8 @@ function fz --description 'entry point for all the fuzziness glory'
 				return
 			end
 
-			sqlite3 ~/.config/emacs/.local/cache/org-roam.db 'select id from nodes order by id' \
-				| _awk '{gsub(/"/, "", $1); printf "%s\n", $1}' \
+			sqlite3 ~/.config/emacs/.local/cache/org-roam.db \
+				'select trim(id, \'"\') from nodes order by id' \
 				| _fzf \
 				| tr -d '\n' \
 				| jq --slurp --raw-input --raw-output @uri \
