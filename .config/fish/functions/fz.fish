@@ -1925,39 +1925,46 @@ function fz --description 'entry point for all the fuzziness glory'
 
 		fish_config theme list | _fzf --preview 'fish_config theme show {}'
 
-	case skopeo-bookmarks
-		set --local data_source '~/.local/share/skopeo-bookmarks/*.bookmarks'
-		if test "$argv[2]" = "--help"
-			printf "list: bookmarked skopeo images from $data_source\n"
-			printf 'preview: image tags\n'
-			print_dim 'action: none'
-			return
+	case 'skopeo-*'
+
+		alias _fzf="$fzf_cmd --bind 'backward-eof:become(fz . skopeo)'"
+
+		switch $argv[1]
+
+		case skopeo-bookmarks
+			set --local data_source '~/.local/share/skopeo-bookmarks/*.bookmarks'
+			if test "$argv[2]" = "--help"
+				printf "list: bookmarked skopeo images from $data_source\n"
+				printf 'preview: image tags\n'
+				print_dim 'action: none'
+				return
+			end
+
+			set --local choice (cat ~/.local/share/skopeo-bookmarks/*.bookmarks \
+				| rg -v '^#' | rg -v '^$' \
+				| _fzf \
+					--header "$data_source" \
+					--preview "skopeo list-tags {1}")
+
+			if test -n "$choice"
+				echo "$choice" > /tmp/fz-skopeo-image
+				fz skopeo-tags
+			end
+
+		case skopeo-tags
+			set --local skopeo_image (cat /tmp/fz-skopeo-image)
+			if test "$argv[2]" = "--help"
+				printf 'list: skopeo tags\n'
+				printf 'preview: tag creation date\n'
+				print_dim 'action: none'
+				return
+			end
+
+			skopeo list-tags "$skopeo_image" | _jq '.Tags .[]' \
+				| _fzf \
+					--header "$skopeo_image" \
+					--preview "skopeo inspect $skopeo_image:{1} | jq .Created"
 		end
-
-		set --local choice (cat ~/.local/share/skopeo-bookmarks/*.bookmarks \
-			| rg -v '^#' | rg -v '^$' \
-			| _fzf \
-				--header "$data_source" \
-				--preview "skopeo list-tags {1}")
-
-		if test -n "$choice"
-			echo "$choice" > /tmp/fz-skopeo-image
-			fz skopeo-tags
-		end
-
-	case skopeo-tags
-		set --local skopeo_image (cat /tmp/fz-skopeo-image)
-		if test "$argv[2]" = "--help"
-			printf 'list: skopeo tags\n'
-			printf 'preview: tag creation date\n'
-			print_dim 'action: none'
-			return
-		end
-
-		skopeo list-tags "$skopeo_image" | _jq '.Tags .[]' \
-			| _fzf \
-				--header "$skopeo_image" \
-				--preview "skopeo inspect $skopeo_image:{1} | jq .Created"
 
 	case socat-addresses
 		if test "$argv[2]" = "--help"
@@ -2512,6 +2519,9 @@ function fz --description 'entry point for all the fuzziness glory'
 
 			case 'pulseaudio-*'
 				command -q pactl
+
+			case 'skopeo-*'
+				command -q skopeo
 
 			case 'sockets'
 				command -q ss
