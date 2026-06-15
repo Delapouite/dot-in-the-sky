@@ -1718,8 +1718,19 @@ function fz --description 'entry point for all the fuzziness glory'
 
 			pacman --query \
 				| awk "$awk_dim2" \
-				| _fzf \
-					--preview 'pacman --query --info --list {1}'
+				| _fzf --preview 'pacman --query --info --list {1}'
+
+		case pacman-foreign-packages
+			if test "$argv[2]" = "--help"
+				printf 'list: foreign packages and their version\n'
+				printf 'preview: package details\n'
+				print_dim 'action: none'
+				return
+			end
+
+			pacman --query --foreign \
+				| awk "$awk_dim2" \
+				| _fzf --preview 'pacman --query --info --list {1}'
 
 		case pacman-outdated-packages
 			if test "$argv[2]" = "--help"
@@ -1731,8 +1742,7 @@ function fz --description 'entry point for all the fuzziness glory'
 
 			pacman --query --upgrades \
 				| awk "$awk_dim4" \
-				| _fzf \
-					--preview 'pacman --query --info --list {1}'
+				| _fzf --preview 'pacman --query --info --list {1}'
 		end
 
 	case pastel-colors
@@ -2414,8 +2424,9 @@ function fz --description 'entry point for all the fuzziness glory'
 			org-roam-nodes \
 			pacman-files \
 			pacman-mirrors \
-			pacman-outdated-packages \
 			pacman-packages \
+			pacman-foreign-packages \
+			pacman-outdated-packages \
 			pastel-colors \
 			podman-pods \
 			podman-volumes \
