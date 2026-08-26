@@ -117,6 +117,8 @@
   "workbench.startupEditor": "newUntitledFile",
   "workbench.tree.enableStickyScroll": true,
 
+  "zenMode.showTabs": "none",
+
   // languages
 
   "debug.javascript.autoAttachFilter": "smart",
