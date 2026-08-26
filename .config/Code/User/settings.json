@@ -70,6 +70,7 @@
   "search.mode": "reuseEditor",
   "terminal.integrated.fontFamily": "iosevka term",
   "terminal.integrated.fontSize": 13,
+  "terminal.integrated.initialHint": false,
   "terminal.integrated.scrollback": 10000,
   "terminal.integrated.smoothScrolling": true,
   "terminal.integrated.stickyScroll.enabled": false,
