@@ -296,3 +296,6 @@ records = true
 ## Default filter mode can be overridden with the filter_mode setting.
 # filters = [ "global", "host", "session", "session-preload", "workspace", "directory" ]
 filters = [ "host", "session", "workspace", "directory" ]
+
+[ai]
+enabled = false
