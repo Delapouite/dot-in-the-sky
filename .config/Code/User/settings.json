@@ -7,6 +7,7 @@
   "editor.bracketPairColorization.enabled": true,
   "editor.cursorStyle": "block",
   "editor.cursorSurroundingLines": 10,
+  "editor.foldingImportsByDefault": true,
   "editor.fontFamily": "Iosevka Term, Droid Sans Mono, monospace",
   "editor.fontSize": 10,
   "editor.guides.bracketPairs": "active",
