@@ -441,6 +441,7 @@
        (my/empty-property-drawer 13)
        ;; append is needed to cast the vector into a list
        (let* ((relations (append (assoc-default 'relations data) nil))
+              (official (--find (string-equal (assoc-default 'type it) "official homepage") relations))
               (bandcamp (--find (string-equal (assoc-default 'type it) "bandcamp") relations))
               (bandsintown (--find (string-equal (assoc-default 'type it) "bandsintown") relations))
               (discogs (--find (string-equal (assoc-default 'type it) "discogs") relations))
@@ -451,6 +452,7 @@
               (songkick (--find (string-equal (assoc-default 'type it) "songkick") relations))
               (soundcloud (--find (string-equal (assoc-default 'type it) "soundcloud") relations))
               (youtube (--find (string-equal (assoc-default 'type it) "youtube") relations))p)
+         (when official (org-set-property "official" (my/assoc-default official 'url 'resource)))
          (when bandsintown (org-set-property "bandsintown" (my/assoc-default bandsintown 'url 'resource)))
          (when bandcamp (org-set-property "bandcamp" (my/assoc-default bandcamp 'url 'resource)))
          (when discogs (org-set-property "discogs" (my/assoc-default discogs 'url 'resource)))
