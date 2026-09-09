@@ -61,6 +61,7 @@
 
   "keyboard.dispatch": "keyCode",
   "git.addAICoAuthor": "off",
+  "git.detectWorktrees": true,
   "problems.showCurrentInStatus": true,
   "references.preferredLocation": "view",
 
