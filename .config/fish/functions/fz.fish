@@ -826,7 +826,7 @@ function fz --description 'entry point for all the fuzziness glory'
 		end
 
 	case bin-bookmarks
-		set --local data_source '~/.local/share/bin-bookmarks/*.bookmarks'
+		set --local data_source '~/.local/share/bookmarks/bin/*.bookmarks'
 		if test "$argv[2]" = "--help"
 			printf "list: bookmarked binaries from $data_source\n"
 			printf 'preview: which binary\n'
@@ -834,7 +834,7 @@ function fz --description 'entry point for all the fuzziness glory'
 			return
 		end
 
-		set --local choice (cat ~/.local/share/bin-bookmarks/*.bookmarks \
+		set --local choice (cat ~/.local/share/bookmarks/bin/*.bookmarks \
 			| rg -v '^#' | rg -v '^$' \
 			| _fzf \
 				--header "$data_source" \
@@ -871,7 +871,7 @@ function fz --description 'entry point for all the fuzziness glory'
 		switch $argv[1]
 
 		case browser-bookmarks
-			set --local data_source '~/.local/share/browser-bookmarks/*.bookmarks'
+			set --local data_source '~/.local/share/bookmarks/browser/*.bookmarks'
 			if test "$argv[2]" = "--help"
 				printf "list: browser bookmarks from $data_source\n"
 				print_dim 'preview: none'
@@ -879,7 +879,7 @@ function fz --description 'entry point for all the fuzziness glory'
 				return
 			end
 
-			cat ~/.local/share/browser-bookmarks/*.bookmarks \
+			cat ~/.local/share/bookmarks/browser/*.bookmarks \
 				| rg -v '^#' | rg -v '^$' \
 				| _awk '{printf "%-12s \x1b[36m%s\x1b[m %s\n", $1, $2, $3}' \
 				| _fzf \
@@ -927,6 +927,25 @@ function fz --description 'entry point for all the fuzziness glory'
 					firefoxctl tab activate "$ids[1]"
 				end
 			end
+		end
+
+	case config-bookmarks
+		set --local data_source '~/.local/share/bookmarks/config/*.bookmarks'
+		if test "$argv[2]" = "--help"
+			printf "list: bookmarked config from $data_source\n"
+			printf 'preview: display config\n'
+			printf 'action: edit config\n'
+			return
+		end
+
+		set --local choice (cat ~/.local/share/bookmarks/config/*.bookmarks \
+			| _fzf \
+				--header "$data_source" \
+				--preview "bat $HOME/.config/{2}" \
+				--accept-nth 2)
+
+		if test -n "$choice"
+			$EDITOR "$HOME/.config/$choice"
 		end
 
 	case dbus-system-peers
@@ -1941,7 +1960,7 @@ function fz --description 'entry point for all the fuzziness glory'
 		switch $argv[1]
 
 		case skopeo-bookmarks
-			set --local data_source '~/.local/share/skopeo-bookmarks/*.bookmarks'
+			set --local data_source '~/.local/share/bookmarks/skopeo/*.bookmarks'
 			if test "$argv[2]" = "--help"
 				printf "list: bookmarked skopeo images from $data_source\n"
 				printf 'preview: image tags\n'
@@ -1949,7 +1968,7 @@ function fz --description 'entry point for all the fuzziness glory'
 				return
 			end
 
-			set --local choice (cat ~/.local/share/skopeo-bookmarks/*.bookmarks \
+			set --local choice (cat ~/.local/share/bookmarks/skopeo/*.bookmarks \
 				| rg -v '^#' | rg -v '^$' \
 				| _fzf \
 					--header "$data_source" \
@@ -2372,6 +2391,7 @@ function fz --description 'entry point for all the fuzziness glory'
 			browser-bookmarks \
 			browser-search-engines \
 			browser-tabs \
+			config-bookmarks \
 			dbus-system-peers \
 			dbus-user-peers \
 			deno-tasks \
