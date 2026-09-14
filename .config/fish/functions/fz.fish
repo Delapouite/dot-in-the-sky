@@ -1790,6 +1790,28 @@ function fz --description 'entry point for all the fuzziness glory'
 
 		switch $argv[1]
 
+		case podman-containers
+			if test "$argv[2]" = "--help"
+				printf 'list: podman containers\n'
+				printf 'preview: podman container details\n'
+				print_dim 'action: none'
+				return
+			end
+
+			podman containers -a \
+				| _fzfh (json_preview 'podman container inspect {1} | jq .[0]')
+
+		case podman-images
+			if test "$argv[2]" = "--help"
+				printf 'list: podman images\n'
+				printf 'preview: podman image details\n'
+				print_dim 'action: none'
+				return
+			end
+
+			podman images \
+				| _fzfh (json_preview 'podman image inspect {1} | jq .[0]')
+
 		case podman-pods
 			if test "$argv[2]" = "--help"
 				printf 'list: podman pods\n'
@@ -2448,6 +2470,8 @@ function fz --description 'entry point for all the fuzziness glory'
 			pacman-foreign-packages \
 			pacman-outdated-packages \
 			pastel-colors \
+			podman-containers \
+			podman-images \
 			podman-pods \
 			podman-volumes \
 			processes \

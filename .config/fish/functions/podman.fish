@@ -12,6 +12,18 @@ function podman --description 'podman wrapper'
 		printf "\n"
 		command podman network ls
 
+	case 'containers'
+		command podman container ls --all --format 'table {{.ID}}\t{{slice .CreatedAt 0 10}}\t{{.Image}}\t{{.Command}}\t{{.RunningFor}}\t{{.Status}}\t{{.Ports}}\t{{.Names}}'
+
+	case 'contexts'
+		command podman context ls
+
+	case 'images'
+		command podman image ls --format 'table {{.ID}}\t{{.Repository}}\t{{.Tag}}\t{{if .CreatedSince }}{{.CreatedSince}}{{else}}N/A{{end}}\t{{.Size}}'
+
+	case 'networks'
+		command podman network ls --format 'table {{.ID}}\t{{.Driver}}\t{{.Name}}'
+
 	case 'volumes'
 		command podman volume ls --format 'table {{.Driver}}\t{{.Scope}}\t{{.Name}}\t{{.CreatedAt}}'
 
