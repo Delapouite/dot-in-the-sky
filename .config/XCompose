@@ -9,6 +9,17 @@ include "%L"
 <Multi_key> <asterisk> <3> : "⁂" U2042 # ASTERISM
 <Multi_key> <minus> <plus> : "∓" U2213 # MINOR-OR-PLUS SIGN
 
+# not working with explicit codepoints, must use human aliases below
+# <Multi_key> <U2190> <U2190> : "⇇" U21C7 # LEFTWARDS PAIRED ARROWS
+<Multi_key> <leftarrow> <leftarrow> : "⇇" U21C7 # LEFTWARDS PAIRED ARROWS
+<Multi_key> <uparrow> <uparrow> : "⇈" U21C8 # UPWARDS PAIRED ARROWS
+<Multi_key> <rightarrow> <rightarrow> : "⇉" U21C9 # RIGHTWARDS PAIRED ARROWS
+<Multi_key> <downarrow> <downarrow> : "⇊" U21CA # DOWNWARDS PAIRED ARROWS
+<Multi_key> <leftarrow> <rightarrow> : "↔" U2194 # LEFT-RIGHT ARROW
+<Multi_key> <rightarrow> <leftarrow> : "↔" U2194 # LEFT-RIGHT ARROW
+<Multi_key> <uparrow> <downarrow> : "↕" U2195 # UP-DOWN ARROW
+<Multi_key> <downarrow> <uparrow> : "↕" U2195 # UP-DOWN ARROW
+
 # <dead_schwa> is lafayette quote
 <dead_schwa> <c> : "●" U25CF # BLACK CIRCLE
 <dead_schwa> <C> : "○" U25CB # WHITE CIRCLE
