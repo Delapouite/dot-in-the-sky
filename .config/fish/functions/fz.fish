@@ -2602,8 +2602,15 @@ function fz --description 'entry point for all the fuzziness glory'
 			if test "$status" = 0
 				set enabled_commands $enabled_commands $command
 			else
-				set enabled_commands $enabled_commands (print_disabled $command)
+				if test "$argv[1]" != 'completions'
+					set enabled_commands $enabled_commands (print_disabled $command)
+				end
 			end
+		end
+
+		if test "$argv[1]" = 'completions'
+			echo "$enabled_commands"
+			return
 		end
 
 		set --local selected_command (printf '%s\n' $enabled_commands | _fzf --prompt 'fz ❯ ' --preview 'fz {} --help' --bind 'backward-eof:abort')
