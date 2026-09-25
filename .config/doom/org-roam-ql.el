@@ -29,7 +29,7 @@
       (org-dblock-write:org-roam-ql `(:query (and (title ,(concat start title "·\\)"
                                                                   alt "\\(·" title end
                                                                   alt "\\(·" title "·\\)"
-                                                                  compound)))
+                                                                  compound) nil t))
                                       :columns (combo-link combos acronym bathonym)
                                       :headers ("Link" "Combo" "Acro" "Batho")
                                       :combos-depth ,depth
