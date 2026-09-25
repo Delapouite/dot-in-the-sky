@@ -3,6 +3,7 @@
 ;;; https://github.com/doomemacs/doomemacs/tree/master/modules/ui/modeline
 
 (use-package! doom-modeline
+  :after (org-roam)
   :config
 
   (setq doom-modeline-total-line-number t)
