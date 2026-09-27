@@ -7,6 +7,7 @@ function browser-search --description 'browser search with various engines'
 		# default first
 		duckduckgo \
 		arch \
+		arch-man \
 		arch-wiki \
 		bitbucket \
 		bugzilla \
@@ -73,6 +74,9 @@ function browser-search --description 'browser search with various engines'
 	switch $engine
 	case arch
 		$browser "https://archlinux.org/packages/?q=$query"
+
+	case arch-man
+		$browser "https://man.archlinux.org/search?q=$query"
 
 	case arch-wiki
 		$browser "https://wiki.archlinux.org/index.php?search=$query"
