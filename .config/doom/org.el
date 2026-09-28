@@ -230,6 +230,17 @@ into the current buffer"
        ;; forward the title to the default org-cliplink transformer
        (org-cliplink-org-mode-link-transformer url clean-title)))))
 
+(with-eval-after-load 'org-lint
+  (org-lint-remove-checker
+   ;; to allow :comments: in drawers
+   'deprecated-header-syntax
+   'empty-header-argument
+   'missing-colo
+   'missing-language-in-src-block
+   'suspicious-language-in-src-block
+   'wrong-header-argument
+   ))
+
 ;; (add-hook 'find-file-hook #'my/org-update-agenda-tag)
 (add-hook 'before-save-hook #'my/org-update-agenda-tag)
 
