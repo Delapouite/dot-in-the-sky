@@ -81,7 +81,7 @@
   (defun org-dblock-write:org-roam-tracks (params)
     "Write org block for org-roam-tracks with PARAMS."
     (let ((artist (plist-get params :artist)))
-      (org-dblock-write:org-roam-ql `(:query (and (properties type "track") (properties "artist" ,(concat "\\[" artist "\\]\\]")))
+      (org-dblock-write:org-roam-ql `(:query (and (properties "type" "track") (properties "artist" ,(concat "\\[" artist "\\]\\]")))
                                       :columns (link instruments features tier played-at play-count)
                                       :no-link true))))
 
@@ -114,12 +114,12 @@
           (year (plist-get params :year)))
       (when author
         (org-dblock-write:org-roam-ql `(:query (and (tags "book") (properties "author" ,author))
-                                        :columns (released-at link live)
+                                        :columns (released-at link index live)
                                         :sort "released-at"
                                         :no-link true)))
       (when year
         (org-dblock-write:org-roam-ql `(:query (and (tags "book") (properties "released-at" ,year))
-                                        :columns (link author live)
+                                        :columns (link author index live)
                                         :no-link true)))))
 
   (defun org-dblock-write:books-by-author (_params)
