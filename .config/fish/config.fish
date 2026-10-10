@@ -1,4 +1,5 @@
 set -x EDITOR kak
+set -x PAGER 'less --jump-target 5' # scrolloff
 set -x VISUAL kak
 # XDG user directories
 set -x GOBIN "$HOME/.local/bin"
