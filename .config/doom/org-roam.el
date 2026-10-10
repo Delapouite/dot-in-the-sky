@@ -166,7 +166,7 @@
            (artist (car title))
            (album (cadr title))
            (year (org-roam-node-released-at (org-roam-node-from-id (org-id-get)))))
-      (insert (concat "[[~/music/" artist "/" year " - " album "/cover.jpg]]"))))
+      (insert (concat "[[~/music/by-artist/" artist "/" year " - " album "/cover.jpg]]"))))
 
   (defun my/org-roam-save-counts ()
     "Save links and backlinks count in database"
