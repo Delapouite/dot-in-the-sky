@@ -21,8 +21,13 @@
   "ui_font_size": 10,
   "theme": {
     "mode": "dark",
-    "light": "Dracula Light (Alucard)",
-    "dark": "Dracula",
+    "light": "One Light",
+    "dark": "One Dark",
+  },
+  "icon_theme": {
+    "mode": "dark",
+    "light": "Zed (Default)",
+    "dark": "Zed (Default)",
   },
   // Keymap
   "helix_mode": false,
@@ -32,32 +37,34 @@
   },
   // Editor
   "code_lens": "on",
+  "wrap_guides": [80, 120],
   // Windows and Layout
   "tabs": {
     "git_status": true,
   },
   // Panels
   "project_panel": {
+    "dock": "left",
+    "folder_indicator": "icon",
     "bold_folder_labels": true,
     "diagnostic_badges": true,
-    "dock": "left",
     "entry_spacing": "standard",
     "file_icons": true,
-    "folder_icons": true,
     "git_status": true,
     "git_status_indicator": true,
     "hide_hidden": false,
     "hide_root": true,
     "starts_open": true,
   },
-  "outline_panel": {
+  "git_panel": {
     "dock": "left",
   },
-  "git_panel": {
+  "outline_panel": {
     "dock": "left",
   },
   "collaboration_panel": {
     "dock": null,
+    "button": false,
   },
   "lsp": {
     "clangd": {
@@ -66,4 +73,10 @@
   },
   // AI
   "disable_ai": true,
+  "agent": {
+    "dock": null,
+    "button": false,
+    "favorite_models": [],
+    "model_parameters": [],
+  },
 }
