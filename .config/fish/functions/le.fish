@@ -16,10 +16,11 @@ function le --description 'print sorted and colorful environment variables'
 	set --local systemd 'DBUS_SESSION_BUS_ADDRESS|INVOCATION_ID|MEMORY_PRESSURE_WATCH|MEMORY_PRESSURE_WRITE|SYSTEMD_EXEC_PID'
 	set --local term 'COLORTERM|TERM|TERMINFO'
 	set --local tool 'ASDF_DIR|FZF_DEFAULT_OPTS|FZF_DEFAULT_OPTS_FILE|I3SOCK|NPM_CONFIG_USERCONFIG'
-	set --local wellknown 'EDITOR|HOME|LANG|LOGNAME|MAIL|MOTD_SHOWN|PATH|PWD|SHELL|SHLVL|USER|VISUAL'
+	set --local vapoursynth 'VSSCRIPT_PATH'
+	set --local wellknown 'EDITOR|HOME|LANG|LOGNAME|MAIL|MANPATH|MOTD_SHOWN|PAGER|PATH|PWD|SHELL|SHLVL|USER|VISUAL'
 	set --local xdg 'DESKTOP_STARTUP_ID|XDG_RUNTIME_DIR|XDG_SEAT|XDG_SESSION_CLASS|XDG_SESSION_ID|XDG_SESSION_TYPE|XDG_VTNR'
 	set --local xorg 'DISPLAY|WINDOWID|WINDOWPATH|XAUTHORITY'
-	set --local masked "$atuin|$direnv|$eza|$go|$kitty|$mise|$ssh|$starship|$systemd|$term|$tool|$wellknown|$xdg|$xorg"
+	set --local masked "$atuin|$direnv|$eza|$go|$kitty|$mise|$ssh|$starship|$systemd|$term|$tool|$vapoursynth|$wellknown|$xdg|$xorg"
 
 	env -0 | sort -z | tr '\0' '\n' | awk "\
 	match(\$0, /^($masked)=(.*)/, m) { \
