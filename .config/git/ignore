@@ -1,8 +1,10 @@
 # Linux
 
+# file·project
 .envrc
 .envrc.d
 mise.local.toml
+.localias.yaml
 
 # macOS
 
