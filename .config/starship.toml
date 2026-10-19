@@ -40,7 +40,7 @@ ${custom.direnv_allowed}\
 ${custom.direnv_denied}\
 ${custom.envars}\
 ${custom.files_hidden}\
-${custom.sudo}\
+$sudo\
 $shell\
 $character\
 $status\
@@ -133,12 +133,9 @@ detect_files = ["Dockerfile", "docker-compose.yml", "docker-compose.yaml"]
 when = "command -v docker &> /dev/null; exit (echo $?);"
 format = "🐳 "
 
-[custom.sudo]
+[sudo]
 disabled = false
-description = "Valid sudo timestamp marker"
-when = "sudo -vn &>/dev/null"
-format = "[sudo]($style)"
-style = "bold cyan"
+format = "🥪"
 
 [custom.ssh_keys]
 disabled = false
