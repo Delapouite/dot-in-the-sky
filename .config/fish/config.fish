@@ -22,16 +22,12 @@ abbr --add --position anywhere -- --jwt '--header "Authorization: Bearer $JWT"'
 abbr --add --position anywhere -- --transient '--rm --interactive --tty'
 
 # use fish_key_reader
-
-# ctrl+backspace
-bind \b backward-kill-bigword
-
-# ← arrow
-bind \e\[1\;3D backward-kill-word
-bind \e\[1\;4D backward-kill-bigword
-# → arrow
-bind \e\[1\;3C kill-word
-bind \e\[1\;4C kill-bigword
+bind alt-right kill-word
+bind alt-shift-right kill-bigword
+bind alt-left backward-kill-word
+bind alt-shift-left backward-kill-bigword
+bind ctrl-backspace backward-kill-bigword
+bind ctrl-l accept-autosuggestion
 
 fish_add_path ~/.local/bin
 
