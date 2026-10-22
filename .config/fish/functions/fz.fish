@@ -951,24 +951,24 @@ function fz --description 'entry point for all the fuzziness glory'
 	case dbus-system-peers
 		if test "$argv[2]" = "--help"
 			printf 'list: dbus system peers\n'
-			print_dim 'preview: none'
+			printf 'preview: tree and status\n'
 			print_dim 'action: none'
 			return
 		end
 
 		busctl list --system \
-			| _fzfh --preview 'busctl status {1} --system'
+			| _fzfh --preview 'busctl tree {1} --system && busctl status {1} --system'
 
 	case dbus-user-peers
 		if test "$argv[2]" = "--help"
 			printf 'list: dbus user peers\n'
-			print_dim 'preview: none'
+			printf 'preview: tree and status\n'
 			print_dim 'action: none'
 			return
 		end
 
 		busctl list --user \
-			| _fzfh --preview 'busctl status {1} --user'
+			| _fzfh --preview 'busctl tree {1} --user && busctl status {1} --user'
 
 	case deno-tasks
 		if not test -e './deno.jsonc'
