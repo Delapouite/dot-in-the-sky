@@ -992,6 +992,17 @@ function fz --description 'entry point for all the fuzziness glory'
 			deno task "$choice"
 		end
 
+	case desktop-files
+		if test "$argv[2]" = "--help"
+			printf 'list: .desktop files\n'
+			printf 'preview: .desktop file\n'
+			print_dim 'action: none'
+			return
+		end
+
+		fd --type file --extension .desktop --base-directory / --absolute-path \
+			| _fzf --preview 'bat {} --plain --color always --language desktop'
+
 	case 'docker-*'
 		if not systemctl is-active docker > /dev/null
 			print_error 'docker daemon is not active'
@@ -2417,6 +2428,7 @@ function fz --description 'entry point for all the fuzziness glory'
 			dbus-system-peers \
 			dbus-user-peers \
 			deno-tasks \
+			desktop-files \
 			docker-accounts \
 			docker-containers \
 			docker-images \
