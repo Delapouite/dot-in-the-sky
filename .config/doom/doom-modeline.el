@@ -18,8 +18,9 @@
     "Select a face in a gradient depending on decay"
     (let ((days (iso8601-diff-days mtime)))
       (cond ((> days 300) 'error)
-            ((> days 180) 'warning)
-            ((< days 30) 'success)
+            ((> days 180) 'warning-orange)
+            ((> days 90) 'warning)
+            ((< days 7) 'success)
             (t 'mode-line))))
 
   (doom-modeline-def-segment buffer-mtime

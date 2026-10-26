@@ -45,6 +45,10 @@
   ; unofficial
   dracula-grey "#adb2cb")
 
+(defface warning-orange
+  `((t :foreground ,dracula-orange))
+  "Face for alternative warning")
+
 (custom-set-faces!
   `(bold :weight bold :foreground ,dracula-orange)
   `(nobreak-hyphen :foreground ,dracula-foreground :background ,dracula-pink)
