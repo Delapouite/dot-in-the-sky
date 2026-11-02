@@ -40,6 +40,7 @@ ${custom.direnv_allowed}\
 ${custom.direnv_denied}\
 ${custom.envars}\
 ${custom.files_hidden}\
+${custom.mise}\
 $sudo\
 $shell\
 $character\
@@ -182,4 +183,12 @@ description = "Current i3 workspace"
 command = "i3-msg -t get_workspaces | jq --raw-output '.[] | select(.focused==true).name'"
 when = "true"
 format = "[$output]($style)🖥️"
+style = "normal"
+
+[custom.mise]
+disabled = false
+description = "Mise symbol if the current directory has mise files"
+shell = ["bash", "--noprofile", "--norc"]
+detect_files = ["mise.toml", "mise.local.toml"]
+format = " [$output]($style)🧑‍🍳"
 style = "normal"
