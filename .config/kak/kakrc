@@ -85,6 +85,8 @@ map global user <tab> ': set global indentwidth 0<ret>'       -docstring 'indent
 map global user 2 ': set global indentwidth 2<ret>'           -docstring 'indent space ␣2'
 map global user 4 ': set global indentwidth 4<ret>'           -docstring 'indent space ␣4'
 
+map global user <minus> ': set global extra_word_chars _ -<ret>' -docstring 'extra_word_chars _ -'
+
 alias global h doc
 alias global u enter-user-mode
 
