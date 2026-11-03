@@ -1693,6 +1693,20 @@ function fz --description 'entry point for all the fuzziness glory'
 				| xargs xdg-open > /dev/null
 			focus_browser
 
+		case org-roam-links-github-users
+			if test "$argv[2]" = "--help"
+				printf "list: https github users links from org-roam\n"
+				print_dim 'preview: none'
+				printf 'action: open https github users link in default browser\n'
+				return
+			end
+
+			sqlite3 ~/.config/emacs/.local/cache/org-roam.db \
+				'select concat(\'https:\', trim(distinct dest, \'"\')) from links where type = \'"https"\' and dest regexp \'/github.com/[^?/]*$\' order by dest' \
+				| _fzf \
+				| xargs xdg-open > /dev/null
+			focus_browser
+
 		case org-roam-nodes
 			if test "$argv[2]" = "--help"
 				printf "list: nodes from org-roam\n"
@@ -2475,6 +2489,7 @@ function fz --description 'entry point for all the fuzziness glory'
 			npm-dependencies \
 			npm-scripts \
 			org-roam-links \
+			org-roam-links-github-users \
 			org-roam-nodes \
 			pacman-files \
 			pacman-mirrors \
