@@ -9,6 +9,10 @@ exec --no-startup-id xsetroot -solid "#282a36"
 
 # use Mouse+$mod to drag floating windows
 set $mod Mod4
+set $term kitty --single-instance
+set $shell kitty --single-instance --class floating-term fish -c
+set $editor kitty --single-instance kak
+set $browser firefox-developer-edition
 
 # floating - ppt = "percentage point"
 floating_modifier $mod
@@ -24,26 +28,24 @@ bindsym $mod+Escape kill
 bindsym $mod+button2 kill
 
 # mirror Kitty keybindings
-bindsym $mod+F1 exec firefox-developer-edition 'https://i3wm.org/docs/userguide.html'
-bindsym $mod+F2 exec kitty --single-instance 'kak' '~/.config/i3/config'
+bindsym $mod+F1 exec $browser https://i3wm.org/docs/userguide.html
+bindsym $mod+F2 exec $editor ~/.config/i3/config
 bindsym $mod+F5 reload
 
-bindsym $mod+Return exec kitty --single-instance
-# note: not working with xclip :( https://github.com/astrand/xclip/issues/4 ?
-bindsym $mod+y exec kitty --single-instance --class floating-term fish -c 'firefoxctl tab list | jq ".[] | select(.active)" | xsel --clipboard'
+bindsym $mod+Return exec $term
 
 bindsym $mod+backslash resize set width 30 ppt
-bindsym $mod+s exec kitty --single-instance --name=scratchpad
+bindsym $mod+s exec $term --name=scratchpad
 
 # fz
-bindsym $mod+space exec kitty --single-instance --class floating-term fish -c 'fz'
-bindsym $mod+minus exec kitty --single-instance --class floating-term fish -c browser-search
-bindsym $mod+plus exec kitty --single-instance --class floating-term fish -c 'fz browser-bookmarks'
-bindsym $mod+BackSpace exec kitty --single-instance --class floating-term fish -c 'fz org-roam-nodes'
+bindsym $mod+space exec $shell fz
+bindsym $mod+minus exec $shell browser-search
+bindsym $mod+plus exec $shell 'fz browser-bookmarks'
+bindsym $mod+BackSpace exec $shell 'fz org-roam-nodes'
 
-bindsym $mod+p exec kitty --single-instance --class floating-term fish -c 'fz i3-windows'
-bindsym $mod+dead_circumflex exec kitty --single-instance --class floating-term fish -c 'fz browser-tabs'
-bindsym $mod+dead_diaeresis exec kitty --single-instance --class floating-term fish -c 'fz org-roam-links'
+bindsym $mod+p exec $shell 'fz i3-windows'
+bindsym $mod+dead_circumflex exec $shell 'fz browser-tabs'
+bindsym $mod+dead_diaeresis exec $shell 'fz org-roam-links'
 
 bindsym $mod+Shift+asciitilde move scratchpad
 bindsym $mod+asciitilde scratchpad show
@@ -53,14 +55,20 @@ bindsym $mod+h focus left
 bindsym $mod+j focus down
 bindsym $mod+k focus up
 bindsym $mod+l focus right
-bindsym $mod+Prior focus parent
-bindsym $mod+Next focus child
+bindsym $mod+i focus parent
+bindsym $mod+u focus child
 
 # move focused window
 bindsym $mod+Shift+h move left
 bindsym $mod+Shift+j move down
 bindsym $mod+Shift+k move up
 bindsym $mod+Shift+l move right
+
+# split focused terminal
+bindsym $mod+Mod1+h split h; exec $term && sleep 0.1 && i3-msg move left
+bindsym $mod+Mod1+l split h; exec $term
+bindsym $mod+Mod1+k split v; exec $term && sleep 0.1 && i3-msg move up
+bindsym $mod+Mod1+j split v; exec $term
 
 bindsym --whole-window $mod+button9 move left
 bindsym --whole-window $mod+button8 move right
@@ -88,8 +96,9 @@ bindsym $mod+c layout splith
 bindsym $mod+v layout splitv
 
 # horizontal orientation is [][][]
-bindsym $mod+Shift+c split h
-bindsym $mod+Shift+v split v
+# dummy mark is to force redraw of border indicator
+bindsym $mod+Shift+c split h; mark dummy
+bindsym $mod+Shift+v split v; mark dummy
 
 # workspaces
 
@@ -124,22 +133,22 @@ bindsym $mod+Shift+0 move container to workspace 10
 bindsym $mod+o mode $openmode
 set $openmode "open: vs[c]ode [e]macs [f]irefox [g]imp [k]akoune [i]nkscape [l]f nc[m]pcpp [n]ode [s]creenshot"
 mode $openmode {
-  bindsym o exec kitty --single-instance --class floating-term fish -c 'fz bin-bookmarks' ; mode default
+  bindsym o exec $term --class floating-term fish -c 'fz bin-bookmarks' ; mode default
 
   bindsym c exec code ; mode default
   bindsym e exec emacs --background-color '#282a36'; mode default
-  bindsym f exec firefox-developer-edition ; mode default
+  bindsym f exec $browser ; mode default
   bindsym g exec gimp ; mode default
-  bindsym k exec kitty --single-instance kak ; mode default
+  bindsym k exec $editor ; mode default
   bindsym i exec inkscape ; mode default
-  bindsym l exec kitty --single-instance lf ; mode default
-  bindsym m exec kitty --single-instance ncmpcpp ; mode default
-  bindsym n exec kitty --single-instance node ; mode default
-  bindsym s exec flameshot gui ; mode default
+  bindsym l exec $term lf ; mode default
+  bindsym m exec $term ncmpcpp ; mode default
+  bindsym n exec $term node ; mode default
+  bindsym s exec "QT_ENABLE_HIGHDPI_SCALING=0 flameshot gui ; mode default"
   # standalone terminal
   bindsym t exec kitty ; mode default
   bindsym u exec chromium ; mode default
-  bindsym v exec kitty --single-instance nvim ; mode default
+  bindsym v exec $term nvim ; mode default
 
   bindsym Return mode default
   bindsym Escape mode default
@@ -179,9 +188,9 @@ set $i3mode "i3: [c]onfig [d]oc [q]uit [l]ock [b]ar b[o]rder [g]aps [r]esize"
 mode $i3mode {
   bindsym Delete reload; restart
   # also $mod+F2
-  bindsym c exec kitty --single-instance 'kak' '~/.config/i3/config' ; mode default
+  bindsym c exec $editor ~/.config/i3/config ; mode default
   # also $mod+F1
-  bindsym d exec firefox-developer-edition 'https://i3wm.org/docs/userguide.html' ; mode default
+  bindsym d exec $browser https://i3wm.org/docs/userguide.html ; mode default
   bindsym q exit
 
   bindsym l --release exec i3lock --no-unlock-indicator --image ~/images/wallpapers/bsod.png ; mode default
