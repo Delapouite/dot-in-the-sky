@@ -71,14 +71,12 @@ function fz --description 'entry point for all the fuzziness glory'
 			print_error 'acpi command not found'
 			return 1
 		end
-
 		if test "$argv[2]" = "--help"
 			printf 'list: acpi devices, like battery, adapter, thermal, cooling…\n'
 			print_dim 'preview: none'
 			print_dim 'action: none'
 			return
 		end
-
 		acpi --everything | _fzf
 
 	case asdf-plugins
@@ -86,7 +84,6 @@ function fz --description 'entry point for all the fuzziness glory'
 			print_error 'asdf command not found'
 			return 1
 		end
-
 		if test "$argv[2]" = "--help"
 			printf 'list: asdf plugins\n'
 			print_dim 'preview: none'
@@ -788,7 +785,7 @@ function fz --description 'entry point for all the fuzziness glory'
 
 				end
 			end
-		end
+		end # azure-*
 
 	case balade-dominicale-nodes
 		if test "$argv[2]" = "--help"
@@ -797,7 +794,6 @@ function fz --description 'entry point for all the fuzziness glory'
 			printf 'action: open node in default balade-dominicale\n'
 			return
 		end
-
 		sqlite3 ~/.config/emacs/.local/cache/org-roam.db \
 			'select id, file from nodes order by id' \
 			| tr -d '"' | tr '|' \u001f \
@@ -844,25 +840,30 @@ function fz --description 'entry point for all the fuzziness glory'
 			i3-msg --quiet "exec --no-startup-id $choice"
 		end
 
-	case bluetooth-controllers
-		if test "$argv[2]" = "--help"
-			printf 'list: bluetooth controllers\n'
-			print_dim 'preview: none'
-			print_dim 'action: none'
-			return
-		end
+	case 'bluetooth-*'
 
-		bluetoothctl list | _fzf
+		alias _fzf="$fzf_cmd --bind 'backward-eof:become(fz . bluetooth)'"
 
-	case bluetooth-devices
-		if test "$argv[2]" = "--help"
-			printf 'list: bluetooth devices\n'
-			print_dim 'preview: none'
-			print_dim 'action: none'
-			return
-		end
+		switch $argv[1]
 
-		bluetoothctl devices | _fzf
+		case bluetooth-controllers
+			if test "$argv[2]" = "--help"
+				printf 'list: bluetooth controllers\n'
+				print_dim 'preview: none'
+				print_dim 'action: none'
+				return
+			end
+			bluetoothctl list | _fzf
+
+		case bluetooth-devices
+			if test "$argv[2]" = "--help"
+				printf 'list: bluetooth devices\n'
+				print_dim 'preview: none'
+				print_dim 'action: none'
+				return
+			end
+			bluetoothctl devices | _fzf
+		end # bluetooth-*
 
 	case 'browser-*'
 
@@ -895,7 +896,6 @@ function fz --description 'entry point for all the fuzziness glory'
 				printf 'action: query search engines\n'
 				return
 			end
-
 			browser-search
 
 		case browser-tabs
@@ -927,7 +927,7 @@ function fz --description 'entry point for all the fuzziness glory'
 					firefoxctl tab activate "$ids[1]"
 				end
 			end
-		end
+		end # browser-*
 
 	case config-bookmarks
 		set --local data_source '~/.local/share/bookmarks/config/*.bookmarks'
@@ -948,34 +948,38 @@ function fz --description 'entry point for all the fuzziness glory'
 			$EDITOR "$HOME/.config/$choice"
 		end
 
-	case dbus-system-peers
-		if test "$argv[2]" = "--help"
-			printf 'list: dbus system peers\n'
-			printf 'preview: tree and status\n'
-			print_dim 'action: none'
-			return
-		end
+	case 'dbus-*'
 
-		busctl list --system \
-			| _fzfh --preview 'busctl tree {1} --system && busctl status {1} --system'
+		alias _fzfh="$fzf_cmd --bind 'backward-eof:become(fz . dbus)' --header-lines 1"
 
-	case dbus-user-peers
-		if test "$argv[2]" = "--help"
-			printf 'list: dbus user peers\n'
-			printf 'preview: tree and status\n'
-			print_dim 'action: none'
-			return
-		end
+		switch $argv[1]
 
-		busctl list --user \
-			| _fzfh --preview 'busctl tree {1} --user && busctl status {1} --user'
+		case dbus-system-peers
+			if test "$argv[2]" = "--help"
+				printf 'list: dbus system peers\n'
+				printf 'preview: tree and status\n'
+				print_dim 'action: none'
+				return
+			end
+			busctl list --system \
+				| _fzfh --preview 'busctl tree {1} --system && busctl status {1} --system'
+
+		case dbus-user-peers
+			if test "$argv[2]" = "--help"
+				printf 'list: dbus user peers\n'
+				printf 'preview: tree and status\n'
+				print_dim 'action: none'
+				return
+			end
+			busctl list --user \
+				| _fzfh --preview 'busctl tree {1} --user && busctl status {1} --user'
+		end # dbus-*
 
 	case deno-tasks
 		if not test -e './deno.jsonc'
 			print_error 'no deno.jsonc in current directory'
 			return 1
 		end
-
 		if test "$argv[2]" = "--help"
 			printf 'list: deno tasks\n'
 			print_dim 'preview: none'
@@ -999,7 +1003,6 @@ function fz --description 'entry point for all the fuzziness glory'
 			print_dim 'action: none'
 			return
 		end
-
 		fd --type file --extension .desktop --base-directory / --absolute-path \
 			| _fzf --preview 'bat {} --plain --color always --language desktop'
 
@@ -1021,7 +1024,6 @@ function fz --description 'entry point for all the fuzziness glory'
 				print_dim 'action: none'
 				return
 			end
-
 			jq .auths ~/.docker/config.json \
 				| gron \
 				| rg '.auth =' \
@@ -1037,7 +1039,6 @@ function fz --description 'entry point for all the fuzziness glory'
 				print_dim 'action: none'
 				return
 			end
-
 			docker containers -a \
 				| _fzfh (json_preview 'docker container inspect {1} | jq .[0]')
 
@@ -1048,7 +1049,6 @@ function fz --description 'entry point for all the fuzziness glory'
 				print_dim 'action: none'
 				return
 			end
-
 			docker images \
 				| _fzfh (json_preview 'docker image inspect {3} | jq .[0]')
 
@@ -1059,7 +1059,6 @@ function fz --description 'entry point for all the fuzziness glory'
 				print_dim 'action: none'
 				return
 			end
-
 			docker images --filter 'dangling=true' \
 				| _fzfh (json_preview 'docker image inspect {3} | jq .[0]')
 
@@ -1070,7 +1069,6 @@ function fz --description 'entry point for all the fuzziness glory'
 				print_dim 'action: none'
 				return
 			end
-
 			docker networks \
 				| _fzfh (json_preview 'docker network inspect {1} | jq .[0]')
 
@@ -1081,7 +1079,6 @@ function fz --description 'entry point for all the fuzziness glory'
 				print_dim 'action: none'
 				return
 			end
-
 			_jq '.auths | keys[]' ~/.docker/config.json | _fzf
 
 		case docker-volumes
@@ -1091,11 +1088,9 @@ function fz --description 'entry point for all the fuzziness glory'
 				print_dim 'action: none'
 				return
 			end
-
 			docker volumes \
 				| _fzfh (json_preview 'docker volume inspect {3} | jq .[0]')
-
-		end
+		end # docker-*
 
 	case efi-variables
 		if test "$argv[2]" = "--help"
@@ -1104,7 +1099,6 @@ function fz --description 'entry point for all the fuzziness glory'
 			print_dim 'action: none'
 			return
 		end
-
 		efivar --list | _fzf --preview "efivar --name {}"
 
 	case end-of-life-date
@@ -1135,7 +1129,6 @@ function fz --description 'entry point for all the fuzziness glory'
 			print_dim 'action: none'
 			return
 		end
-
 		_fzf_search_variables (set --show | psub) (set --names | psub)
 
 	case eslint-rules
@@ -1177,7 +1170,6 @@ function fz --description 'entry point for all the fuzziness glory'
 			print_dim 'action: none'
 			return
 		end
-
 		_fzf_search_directory
 
 	case file-descriptors
@@ -1187,7 +1179,6 @@ function fz --description 'entry point for all the fuzziness glory'
 			print_dim 'action: none'
 			return
 		end
-
 		lsfd | _fzfh
 
 	case fonts
@@ -1195,14 +1186,12 @@ function fz --description 'entry point for all the fuzziness glory'
 			print_error 'fontpreview command not found'
 			return 1
 		end
-
 		if test "$argv[2]" = "--help"
 			printf 'list: fonts using fontpreview\n'
 			print_dim 'preview: none'
 			print_dim 'action: none'
 			return
 		end
-
 		fontpreview
 
 	case 'git'
@@ -1231,7 +1220,6 @@ function fz --description 'entry point for all the fuzziness glory'
 				print_dim 'action: none'
 				return
 			end
-
 			git branches --all --color=always | _fzf --preview 'git show {2} --color=always'
 
 		case git-config
@@ -1241,7 +1229,6 @@ function fz --description 'entry point for all the fuzziness glory'
 				print_dim 'action: none'
 				return
 			end
-
 			cat (git config --list --global | sed 's/^/global /' | psub) \
 				(git config --list --local | sed 's/^/local  /' | psub) \
 				| _fzf
@@ -1253,7 +1240,6 @@ function fz --description 'entry point for all the fuzziness glory'
 				print_dim 'action: none'
 				return
 			end
-
 			_fzf_search_git_log
 
 		case git-remotes
@@ -1263,7 +1249,6 @@ function fz --description 'entry point for all the fuzziness glory'
 				print_dim 'action: none'
 				return
 			end
-
 			git remotes | _fzf --preview 'git remote show {1}'
 
 		case git-status
@@ -1273,7 +1258,6 @@ function fz --description 'entry point for all the fuzziness glory'
 				print_dim 'action: none'
 				return
 			end
-
 			_fzf_search_git_status
 
 		case git-tags
@@ -1283,17 +1267,14 @@ function fz --description 'entry point for all the fuzziness glory'
 				print_dim 'action: none'
 				return
 			end
-
 			git tags | _fzf --preview 'git show {1} --color=always'
-
-		end
+		end # git-*
 
 	case github-repositories
 		if not command -q gh
 			print_error 'gh command not found'
 			return 1
 		end
-
 		if test "$argv[2]" = "--help"
 			printf 'list: github repositories using gh\n'
 			printf 'preview: repository details\n'
@@ -1315,14 +1296,12 @@ function fz --description 'entry point for all the fuzziness glory'
 			print_error 'gpg command not found'
 			return 1
 		end
-
 		if test "$argv[2]" = "--help"
 			printf 'list: gpg public keys\n'
 			printf 'preview: gpg public key info\n'
 			print_dim 'action: none'
 			return
 		end
-
 		gpg --list-public-keys --with-colons \
 			| rg uid \
 			| awk -F ':' '{ print $10 }' \
@@ -1374,7 +1353,7 @@ function fz --description 'entry point for all the fuzziness glory'
 			if test -n "$choice"
 				i3-msg --quiet "workspace $choice"
 			end
-		end
+		end # i3-*
 
 	case ip-addresses
 		if test "$argv[2]" = "--help"
@@ -1383,7 +1362,6 @@ function fz --description 'entry point for all the fuzziness glory'
 			print_dim 'action: none'
 			return
 		end
-
 		ip -oneline address \
 			| _fzf \
 				--preview 'ip address show {2}'
@@ -1395,7 +1373,6 @@ function fz --description 'entry point for all the fuzziness glory'
 			print_dim 'action: none'
 			return
 		end
-
 		ip -oneline link \
 			| _fzf \
 				# the link name has an infortunate ":" suffix
@@ -1448,14 +1425,12 @@ function fz --description 'entry point for all the fuzziness glory'
 			print_error 'kak command not found'
 			return 1
 		end
-
 		if test "$argv[2]" = "--help"
 			printf 'list: kakoune sessions\n'
 			print_dim 'preview: none'
 			print_dim 'action: none'
 			return
 		end
-
 		kak -l | _fzf
 
 	case key-compositions
@@ -1470,25 +1445,48 @@ function fz --description 'entry point for all the fuzziness glory'
 			~/.config/XCompose \
 			| rg --invert-match '^#' | _fzf
 
-	case linux-kernel-modules
-		if test "$argv[2]" = "--help"
-			printf 'list: linux kernel modules using lsmod\n'
-			printf 'preview: modinfo\n'
-			print_dim 'action: none'
-			return
-		end
+	case 'linux-*'
 
-		lsmod | _fzfh --preview 'modinfo {1}'
+		alias _fzfh="$fzf_cmd --bind 'backward-eof:become(fz . linux)' --header-lines 1"
 
-	case linux-namespaces
-		if test "$argv[2]" = "--help"
-			printf 'list: linux namespaces using lsns\n'
-			print_dim 'preview: none'
-			print_dim 'action: none'
-			return
-		end
+		switch $argv[1]
 
-		lsns | _fzfh
+		case linux-groups
+			if test "$argv[2]" = "--help"
+				printf 'list: groups in /etc/group\n'
+				print_dim 'preview: none'
+				print_dim 'action: none'
+				return
+			end
+			cat /etc/group | column --table --separator : | _fzf
+
+		case linux-kernel-modules
+			if test "$argv[2]" = "--help"
+				printf 'list: linux kernel modules using lsmod\n'
+				printf 'preview: modinfo\n'
+				print_dim 'action: none'
+				return
+			end
+			lsmod | _fzfh --preview 'modinfo {1}'
+
+		case linux-namespaces
+			if test "$argv[2]" = "--help"
+				printf 'list: linux namespaces using lsns\n'
+				print_dim 'preview: none'
+				print_dim 'action: none'
+				return
+			end
+			lsns | _fzfh
+
+		case linux-users
+			if test "$argv[2]" = "--help"
+				printf 'list: users in /etc/passwd\n'
+				print_dim 'preview: none'
+				print_dim 'action: none'
+				return
+			end
+			cat /etc/passwd | column --table --separator : | _fzf
+		end # linux-*
 
 	case man-pages
 		if test "$argv[2]" = "--help"
@@ -1497,7 +1495,6 @@ function fz --description 'entry point for all the fuzziness glory'
 			print_dim 'action: none'
 			return
 		end
-
 		man -k . | _fzf --preview 'man {1}'
 
 	case media-types
@@ -1507,7 +1504,6 @@ function fz --description 'entry point for all the fuzziness glory'
 			print_dim 'action: none'
 			return
 		end
-
 		cat /etc/mime.types | tail --lines +14 | _fzf
 
 	case 'mise-*'
@@ -1523,7 +1519,6 @@ function fz --description 'entry point for all the fuzziness glory'
 				print_dim 'action: none'
 				return
 			end
-
 			mise backends | _fzf
 
 		case mise-tools
@@ -1533,24 +1528,20 @@ function fz --description 'entry point for all the fuzziness glory'
 				print_dim 'action: none'
 				return
 			end
-
 			mise registry | _fzf
-
-		end
+		end #mise-*
 
 	case monitors
 		if not command -q xrandr
 			print_error 'xrandr command not found'
 			return 1
 		end
-
 		if test "$argv[2]" = "--help"
 			printf 'list: monitors using xrandr\n'
 			print_dim 'preview: none'
 			print_dim 'action: none'
 			return
 		end
-
 		xrandr --listmonitors | _fzfh
 
 	case mounts
@@ -1560,7 +1551,6 @@ function fz --description 'entry point for all the fuzziness glory'
 			print_dim 'action: none'
 			return
 		end
-
 		mount --show-label | _fzf
 
 	case 'music-*'
@@ -1580,7 +1570,6 @@ function fz --description 'entry point for all the fuzziness glory'
 				print_dim 'action: none'
 				return
 			end
-
 			mpc list album | _fzf --preview 'mpc search album {}'
 
 		case music-artists
@@ -1590,7 +1579,6 @@ function fz --description 'entry point for all the fuzziness glory'
 				print_dim 'action: none'
 				return
 			end
-
 			mpc list artist | _fzf --preview 'mpc search artist {}'
 
 		case music-dates
@@ -1600,7 +1588,6 @@ function fz --description 'entry point for all the fuzziness glory'
 				print_dim 'action: none'
 				return
 			end
-
 			mpc list date | _fzf --preview 'mpc search date {}'
 
 		case music-playlists
@@ -1610,10 +1597,8 @@ function fz --description 'entry point for all the fuzziness glory'
 				print_dim 'action: none'
 				return
 			end
-
 			mpc lsplaylist | _fzf --preview 'mpc playlist {}'
-
-		end
+		end # music-*
 
 	case network-ports
 		if test "$argv[2]" = "--help"
@@ -1622,7 +1607,6 @@ function fz --description 'entry point for all the fuzziness glory'
 			print_dim 'action: none'
 			return
 		end
-
 		cat /etc/services | tail --lines +3 | _fzf
 
 	case npm-dependencies
@@ -1631,7 +1615,6 @@ function fz --description 'entry point for all the fuzziness glory'
 			print_error 'no package.json in current directory'
 			return 1
 		end
-
 		if test "$argv[2]" = "--help"
 			printf "list: npm dependencies from $data_source\n"
 			print_dim 'preview: none'
@@ -1655,7 +1638,6 @@ function fz --description 'entry point for all the fuzziness glory'
 			print_error 'no package.json in current directory'
 			return 1
 		end
-
 		if test "$argv[2]" = "--help"
 			printf "list: npm scripts from $data_source\n"
 			print_dim 'preview: none'
@@ -1686,7 +1668,6 @@ function fz --description 'entry point for all the fuzziness glory'
 				printf 'action: open https link in default browser\n'
 				return
 			end
-
 			sqlite3 ~/.config/emacs/.local/cache/org-roam.db \
 				'select concat(\'https:\', trim(distinct dest, \'"\')) from links where type = \'"https"\' order by dest' \
 				| _fzf \
@@ -1700,7 +1681,6 @@ function fz --description 'entry point for all the fuzziness glory'
 				printf 'action: open https github users link in default browser\n'
 				return
 			end
-
 			sqlite3 ~/.config/emacs/.local/cache/org-roam.db \
 				'select concat(\'https:\', trim(distinct dest, \'"\')) from links where type = \'"https"\' and dest regexp \'/github.com/[^?/]*$\' order by dest' \
 				| _fzf \
@@ -1714,7 +1694,6 @@ function fz --description 'entry point for all the fuzziness glory'
 				printf 'action: open node in Emacs\n'
 				return
 			end
-
 			sqlite3 ~/.config/emacs/.local/cache/org-roam.db \
 				'select trim(id, \'"\') from nodes order by id' \
 				| _fzf \
@@ -1723,8 +1702,7 @@ function fz --description 'entry point for all the fuzziness glory'
 				| _awk '{printf "org-protocol://roam-node?node=%s\n", $1}' \
 				| xargs xdg-open
 			i3-msg --quiet "[class=Emacs] focus"
-
-		end
+		end # org-roam-*
 
 	case 'pacman-*'
 
@@ -1739,7 +1717,6 @@ function fz --description 'entry point for all the fuzziness glory'
 				print_dim 'action: none'
 				return
 			end
-
 			pacman --query --list | _fzf
 
 		case pacman-mirrors
@@ -1749,7 +1726,6 @@ function fz --description 'entry point for all the fuzziness glory'
 				print_dim 'action: none'
 				return
 			end
-
 			cat /etc/pacman.d/mirrorlist | rg '^Server' | _fzf
 
 		case pacman-packages
@@ -1759,7 +1735,6 @@ function fz --description 'entry point for all the fuzziness glory'
 				print_dim 'action: none'
 				return
 			end
-
 			pacman --query \
 				| awk "$awk_dim2" \
 				| _fzf --preview 'pacman --query --info --list {1}'
@@ -1771,7 +1746,6 @@ function fz --description 'entry point for all the fuzziness glory'
 				print_dim 'action: none'
 				return
 			end
-
 			pacman --query --foreign \
 				| awk "$awk_dim2" \
 				| _fzf --preview 'pacman --query --info --list {1}'
@@ -1787,21 +1761,19 @@ function fz --description 'entry point for all the fuzziness glory'
 			pacman --query --upgrades \
 				| awk "$awk_dim4" \
 				| _fzf --preview 'pacman --query --info --list {1}'
-		end
+		end # pacman-*
 
 	case pastel-colors
 		if not command -q pastel
 			print_error 'pastel command not found'
 			return 1
 		end
-
 		if test "$argv[2]" = "--help"
 			printf 'list: pastel colors\n'
 			printf 'preview: colored example\n'
 			print_dim 'action: none'
 			return
 		end
-
 		pastel list | _fzf --preview 'pastel --force-color paint {} █▓▒░ pastel'
 
 	case 'podman-*'
@@ -1822,7 +1794,6 @@ function fz --description 'entry point for all the fuzziness glory'
 				print_dim 'action: none'
 				return
 			end
-
 			podman containers -a \
 				| _fzfh (json_preview 'podman container inspect {1} | jq .[0]')
 
@@ -1833,7 +1804,6 @@ function fz --description 'entry point for all the fuzziness glory'
 				print_dim 'action: none'
 				return
 			end
-
 			podman images \
 				| _fzfh (json_preview 'podman image inspect {1} | jq .[0]')
 
@@ -1844,7 +1814,6 @@ function fz --description 'entry point for all the fuzziness glory'
 				print_dim 'action: none'
 				return
 			end
-
 			podman pod ls | _fzf
 
 		case podman-volumes
@@ -1854,11 +1823,9 @@ function fz --description 'entry point for all the fuzziness glory'
 				print_dim 'action: none'
 				return
 			end
-
 			podman volumes \
 				| _fzfh (json_preview 'podman volume inspect {3} | jq .[0]')
-
-		end
+		end # podman-*
 
 	case processes
 		if test "$argv[2]" = "--help"
@@ -1867,7 +1834,6 @@ function fz --description 'entry point for all the fuzziness glory'
 			print_dim 'action: none'
 			return
 		end
-
 		_fzf_search_processes
 
 	case 'pulseaudio-*'
@@ -1887,7 +1853,6 @@ function fz --description 'entry point for all the fuzziness glory'
 				print_dim 'action: none'
 				return
 			end
-
 			pactl -f json list modules\
 				| _jq '.[] | "\(.properties["module.description"])\u001f\(.name)"' \
 				| _awk "$awk_dim2" \
@@ -1901,7 +1866,6 @@ function fz --description 'entry point for all the fuzziness glory'
 				print_dim 'action: none'
 				return
 			end
-
 			pactl -f json list sinks \
 				| _jq '.[] | "\(.description)\u001f\(.active_port)"' \
 				| _awk "$awk_dim2" \
@@ -1915,90 +1879,89 @@ function fz --description 'entry point for all the fuzziness glory'
 				print_dim 'action: none'
 				return
 			end
-
 			pactl -f json list sources \
 				| _jq '.[] | "\(.description)\u001f\(.active_port)"' \
 				| _awk "$awk_dim2" \
 				| _fzf \
 					--accept-nth 1
+		end # pulseaudio-*
 
-		end
+	case 'shell-*'
 
-	case shell-abbreviations
-		if test "$argv[2]" = "--help"
-			printf 'list: shell abbreviations\n'
-			print_dim 'preview: none'
-			print_dim 'action: none'
-			return
-		end
+		alias _fzf="$fzf_cmd --bind 'backward-eof:become(fz . shell)'"
 
-		abbr | _fzf
+		switch $argv[1]
 
-	case shell-aliases
-		if test "$argv[2]" = "--help"
-			printf 'list: shell aliases\n'
-			print_dim 'preview: none'
-			print_dim 'action: none'
-			return
-		end
+		case shell-abbreviations
+			if test "$argv[2]" = "--help"
+				printf 'list: shell abbreviations\n'
+				print_dim 'preview: none'
+				print_dim 'action: none'
+				return
+			end
+			abbr | _fzf
 
-		alias | _fzf
+		case shell-aliases
+			if test "$argv[2]" = "--help"
+				printf 'list: shell aliases\n'
+				print_dim 'preview: none'
+				print_dim 'action: none'
+				return
+			end
+			alias | _fzf
 
-	case shell-functions
-		if test "$argv[2]" = "--help"
-			printf 'list: shell functions\n'
-			print_dim 'preview: none'
-			print_dim 'action: none'
-			return
-		end
+		case shell-functions
+			if test "$argv[2]" = "--help"
+				printf 'list: shell functions\n'
+				print_dim 'preview: none'
+				print_dim 'action: none'
+				return
+			end
 
-		for name in (functions)
-			set --local details (functions --details --verbose $name)
-			set_color --bold cyan
-			printf $name
-			set_color normal
-			printf " $details[-1]\n"
-		end | _fzf
+			for name in (functions)
+				set --local details (functions --details --verbose $name)
+				set_color --bold cyan
+				printf $name
+				set_color normal
+				printf " $details[-1]\n"
+			end | _fzf
 
-	case shell-history
-		if test "$argv[2]" = "--help"
-			printf 'list: history\n'
-			printf 'preview: command details\n'
-			print_dim 'action: none'
-			return
-		end
+		case shell-history
+			if test "$argv[2]" = "--help"
+				printf 'list: history\n'
+				printf 'preview: command details\n'
+				print_dim 'action: none'
+				return
+			end
+			_fzf_search_history
 
-		_fzf_search_history
+		case shell-key-bindings
+			if test "$argv[2]" = "--help"
+				printf 'list: shell key-bindings and associated functions\n'
+				print_dim 'preview: none'
+				print_dim 'action: none'
+				return
+			end
+			bind | _fzf
 
-	case shell-key-bindings
-		if test "$argv[2]" = "--help"
-			printf 'list: shell key-bindings and associated functions\n'
-			print_dim 'preview: none'
-			print_dim 'action: none'
-			return
-		end
+		case shell-prompts
+			if test "$argv[2]" = "--help"
+				printf 'list: shell prompts\n'
+				print_dim 'preview: none'
+				print_dim 'action: none'
+				return
+			end
+			fish_config prompt list | _fzf --preview 'fish_config prompt show {}'
 
-		bind | _fzf
-
-	case shell-prompts
-		if test "$argv[2]" = "--help"
-			printf 'list: shell prompts\n'
-			print_dim 'preview: none'
-			print_dim 'action: none'
-			return
-		end
-
-		fish_config prompt list | _fzf --preview 'fish_config prompt show {}'
-
-	case shell-themes
-		if test "$argv[2]" = "--help"
-			printf 'list: shell themes\n'
-			print_dim 'preview: none'
-			print_dim 'action: none'
-			return
-		end
-
-		fish_config theme list | _fzf --preview 'fish_config theme show {}'
+		case shell-themes
+			if test "$argv[2]" = "--help"
+				printf 'list: shell themes\n'
+				print_dim 'preview: none'
+				print_dim 'action: none'
+				return
+			end
+			fish_config theme list | _fzf --preview 'fish_config theme show {}'
+		end # shell-*
 
 	case 'skopeo-*'
 
@@ -2039,7 +2002,7 @@ function fz --description 'entry point for all the fuzziness glory'
 				| _fzf \
 					--header "$skopeo_image" \
 					--preview "skopeo inspect $skopeo_image:{1} | jq .Created"
-		end
+		end # skopeo-*
 
 	case socat-addresses
 		if test "$argv[2]" = "--help"
@@ -2048,7 +2011,6 @@ function fz --description 'entry point for all the fuzziness glory'
 			print_dim 'action: none'
 			return
 		end
-
 		socat -h \
 			| sed -e '1,/address-head:/d' \
 			| sed -e 's/^      //' \
@@ -2061,7 +2023,6 @@ function fz --description 'entry point for all the fuzziness glory'
 			print_dim 'action: none'
 			return
 		end
-
 		ss --all | _fzfh
 
 	case 'ssh-*'
@@ -2075,7 +2036,6 @@ function fz --description 'entry point for all the fuzziness glory'
 				print_error 'ssh-add command not found'
 				return 1
 			end
-
 			if test "$argv[2]" = "--help"
 				printf 'list: ssh-agent keys SHA256 fingerprints\n'
 				printf 'preview: full public key\n'
@@ -2092,7 +2052,6 @@ function fz --description 'entry point for all the fuzziness glory'
 				print_dim 'action: none'
 				return
 			end
-
 			cat ~/.ssh/authorized_keys | _fzf
 
 		case ssh-hosts
@@ -2109,7 +2068,7 @@ function fz --description 'entry point for all the fuzziness glory'
 			if test -n "$choice"
 				ssh "$choice"
 			end
-		end
+		end # ssh-*
 
 	case 'starship-*'
 		if not command -q starship
@@ -2128,7 +2087,6 @@ function fz --description 'entry point for all the fuzziness glory'
 				print_dim 'action: none'
 				return
 			end
-
 			starship module --list | tail --lines +3 | _fzf
 
 		case starship-presets
@@ -2138,59 +2096,60 @@ function fz --description 'entry point for all the fuzziness glory'
 				print_dim 'action: none'
 				return
 			end
-
 			starship preset --list | _fzf
-		end
+		end # starship-*
 
 	case sysctl-values
 		if not command -q sysctl
 			print_error 'sysctl command not found'
 			return 1
 		end
-
 		if test "$argv[2]" = "--help"
 			printf 'list: sysctl values\n'
 			print_dim 'preview: none'
 			print_dim 'action: none'
 			return
 		end
-
 		sysctl --all | _fzf
 
-	case systemd-paths
-		if test "$argv[2]" = "--help"
-			printf 'list: systemd paths\n'
-			print_dim 'preview: none'
-			print_dim 'action: none'
-			return
-		end
+	case 'systemd-*'
 
-		systemd-path | _fzf
+		alias _fzf="$fzf_cmd --bind 'backward-eof:become(fz . systemd)'"
+		alias _fzfh="$fzf_cmd --bind 'backward-eof:become(fz . systemd)' --header-lines 1"
 
-	case systemd-timers
-		if test "$argv[2]" = "--help"
-			printf 'list: systemd timers\n'
-			print_dim 'preview: none'
-			print_dim 'action: none'
-			return
-		end
+		switch $argv[1]
 
-		systemctl list-timers --all | _fzfh
+		case systemd-paths
+			if test "$argv[2]" = "--help"
+				printf 'list: systemd paths\n'
+				print_dim 'preview: none'
+				print_dim 'action: none'
+				return
+			end
+			systemd-path | _fzf
 
-	case systemd-units
-		if not command -q sysz
-			print_error 'sysz command not found'
-			return 1
-		end
+		case systemd-timers
+			if test "$argv[2]" = "--help"
+				printf 'list: systemd timers\n'
+				print_dim 'preview: none'
+				print_dim 'action: none'
+				return
+			end
+			systemctl list-timers --all | _fzfh
 
-		if test "$argv[2]" = "--help"
-			printf 'list: systemd units and unit-files using sysz\n'
-			printf 'preview: systemd unit details\n'
-			print_dim 'action: none'
-			return
-		end
-
-		sysz
+		case systemd-units
+			if not command -q sysz
+				print_error 'sysz command not found'
+				return 1
+			end
+			if test "$argv[2]" = "--help"
+				printf 'list: systemd units and unit-files using sysz\n'
+				printf 'preview: systemd unit details\n'
+				print_dim 'action: none'
+				return
+			end
+			sysz
+		end # systemd-*
 
 	case tc39-proposals
 		set --local url 'https://tc39.es/dataset/proposals.json'
@@ -2239,7 +2198,6 @@ function fz --description 'entry point for all the fuzziness glory'
 			print_dim 'action: none'
 			return
 		end
-
 		trust list \
 			| rg --multiline '(pkcs11:.*)\n\s*.*\n\s*label: (.*)' --only-matching --replace '$2 $1' \
 			| _fzf --preview 'p11-kit export-object {-1} | step-cli certificate inspect --format json | jq --color-output .'
@@ -2287,35 +2245,13 @@ function fz --description 'entry point for all the fuzziness glory'
 			print_error 'lsusb command not found'
 			return 1
 		end
-
 		if test "$argv[2]" = "--help"
 			printf 'list: usb devices with lsusb\n'
 			print_dim 'preview: none'
 			print_dim 'action: none'
 			return
 		end
-
 		lsusb | _fzf --preview 'lsusb --verbose -d {6} 2> /dev/null'
-
-	case user-groups
-		if test "$argv[2]" = "--help"
-			printf 'list: groups in /etc/group\n'
-			print_dim 'preview: none'
-			print_dim 'action: none'
-			return
-		end
-
-		cat /etc/group | column --table --separator : | _fzf
-
-	case users
-		if test "$argv[2]" = "--help"
-			printf 'list: users in /etc/passwd\n'
-			print_dim 'preview: none'
-			print_dim 'action: none'
-			return
-		end
-
-		cat /etc/passwd | column --table --separator : | _fzf
 
 	case 'vscode-*'
 
@@ -2324,18 +2260,15 @@ function fz --description 'entry point for all the fuzziness glory'
 		switch $argv[1]
 
 		case vscode-extensions
-
 			if test "$argv[2]" = "--help"
 				printf 'list: vscode extensions\n'
 				print_dim 'preview: none'
 				print_dim 'action: none'
 				return
 			end
-
 			code --list-extensions --show-versions 2> /dev/null | _fzf
 
 		case vscode-profiles
-
 			if test "$argv[2]" = "--help"
 				printf 'list: vscode profiles\n'
 				print_dim 'preview: none'
@@ -2353,7 +2286,6 @@ function fz --description 'entry point for all the fuzziness glory'
 			end
 
 		case vscode-workspaces
-
 			if test "$argv[2]" = "--help"
 				printf 'list: vscode workspaces\n'
 				printf 'preview: vscode workspace details\n'
@@ -2368,21 +2300,19 @@ function fz --description 'entry point for all the fuzziness glory'
 			if test -n "$choice"
 				code "$choice"
 			end
-		end
+		end # vscode-*
 
 	case xinput-devices
 		if not command -q xinput
 			print_error 'xinput command not found'
 			return 1
 		end
-
 		if test "$argv[2]" = "--help"
 			printf 'list: xinput devices\n'
 			printf 'preview: xinput device detail\n'
 			print_dim 'action: none'
 			return
 		end
-
 		xinput --list --name-only | _fzf --preview 'xinput --list {}'
 
 	case yarn-workspaces
@@ -2390,14 +2320,12 @@ function fz --description 'entry point for all the fuzziness glory'
 			print_error 'no package.json in current directory'
 			return 1
 		end
-
 		if test "$argv[2]" = "--help"
 			printf 'list: yarn workspaces\n'
 			print_dim 'preview: none'
 			print_dim 'action: none'
 			return
 		end
-
 		yarn workspaces list --json \
 			| _jq '"\(.name)\u001f\(.location)"' \
 			| _awk "$awk_dim2" \
@@ -2473,8 +2401,10 @@ function fz --description 'entry point for all the fuzziness glory'
 			json-schemas \
 			kakoune-sessions \
 			key-compositions \
+			linux-groups \
 			linux-kernel-modules \
 			linux-namespaces \
+			linux-users \
 			man-pages \
 			media-types \
 			mise-backends \
@@ -2531,8 +2461,6 @@ function fz --description 'entry point for all the fuzziness glory'
 			unicode-blocks \
 			unicode-code-points \
 			usb-devices \
-			user-groups \
-			users \
 			vscode-extensions \
 			vscode-profiles \
 			vscode-workspaces \
