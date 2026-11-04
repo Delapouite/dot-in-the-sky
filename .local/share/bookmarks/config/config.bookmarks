@@ -1,0 +1,7 @@
+fish fish/config.fish
+git git/config
+i3 i3/config
+kakoune kak/kakrc
+kitty kitty/kitty.conf
+mise mise/config.toml
+starship starship.toml
