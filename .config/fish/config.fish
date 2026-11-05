@@ -6,14 +6,14 @@ set -x GOBIN "$HOME/.local/bin"
 set -x FZF_DEFAULT_OPTS_FILE "$HOME/.config/fzf/config"
 set -x NPM_CONFIG_USERCONFIG "$HOME/.config/npm/config"
 
-alias ...='cd ../../'
-alias ....='cd ../../../'
-alias .....='cd ../../../../'
-alias ......='cd ../../../../../'
 alias zed='zeditor'
-
 # plurals
 alias builtins='builtin --names'
+
+abbr --add --position anywhere -- ... '../../'
+abbr --add --position anywhere -- .... '../../../'
+abbr --add --position anywhere -- ..... '../../../../'
+abbr --add --position anywhere -- ...... '../../../../../'
 
 # curl
 abbr --add --position anywhere -- --jwt '--header "Authorization: Bearer $JWT"'
